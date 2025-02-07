@@ -147,21 +147,35 @@
     </q-btn>
 
     <q-avatar class="shadow-4" :size="isMobile ? '40px' : '50px'">
-      <q-img
-        :src="imageUrl || profileImg"
-        class="profileImg cursor-pointer rounded full-width full-height"
-      />
-      <q-menu
-        :offset="[-5, 5]"
-        max-width="300px"
-        style="width:230px;background: transparent!important;"
-        class="fin-br-8 q-py-md shadow-0"
-        transition-show="flip-right"
-        transition-hide="rotate"
-      >
-        <!-- Profile menu content -->
-      </q-menu>
-    </q-avatar>
+          <q-img :src="imageUrl || profileImg" class="profileImg cursor-pointer rounded full-width full-height" />
+          <q-menu :offset="[-5, 5]" max-width="300px" style="width:230px;background: transparent!important;"
+            class="fin-br-8 q-py-md shadow-0" transition-show="flip-right" transition-hide="rotate">
+            <div style="background-color: #EAEAEA;opacity:0.99" class="q-py-md shadow-2 fin-br-8">
+              <div class="q-pa-sm absolute-top-right arrow" style="margin-top: -19px">
+                <q-icon name="arrow_drop_up" size="xl" style="color: #EAEAEA"></q-icon>
+              </div>
+              <q-list style="min-width: 200px" class="text-weight-bold">
+                <q-item @click="$router.push('/profile')" clickable v-close-popup>
+                  <q-item-section>Profile</q-item-section>
+                </q-item>
+                <q-item v-if="isEligible" @click="$router.push('/StudentProfile')" clickable v-close-popup>
+                  <q-item-section>Student Profile</q-item-section>
+                </q-item>
+                <q-item @click="logout" clickable v-close-popup>
+                  <q-item-section>Log Out</q-item-section>
+                  <q-item-section>
+                    <svg width="27" height="9" viewBox="0 0 27 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path id="Arrow 3"
+                        d="M26.3536 4.85355C26.5488 4.65829 26.5488 4.34171 26.3536 4.14644L23.1716 0.964464C22.9763 0.769202 22.6597 0.769202 22.4645 0.964464C22.2692 1.15973 22.2692 1.47631 22.4645 1.67157L25.2929 4.5L22.4645 7.32843C22.2692 7.52369 22.2692 7.84027 22.4645 8.03553C22.6597 8.23079 22.9763 8.23079 23.1716 8.03553L26.3536 4.85355ZM4.37114e-08 5L26 5L26 4L-4.37114e-08 4L4.37114e-08 5Z"
+                        fill="black" />
+                    </svg>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </div>
+          </q-menu>
+        </q-avatar>
+     
   </q-toolbar>
 </q-header>
 
@@ -554,7 +568,7 @@ setAccessPaths() {
         this.backgroundStyle = 'Assignment_BackgroundStyle'; // Apply the background style class
       }
 
-      
+
       else if(this.$route.path === '/help'){
         this.backgroundStyle = 'help_backgroundStyle';
 

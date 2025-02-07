@@ -25,7 +25,7 @@ export default {
     async fetchRoles() {
       try {
         const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
-              const getRolesURL = baseUrl + 'api/roles';
+        const getRolesURL = baseUrl + 'api/roles';
         const response = await this.$api.get(getRolesURL, {
           headers: {
             Authorization: `Bearer ${this.token}` // Adding Bearer token to the header
@@ -45,28 +45,10 @@ export default {
         // Fetch roles before proceeding with the redirection
         await this.fetchRoles();
 
-        // Find the role that matches the userType
-        const matchedRole = this.roles.find(role => role.name === this.userType);
-        // console.log('Matched Role:', matchedRole);
-        
-        if (matchedRole) {
-          // Ensure defaultPath starts with a "/"
-          if (matchedRole.defaultPath == null) {
-        matchedRole.defaultPath = 'library/books';
-      }
-
-          let defaultPath = '/' + matchedRole.defaultPath || '/library/books';
-          // console.log('matchedRole.default_path:', matchedRole.default_path);
-          // console.log('Redirecting to:', defaultPath);
-          if (!defaultPath.startsWith('/')) {
-            defaultPath = '/' + defaultPath; // Add leading slash if missing
-          }
-          this.$router.push({ path: defaultPath });
-        } else {
-          console.log('No matching role found, redirecting to /library/books');
-          this.$router.push('/library/books'); // Default path if no role matches
-        }
+        // Redirect to home page after verification
+        this.$router.push({ path: '/home' });
       } else {
+        // Redirect to login if no token is present
         this.$router.push('/login');
       }
     }
