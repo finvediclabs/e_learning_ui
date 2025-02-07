@@ -1,0 +1,290 @@
+.TopBG{
+  
+    background-repeat: no-repeat;
+    background-size: 100vw 65vh
+    
+  }
+  .bottom_div{
+    position:relative; 
+    background-color: #ffff !important;
+    margin-top: 6%;
+  
+    padding-bottom: 4vh;
+  
+    /* border: 2px solid grey; */
+  }
+  /* .backgroundStyle{
+    background-image: url('/src/assets/Background_new_crop.png');
+    background-repeat: no-repeat;
+    background-size: 100vw 65vh;
+  } */
+  .single_book{
+    margin-top: -25%;
+    display: flex; justify-content: center;
+  flex-direction: column;  
+    /* border:2px solid green */
+  }
+  .right_side{
+    z-index: 2;
+  }
+  .book_single{
+    width: 24vw;
+    /* border: 2px solid green; */
+    height: 100%;
+    margin-top: 4%;
+    /* padding-top: 4vw; */
+  }
+  .desc_div{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    margin-bottom: auto;
+    width:100%;
+    /* border: 2px solid green; */
+  }
+  .single_book_desc{
+    font-family: 'Manrope';
+    font-size:20px;
+    width: 86%;
+    /* border:2px solid red; */
+    /* margin-left:10%; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* border:2px solid red; */
+    margin-top: 2%;
+    line-height: 30px;
+    color: #5479F7;
+    
+  }
+  .heading_class{
+    /* border: 2px solid green; */
+   width:80%;
+   /* margin-left:auto; */
+   display: flex;
+   align-self:end;
+  
+   justify-content: center;
+   margin-right: auto;
+   /* border: 2px solid red; */
+  }
+  h4{
+    color: #032390;
+    font-family: 'Playfair Display SC', serif;
+    font-weight: 700;
+    text-align: center;
+    /* width: 80%; */
+    margin-left:auto;
+    margin-right:auto;
+    line-height:140%;
+    /* margin-top: -0.75%; */
+    text-transform: uppercase;
+    margin-top: auto;
+    margin-bottom: auto;
+    font-size: 25px;
+    
+  }
+  .chapter_text{
+    margin-right: auto;
+    margin-left: auto; 
+    text-align: center;
+    font-size: 20px;
+    font-weight: 600;
+    font-family: 'Manrope';
+    /* padding-top: 2%; */
+    padding-bottom: 2%;
+  }
+  .right_side_chapters{
+    position:relative;
+    margin-top: 1%;
+    /* border: 2px solid red; */
+  }
+  .chapter_right{
+    max-height: 70%;
+    max-width: 80%;
+    margin-left: auto;
+    /* border:2px solid red; */
+    margin-right: 4.6%;
+    /* max-width: 100%; */
+    /* border: 2px solid green; */
+  }
+  .q-carousel{
+    background: transparent;
+  }
+  .TopBG{
+    /* border:2px solid green; */
+    padding-top: 2%;
+  }
+  @media screen and (min-width: 1920px) {
+      /* Your CSS styles for this screen width range */
+      .bottom_div{
+        margin-top:10%;
+      }
+      .book_single{
+    width: 26vw;
+    height: 100%;
+    /* padding-top: 2% */
+  }
+  .TopBG{
+    /* border:2px solid green; */
+    padding-top: 4%;
+  }
+  h4{
+    color: #032390;
+    font-family: 'Playfair Display SC', serif;
+    font-weight: 700;
+    text-align: center;
+    /* width: 80%; */
+    margin-left:auto;
+    margin-right:auto;
+    line-height:140%;
+    /* margin-top: -0.75%; */
+    text-transform: uppercase;
+    margin-top: auto;
+    margin-bottom: auto;
+    font-size: 1.2em;
+    
+  }
+  .single_book_desc{
+    font-family: 'Manrope';
+    font-size:24px;
+    width: 90%;
+    /* border:2px solid red; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 20px;
+    color: #5479F7;
+    
+  }
+  .single_book{
+    margin-top: -33%;
+    display: flex; justify-content: center;
+  flex-direction: column;  
+    /* border:2px solid green */
+  }
+  .single_book_desc{
+    font-family: 'Manrope';
+    font-size:2em;
+    width: 86%;
+    /* border:2px solid red; */
+    /* margin-left:10%; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* border:2px solid red; */
+    margin-top: 2%;
+    line-height: 30px;
+    color: #5479F7;
+    
+  }
+  
+  }
+  @media screen and (min-width: 1400px) and (max-width: 1602px) {
+    .single_book{
+    margin-top: -30%;
+    display: flex; justify-content: center;
+  flex-direction: column;  
+    /* border:2px solid green */
+  } /* CSS rules here apply when the screen width is between 1920px and 2560px */
+  }
+  /* @media screen and (max-width: 567px){
+    .topHead{
+      display: none !important;
+    }
+  } */
+
+
+  @media screen and (max-width: 600px) {
+
+    .TopBG{
+  
+        background-size: 100vw 20vh
+        
+      }
+
+    .fin-portlet{
+        display: flex;
+        flex-direction: column;
+
+    }
+
+    .right_side {
+        order: 1;
+        /* border: 2px solid red; */
+    }
+
+    .topHead {
+        display: flex;
+        justify-content: center;
+        align-items: center; 
+        height: 100%; 
+        text-align: center; 
+      }
+  
+    /* h4{
+        order: 2;
+         border: 2px solid blue; 
+        font-size: 20px;
+       line-height:140%;    
+       text-align: center;
+    } */
+
+    .heading_class{
+        text-align: center;
+        margin: 0;
+        width: 100%;
+
+    }
+
+    .book_single{
+        order: 3;
+        /* border: 2px solid yellow; */
+        display: flex;
+        width: 40vw;
+    }
+
+    .desc_div{
+        order: 4;
+        /* border: 2px solid purple; */
+        display: flex;
+        text-align: center;
+
+
+    }
+
+    .right_side_chapters{
+        
+        order: 5;
+        /* border: 2px solid orange; */
+    }
+
+    .chapter_grid{
+        margin-left: 0px;
+    }
+
+    .BigScreen {
+      display: none; 
+    }
+    .MobScreen {
+      display: block; 
+    }
+      
+
+      
+
+   
+  }
+
+
+  
+ 
+  @media only screen and (min-width: 600px) {
+    .BigScreen {
+      display: block; 
+    }
+    .MobScreen { 
+      display: none ; 
+    }
+  }

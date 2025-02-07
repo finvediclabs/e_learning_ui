@@ -1,0 +1,22 @@
+/* AdminRoles CSS starts */
+
+.User_heading{
+    color:#5479F7;
+    margin-left:4%;
+  }
+
+  .fin-table {
+    border-radius: 8px; 
+    overflow: hidden; 
+  }
+
+
+  @media screen and (max-width: 768px) {
+    .User_heading {
+      font-size: 20px;
+      background-color:#5479F7;
+      color: #fff !important;
+      padding: 10px;
+      border-radius: 10px ;
+    }
+  }

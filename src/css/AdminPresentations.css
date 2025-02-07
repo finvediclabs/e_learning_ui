@@ -1,0 +1,78 @@
+/*Admin Panel Presentations tab CSS*/
+
+.User_heading {
+    color: #5479F7;
+    margin-left: 4%;
+    font-weight: bold;
+  }
+  
+  /* Apply responsiveness for tablet view (601px to 1024px) */
+  @media screen and (min-width: 601px) and (max-width: 1024px) {
+    .User_heading {
+      font-size: 24px;
+      background-color: #5479F7;
+      color: #fff;
+      padding: 10px;
+      border-radius: 10px;
+    }
+  
+    .fin-table {
+      width: 100%;
+    }
+  
+    .fin-table img {
+      width: 100%; 
+      height: auto !important; 
+      object-fit: cover; 
+      border-radius: 0; 
+    }
+  
+    /* Optionally hide some columns on tablets for better readability */
+    th:nth-child(5), td:nth-child(5),
+    th:nth-child(6), td:nth-child(6) {
+      display: none; /* Hide columns 5 and 6 in tablet view */
+    }
+  
+    .shadow-1 {
+      box-shadow: none;
+    }
+  
+    .vertical-middle .q-avatar__content {
+      border-radius: 0;
+    }
+  }
+  
+  @media screen and (max-width: 600px) {
+  
+    .User_heading {
+      font-size: 20px;
+      background-color:#5479F7;
+      color: #fff;
+      padding: 10px;
+      border-radius: 10px ;
+    }
+  
+  
+    th:nth-child(4), td:nth-child(4),
+    th:nth-child(5), td:nth-child(5),
+    th:nth-child(6), td:nth-child(6) {
+      display: none;
+    }
+  
+    .fin-table img {
+      border-radius: 0 ; 
+      width: 100% ; 
+      height: auto !important; 
+      object-fit: cover ; 
+    
+    }
+    
+    .shadow-1{
+      box-shadow: none;
+    }
+    
+    .vertical-middle .q-avatar__content{
+      border-radius: 0%;
+    }
+  }
+  
