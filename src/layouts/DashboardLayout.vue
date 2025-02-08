@@ -175,7 +175,7 @@
             </div>
           </q-menu>
         </q-avatar>
-     
+
   </q-toolbar>
 </q-header>
 
@@ -238,15 +238,14 @@ export default {
       batchNumber:null,
       modulesList: [
 
-        { label: "Calendar", value: "class-room", icon: 'event' },
+      
         {label: "Home", value: "home", icon: 'home'},
         // { icon: 'event', label: 'Calendar', value: 'calendar' },
         {
     icon: 'computer', label: 'Labs', value: 'labs',
-    // menu: [
-    //   { icon: 'summarize', label: 'Reports', value: 'reports' }
-    // ]
   },
+
+  { label: "Calendar", value: "class-room", icon: 'event' },
 
 
 
@@ -286,7 +285,7 @@ export default {
       //this all access is for testing only// Please remove unnessary profiles in this after testing
       // allAccess: [ "profile", "help","program","assignment","class-room","elearning","admin","library","hackathon","read-pdf"],
 
-      allAccess: [ "profile", "help","home"],
+      allAccess: [ "profile", "help","home","labs","library","reports","channel","class-room","calendar","books","videos","presentations","chat","read-pdf"],
       profiles: [], // Store fetched profiles here
       roles: [], // Store fetched roles here
       userRoles: [],
