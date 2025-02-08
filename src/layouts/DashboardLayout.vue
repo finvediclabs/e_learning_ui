@@ -238,7 +238,7 @@ export default {
       batchNumber:null,
       modulesList: [
 
-      
+
         {label: "Home", value: "home", icon: 'home'},
         // { icon: 'event', label: 'Calendar', value: 'calendar' },
         {
@@ -260,11 +260,6 @@ export default {
           ]
         },
         {
-
-           icon: 'school', label: 'Programs', value: 'program',
-
-       },
-        {
            icon: 'summarize', label: 'Reports', value: 'reports',
 
        },
@@ -283,7 +278,8 @@ export default {
       userType: '',
 
       //this all access is for testing only// Please remove unnessary profiles in this after testing
-      // allAccess: [ "profile", "help","program","assignment","class-room","elearning","admin","library","hackathon","read-pdf"],
+      // allAccess: [ "profile", "help","program","assignment","class-room","elearning","admin","library","hackathon","read-pdf"],54
+
 
       allAccess: [ "profile", "help","home","labs","library","reports","channel","class-room","calendar","books","videos","presentations","chat","read-pdf"],
       profiles: [], // Store fetched profiles here
