@@ -1,7 +1,7 @@
 
 
 <template>
-  <fin-portlet v-if="userType === 'Admin'" style="background-color: transparent;"> 
+  <fin-portlet v-if="userType === 'Admin'" style="background-color: transparent;">
     <fin-portlet-header>
       <fin-portlet-heading>
         <span class="User_heading">Channels</span>

@@ -1,4 +1,9 @@
-
+@font-face {
+  font-family: "Poppins";
+  src: url("@/assets/fonts/Poppins/Poppins-ExtraBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+}
 
 
 /* General Styling */
@@ -186,9 +191,38 @@ h4::after {
 .course-name {
   font-size: 18px;
   font-weight: 500;
-  color: #032390;
+  font-family: 'Popins', sans-serif;
+  font-weight: 600;
+  color: #141414;
   margin-bottom: 5px;
 }
+.courseDetailsPage{
+  width: 80%;
+  padding: 2%;
+  margin-left: auto;
+  margin-right: auto;
+  border:2px solid #B1B1B1;
+  border-radius: 5px;
+  margin-top: 2%;
+}
+.category-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.category-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.chapter-categories{
+  margin-top: 5%;
+  font-size: large;
+}
+.category-button {
+  margin-left: auto;
+}
+
 
 .course-description {
   font-size: 14px;
@@ -283,13 +317,13 @@ h4::after {
 }
 }
 
-.elearning-page {
+/* .elearning-page {
 background-image: url('/src/assets/ai_set_bg.jpg');
 background-size: cover;
 background-position: center;
 background-repeat: no-repeat;
 background-attachment: fixed;
-}
+} */
 
 
 @media (min-width: 820px){

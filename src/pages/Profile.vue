@@ -47,23 +47,23 @@
                   </div>
                 </div>
                 <div class="col-12">
-                      <q-input 
-                        label="Phone Number" 
-                        borderless 
-                        class="shadow-3 q-px-md fin-br-8" 
-                        v-model="profile.phoneNumber" 
-                        :disable="disableEdit" 
+                      <q-input
+                        label="Phone Number"
+                        borderless
+                        class="shadow-3 q-px-md fin-br-8"
+                        v-model="profile.phoneNumber"
+                        :disable="disableEdit"
                         :rules="[
                           val => val && val.length > 0 || 'Phone Number is required',
                           val => /^[0-9]+$/.test(val) || 'Phone Number must not contain letters',
                           val => /^\d{10}$/.test(val) || 'Phone Number must be exactly 10 digits'
-                    
+
                         ]"
                       />
                       <div class="errorMsgBox">
                         <span v-if="error.phoneNumber && !profile.phoneNumber">{{ error.phoneNumber }}</span>
                       </div>
-                  
+
                 </div>
                 <div class="col-12">
                   <q-select borderless class="shadow-3 q-px-md fin-br-8" v-model="profile.role" label="Role" :options="roles" option-value="id" option-label="name" disable />
@@ -72,15 +72,15 @@
                   </div>
                 </div>
                 <div class="col-12">
-                  <q-select 
-                    label="Gender" 
-                    borderless 
-                    class="shadow-3 q-px-md fin-br-8" 
+                  <q-select
+                    label="Gender"
+                    borderless
+                    class="shadow-3 q-px-md fin-br-8"
                     v-model="profile.gender"
-                    :options="genders" 
-                    option-value="value" 
-                    option-label="label" 
-                    :disable="disableEdit" 
+                    :options="genders"
+                    option-value="value"
+                    option-label="label"
+                    :disable="disableEdit"
                   />
                   <div class="errorMsgBox">
                     <span v-if="error.gender && !profile.gender">{{ error.gender }}</span>
@@ -91,29 +91,29 @@
               <div class="col-5">
                 <div class="col-12">
                   <div class="col-12">
-                  <q-input 
-                    label="Date of Birth" 
-                    type="date" 
-                    borderless 
-                    class="shadow-3 q-px-md fin-br-8" 
-                    v-model="profile.dob" 
-                    :disable="disableEdit" 
+                  <q-input
+                    label="Date of Birth"
+                    type="date"
+                    borderless
+                    class="shadow-3 q-px-md fin-br-8"
+                    v-model="profile.dob"
+                    :disable="disableEdit"
                     :rules="[
                       val => val && isValidDate(val) || 'Date of Birth is required',
                       val => isValidAge(val) || 'Age must be between 18 and 70 years'
                     ]"
-                  /> 
+                  />
               <div class="errorMsgBox">
                                 <span v-if="error.dob && !profile.dob">{{ error.dob }}</span>
                     </div>
                   </div>
 
-                  <q-input 
-                        label="Highest Qualification" 
-                        borderless 
-                        class="shadow-3 q-px-md fin-br-8" 
-                        v-model="profile.graduationDegree" 
-                        :disable="disableEdit" 
+                  <q-input
+                        label="Highest Qualification"
+                        borderless
+                        class="shadow-3 q-px-md fin-br-8"
+                        v-model="profile.graduationDegree"
+                        :disable="disableEdit"
                         :rules="[
                           val => val && val.trim().length > 0 || 'Highest Qualification is required',
                         ]"
@@ -124,12 +124,12 @@
                 </div>
                 <div class="col-12">
                   <div class="col-12 mt-4"> <!-- Added mt-4 for spacing -->
-                    <q-input 
-                          label="Qualification Year" 
-                          borderless 
-                          class="shadow-3 q-px-md fin-br-8" 
-                          v-model="profile.qualificationYear" 
-                          :disable="disableEdit" 
+                    <q-input
+                          label="Qualification Year"
+                          borderless
+                          class="shadow-3 q-px-md fin-br-8"
+                          v-model="profile.qualificationYear"
+                          :disable="disableEdit"
                           :rules="[
                             val => val && /^\d+$/.test(val) || 'Qualification Year must be a number',
                             val => isValidYear(val) || 'Qualification Year must be a valid year'
@@ -141,22 +141,22 @@
                   </div>
                 </div>
                 <div class="col-12">
-                  <q-input 
-                    label="Specialization" 
-                    borderless 
-                    class="shadow-3 q-px-md fin-br-8" 
-                    v-model="profile.specialization" 
+                  <q-input
+                    label="Specialization"
+                    borderless
+                    class="shadow-3 q-px-md fin-br-8"
+                    v-model="profile.specialization"
                     :disable="disableEdit"
                     :rules="[
                           val => val && val.trim().length > 0 || 'Specialization is required',
                           val => /^[a-zA-Z\s]+$/.test(val) || 'Specialization must contain only letters and spaces'
-                        ]" 
+                        ]"
                   />
                   <div class="errorMsgBox">
                     <span v-if="error.specialization && !profile.specialization">{{ error.specialization }}</span>
                   </div>
                 </div>
-               
+
                 <div class="q-pa-sm col-12 text-center" style="min-height:70px;">
                   <q-btn label="Cancel" no-caps color="red" class="fin-br-8" @click="cancelEdit()" size="md" v-if="!disableEdit" />
                   <q-btn color="primary" no-caps class="fin-br-8 q-ml-sm" size="md" style="min-width:150px" label="Update" type="submit" :disable="loading" v-if="!disableEdit">
@@ -246,7 +246,7 @@ export default {
       resetPasswordForm: {
         oldPassword: '',
         newPassword: '',
-        confirmNewPassword: '',  
+        confirmNewPassword: '',
       },
       genders: [
         { value: 'male', label: 'Male' },
@@ -268,7 +268,7 @@ export default {
   },
   mounted() {
     this.getUserData();
-    
+
   },
   methods: {
     showMsg(message, type) {
@@ -301,7 +301,7 @@ export default {
       if (this.profile.uploadDocumentPath) {
         const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
         const removeImagePath = baseUrl + 'fs/download/';
-        
+
         // Extract the filename by removing the base URL
         const filename = this.profile.uploadDocumentPath.replace(removeImagePath, '');
 
@@ -310,7 +310,7 @@ export default {
         formData.append('filename', filename);
 
         const ImagePath = baseUrl + 'fs/download';
-        
+
         // Send POST request with FormData
         axios.post(ImagePath, formData, { responseType: 'blob' })
           .then(response => {
@@ -522,7 +522,7 @@ export default {
   //       })
   //       .then(response => {
   //         if (response.data.success) {
-  //           this.getUserData(); 
+  //           this.getUserData();
   //           this.cancelEdit();
   //         } else {
   //           this.showMsg(response.data.message, 'negative');
@@ -577,7 +577,7 @@ export default {
       this.imageUrl = fileSrc; // Update image preview if necessary
     }
   },
-  
+
     validatePhoneNumber(number) {
       // Check if the number is exactly 10 digits and does not contain letters
       const phoneRegex = /^\d{10}$/;
@@ -588,9 +588,9 @@ export default {
       this.error.graduationDegree = this.isValidDegree(this.profile.graduationDegree) ? '' : 'Invalid Highest Qualification';
       this.error.qualificationYear = this.isValidYear(this.profile.qualificationYear) ? '' : 'Invalid Qualification Year';
       this.error.span = this.isValidSpecialization(this.profile.specialization) ? '' : 'Invalid Specialization';
-     
+
     },
-   
+
     isValidDate(date) {
       return !!date;
     },
@@ -616,7 +616,7 @@ isValidYear(year) {
     {
       return specialization && /^[a-zA-Z\s.,'-]+$/.test(specialization);
     }
-  
+
   },
   watch: {
     user() {
@@ -659,7 +659,7 @@ isValidYear(year) {
 }
 .custom-dialog .q-card {
   width: 500px;
-  max-width: 90vw; 
+  max-width: 90vw;
 }
 
 .custom-button {
@@ -667,7 +667,7 @@ isValidYear(year) {
 }
 
 .custom-button:hover {
-  background-color: #5479F7; 
-  color: white; 
+  background-color: #5479F7;
+  color: white;
 }
 </style>

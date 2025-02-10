@@ -212,13 +212,18 @@ const routes = [
     meta: { title: 'Program', module: 'program' },
     component: () => import('layouts/DashboardLayout.vue'),
     children: [
-
       {
         path: '',
         component: () => import('pages/program/program.vue'),
-        meta: { item: '' }
-      }
-    ]
+        meta: { item: '' },
+      },
+      {
+        path: ':id',
+        name: 'ProgramDetails',
+        component: () => import('pages/program/CourseDetails.vue'),
+        meta: { title: 'Course Details', item: '' },
+      },
+    ],
   },
   {
     path: '/channel',

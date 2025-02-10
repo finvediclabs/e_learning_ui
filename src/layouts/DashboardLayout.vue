@@ -245,6 +245,10 @@ export default {
     icon: 'computer', label: 'Labs', value: 'labs',
   },
 
+  {
+    icon:"books", label:"program", value:"program"
+  },
+
   { label: "Calendar", value: "class-room", icon: 'event' },
 
 
@@ -281,7 +285,7 @@ export default {
       // allAccess: [ "profile", "help","program","assignment","class-room","elearning","admin","library","hackathon","read-pdf"],54
 
 
-      allAccess: [ "profile", "help","home","labs","library","reports","channel","class-room","calendar","books","videos","presentations","chat","read-pdf"],
+      allAccess: [ "profile", "help","home","labs","library","reports","channel","class-room","calendar","books","videos","presentations","chat","read-pdf","program"],
       profiles: [], // Store fetched profiles here
       roles: [], // Store fetched roles here
       userRoles: [],
@@ -558,6 +562,9 @@ setAccessPaths() {
       if  (this.$route.path === '/elearning') {
         this.backgroundStyle = 'Elearning_BackgroundStyle'; // Apply the background style class
       }
+      else if  (this.$route.path === '/program') {
+        this.backgroundStyle = 'Program_BackgroundStyle'; // Apply the background style class
+      }
 
       else if (this.$route.path === '/library/elearning') {
         this.backgroundStyle = 'Assignment_BackgroundStyle'; // Apply the background style class
@@ -719,6 +726,11 @@ setAccessPaths() {
  background-color: #F6F6F6;
  background-size: 100% 100%;
 
+}
+.Program_BackgroundStyle {
+  background-color: #FFFFFF;
+  background-size: 100% 100%;
+  margin-top:3%;
 }
 body{
   background-color: #F6F6F6;
