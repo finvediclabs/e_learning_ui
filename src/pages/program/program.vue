@@ -9,13 +9,13 @@
           class="course-item"
         >
           <div class="course-name">{{ course.title }}</div>
-          <div class="course-card">
+          <div class="course-card" @click="navigateToCourse(course.id)">
             <q-btn
               class="course-button"
               :style="{ backgroundImage: `url(${course.imagePath})` }"
-              flat
-              @click="navigateToCourse(course.id)"
-            ></q-btn>
+              flat 
+            >
+          </q-btn>
             <div class="course-content">
               <div class="course-description">{{ course.abstractt }}</div>
             </div>

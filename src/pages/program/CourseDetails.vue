@@ -27,8 +27,8 @@
         </div>
 <div class="col-1"></div>
         <!-- Chapter Categories Section -->
-        <div class="col-6">
-  <div class="chapter-categories">
+        <div class="col-6" style="display: flex;flex-direction: column;justify-content: center;">
+  <div class="chapter-categories" >
     <ul>
       <li v-for="(name, index) in course.categoryName" :key="index" class="category-item">
         <div class="category-row">
@@ -36,7 +36,6 @@
           <q-btn
             label="lets start"
             unelevated
-            color="primary"
             class="category-button"
             @click="onCategoryClick(course.catgoryId[index])"
           />
