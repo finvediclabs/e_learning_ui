@@ -18,7 +18,6 @@
               class="course-button"
               :style="{ backgroundImage: `url(${course.imagePath})` }"
               flat
-              @click="navigateToCourse(course.id)"
             ></q-btn>
             <div class="course-content">
               <div class="course-description">{{ course.abstractt }}</div>
@@ -28,7 +27,7 @@
 <div class="col-1"></div>
         <!-- Chapter Categories Section -->
         <div class="col-6" style="display: flex;flex-direction: column;justify-content: center;">
-  <div class="chapter-categories" >
+  <div class="chapter-categories">
     <ul>
       <li v-for="(name, index) in course.categoryName" :key="index" class="category-item">
         <div class="category-row">
@@ -36,6 +35,7 @@
           <q-btn
             label="lets start"
             unelevated
+            color="primary"
             class="category-button"
             @click="onCategoryClick(course.catgoryId[index])"
           />
@@ -129,6 +129,12 @@ export default {
     this.loading = false;
     console.log('fetchCourseDetails: Finished fetching course details.');
   }
+
+},
+onCategoryClick(categoryId) {
+  const courseId = this.course.id; // Get the current course ID
+  console.log('onCategoryClick: Navigating to category details:', courseId, categoryId);
+  this.$router.push({ name: 'CategoryDetails', params: { courseId, categoryId } });
 },
 
   },

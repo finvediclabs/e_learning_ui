@@ -210,6 +210,9 @@ const routes = [
   {
     path: '/program',
     meta: { title: 'Program', module: 'program' },
+    props:{
+      showDrawer: false,
+  },
     component: () => import('layouts/DashboardLayout.vue'),
     children: [
       {
@@ -222,6 +225,13 @@ const routes = [
         name: 'ProgramDetails',
         component: () => import('pages/program/CourseDetails.vue'),
         meta: { title: 'Course Details', item: '' },
+        
+      },
+      {
+        path: ':courseId/category/:categoryId',
+        name: 'CategoryDetails',
+        component: () => import('pages/program/CategoryDetails.vue'),
+        meta: { title: 'Category Details', item: '' },
       },
     ],
   },
