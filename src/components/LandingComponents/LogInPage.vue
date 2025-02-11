@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="text-h5 text-weight-bolder">Log In</div>
+    <div class="text-h5 text-weight-bolder">Login and start learning</div>
     <!-- <account-log-in />
     <div class="full-width text-center q-py-sm">OR</div> -->
     <div class="">
