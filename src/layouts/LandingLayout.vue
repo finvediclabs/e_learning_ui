@@ -1,9 +1,9 @@
 <template>
   <q-layout>
     <q-page-container>
-      <q-page class="login-class relative-position">
-        <q-page style="z-index: 1" class="q-pt-xl q-px-xl">
-          <div class="text-h3 text-weight-bolder gurukul-text">
+      <q-page class="login-class relative-position" style="height: 100vh;">
+        <q-page style="z-index: 1; display: flex; flex-direction: column; justify-content: center; padding-top: 0px; " class="q-pt-xl q-px-xl" >
+          <!-- <div class="text-h3 text-weight-bolder gurukul-text">
             <svg xmlns="http://www.w3.org/2000/svg" width="180" height="35" viewBox="0 0 241 41" :fill="logoColor">
               <path d="M236.176 34.0211H207.469V4.91602H221.824L221.855 20.2101H236.176V34.0211Z" />
               <path
@@ -63,19 +63,23 @@
               <path d="M138.254 35.6641V6.87597H149.766L149.647 6.70801H138.082V35.8321H149.65L149.769 35.6641H138.254Z"
                 stroke-miterlimit="10" />
             </svg>
-          </div>
+          </div> -->
+          <!-- <div class="gurukul-text flex column" style="max-width: 50%;">
+            <h5 class="text-h5 text-weight-bolder col-6" style="margin-bottom: 1%;">Welcome to <br> GURUKUL</h5>
+            <p class="col-6 self-start" >Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi.</p>
+          </div> -->
           <landing-page style="z-index: 1" />
-          <div class="row justify-between q-pt-lg">
+          <!-- <div class="row justify-between q-pt-lg" style="padding-top: 0px;">
             <div class="text-center gurukul-text">
-              <span class="text-subtitle2">A product by</span> <br>
-              <span class="text-h6">FINVEDIC</span>
+              <span class="text-subtitle2" >A product by</span> <br>
+              <span class="text-h6" >FINVEDIC</span>
             </div>
             <div class="items-center row">
               <span class="text-h5 ">&#169;</span>&nbsp;<span class="text-caption">All Rights reserved</span>
             </div>
-          </div>
+          </div> -->
         </q-page>
-        <q-page class="bg-white fin-absolute"></q-page>
+        <!-- <q-page class="bg-white fin-absolute"></q-page> -->
       </q-page>
     </q-page-container>
   </q-layout>
@@ -118,11 +122,12 @@ export default {
 <style>
 .login-class {
   position:relative;
-  background: #5479F7;
+  /* background: #5479F7; */
+  background: #f6f6f6;
 }
 
 .gurukul-text {
-  color: #ffffff;
+  color: #000000;
 }
 
 .fin-absolute {
