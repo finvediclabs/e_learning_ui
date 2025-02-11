@@ -43,7 +43,7 @@
             </template>
           </q-input>
 
-          <q-btn color="primary" class="full-width sub-btn text-weight-bolder" padding="md" label="Create Account"
+          <q-btn color="primary" class="full-width sub-btn text-weight-bolder" padding="md" label="Sign up" style="background-color: #4E5BF8 !important; color: #ffffff;"
             type="submit" />
 
         </q-form>

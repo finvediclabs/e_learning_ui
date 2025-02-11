@@ -69,7 +69,7 @@
             <p class="col-6 self-start" >Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi.</p>
           </div> -->
           <landing-page style="z-index: 1" />
-          <div class="row justify-between q-pt-lg" style="padding-top: 0px;">
+          <!-- <div class="row justify-between q-pt-lg" style="padding-top: 0px;">
             <div class="text-center gurukul-text">
               <span class="text-subtitle2" >A product by</span> <br>
               <span class="text-h6" >FINVEDIC</span>
@@ -77,7 +77,7 @@
             <div class="items-center row">
               <span class="text-h5 ">&#169;</span>&nbsp;<span class="text-caption">All Rights reserved</span>
             </div>
-          </div>
+          </div> -->
         </q-page>
         <!-- <q-page class="bg-white fin-absolute"></q-page> -->
       </q-page>
