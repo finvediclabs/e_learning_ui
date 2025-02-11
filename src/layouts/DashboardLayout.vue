@@ -119,11 +119,25 @@
 
     <q-space />
 
-    <q-input color="bg-finvedic" rounded outlined v-model="text" label="Search">
+    <q-input color="bg-finvedic" rounded outlined v-model="text" label="Search" style="width: 40%;">
       <template v-slot:append>
         <q-icon name="search" />
       </template>
     </q-input>
+
+<!-- ================================== -->
+<template v-for="(module, index) in otherModules2" :key="index">
+  <q-btn
+    v-if="!module.menu"
+    flat
+    class="q-mx-lg text-body1 secondary-nav-btn"
+    @click="changeLocation(module)"
+    v-ripple
+  >
+    <q-icon :name="module.icon" class="q-mr-sm" size="32px" />
+  </q-btn>
+</template>
+<!-- ================================== -->
 
     <q-btn
       icon="notifications_active"
@@ -176,6 +190,49 @@
           </q-menu>
         </q-avatar>
 
+  </q-toolbar>
+  <q-toolbar class="second_navbar justify-center">
+    <!-- Secondary Navigation Bar -->
+    <div class="nav-bar row items-center">
+          <template v-for="(module, index) in otherModules" :key="index">
+            <q-btn
+              v-if="!module.menu"
+              flat
+              class="q-mx-sm text-body1 secondary-nav-btn"
+              @click="changeLocation(module)"
+              v-ripple
+            >
+              <q-icon :name="module.icon" class="q-mr-sm" />
+              {{ module.label }}
+            </q-btn>
+            <q-btn-dropdown
+              v-else
+              flat
+              class="q-mx-sm text-body1 secondary-nav-btn"
+              :icon="module.icon"
+              :label="module.label"
+              no-caps
+            >
+              <q-list>
+                <q-item
+                  v-for="(item, i) in module.menu"
+                  :key="item.value"
+                  clickable
+                  class="q-my-xs q-px-md"
+                  @click="changeLocation(module, item)"
+                  v-ripple
+                >
+                  <q-item-section avatar>
+                    <q-icon :name="item.icon" />
+                  </q-item-section>
+                  <q-item-section>
+                    {{ item.label }}
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-btn-dropdown>
+          </template>
+        </div>
   </q-toolbar>
 </q-header>
 
@@ -249,11 +306,28 @@ export default {
     icon:"books", label:"program", value:"program"
   },
 
+
+
+      {
+
+
+           icon: 'chat', label: 'Collaboration', value: 'channel'
+       },
+
+
+      ],
+      otherModules2List:[
+        {label:"help", value:"help", icon: 'help'},
+      ],
+
+      otherModulesList: [
+        
   { label: "Calendar", value: "class-room", icon: 'event' },
 
-
-
-       {
+        { label: "Assignments", value: "assignment", icon: 'task' },
+        { label: "Hackathons", value: "hackathons", icon: 'celebration' },
+        { label: "Calendar", value: "class-room", icon: 'event' },
+        {
           icon: 'library_books', label: 'Libraries', value: 'library', menu: [
             { label: "Books", value: 'books', icon: 'menu_book' },
             { label: "Videos", value: "videos", icon: 'switch_video' },
@@ -267,11 +341,7 @@ export default {
            icon: 'summarize', label: 'Reports', value: 'reports',
 
        },
-      {
 
-
-           icon: 'chat', label: 'Collaboration', value: 'channel'
-       },
 
 
       ],
@@ -300,6 +370,12 @@ export default {
     modules() {
     return this.modulesList.filter(module => this.userAccess.includes(module.value));
   },
+  otherModules() {
+      return this.otherModulesList.filter((module) => this.userAccess.includes(module.value));
+    },
+    otherModules2() {
+      return this.otherModules2List.filter((module) => this.userAccess.includes(module.value));
+    },
   isEligible() {
       const profileStore = useProfileStore();
       const roles = profileStore.user.roles.map(role => role.name);
@@ -753,7 +829,7 @@ background-attachment: fixed;
   background-repeat: no-repeat;
   background-size: 100vw 55vh;
   position: absolute;
-  top: 72px
+  top: 120px
 }
 .StudentProfile_backgroundStyle{
   background-color: #B2CCFC;
@@ -835,7 +911,11 @@ background-attachment: fixed;
 .q-toolbar {
   font-family: 'Poppins', sans-serif;
 }
-
+.second_navbar{
+  background-color: #ffff;
+  color: #7D7D7D;
+  width: 100%;
+}
 .mainHeader {
   background: #5479F7;
   backdrop-filter: blur(19px);
