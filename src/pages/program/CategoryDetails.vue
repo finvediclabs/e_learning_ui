@@ -41,21 +41,23 @@
     <div v-else>
       <!-- Top Buttons -->
       <div class="row mb-4" style="padding-left: 2%;">
-  <div class="col-12 d-flex justify-content-center button-container">
-    <q-btn
-      v-for="tab in tabs"
-      :key="tab.name"
-      :label="tab.label"
-      :color="activeTab === tab.name ? 'primary' : 'grey'"
-      :class="{
-        'bg-primary text-white': activeTab === tab.name,
-        'bg-transparent text-grey': activeTab !== tab.name
-      }"
-      class="mx-2 button-class"
-      unelevated
-      @click="activeTab = tab.name"
-    />
-  </div>
+        <!-- ======= -->
+        <div class="col-12 d-flex justify-content-center button-container">
+  <q-btn
+    v-for="profile in elProfiles"
+    :key="profile.id"
+    :label="formatProfileName(profile.profileName)"
+    :color="activeTab === formatProfileName(profile.profileName) ? 'primary' : 'grey'"
+    :class="{
+      'bg-primary text-white': activeTab === formatProfileName(profile.profileName),
+      'bg-transparent text-grey': activeTab !== formatProfileName(profile.profileName)
+    }"
+    class="mx-2 button-class"
+    unelevated
+    @click="activeTab = formatProfileName(profile.profileName)"
+  />
+</div>
+  <!-- ======== -->
 </div>
 
 
@@ -127,19 +129,29 @@
 
 <script>
 import 'src/css/LibraryProgramView.css';
+import { useSessionStore } from "src/stores/session";
+import { storeToRefs } from "pinia";
 import CryptoJS from 'crypto-js'
 export default {
   name: 'CategoryDetails',
+  setup() {
+    const session = useSessionStore();
+    const { token, userType } = storeToRefs(session);
+
+    // console.log('Session Store:', session);
+    return {
+      token,
+      userType,
+      roles: [] // Initialize roles array to store fetched roles
+    };
+  },
   data() {
     return {
       books: [],
       activeTab: 'books', // Default active tab
       activeCategoryId: null,
-    tabs: [
-      { name: 'books', label: 'Books' },
-      { name: 'videos', label: 'Videos' },
-      { name: 'presentations', label: 'Presentations' },
-    ],
+      profiles: [], // This will hold all fetched profiles
+      elProfiles: [],
       videos: [],
       presentations: [],
       category: {
@@ -179,6 +191,42 @@ created() {
   },
 
   methods: {
+    formatProfileName(profileName) {
+    // Remove 'programs/' prefix if it exists
+    return profileName.replace(/^programs\//, '');
+
+  },
+  async fetchProfiles() {
+  try {
+    const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
+    const response = await this.$api.get(`${baseUrl}api/userprofiles`);
+    this.profiles = response.data;
+
+    // Filter profiles based on:
+    // 1. profileCode starts with 'EL'
+    // 2. active === true
+    // 3. roles array includes a role with name matching userType
+    this.elProfiles = this.profiles.filter(profile => {
+      return (
+        profile.profileCode.startsWith('EL') &&
+        profile.active &&
+        profile.roles.some(role => role.name === this.userType)
+      );
+    });
+
+    // Set the first EL Profile's profileName (after removing 'programs/') as the default active tab
+    if (this.elProfiles.length > 0) {
+      this.activeTab = this.formatProfileName(this.elProfiles[0].profileName);
+      console.log('Active Tab:', this.activeTab);
+    } else {
+      console.log('No matching profiles found for the given userType.');
+    }
+  } catch (error) {
+    console.error("Error fetching profiles:", error);
+    this.error = error;
+  }
+},
+
     async fetchCourseDetails() {
       const { courseId } = this.$route.params; // Get courseId from route params
       const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
@@ -419,6 +467,7 @@ created() {
   },
   mounted() {
     this.fetchCourseDetails();
+    this.fetchProfiles();
     this.fetchCategoryDetails(); // Fetch category details on component mount
   },
 };
