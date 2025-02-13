@@ -109,3 +109,14 @@
   color: #191919; /* Text color for better contrast */
   border-radius: 10px; /* Optional for rounded corners */
 }
+@media (max-width: 600px) {
+  .right-container {
+    background-color: #ffff !important;
+    overflow-y: auto;
+    margin-left: 2%;
+    margin-right: 2%;
+    margin-top: 2vh;
+    height: 100vh;
+    border-radius: 20px; /* Adjust the radius value as needed */
+   }
+}

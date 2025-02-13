@@ -2,22 +2,28 @@
   <div class="home">
     <h3>Welcome back {{ user?.name }}</h3>
   </div>
-  <div class="row">
-    <div class="col-8">
-      <div class="row">
-        <div class="col-4">
-          <attendance-card />
-        </div>
-        <div class="col-4">
-          <assignment-card />
-        </div>
-        <div class="col-4">
-          <hackathon-card />
-        </div>
+ <div class="row">
+  <!-- Left Column -->
+  <div class="col-12 col-md-8">
+    <div class="row">
+      <!-- Attendance Card -->
+      <div class="col-12 col-sm-6 col-lg-4 margin-bottom">
+        <attendance-card />
+      </div>
+      <!-- Assignment Card -->
+      <div class="col-12 col-sm-6 col-lg-4 margin-bottom">
+        <assignment-card />
+      </div>
+      <!-- Hackathon Card -->
+      <div class="col-12 col-sm-6 col-lg-4 margin-bottom">
+        <hackathon-card />
       </div>
     </div>
-    <div class="col-4"></div>
   </div>
+  <!-- Right Column -->
+  <div class="col-12 col-md-4 mb-3 mb-sm-3"></div>
+</div>
+
 </template>
 
 <script>
@@ -70,5 +76,8 @@ h3 {
   font-size: x-large;
   color: #141414;
   font-weight: 600;
+}
+.margin-bottom {
+  margin-bottom: 1rem;
 }
 </style>

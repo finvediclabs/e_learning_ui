@@ -1,17 +1,27 @@
 <template>
   <q-layout view="hHh Lpr fFf  " :class="backgroundStyle" >
-    <q-header>
-  <q-toolbar class="q-pa-sm q-pr-lg mainHeader">
-    <q-item>
+    <q-header >
+  <q-toolbar class="q-pa-sm q-pr-lg mainHeader" >
+    <q-item class="mobile_padding">
       <q-item-section avatar>
+        <q-btn
+          v-if="isMobile"
+          flat
+          dense
+          round
+          icon="menu"
+          class="menu-button"
+          @click="drawerLeft = !drawerLeft"
+        />
         <q-icon
           name="arrow_back"
           style="font-weight: bold;"
           class="cursor-pointer"
           @click="$router.go(-1)"
-          v-if="!showDrawer"
+          v-if="!showDrawer && !isMobile"
         />
       </q-item-section>
+
       <q-item-section class="text-h5 text-weight-bolder logo">
             <svg xmlns="http://www.w3.org/2000/svg" :width="widthSVG" height="30" viewBox="0 0 197 30" fill="none">
               <path d="M197 25.0071H174.011V0.961853H185.507L185.532 13.5971H197V25.0071Z" fill="#ffff" />
@@ -68,15 +78,7 @@
     </q-item>
 
     <!-- Hamburger Menu Button for Mobile -->
-    <q-btn
-          v-if="isMobile"
-          flat
-          dense
-          round
-          icon="menu"
-          class="menu-button"
-          @click="drawerLeft = !drawerLeft"
-        />
+
 
     <!-- Horizontal Navigation Bar -->
     <div class="nav-bar row items-center q-gutter-sm" v-if="!isMobile">
@@ -132,13 +134,13 @@
 
 
 
-    <q-input 
+    <q-input
   v-if="!isMobile"
-  color="bg-finvedic" 
-  rounded 
-  outlined 
-  v-model="text" 
-  label="Search" 
+  color="bg-finvedic"
+  rounded
+  outlined
+  v-model="text"
+  label="Search"
   style="width: 40%; margin: 0px 20px;">
   <template v-slot:append>
     <q-icon name="search" />
@@ -151,7 +153,7 @@
   <q-btn
     v-if="!module.menu"
     flat
-    class="text-body1 secondary-nav-btn"
+    class="text-body1 secondary-nav-btn help_button"
     @click="changeLocation(module)"
     v-ripple
   >
@@ -164,8 +166,6 @@
       icon="notifications_active"
       round
       class=" text-white notifs"
-      :size="isMobile ? 'sm' : 'md'"
-      style="margin-right: 20px; font-size: 1rem;"
     >
       <div v-if="notificationList.length" class="notification-badge">
         {{ notificationList.length }}
@@ -371,7 +371,7 @@ export default {
       ],
 
       otherModulesList: [
-        
+
   { label: "Calendar", value: "class-room", icon: 'event' },
 
         { label: "Assignments", value: "assignment", icon: 'task' },
@@ -958,6 +958,9 @@ background-attachment: fixed;
 .q-drawer {
   background-color: transparent;
 }
+.notifs{
+  margin-right: 20px; font-size: 1rem;
+}
 .nav-bar .q-btn {
   font-family: 'Poppins', sans-serif;
   font-size: small;
@@ -1012,9 +1015,9 @@ background-attachment: fixed;
 
 
 @media only screen and (max-width:576px){
-  .logo{
+  /* .logo{
     display: none !important;
-  }
+  } */
 }
 @media screen and (min-width: 1920px){
   .booksBackgroundStyle {
@@ -1062,7 +1065,17 @@ background-attachment: fixed;
   .mobile-menu {
     display: block;
   }
-} 
+  .notifs{
+    margin-right:0px; font-size: 1rem;
+  }
+  .help_button{
+    padding: 0px 0px !important;
+    margin-right: 0% !important;
+  }
+  .mobile_padding{
+      padding-left: 1% !important;
+  }
+}
 
 .otherModules2{
   border: 2px solid red !important;
@@ -1075,25 +1088,25 @@ background-attachment: fixed;
 .nav-bar {
   display: flex;
   align-items: center;
-  gap: 10px; 
-  flex-wrap: nowrap; 
+  gap: 10px;
+  flex-wrap: nowrap;
   overflow: hidden;
 }
 
 /* Reduce font size on smaller laptop screens */
-@media (max-width: 1440px) {  
+@media (max-width: 1440px) {
   .nav-bar {
     gap: 6px;
   }
   .nav-bar .q-btn {
-    font-size: 14px; 
+    font-size: 14px;
     padding: 6px 10px;
   }
 }
 
-@media (max-width: 1280px) {  
+@media (max-width: 1280px) {
   .nav-bar .q-btn {
-    font-size: 13px; 
+    font-size: 13px;
     padding: 5px 8px;
   }
 }

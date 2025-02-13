@@ -11,45 +11,59 @@
     <!-- Course Details -->
     <div v-else>
       <div class="row col-12 courseDetailsPage">
-        <div class="col-4">
-          <div class="course-name">{{ course.title }}</div>
-          <div class="course-card">
-            <q-btn
-              class="course-button"
-              :style="{ backgroundImage: `url(${course.imagePath})` }"
-              flat
-            ></q-btn>
-            <div class="course-content">
-              <div class="course-description">{{ course.abstractt }}</div>
-            </div>
-          </div>
-        </div>
-<div class="col-1"></div>
-        <!-- Chapter Categories Section -->
-        <div class="col-6" style="display: flex;flex-direction: column;justify-content: center;">
-  <div class="chapter-categories">
-    <ul>
-      <li v-for="(name, index) in course.categoryName" :key="index" class="category-item">
-        <div class="category-row">
-          <span>{{ name }}</span>
-          <q-btn
-            label="lets start"
-            unelevated
-            color="primary"
-            class="category-button"
-            @click="onCategoryClick(course.catgoryId[index])"
-          />
-
-        </div>
-        <span v-if="index < course.categoryName.length - 1"><hr></span> <!-- Add separator after each item except the last -->
-      </li>
-    </ul>
+  <!-- Left Section: Course Name and Card -->
+  <div class="col-12 col-md-5 col-lg-4 mb-3">
+    <div class="course-name">{{ course.title }}</div>
+    <div class="course-card">
+      <q-btn
+        class="course-button"
+        :style="{ backgroundImage: `url(${course.imagePath})` }"
+        flat
+      ></q-btn>
+      <div class="course-content">
+        <div class="course-description">{{ course.abstractt }}</div>
+      </div>
+    </div>
   </div>
+
+  <!-- Spacer for Small Screens -->
+  <div class="d-none d-md-block col-md-1"></div>
+
+  <!-- Right Section: Chapter Categories -->
+  <div
+    class="col-12 col-md-6"
+    style="display: flex; flex-direction: column; justify-content: center;"
+  >
+    <div class="chapter-categories">
+      <ul>
+        <li
+          v-for="(name, index) in course.categoryName"
+          :key="index"
+          class="category-item"
+        >
+          <div class="category-row d-flex align-items-center justify-content-between">
+            <span>{{ name }}</span>
+            <q-btn
+              label="Let's Start"
+              unelevated
+              color="primary"
+              class="category-button"
+              @click="onCategoryClick(course.catgoryId[index])"
+            />
+          </div>
+          <!-- Add separator after each item except the last -->
+          <span v-if="index < course.categoryName.length - 1">
+            <hr />
+          </span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Spacer for Small Screens -->
+  <div class="d-none d-md-block col-md-1"></div>
 </div>
 
-
-        <div class="col-1"></div>
-      </div>
     </div>
   </div>
 </template>

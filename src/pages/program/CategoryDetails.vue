@@ -1,6 +1,6 @@
 <template>
   <div class="row parent-container">
-    <div class="col-4 left-container">
+    <div class="col-12 col-md-4 left-container mb-3">
       <div class="chapter-categories">
         <div class="course-details">
           <span>Course Details</span>
@@ -26,7 +26,7 @@
 
 </div>
 
-  <div class="col-8">
+<div class="col-12 col-md-8 mb-3">
     <div class="right-container">
   <div class="category-details">
     <!-- Loading State -->
@@ -41,53 +41,59 @@
     <div v-else>
       <!-- Top Buttons -->
       <div class="row mb-4" style="padding-left: 2%;">
-        <!-- ======= -->
-        <div class="col-12 d-flex justify-content-center button-container">
-  <q-btn
-    v-for="profile in elProfiles"
-    :key="profile.id"
-    :label="formatProfileName(profile.profileName)"
-    :color="activeTab === formatProfileName(profile.profileName) ? 'primary' : 'grey'"
-    :class="{
-      'bg-primary text-white': activeTab === formatProfileName(profile.profileName),
-      'bg-transparent text-grey': activeTab !== formatProfileName(profile.profileName)
-    }"
-    class="mx-2 button-class"
-    unelevated
-    @click="activeTab = formatProfileName(profile.profileName)"
-  />
-</div>
-  <!-- ======== -->
+  <div
+    class="col-12 d-flex flex-wrap justify-content-center align-items-center button-container"
+  >
+    <q-btn
+      v-for="profile in elProfiles"
+      :key="profile.id"
+      :label="formatProfileName(profile.profileName)"
+      :color="activeTab === formatProfileName(profile.profileName) ? 'primary' : 'grey'"
+      :class="{
+        'bg-primary text-white': activeTab === formatProfileName(profile.profileName),
+        'bg-transparent text-grey': activeTab !== formatProfileName(profile.profileName)
+      }"
+      class="mx-2 my-2 button-class"
+      unelevated
+      @click="activeTab = formatProfileName(profile.profileName)"
+    />
+  </div>
 </div>
 
 
       <!-- Content Tabs -->
      <!-- Books Tab -->
-<div v-if="activeTab === 'books'" class="tab-content row">
-  <div class="row col-10 main-content">
+     <div v-if="activeTab === 'books'" class="tab-content row">
+  <div class="row col-12 col-md-10 main-content">
     <div
       v-for="book in books"
       :key="book.id"
-      class="col-12 col-sm-4 col-md-3 col-lg-3 mb-4 book-card"
+      class="col-6 col-sm-4 col-md-3 col-lg-3 mb-4 book-card"
     >
       <div class="card h-100">
-        <q-img :src="book.imagePath" alt="Book Cover" class="card-img-top book_img"  @click="visitChapter(book)"/>
+        <q-img
+          :src="book.imagePath"
+          alt="Book Cover"
+          class="card-img-top book_img"
+          @click="visitChapter(book)"
+        />
         <div class="card-body">
           <span class="card-title">{{ book.chapterTitle }}</span>
         </div>
       </div>
     </div>
   </div>
-  <div class="col-2"></div>
+  <div class="col-2 d-none d-md-block"></div>
 </div>
+
 
 <!-- Videos Tab -->
 <div v-if="activeTab === 'videos'" class="tab-content row">
-  <div class="row mb-4 col-11 main-content">
+  <div class="row col-12 col-md-10 main-content">
     <div
       v-for="video in videos"
       :key="video.id"
-      class="col-12 col-sm-4 col-lg-4 mb-4 video-card"
+      class="col-6 col-sm-4 col-lg-4 mb-4 video-card"
     >
       <div class="card h-100">
         <q-img :src="video.coverPath" alt="Video Cover" class="card-img-top book_img" @click="visitVideo(video)" />
@@ -97,16 +103,16 @@
       </div>
     </div>
   </div>
-  <div class="col-1"></div>
+  <div class="col-1  d-none d-md-block"></div>
 </div>
 
 <!-- Presentations Tab -->
 <div v-if="activeTab === 'presentations'" class="tab-content row">
-  <div class="row mb-4 col-11 main-content">
+  <div class="row col-12 col-md-10 main-content">
     <div
       v-for="presentation in presentations"
       :key="presentation.id"
-      class="col-12 col-sm-4 col-lg-4 mb-4 presentation-card"
+      class="col-6 col-sm-4 col-lg-4 mb-4 presentation-card"
     >
       <div class="card h-100">
         <q-img :src="presentation.coverPath" alt="Presentation Cover" class="card-img-top book_img" @click="visitPresentation(presentation)" />
@@ -116,7 +122,7 @@
       </div>
     </div>
   </div>
-  <div class="col-1"></div>
+  <div class="col-1  d-none d-md-block"></div>
 </div>
 
 
