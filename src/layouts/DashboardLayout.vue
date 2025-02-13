@@ -67,8 +67,19 @@
           </q-item-section>
     </q-item>
 
+    <!-- Hamburger Menu Button for Mobile -->
+    <q-btn
+          v-if="isMobile"
+          flat
+          dense
+          round
+          icon="menu"
+          class="menu-button"
+          @click="drawerLeft = !drawerLeft"
+        />
+
     <!-- Horizontal Navigation Bar -->
-    <div class="nav-bar row items-center">
+    <div class="nav-bar row items-center q-gutter-sm" v-if="!isMobile">
 
       <template v-for="(module, index) in modules">
 
@@ -119,18 +130,28 @@
 
     <q-space />
 
-    <q-input color="bg-finvedic" rounded outlined v-model="text" label="Search" style="width: 40%;">
-      <template v-slot:append>
-        <q-icon name="search" />
-      </template>
-    </q-input>
+
+
+    <q-input 
+  v-if="!isMobile"
+  color="bg-finvedic" 
+  rounded 
+  outlined 
+  v-model="text" 
+  label="Search" 
+  style="width: 40%; margin: 0px 20px;">
+  <template v-slot:append>
+    <q-icon name="search" />
+  </template>
+</q-input>
+
 
 <!-- ================================== -->
 <template v-for="(module, index) in otherModules2" :key="index">
   <q-btn
     v-if="!module.menu"
     flat
-    class="q-mx-lg text-body1 secondary-nav-btn"
+    class="text-body1 secondary-nav-btn"
     @click="changeLocation(module)"
     v-ripple
   >
@@ -142,8 +163,9 @@
     <q-btn
       icon="notifications_active"
       round
-      class="bg-white2 text-white q-mx-lg"
+      class=" text-white notifs"
       :size="isMobile ? 'sm' : 'md'"
+      style="margin-right: 20px; font-size: 1rem;"
     >
       <div v-if="notificationList.length" class="notification-badge">
         {{ notificationList.length }}
@@ -191,50 +213,76 @@
         </q-avatar>
 
   </q-toolbar>
-  <q-toolbar class="second_navbar justify-center">
-    <!-- Secondary Navigation Bar -->
-    <div class="nav-bar row items-center">
-          <template v-for="(module, index) in otherModules" :key="index">
-            <q-btn
-              v-if="!module.menu"
-              flat
-              class="q-mx-sm text-body1 secondary-nav-btn"
-              @click="changeLocation(module)"
-              v-ripple
-            >
-              <q-icon :name="module.icon" class="q-mr-sm" />
-              {{ module.label }}
-            </q-btn>
-            <q-btn-dropdown
-              v-else
-              flat
-              class="q-mx-sm text-body1 secondary-nav-btn"
-              :icon="module.icon"
-              :label="module.label"
-              no-caps
-            >
-              <q-list>
-                <q-item
-                  v-for="(item, i) in module.menu"
-                  :key="item.value"
-                  clickable
-                  class="q-my-xs q-px-md"
-                  @click="changeLocation(module, item)"
-                  v-ripple
-                >
-                  <q-item-section avatar>
-                    <q-icon :name="item.icon" />
-                  </q-item-section>
-                  <q-item-section>
-                    {{ item.label }}
-                  </q-item-section>
-                </q-item>
-              </q-list>
-            </q-btn-dropdown>
-          </template>
-        </div>
-  </q-toolbar>
+  <q-toolbar v-if="!isMobile" class="second_navbar justify-center">
+  <!-- Secondary Navigation Bar (Desktop) -->
+  <div class="nav-bar row items-center">
+    <template v-for="(module, index) in otherModules" :key="index">
+      <q-btn
+        v-if="!module.menu"
+        flat
+        class="q-mx-sm text-body1 secondary-nav-btn"
+        @click="changeLocation(module)"
+        v-ripple
+      >
+        <q-icon :name="module.icon" class="q-mr-sm" />
+        {{ module.label }}
+      </q-btn>
+      <q-btn-dropdown
+        v-else
+        flat
+        class="q-mx-sm text-body1 secondary-nav-btn"
+        :icon="module.icon"
+        :label="module.label"
+        no-caps
+      >
+        <q-list>
+          <q-item
+            v-for="(item, i) in module.menu"
+            :key="item.value"
+            clickable
+            class="q-my-xs q-px-md"
+            @click="changeLocation(module, item)"
+            v-ripple
+          >
+            <q-item-section avatar>
+              <q-icon :name="item.icon" />
+            </q-item-section>
+            <q-item-section>
+              {{ item.label }}
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-btn-dropdown>
+    </template>
+  </div>
+</q-toolbar>
+
 </q-header>
+
+<!-- Sidebar Drawer for Mobile Navigation -->
+<q-drawer v-if="isMobile" v-model="drawerLeft" side="left" overlay>
+  <q-list>
+    <template v-for="(module, index) in modules" :key="index">
+      <q-item clickable @click="changeLocation(module)">
+        <q-item-section>
+          {{ module.label }}
+        </q-item-section>
+      </q-item>
+    </template>
+
+    <!-- Secondary Navbar Items (Mobile Only) -->
+    <q-separator class="q-my-md" />
+    <q-item-label header>More</q-item-label>
+    <template v-for="(module, index) in otherModules" :key="'other-' + index">
+      <q-item clickable @click="changeLocation(module)">
+        <q-item-section>
+          {{ module.label }}
+        </q-item-section>
+      </q-item>
+    </template>
+  </q-list>
+</q-drawer>
+
 
 
 
@@ -280,6 +328,8 @@ export default {
   },
   data() {
     return {
+      drawerLeft: false,
+      isMobile: window.innerWidth <= 600,
       backgroundStyle: '',
       profileImg: profileImg,
       imageUrl: '',
@@ -391,6 +441,7 @@ export default {
   },
 
   mounted() {
+    window.addEventListener("resize", this.checkScreenSize);
     // Start polling when the component is mounted
     // this.notificationInterval = setInterval(() => {
     //   this.getNotifications();
@@ -421,6 +472,9 @@ export default {
     // Fetch profiles and roles to set access paths
     this.fetchProfiles();
   },
+  beforeDestroy() {
+    window.removeEventListener("resize", this.checkScreenSize);
+  },
 
   watch: {
     token(newVal) {
@@ -437,6 +491,9 @@ export default {
     }
   },
   methods: {
+    checkScreenSize() {
+      this.isMobile = window.innerWidth <= 600;
+    },
     async fetchProfiles() {
       try {
         const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
@@ -745,6 +802,11 @@ setAccessPaths() {
     getExpansionBoolean(module) {
       return this.selectedModule.module === module.value;
     },
+    changeLocation(module, item) {
+      let url = item ? `/${module.value}/${item.value}` : `/${module.value}`;
+      this.$router.push({ path: url });
+      if (this.isMobile) this.drawerLeft = false;
+    },
 
     changeLocation(module, item) {
 
@@ -829,7 +891,7 @@ background-attachment: fixed;
   background-repeat: no-repeat;
   background-size: 100vw 55vh;
   position: absolute;
-  top: 120px
+  top: 120px;
 }
 .StudentProfile_backgroundStyle{
   background-color: #B2CCFC;
@@ -976,5 +1038,81 @@ background-attachment: fixed;
 .hidden-arrow {
   display: none;
 }
+/* ======================= */
+.menu-button {
+  color: white;
+  margin-left: auto;
+}
+
+.nav-bar {
+  display: flex;
+  gap: 15px;
+  justify-content: flex-start !important;
+}
+
+.q-drawer {
+  background: #fff;
+  width: 250px;
+}
+
+@media (max-width: 600px) {
+  /* .nav-bar {
+    display: none;
+  } */
+  .mobile-menu {
+    display: block;
+  }
+} 
+
+.otherModules2{
+  border: 2px solid red !important;
+}
+
+.q-btn:before{
+  box-shadow: none !important;
+}
+
+.nav-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px; 
+  flex-wrap: nowrap; 
+  overflow: hidden;
+}
+
+/* Reduce font size on smaller laptop screens */
+@media (max-width: 1440px) {  
+  .nav-bar {
+    gap: 6px;
+  }
+  .nav-bar .q-btn {
+    font-size: 14px; 
+    padding: 6px 10px;
+  }
+}
+
+@media (max-width: 1280px) {  
+  .nav-bar .q-btn {
+    font-size: 13px; 
+    padding: 5px 8px;
+  }
+}
+
+
+.second_navbar {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 10px 0;
+}
+
+/* Hide secondary navbar on mobile screens */
+@media (max-width: 768px) {
+  .second_navbar {
+    display: none;
+  }
+}
+
+
 
 </style>
