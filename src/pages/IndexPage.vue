@@ -46,10 +46,10 @@ export default {
         await this.fetchRoles();
 
         // Redirect to home page after verification
-        this.$router.push({ path: '/home' });
+        this.$router.push({ path: '/homeProfile' });
       } else {
         // Redirect to login if no token is present
-        this.$router.push('/login');
+        this.$router.push('/home');
       }
     }
   }

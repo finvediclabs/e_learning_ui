@@ -40,6 +40,11 @@ const routes = [
     meta: { title: 'landing', module: 'login' },
     component: () => import('layouts/LandingLayout.vue'),
   },
+  {
+    path: '/home',
+    meta: { title: 'landing', module: 'home' },
+    component: () => import('layouts/home/HomePage.vue'),
+  },
 
 
   {
@@ -61,7 +66,7 @@ const routes = [
   },
 
   {
-    path: '/home',
+    path: '/homeProfile',
     meta: { title: 'Home', module: 'home' },
     component: () => import('layouts/DashboardLayout.vue'),
     children: [
@@ -225,14 +230,14 @@ const routes = [
         name: 'ProgramDetails',
         component: () => import('pages/program/CourseDetails.vue'),
         meta: { title: 'Course Details', item: '' },
-        
-      },
+},
       {
         path: ':courseId/category/:categoryId',
         name: 'CategoryDetails',
         component: () => import('pages/program/CategoryDetails.vue'),
         meta: { title: 'Category Details', item: '' },
-      },
+
+ },
     ],
   },
   {
