@@ -3,7 +3,7 @@
     <!-- Navigation Bar -->
     <q-header class="bg-black text-white" elevated>
       <q-toolbar>
-        <div class="q-gutter-md">
+        <div class="nav-container">
           <q-btn
             v-for="(item, index) in navItems"
             :key="index"
@@ -11,7 +11,7 @@
             noCaps
             :label="item.label"
             @click="activeTab = item.key"
-            class="text-white"
+            class="text-white nav-item"
             :class="{ 'active-link': activeTab === item.key }"
           />
         </div>
@@ -64,12 +64,57 @@ export default {
 </script>
 
 <style scoped>
-.q-gutter-md {
+/* Navigation Container */
+.nav-container {
   display: flex;
+  justify-content: start;
   align-items: center;
+  width: 100%;
 }
 
-.active-link {
-  border-bottom: 2px solid white; /* Adds underline to active tab */
+/* Navigation Item */
+.nav-item {
+  /* font-size: 16px; */
+  /* padding: 12px 15px; */
+  position: relative;
+  transition: color 0.3s ease-in-out;
+}
+
+/* Underline Effect (Default Hidden) */
+.nav-item::after {
+  content: '';
+  position: absolute;
+  bottom: 3px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background-color: white;
+  transition: width 0.3s ease-in-out, left 0.3s ease-in-out;
+}
+
+/* Underline on Active Tab (Always Visible) */
+.active-link::after {
+  width: 100%;
+  left: 0;
+}
+
+/* Responsive Font Adjustments */
+@media (max-width: 768px) {
+  .nav-item {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-container {
+    flex-direction: row; 
+  }
+  .nav-item {
+    font-size: 11px;
+    padding: 6px 8px;
+    text-align: center;
+    flex-grow: 1;
+  }
 }
 </style>
