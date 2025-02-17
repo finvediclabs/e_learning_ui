@@ -91,6 +91,7 @@
           flat
           :key="module.value"
           class="q-mx-sm text-body1"
+          :class="{ 'active-web-nav': isActive(module) }"
           @click="changeLocation(module)"
           v-ripple
         >
@@ -104,6 +105,7 @@
           flat
           :key="module.menu"
           class="q-mx-sm text-body1"
+          :class="{ 'active-web-nav': isActive(module) }"
           :icon="module.icon"
           :label="module.label"
           no-caps
@@ -260,10 +262,25 @@
 </q-header>
 
 <!-- Sidebar Drawer for Mobile Navigation -->
-<q-drawer v-if="isMobile" v-model="drawerLeft" side="left" overlay>
+<q-drawer v-if="isMobile" v-model="drawerLeft" side="left" overlay persistent>
   <q-list>
-    <template v-for="(module, index) in modules" :key="index">
-      <q-item clickable @click="changeLocation(module)">
+    <!-- Close Button -->
+    <q-item>
+          <q-btn 
+            flat 
+            dense 
+            round 
+            icon="close" 
+            class="menu-close-button" 
+            @click="drawerLeft = false" 
+          />
+        </q-item>
+        <template v-for="(module, index) in modules" :key="index">
+      <q-item 
+        clickable 
+        @click="changeLocation(module)" 
+        :class="{ 'active-nav-item': isActive(module) }"
+      >
         <q-item-section>
           {{ module.label }}
         </q-item-section>
@@ -272,9 +289,13 @@
 
     <!-- Secondary Navbar Items (Mobile Only) -->
     <q-separator class="q-my-md" />
-    <q-item-label header>More</q-item-label>
+    <!-- <q-item-label header>More</q-item-label> -->
     <template v-for="(module, index) in otherModules" :key="'other-' + index">
-      <q-item clickable @click="changeLocation(module)">
+      <q-item 
+        clickable 
+        @click="changeLocation(module)" 
+        :class="{ 'active-nav-item': isActive(module) }"
+      >
         <q-item-section>
           {{ module.label }}
         </q-item-section>
@@ -491,6 +512,9 @@ export default {
     }
   },
   methods: {
+    isActive(module) {
+    return this.$route.path.startsWith(`/${module.value}`);
+  },
     checkScreenSize() {
       this.isMobile = window.innerWidth <= 600;
     },
@@ -1125,6 +1149,21 @@ background-attachment: fixed;
     display: none;
   }
 }
+
+.menu-close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.active-nav-item {
+  background-color: #E6E6E6 !important; 
+  color: #000 !important;
+  border-radius: 8px;
+  margin: 0px 10px;
+  font-size:medium;
+}
+
 
 
 
