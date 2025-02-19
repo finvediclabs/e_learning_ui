@@ -81,15 +81,11 @@ export default {
 }
 
 /* Underline Effect (Default Hidden) */
-.nav-item::after {
-  content: '';
-  position: absolute;
-  bottom: 3px;
-  left: 50%;
-  width: 0;
-  height: 2px;
-  background-color: white;
-  transition: width 0.3s ease-in-out, left 0.3s ease-in-out;
+
+
+.active-link{
+  text-decoration: underline;
+  text-underline-offset: 6px;
 }
 
 /* Underline on Active Tab (Always Visible) */

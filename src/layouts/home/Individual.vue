@@ -4,7 +4,7 @@
 
       <q-toolbar>
         <!-- Left Side: Logo, q-select, q-search -->
-        <q-toolbar-title class="row items-center">
+        <q-toolbar-title class="row items-center q-py-sm">
 <!-- space for logo will add later -->
 <q-item>
         <q-item-section class="text-h5 text-weight-bolder logo">
@@ -125,13 +125,13 @@
   </div>
 
  <!-- Programs Section -->
- <div class="q-mt-lg row" >
+ <div class="row" >
   <q-btn
   v-for="program in programs"
   :key="program.programId"
   flat
   noCaps
-  :color="selectedProgramId === program.programId ? '#474BFF' : 'gray'"
+  :color="selectedProgramId === program.programId ? '#474BFF' : 'grey'"
   class="q-mr-md text-lg bordered-btn "
   :class="{'underline': selectedProgramId === program.programId}"
   @click="fetchCourses(program.programId, program.heading, program.description)"
@@ -148,12 +148,12 @@
     <div class="col-12 col-md-6">
       <div class="row">
       <p class="text-h4 text-bold text-left">{{ selectedProgram }}</p>
-      <span class="text-left">{{ selectedDescription }}</span>
+      <span class="text-left text-grey">{{ selectedDescription }}</span>
     </div>
    <!-- Row for Labels -->
-   <div class="row col-12 flex justify-center blue_border">
+   <div class="row col-12 q-mr-lg flex justify-center blue_border">
   <!-- Eligibility Column -->
-  <div class="col-4 q-py-md">
+  <div class="col-4 q-py-sm">
     <div class="row text-bold">
       <div class="col text-center">Eligibility</div>
     </div>
@@ -163,7 +163,7 @@
   </div>
 
   <!-- Duration Column -->
-  <div class="col-4 q-py-md blue_box">
+  <div class="col-4 q-py-sm blue_box">
     <div class="row text-bold">
       <div class="col text-center ">Duration</div>
     </div>
@@ -173,7 +173,7 @@
   </div>
 
   <!-- Modules Column -->
-  <div class="col-4 q-py-md">
+  <div class="col-4 q-py-sm">
     <div class="row text-bold">
       <div class="col text-center">Modules</div>
     </div>
@@ -182,8 +182,70 @@
     </div>
   </div>
 </div>
-    </div>
 
+<div>
+    <!-- Course Fee-->
+    <div class="text-bold q-my-lg" style="font-size: large;">Course fee: INR 450,000 /</div>
+
+    <!-- Reviews -->
+     
+    <div class="reviews">
+  <!-- Review 1 -->
+  <div class="review-container">
+    <!-- Left Section -->
+    <div class="left-section flex column">
+      <div class="reviewer-info flex">
+        <img class="review-img q-mr-md" src="src/assets/Character_Drona.png" alt="Reviewer Image" />
+        <div class="reviewer-details flex column justify-center">
+          <p class="review-name q-mb-none text-bold">John Doe</p>
+          <p class="review-role q-mb-none text-grey">Software Engineer</p>
+        </div>
+      </div>
+      <!-- Star Ratings -->
+      <div class="ratings">
+        <q-icon name="star" size="16px" color="yellow" />
+        <q-icon name="star" size="16px" color="yellow" />
+        <q-icon name="star" size="16px" color="yellow" />
+        <q-icon name="star" size="16px" color="yellow" />
+        <q-icon name="star" size="16px" color="grey" />
+      </div>
+    </div>
+    <!-- Right Section -->
+    <p class="review-text">
+      "This course was fantastic! The explanations were clear, and the exercises really helped me understand the concepts."
+    </p>
+  </div>
+
+  <!-- Review 2 -->
+  <div class="review-container">
+    <!-- Left Section -->
+    <div class="left-section flex column">
+      <div class="reviewer-info flex">
+        <img class="review-img q-mr-md" src="src/assets/Character_Ved.png" alt="Reviewer Image" />
+        <div class="reviewer-details flex column justify-center">
+          <p class="review-name q-mb-none text-bold">Jane Smith</p>
+          <p class="review-role q-mb-none">Data Analyst</p>
+        </div>
+      </div>
+      <!-- Star Ratings -->
+      <div class="ratings">
+        <q-icon name="star" size="16px" color="yellow" />
+        <q-icon name="star" size="16px" color="yellow" />
+        <q-icon name="star" size="16px" color="yellow" />
+        <q-icon name="star" size="16px" color="yellow" />
+        <q-icon name="star" size="16px" color="yellow" />
+      </div>
+    </div>
+    <!-- Right Section -->
+    <p class="review-text">
+      "An amazing course that covers all the fundamentals. The instructor explained everything in detail, and the assignments were very helpful."
+    </p>
+  </div>
+</div>
+
+
+</div>
+    </div>
 
     <!-- Right Side: Course List -->
     <div class="col-12 col-md-6" >
@@ -381,18 +443,55 @@ border-radius: 20px;
 }
 .blue_border{
   border: 2px solid #4E5BF8;
-  border-radius: 50px;
+  border-radius: 22px;
   color: #4e5bf8;
-  margin-top: 2%;
-  width: 80% !important;
+  margin-top: 3%;
+  letter-spacing: 1px;
+  /* width: 80% !important;
   margin-left: auto;
-  margin-right: auto;
+  margin-right: auto; */
+  /* margin-right: 20px; */
 
 }
 .blue_box{
   background-color: #4E5BF8;
   color: white;
 }
+
+.review-container {
+  display: grid;
+  grid-template-columns: auto 1fr; 
+  gap: 16px !important; 
+  align-items: start;
+  margin-bottom: 24px; 
+}
+
+
+.review-name {
+  font-size: large;
+}
+
+.review-role {
+  font-size: 12px;
+
+}
+
+.ratings {
+  display: flex;
+  gap: 1px;
+  margin-top: 5px;
+}
+
+.review-img {
+  width: 50px;  
+  height: 50px; 
+  border-radius: 50%; 
+  object-fit: cover; 
+  object-position: center; 
+  border: 2px solid #ccc; 
+}
+
+
 
 </style>
 
