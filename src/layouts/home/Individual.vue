@@ -70,25 +70,40 @@
   dense
   outlined
   emit-value
-  color="blue"
+  color="#4E5BF8"
   map-options
-  class="q-ml-md"
+  class="q-ml-md explore"
   style="min-width: 140px;"
 />
-          <q-input dense outlined placeholder="Search" class="q-ml-md search-box">
-            <template v-slot:append>
-              <q-icon name="search" />
-            </template>
-          </q-input>
+<q-input
+  dense
+  outlined
+  placeholder="What do you want to learn?"
+  class="q-ml-md search-box"
+  bg-color="transparent"
+  color="#4E5BF8"
+  rounded
+  style="width: 300px;"
+>
+  <template v-slot:append>
+    <q-icon name="search" />
+  </template>
+</q-input>
         </q-toolbar-title>
 
         <!-- Right Side: Navigation Links -->
 
         <q-btn noCaps flat label="Courses" class="nav-link" />
 <q-btn noCaps flat label="Career" class="nav-link" />
-<q-btn noCaps color="primary" flat label="Login" class="nav-link" :to="'/login'" />
+<q-btn noCaps flat label="Login" class="nav-link" :to="'/login'" style="color: #4E5BF8"/>
 
-        <q-btn color="primary" noCaps label="Join for Free" unelevated class="join-btn" />
+<q-btn 
+  noCaps 
+  label="Join for Free" 
+  unelevated 
+  class="join-btn"
+  style="background-color: #4E5BF8; color: white;"
+/>
       </q-toolbar>
     <q-page-container>
       <!-- 	Alice blue Bar -->
@@ -103,23 +118,24 @@
        </span>!</span>
 </q-banner>
 
-<q-page class="q-pa-md">
-  <div class="page_class q-mt-lg row">
+<q-page class="q-pa-md q-my-md q-mx-xl" >
+  <div class="page_class q-mt-lg row" >
     <p><b>Launch a new career in as little as 6 months</b></p>
     <span class="q-pl-md all_courses">view all courses →</span>
   </div>
 
  <!-- Programs Section -->
- <div class="q-mt-lg row">
+ <div class="q-mt-lg row" >
   <q-btn
   v-for="program in programs"
   :key="program.programId"
   flat
   noCaps
   :color="selectedProgramId === program.programId ? '#474BFF' : 'gray'"
-  class="q-mr-md bordered-btn"
+  class="q-mr-md text-lg bordered-btn "
   :class="{'underline': selectedProgramId === program.programId}"
   @click="fetchCourses(program.programId, program.heading, program.description)"
+  style="font-size: 15px;"
 >
   {{ program.heading }}
 </q-btn>
@@ -136,11 +152,11 @@
 
 
     <!-- Right Side: Course List -->
-    <div class="col-12 col-md-6">
+    <div class="col-12 col-md-6" >
       <div>
-          <span class="text-h5 text-bold text-left">Recommended Professional Courses</span>
+          <span class="text-h5 text-bold text-left q-ml-md ">Recommended Professional Courses</span>
         </div>
-      <div v-if="courses.length" class="row q-col-gutter-md  flex justify-start">
+      <div v-if="courses.length" class="row q-col-gutter-md  flex justify-start q-ml-none" >
 
         <div
           v-for="(course, index) in courses"
@@ -273,10 +289,6 @@ export default {
   height: 40px;
   width: auto;
 }
-
-.search-box {
-  width: 200px;
-}
 .all_courses{
   color: #7D7D7D;
   cursor: pointer;
@@ -318,13 +330,17 @@ export default {
   cursor: pointer;
 }
 .underline {
-  color:#474BFF;
+  color: #474BFF;
   text-decoration: underline;
+  text-underline-offset: 6px;
 }
+
 .program_view {
 width: 100%;
 border: 1px solid gray;
 border-radius: 20px;
 }
+
+
 </style>
 
