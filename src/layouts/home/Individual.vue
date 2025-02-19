@@ -97,10 +97,10 @@
 <q-btn noCaps flat label="Career" class="nav-link" />
 <q-btn noCaps flat label="Login" class="nav-link" :to="'/login'" style="color: #4E5BF8"/>
 
-<q-btn 
-  noCaps 
-  label="Join for Free" 
-  unelevated 
+<q-btn
+  noCaps
+  label="Join for Free"
+  unelevated
   class="join-btn"
   style="background-color: #4E5BF8; color: white;"
 />
@@ -146,8 +146,42 @@
   <div class="q-pa-md q-mb-md q-col-12 q-md-10 q-lg-8 row program_view">
     <!-- Left Side: Program Name -->
     <div class="col-12 col-md-6">
+      <div class="row">
       <p class="text-h4 text-bold text-left">{{ selectedProgram }}</p>
       <span class="text-left">{{ selectedDescription }}</span>
+    </div>
+   <!-- Row for Labels -->
+   <div class="row col-12 flex justify-center blue_border">
+  <!-- Eligibility Column -->
+  <div class="col-4 q-py-md">
+    <div class="row text-bold">
+      <div class="col text-center">Eligibility</div>
+    </div>
+    <div class="row">
+      <div class="col text-center">{{ selectedEligibility }}</div>
+    </div>
+  </div>
+
+  <!-- Duration Column -->
+  <div class="col-4 q-py-md blue_box">
+    <div class="row text-bold">
+      <div class="col text-center ">Duration</div>
+    </div>
+    <div class="row">
+      <div class="col text-center">{{ selectedDuration }}</div>
+    </div>
+  </div>
+
+  <!-- Modules Column -->
+  <div class="col-4 q-py-md">
+    <div class="row text-bold">
+      <div class="col text-center">Modules</div>
+    </div>
+    <div class="row">
+      <div class="col text-center">10</div>
+    </div>
+  </div>
+</div>
     </div>
 
 
@@ -206,6 +240,9 @@ export default {
       courses: [], // List of courses (chapter categories)
       selectedProgram: "", // Selected program name
       selectedDescription: "", // Selected program description
+      selectedDuration: "", // Duration of the program
+    selectedModules: "", // Modules in the program
+    selectedEligibility: "", // Eligibility criteria for the program
     };
   },
   async created() {
@@ -242,7 +279,9 @@ export default {
     try {
       const response = await axios.get(`http://localhost:8087/api/programsInfo/${programId}`);
       const data = response.data.data;
-
+      this.selectedDuration = data.duration || "Not available";
+    this.selectedModules = data.modules || "Not specified";
+    this.selectedEligibility = data.eligibility || "Not mentioned";
       this.courses = await Promise.all(
         data.chapterCategoryNames.map(async (name, index) => {
           let imageUrl = data.chapterCategoryImagePaths[index] || null;
@@ -340,7 +379,20 @@ width: 100%;
 border: 1px solid gray;
 border-radius: 20px;
 }
+.blue_border{
+  border: 2px solid #4E5BF8;
+  border-radius: 50px;
+  color: #4e5bf8;
+  margin-top: 2%;
+  width: 80% !important;
+  margin-left: auto;
+  margin-right: auto;
 
+}
+.blue_box{
+  background-color: #4E5BF8;
+  color: white;
+}
 
 </style>
 
