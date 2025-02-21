@@ -273,8 +273,15 @@
           </q-card>
         </div>
         <div class="col-12 q-mt-md text-right">
+  <span style="color: #4E5BF8; cursor: pointer;" @click="navigateToAllCourses">
+    Explore All Courses →
+  </span>
+</div>
+
+
+        <!-- <div class="col-12 q-mt-md text-right">
           <span style="color: #4E5BF8;">Explore All Courses →</span>
-        </div>
+        </div> -->
       </div>
       <div v-else class="text-center">
         <q-spinner color="primary" size="md" class="q-mt-md" />
@@ -293,9 +300,12 @@
 
 <script>
 import axios from "axios";
+// import FinAssociate from "src/layouts/home/FinAssociate.vue";
+
 
 export default {
   name: "Individual",
+ 
   data() {
     return {
       programs: [], // List of programs
@@ -319,6 +329,9 @@ export default {
     }
   },
   methods: {
+    navigateToAllCourses() {
+    this.$router.push("/finassociate"); 
+  },
     async fetchPrograms() {
       try {
         const response = await axios.get("http://localhost:8087/api/programsInfo");
