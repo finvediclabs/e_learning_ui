@@ -60,10 +60,11 @@ export default {
   methods: {
     async fetchCategories() {
   try {
-    const response = await fetch("http://localhost:8087/api/chapterCategoriess");
+    const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
+    const getCourse = baseUrl + 'api/chapterCategoriess';
+    const response = await fetch(getCourse);
     const data = await response.json();
 
-    const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
 
     // Process categories and fetch images
     this.categories = await Promise.all(
