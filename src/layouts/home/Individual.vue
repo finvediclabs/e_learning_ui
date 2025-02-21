@@ -178,7 +178,7 @@
       <div class="col text-center">Modules</div>
     </div>
     <div class="row">
-      <div class="col text-center">10</div>
+      <div class="col text-center">{{ selectedModules }}</div>
     </div>
   </div>
 </div>
