@@ -118,7 +118,7 @@
        </span>!</span>
 </q-banner>
 
-<q-page class="q-pa-md q-my-md q-mx-xl" >
+<q-page class="q-pt-md q-px-md q-mt-md q-mx-xl" >
   <div class="page_class q-mt-lg row" >
     <p><b>Launch a new career in as little as 6 months</b></p>
     <span class="q-pl-md all_courses">view all courses →</span>
@@ -185,63 +185,44 @@
 
 <div>
     <!-- Course Fee-->
-    <div class="text-bold q-my-lg" style="font-size: large;">Course fee: INR 450,000 /</div>
+    <div class="text-bold q-my-lg" style="font-size: large;">Course fee: INR {{ selectedCourseFee }} </div>
 
-    <!-- Reviews -->
-     
     <div class="reviews">
-  <!-- Review 1 -->
-  <div class="review-container">
-    <!-- Left Section -->
-    <div class="left-section flex column">
-      <div class="reviewer-info flex">
-        <img class="review-img q-mr-md" src="src/assets/Character_Drona.png" alt="Reviewer Image" />
-        <div class="reviewer-details flex column justify-center">
-          <p class="review-name q-mb-none text-bold">John Doe</p>
-          <p class="review-role q-mb-none text-grey">Software Engineer</p>
+    <div
+      v-for="review in reviews"
+      :key="review.id"
+      class="review-container"
+    >
+      <!-- Left Section -->
+      <div class="left-section flex column">
+        <div class="reviewer-info flex">
+          <img
+            class="review-img q-mr-md"
+            :src="review.imagePath"
+            alt="Reviewer Image"
+          />
+          <div class="reviewer-details flex column justify-center">
+            <p class="review-name q-mb-none text-bold">{{ review.studentName }}</p>
+            <p class="review-role q-mb-none text-grey">{{ review.studentProf }}</p>
+          </div>
         </div>
-      </div>
-      <!-- Star Ratings -->
-      <div class="ratings">
-        <q-icon name="star" size="16px" color="yellow" />
-        <q-icon name="star" size="16px" color="yellow" />
-        <q-icon name="star" size="16px" color="yellow" />
-        <q-icon name="star" size="16px" color="yellow" />
-        <q-icon name="star" size="16px" color="grey" />
-      </div>
-    </div>
-    <!-- Right Section -->
-    <p class="review-text">
-      "This course was fantastic! The explanations were clear, and the exercises really helped me understand the concepts."
-    </p>
-  </div>
 
-  <!-- Review 2 -->
-  <div class="review-container">
-    <!-- Left Section -->
-    <div class="left-section flex column">
-      <div class="reviewer-info flex">
-        <img class="review-img q-mr-md" src="src/assets/Character_Ved.png" alt="Reviewer Image" />
-        <div class="reviewer-details flex column justify-center">
-          <p class="review-name q-mb-none text-bold">Jane Smith</p>
-          <p class="review-role q-mb-none">Data Analyst</p>
+        <!-- Dynamic Star Ratings -->
+        <div class="ratings">
+          <q-icon
+            v-for="n in 5"
+            :key="n"
+            name="star"
+            size="16px"
+            :color="n <= review.rating ? 'yellow' : 'grey'"
+          />
         </div>
       </div>
-      <!-- Star Ratings -->
-      <div class="ratings">
-        <q-icon name="star" size="16px" color="yellow" />
-        <q-icon name="star" size="16px" color="yellow" />
-        <q-icon name="star" size="16px" color="yellow" />
-        <q-icon name="star" size="16px" color="yellow" />
-        <q-icon name="star" size="16px" color="yellow" />
-      </div>
+
+      <!-- Right Section -->
+      <p class="review-text">{{ review.description }}</p>
     </div>
-    <!-- Right Section -->
-    <p class="review-text">
-      "An amazing course that covers all the fundamentals. The instructor explained everything in detail, and the assignments were very helpful."
-    </p>
   </div>
-</div>
 
 
 </div>
@@ -273,15 +254,10 @@
           </q-card>
         </div>
         <div class="col-12 q-mt-md text-right">
-  <span style="color: #4E5BF8; cursor: pointer;" @click="navigateToAllCourses">
+          <span style="color: #4E5BF8; cursor: pointer;" @click="navigateToAllCourses">
     Explore All Courses →
   </span>
-</div>
-
-
-        <!-- <div class="col-12 q-mt-md text-right">
-          <span style="color: #4E5BF8;">Explore All Courses →</span>
-        </div> -->
+        </div>
       </div>
       <div v-else class="text-center">
         <q-spinner color="primary" size="md" class="q-mt-md" />
@@ -296,18 +272,22 @@
 
     </q-page-container>
   </q-layout>
-</template>
+<mostPopular />
 
+</template>
 <script>
 import axios from "axios";
-// import FinAssociate from "src/layouts/home/FinAssociate.vue";
 
+import mostPopular from "./mostPopular.vue";
 
 export default {
+  components: {
+    mostPopular,
+  },
   name: "Individual",
- 
   data() {
     return {
+      reviews: [],
       programs: [], // List of programs
       courses: [], // List of courses (chapter categories)
       selectedProgram: "", // Selected program name
@@ -315,6 +295,7 @@ export default {
       selectedDuration: "", // Duration of the program
     selectedModules: "", // Modules in the program
     selectedEligibility: "", // Eligibility criteria for the program
+    selectedCourseFee: "", // Course fee for the program
     };
   },
   async created() {
@@ -329,12 +310,12 @@ export default {
     }
   },
   methods: {
-    navigateToAllCourses() {
-    this.$router.push("/finassociate"); 
-  },
     async fetchPrograms() {
       try {
-        const response = await axios.get("http://localhost:8087/api/programsInfo");
+        const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
+        const getPrograms = baseUrl + 'api/programsInfo';
+        const response = await axios.get(getPrograms);
+
         this.programs = response.data.data;
 
         // Ensure at least one program exists before setting default
@@ -345,25 +326,83 @@ export default {
         console.error("Error fetching programs:", error);
       }
     },
+    navigateToAllCourses() {
+    this.$router.push("/finassociate");
+  },
     async fetchCourses(programId, programName, programDescription) {
-    this.selectedProgramId = programId; // Set the selected program id
-    this.selectedDescription = programDescription;
-    this.selectedProgram = programName;
-    this.courses = []; // Clear previous data
+  this.selectedProgramId = programId;
+  this.selectedDescription = programDescription;
+  this.selectedProgram = programName;
+  this.courses = []; // Clear previous data
 
-    try {
-      const response = await axios.get(`http://localhost:8087/api/programsInfo/${programId}`);
-      const data = response.data.data;
-      this.selectedDuration = data.duration || "Not available";
+  try {
+    const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
+const getProgramCourse = baseUrl + 'api/programsInfo';
+
+const response = await axios.get(`${getProgramCourse}/${programId}`);
+    const data = response.data.data;
+    this.selectedDuration = data.duration || "Not available";
     this.selectedModules = data.modules || "Not specified";
     this.selectedEligibility = data.eligibility || "Not mentioned";
-      this.courses = await Promise.all(
-        data.chapterCategoryNames.map(async (name, index) => {
-          let imageUrl = data.chapterCategoryImagePaths[index] || null;
-          const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
-          // Handle image download
+    this.selectedCourseFee = data.courseFee || "Not specified";
+
+    // Fetch reviews for the selected program
+    await this.fetchReviews(programId);
+
+    this.courses = await Promise.all(
+      data.chapterCategoryNames.map(async (name, index) => {
+        let imageUrl = data.chapterCategoryImagePaths[index] || null;
+        const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
+
+        if (imageUrl && imageUrl.startsWith(`${baseUrl}fs/download/`)) {
+          console.log(`Fetching cover image for: ${name}`);
+          const downloadUrl = `${baseUrl}fs/download`;
+          const filename = imageUrl.replace(`${baseUrl}fs/download/`, '');
+
+          try {
+            const formData = new FormData();
+            formData.append('filename', filename);
+
+            const downloadResponse = await this.$api.post(downloadUrl, formData, { responseType: 'blob' });
+            const blob = new Blob([downloadResponse.data]);
+            imageUrl = window.URL.createObjectURL(blob);
+
+            console.log(`Fetched cover image for: ${name}`);
+          } catch (error) {
+            console.error(`Error fetching cover image for: ${name}`, error);
+            imageUrl = this.DummyBook; // Fallback image
+          }
+        }
+
+        return {
+          title: name,
+          programDescription: data.description,
+          description: data.chapterCategoryDescriptions[index] || "No description available",
+          image: imageUrl,
+        };
+      })
+    );
+  } catch (error) {
+    console.error("Error fetching courses:", error);
+  }
+},
+async fetchReviews(programId) {
+  this.reviews = []; // Clear previous reviews before fetching new ones
+  const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
+
+  try {
+    const getCourse = baseUrl + 'api/programFeedback/program';
+const response = await axios.get(`${getCourse}/${programId}`);
+
+
+    if (response.data.success) {
+      // Process each review to fetch its image
+      this.reviews = await Promise.all(
+        response.data.data.map(async (review) => {
+          let imageUrl = review.imagePath || null;
+
           if (imageUrl && imageUrl.startsWith(`${baseUrl}fs/download/`)) {
-            console.log(`Fetching cover image for: ${name}`);
+            console.log(`Fetching image for: ${review.studentName}`);
             const downloadUrl = `${baseUrl}fs/download`;
             const filename = imageUrl.replace(`${baseUrl}fs/download/`, '');
 
@@ -375,25 +414,26 @@ export default {
               const blob = new Blob([downloadResponse.data]);
               imageUrl = window.URL.createObjectURL(blob);
 
-              console.log(`Fetched cover image for: ${name}`);
+              console.log(`Fetched image for: ${review.studentName}`);
             } catch (error) {
-              console.error(`Error fetching cover image for: ${name}`, error);
+              console.error(`Error fetching image for: ${review.studentName}`, error);
               imageUrl = this.DummyBook; // Fallback image
             }
           }
 
           return {
-            title: name,
-            programDescription: data.description,
-            description: data.chapterCategoryDescriptions[index] || "No description available",
-            image: imageUrl,
+            ...review,
+            imagePath: imageUrl, // Replace with the fetched or fallback image
           };
         })
       );
-    } catch (error) {
-      console.error("Error fetching courses:", error);
+    } else {
+      console.error("Failed to fetch reviews");
     }
-  },
+  } catch (error) {
+    console.error("Error fetching reviews:", error);
+  }
+},
   },
 };
 </script>
@@ -473,10 +513,10 @@ border-radius: 20px;
 
 .review-container {
   display: grid;
-  grid-template-columns: auto 1fr; 
-  gap: 16px !important; 
+  grid-template-columns: auto 1fr;
+  gap: 16px !important;
   align-items: start;
-  margin-bottom: 24px; 
+  margin-bottom: 24px;
 }
 
 
@@ -496,14 +536,17 @@ border-radius: 20px;
 }
 
 .review-img {
-  width: 50px;  
-  height: 50px; 
-  border-radius: 50%; 
-  object-fit: cover; 
-  object-position: center; 
-  border: 2px solid #ccc; 
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
+  border: 2px solid #ccc;
 }
 
+.left-section {
+  width: 200px;
+}
 
 
 </style>

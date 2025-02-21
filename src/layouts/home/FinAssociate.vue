@@ -1,7 +1,7 @@
 <template>
     <q-layout view="lHh Lpr lFf">
       <!-- Navigation Bar -->
-  
+
         <q-toolbar>
           <!-- Left Side: Logo, q-select, q-search -->
           <q-toolbar-title class="row items-center q-py-sm">
@@ -61,7 +61,7 @@
               </svg>
             </q-item-section>
           </q-item>
-  
+
           <q-select
     v-model="selectedExplore"
     :options="exploreOptions"
@@ -90,13 +90,13 @@
     </template>
   </q-input>
           </q-toolbar-title>
-  
+
           <!-- Right Side: Navigation Links -->
-  
+
           <q-btn noCaps flat label="Courses" class="nav-link" />
   <q-btn noCaps flat label="Career" class="nav-link" />
   <q-btn noCaps flat label="Login" class="nav-link" :to="'/login'" style="color: #4E5BF8"/>
-  
+
   <q-btn
     noCaps
     label="Join for Free"
@@ -105,16 +105,16 @@
     style="background-color: #4E5BF8; color: white;"
   />
         </q-toolbar>
-      <q-page-container>  
+      <q-page-container>
 
         <!-- Fintech Associate -->
-         
+
         <div class="container">
   <div class="row q-py-xl" style="background-color: #F1F4FF;">
     <div class="col-5 q-px-xl ">
       <div class="text-bold q-mb-lg text-h4">Fintech Associate Program</div>
       <p class="text-grey">
-        Easy to enjoy, easy to prepare. Healthy as could be. Easy to enjoy, easy to prepare. Healthy as could be. Easy to enjoy, easy to prepare. Easy to enjoy, easy to prepare. Healthy as could be. Easy to enjoy, easy to prepare. Healthy as could be. Easy to enjoy, easy to prepare. Easy to enjoy, easy to prepare. Healthy as could be. Easy to enjoy, easy to prepare. Healthy as could be. Easy to enjoy, easy to prepare. 
+        Easy to enjoy, easy to prepare. Healthy as could be. Easy to enjoy, easy to prepare. Healthy as could be. Easy to enjoy, easy to prepare. Easy to enjoy, easy to prepare. Healthy as could be. Easy to enjoy, easy to prepare. Healthy as could be. Easy to enjoy, easy to prepare. Easy to enjoy, easy to prepare. Healthy as could be. Easy to enjoy, easy to prepare. Healthy as could be. Easy to enjoy, easy to prepare.
       </p>
 
       <div class="flex items-center justify-between">
@@ -138,7 +138,7 @@
           </div>
         </div>
 
-        
+
     </div>
     <div class="text-bold q-my-lg" style="font-size: large;">Course fee: INR 450,000 /</div>
 <q-btn class="q-px-xl text-weight-regular shadow-5" noCaps unelevated rounded label="Enroll Now" color="#fff" style="background-color: #443EDE;"/>
@@ -146,7 +146,7 @@
 
     <div class="col q-pr-xl">
         <q-img
-          src="https://picsum.photos/500/300"
+          :src=course_img
           :ratio="16/8"
           style="border-radius: 15px;"
         />
@@ -199,19 +199,11 @@
 
                   <q-item-section class="litem">Prepare for Industry Certification Exam</q-item-section>
                 </q-item>
-                
-         
+
+
           </q-card-section>
 
           <q-card-section >
-         
-                <q-item v-ripple>
-                  <q-item-section avatar>
-                    <q-icon name="done" color="indigo-14" size="sm"/>
-                  </q-item-section>
-
-                  <q-item-section class="litem">Prepare for Industry Certification Exam</q-item-section>
-                </q-item>
 
                 <q-item v-ripple>
                   <q-item-section avatar>
@@ -236,8 +228,16 @@
 
                   <q-item-section class="litem">Prepare for Industry Certification Exam</q-item-section>
                 </q-item>
-                
-           
+
+                <q-item v-ripple>
+                  <q-item-section avatar>
+                    <q-icon name="done" color="indigo-14" size="sm"/>
+                  </q-item-section>
+
+                  <q-item-section class="litem">Prepare for Industry Certification Exam</q-item-section>
+                </q-item>
+
+
           </q-card-section>
         </div>
         </q-card>
@@ -247,16 +247,18 @@
 
 
 
-  
+
       </q-page-container>
     </q-layout>
   </template>
 
   <script>
      import axios from "axios";
+     import course_img from '../../assets/cours_1.jpg'
      export default {
   data() {
     return {
+      course_img:course_img,
       profiles: [
         { image: "https://randomuser.me/api/portraits/women/1.jpg" },
         { image: "https://randomuser.me/api/portraits/men/2.jpg" },
