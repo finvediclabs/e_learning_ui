@@ -190,7 +190,27 @@ h4::after {
   justify-content: flex-start;
   text-align: left;
 }
+.category-description {
+  overflow: hidden;
+  font-size: 12px;
+  color: #B1B1B1;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Limit to 2 lines */
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+  transition: all 0.3s ease;
+}
 
+.category-description.expanded {
+  -webkit-line-clamp: unset; /* Remove the limit when expanded */
+}
+
+.read-more-link {
+  color: #007bff;
+  cursor: pointer;
+  font-size: 0.9rem;
+  text-decoration: underline;
+}
 .course-name {
   font-size: 18px;
   font-weight: 500;
@@ -199,8 +219,12 @@ h4::after {
   color: #141414;
   margin-bottom: 5px;
 }
+.category-name{
+  color: #3D3D3D;
+
+}
 .courseDetailsPage{
-  width: 80%;
+  width: 90%;
   padding: 2%;
   margin-left: auto;
   margin-right: auto;
@@ -210,7 +234,7 @@ h4::after {
 }
 .category-item {
   display: flex;
-  flex-direction: column;  
+  flex-direction: column;
 }
 
 .category-row {
@@ -224,6 +248,8 @@ h4::after {
   font-size: large;
   display: flex;
   flex-direction: column;
+  margin-top: auto;
+  margin-bottom: auto;
 
 }
 ul{

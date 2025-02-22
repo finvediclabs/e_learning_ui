@@ -30,35 +30,59 @@
   <div class="d-none d-md-block col-md-1"></div>
 
   <!-- Right Section: Chapter Categories -->
-  <div
-    class="col-12 col-md-6"
-    style="display: flex; flex-direction: column; justify-content: center;"
-  >
-    <div class="chapter-categories">
-      <ul>
-        <li
-          v-for="(name, index) in course.categoryName"
-          :key="index"
-          class="category-item"
-        >
-          <div class="category-row d-flex align-items-center justify-content-between">
-            <span>{{ name }}</span>
+  <div class="col-12 col-md-6" style="margin-top: auto;margin-bottom: auto;">
+  <div class="chapter-categories" >
+    <ul>
+      <li
+        v-for="(name, index) in course.categoryName"
+        :key="index"
+        class="category-item"
+      >
+        <div class="row align-items-center">
+          <!-- Category Name & Description (8 columns) -->
+          <div class="col-8">
+            <span class="fw-bold">{{ name }}</span>
+
+            <!-- Description with Read More/Read Less -->
+            <div
+              :class="{
+                'category-description': true,
+                'expanded': expandedIndexes.includes(index)
+              }"
+            >
+              {{ course.categoryDescription[index] }}
+            </div>
+
+            <!-- Read More / Read Less Toggle -->
+            <a
+              href="javascript:void(0);"
+              @click="toggleDescription(index)"
+              class="read-more-link"
+            >
+              {{ expandedIndexes.includes(index) ? 'Read Less' : 'Read More' }}
+            </a>
+          </div>
+
+          <!-- Button (4 columns) centered horizontally & vertically -->
+          <div class="col-4 d-flex justify-content-center align-items-center" style="margin-bottom: auto;margin-top: auto;">
             <q-btn
               label="Let's Start"
               unelevated
               color="primary"
               class="category-button"
-              @click="onCategoryClick(course.catgoryId[index])"
+                 @click="onCategoryClick(course.catgoryId[index])"
             />
           </div>
-          <!-- Add separator after each item except the last -->
-          <span v-if="index < course.categoryName.length - 1">
-            <hr />
-          </span>
-        </li>
-      </ul>
-    </div>
+        </div>
+
+        <!-- Separator -->
+        <span v-if="index < course.categoryName.length - 1">
+          <hr />
+        </span>
+      </li>
+    </ul>
   </div>
+</div>
 
   <!-- Spacer for Small Screens -->
   <div class="d-none d-md-block col-md-1"></div>
@@ -78,6 +102,7 @@ export default {
       course: null, // The course object
       loading: true, // Whether the page is loading
       error: null, // Error message
+      expandedIndexes: []
     };
   },
   methods: {
@@ -99,6 +124,7 @@ export default {
         title: course.heading,
         description: course.description,
         categoryName: course.chapterCategoryNames,
+        categoryDescription: course.chapterCategoryDescriptions,
         catgoryId: course.chapterCategoryIds,
         abstractt: course.description,
         imagePath: course.imagePath ? course.imagePath : this.DummyBook, // Use dummy image as fallback
@@ -145,6 +171,13 @@ export default {
   }
 
 },
+toggleDescription(index) {
+    if (this.expandedIndexes.includes(index)) {
+      this.expandedIndexes = this.expandedIndexes.filter(i => i !== index);
+    } else {
+      this.expandedIndexes.push(index);
+    }
+  },
 onCategoryClick(categoryId) {
   const courseId = this.course.id; // Get the current course ID
   console.log('onCategoryClick: Navigating to category details:', courseId, categoryId);
