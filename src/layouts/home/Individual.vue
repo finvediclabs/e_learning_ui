@@ -273,16 +273,19 @@
     </q-page-container>
   </q-layout>
 <mostPopular />
+<freeCourses />
 
 </template>
 <script>
 import axios from "axios";
 
 import mostPopular from "./mostPopular.vue";
+import freeCourses from "./freeCourses.vue";
 
 export default {
   components: {
     mostPopular,
+    freeCourses,
   },
   name: "Individual",
   data() {
