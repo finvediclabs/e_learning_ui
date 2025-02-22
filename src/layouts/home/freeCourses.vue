@@ -136,7 +136,7 @@ export default {
 <style scoped>
 .free-courses {
   padding: 20px;
-  height: 80vh; /* Set height to 80% of viewport */
+  height: 100%; /* Set height to 80% of viewport */
   overflow-y: auto; /* Adds scroll if content overflows */
 }
 
