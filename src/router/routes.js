@@ -290,6 +290,7 @@ const routes = [
   {
     path: "/finassociate",
     component: () => import("src/layouts/home/FinAssociate.vue") // Adjust path if necessary
+
   },
 
   // Always leave this as last one,
@@ -299,7 +300,7 @@ const routes = [
     component: () => import('pages/ErrorNotFound.vue')
   },
 
-  
+
 ]
 
 

@@ -178,7 +178,7 @@
       <div class="col text-center">Modules</div>
     </div>
     <div class="row">
-      <div class="col text-center">{{ selectedModules }}</div>
+      <div class="col text-center">10</div>
     </div>
   </div>
 </div>
@@ -327,8 +327,15 @@ export default {
       }
     },
     navigateToAllCourses() {
-    this.$router.push("/finassociate");
-  },
+  if (this.selectedProgramId) {
+    this.$router.push({
+      path: "/finassociate",
+      query: { programId: this.selectedProgramId }
+    });
+  } else {
+    console.warn("No program selected");
+  }
+},
     async fetchCourses(programId, programName, programDescription) {
   this.selectedProgramId = programId;
   this.selectedDescription = programDescription;

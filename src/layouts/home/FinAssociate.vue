@@ -2,7 +2,7 @@
     <q-layout view="lHh Lpr lFf">
       <!-- Navigation Bar -->
 
-        <q-toolbar>
+      <q-toolbar>
           <!-- Left Side: Logo, q-select, q-search -->
           <q-toolbar-title class="row items-center q-py-sm">
   <!-- space for logo will add later -->
@@ -106,16 +106,23 @@
   />
         </q-toolbar>
       <q-page-container>
+        <div class="q-my-md q-px-xl">
+  <span class="routing_class" >
+    <span @click="$router.go(-1)" style="cursor: pointer; color: blue;">
 
+      {{ heading }}
+    </span>
+
+  &nbsp; > &nbsp; View Program</span>
+</div>
         <!-- Fintech Associate -->
 
         <div class="container">
   <div class="row q-py-xl" style="background-color: #F1F4FF;">
     <div class="col-5 q-px-xl ">
-      <div class="text-bold q-mb-lg text-h4">Fintech Associate Program</div>
-      <p class="text-grey">
-        Easy to enjoy, easy to prepare. Healthy as could be. Easy to enjoy, easy to prepare. Healthy as could be. Easy to enjoy, easy to prepare. Easy to enjoy, easy to prepare. Healthy as could be. Easy to enjoy, easy to prepare. Healthy as could be. Easy to enjoy, easy to prepare. Easy to enjoy, easy to prepare. Healthy as could be. Easy to enjoy, easy to prepare. Healthy as could be. Easy to enjoy, easy to prepare.
-      </p>
+      <div class="text-bold q-mb-lg text-h4">{{ heading }} Program</div>
+
+      <p class="text-grey">{{ description }}</p>
 
       <div class="flex items-center justify-between">
         <!-- Star Ratings -->
@@ -140,7 +147,7 @@
 
 
     </div>
-    <div class="text-bold q-my-lg" style="font-size: large;">Course fee: INR 450,000 /</div>
+    <div class="text-bold q-my-lg" style="font-size: large;">Course fee: INR {{courseFee}}</div>
 <q-btn class="q-px-xl text-weight-regular shadow-5" noCaps unelevated rounded label="Enroll Now" color="#fff" style="background-color: #443EDE;"/>
     </div>
 
@@ -259,6 +266,9 @@
   data() {
     return {
       course_img:course_img,
+      heading: "",
+    description: "",
+    courseFee: "",
       profiles: [
         { image: "https://randomuser.me/api/portraits/women/1.jpg" },
         { image: "https://randomuser.me/api/portraits/men/2.jpg" },
@@ -266,6 +276,58 @@
         { image: "https://randomuser.me/api/portraits/men/4.jpg" }
       ]
     };
+  },
+  created() {
+    const selectedProgramId = this.$route.query.programId;
+    console.log("Selected Program ID:", selectedProgramId);
+
+    if (selectedProgramId) {
+      this.fetchProgramDetails(selectedProgramId);
+    }
+  },
+methods: {
+  async fetchProgramDetails(programId) {
+  try {
+    const response = await axios.get(`https://fnbackendprod.finvedic.in/api/programsInfo/${programId}`);
+    if (response.data.success) {
+      const program = response.data.data;
+      this.heading = program.heading;
+      this.description = program.description;
+      this.courseFee = program.courseFee;
+
+
+      const baseUrl = "https://fnbackendprod.finvedic.in/";
+      let imageUrl = program.imagePath;
+
+      if (imageUrl && imageUrl.startsWith(`${baseUrl}fs/download/`)) {
+        console.log(`Fetching cover image for: ${program.heading}`);
+        const downloadUrl = `${baseUrl}fs/download`;
+        const filename = imageUrl.replace(`${baseUrl}fs/download/`, '');
+
+        const formData = new FormData();
+        formData.append('filename', filename);
+
+        try {
+          const downloadResponse = await axios.post(downloadUrl, formData, { responseType: 'blob' });
+          const blob = new Blob([downloadResponse.data]);
+          this.course_img = window.URL.createObjectURL(blob);
+          console.log(`Fetched cover image for: ${program.heading}`);
+        } catch (imageError) {
+          console.error(`Error fetching cover image for: ${program.heading}`, imageError);
+          this.course_img = this.DummyBook; // Fallback image
+        }
+      } else {
+        this.course_img = imageUrl;
+      }
+    } else {
+      console.warn("No program data found");
+    }
+  } catch (error) {
+    console.error("Error fetching program details:", error);
+  }
+}
+
+
   }
 };
 
@@ -277,6 +339,11 @@
   display: flex;
   align-items: center;
   margin-left: 10px;
+}
+.routing_class{
+  color: #676DED;
+  font-family: sans-serif;
+  font-weight: 500;
 }
 
 .q-avatar.overlap {
