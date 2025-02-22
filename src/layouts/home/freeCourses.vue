@@ -1,10 +1,10 @@
 <template>
-  <div class="free-courses">
-    <div class="row w-100 text-left q-mt-lg">
+  <div class="free-courses q-pb-lg q-mb-lg">
+    <div class="row w-100 text-left q-mt-lg q-mx-lg">
     <span class="text-black header_freeCourses" style="width: 100%;">Start learning with free courses</span>
     <span class="text-black desc_mostPopular" style="width: 100%;">"Unlock endless learning opportunities with our free courses,designed to expand your knowledge at no cost!"</span>
   </div>
-  <div class="container mt-4 ">
+  <div class="container mt-4 q-mx-lg">
     <div class="row d-flex justify-content-center align-items-center w-100">
       <div
         v-for="category in filteredCategories"
@@ -21,7 +21,7 @@
   />
   <q-card-section>
     <p class="text-bold text-left">{{ category.categoryName }}</p>
-    <span class="text-caption">{{ category.description }}</span>
+    <span class="text-caption text-grey">{{ category.description }}</span>
   </q-card-section>
 </q-card>
 

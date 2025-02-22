@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
+  <q-layout view="lHh Lpr lFf ">
     <!-- Navigation Bar -->
 
       <q-toolbar>
@@ -118,7 +118,7 @@
        </span>!</span>
 </q-banner>
 
-<q-page class="q-pt-md q-px-md q-mt-md q-mx-xl" >
+<q-page class=" q-pb-md q-px-md q-mt-md q-mx-xl" style="min-height: auto;" >
   <div class="page_class q-mt-lg row" >
     <p><b>Launch a new career in as little as 6 months</b></p>
     <span class="q-pl-md all_courses">view all courses →</span>
@@ -557,6 +557,8 @@ border-radius: 20px;
 .left-section {
   width: 200px;
 }
+
+
 
 
 </style>
