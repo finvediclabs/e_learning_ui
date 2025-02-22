@@ -216,8 +216,9 @@ h4::after {
   font-weight: 500;
   font-family: 'Popins', sans-serif;
   font-weight: 600;
-  color: #141414;
+  color: #4E5BF8;
   margin-bottom: 5px;
+  margin-left: 5px;
 }
 .category-name{
   color: #3D3D3D;

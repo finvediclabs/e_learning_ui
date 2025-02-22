@@ -41,10 +41,10 @@
         <div class="row align-items-center">
           <!-- Category Name & Description (8 columns) -->
           <div class="col-8">
-            <span class="fw-bold">{{ name }}</span>
+            <span class="text-weight-regular text-h6">{{ name }}</span>
 
             <!-- Description with Read More/Read Less -->
-            <div
+            <div class="text-body1"
               :class="{
                 'category-description': true,
                 'expanded': expandedIndexes.includes(index)
@@ -64,11 +64,12 @@
           </div>
 
           <!-- Button (4 columns) centered horizontally & vertically -->
-          <div class="col-4 d-flex justify-content-center align-items-center" style="margin-bottom: auto;margin-top: auto;">
+          <div class="col-4 d-flex justify-content-center align-items-center q-pl-lg" style="margin-bottom: auto;margin-top: auto;">
             <q-btn
+            noCaps
               label="Let's Start"
               unelevated
-              color="primary"
+              color="#4E5BF8"
               class="category-button"
                  @click="onCategoryClick(course.catgoryId[index])"
             />
