@@ -5,7 +5,7 @@
     <span class="text-black desc_mostPopular" style="width: 100%;">"Explore our most popular course, designed to boost your skills and <br>accelerate your learning journey!"</span>
   </div>
 
-  <div class="container mt-4">
+  <div class="container mt-4 ">
     <div class="row d-flex justify-content-center align-items-center w-100">
       <div
         v-for="category in filteredCategories"
@@ -13,7 +13,7 @@
         class="col-md-3 mb-4 q-pt-xl"
         style="margin-left: auto;margin-right: auto;"
       >
-      <q-card class="course-card h-100">
+      <q-card class="course-card h-100 ">
   <q-img
     v-if="category.imagePath"
     :src="category.imagePath"
@@ -22,9 +22,28 @@
   />
   <q-card-section>
     <p class="text-bold text-left">{{ category.categoryName }}</p>
-    <span class="text-caption">{{ category.description }}</span>
+
+    <!-- Description with "Read More" -->
+    <span 
+      class="category-description" 
+      :class="{ expanded: expandedIndexes.includes(category.id) }"
+    >
+      {{ getTruncatedDescription(category.id, category.description) }}
+    </span>
+
+    <!-- Read More / Read Less Toggle -->
+    <a
+      href="javascript:void(0);"
+      @click="toggleDescription(category.id)"
+      class="read-more-link"
+    >
+      {{ expandedIndexes.includes(category.id) ? 'Read Less' : 'Read More' }}
+    </a>
   </q-card-section>
 </q-card>
+
+
+
 
       </div>
       <div class="col-12 q-mt-md text-right my-5" style="width: 92%;margin-left: auto;margin-right: auto;">
@@ -40,10 +59,12 @@
 import mostPopularBg from '../../assets/most_popularBG.png';
 export default {
   name: 'MostPopular',
+  
   data() {
     return {
       bgImage: mostPopularBg,
       categories: [],
+      expandedIndexes: []
     };
   },
   computed: {
@@ -56,8 +77,30 @@ export default {
   },
   mounted() {
     this.fetchCategories();
+    
+
   },
   methods: {
+/**
+     * Returns the truncated description if not expanded
+     */
+     getTruncatedDescription(categoryId, description) {
+      if (this.expandedIndexes.includes(categoryId)) {
+        return description; // Show full text when expanded
+      }
+      return description.length > 100 ? description.slice(0, 100) + "..." : description;
+    },
+
+    /**
+     * Toggles the description expansion for a specific category
+     */
+    toggleDescription(categoryId) {
+      if (this.expandedIndexes.includes(categoryId)) {
+        this.expandedIndexes = this.expandedIndexes.filter(id => id !== categoryId);
+      } else {
+        this.expandedIndexes.push(categoryId);
+      }
+    },
     async fetchCategories() {
   try {
     const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
@@ -154,6 +197,30 @@ export default {
 .course-card:hover {
   transform: scale(1.05); /* Enlarges by 5% */
   transition: transform 0.3s ease;
+}
+
+.category-description {
+  overflow: hidden;
+  font-size: 12px;
+  color: #B1B1B1;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Show only 2 lines initially */
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+  transition: max-height 0.3s ease-in-out;
+}
+
+.category-description.expanded {
+  -webkit-line-clamp: unset; /* Remove line limit when expanded */
+  white-space: normal;
+}
+
+.read-more-link {
+  color: #007bff;
+  cursor: pointer;
+  font-size: 0.9rem;
+  text-decoration: underline;
+  margin-left: 5px;
 }
 
 </style>
