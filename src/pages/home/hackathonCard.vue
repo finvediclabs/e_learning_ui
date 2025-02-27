@@ -2,50 +2,58 @@
   <div class="attendance-box">
     <div class="attendance-header row">
       <div class="col-4">
-        <q-img :src="hackathon_vector" class="attendance-vector" />
-        </div>
-      <div class="col-4">
-        <h3 class="attendance-title">Hackathon</h3>
-     </div>
-     <div class="col-4"></div>
+        <q-img :src="hackathon_vector" class="attendance-vector" alt="Hackathon Icon" />
+      </div>
+      <div class="col-8">
+        <h3 class="attendance-title text-left">Hackathon</h3>
+      </div>
     </div>
     <div class="row attendance-content">
       <div class="col-9 attendance-bar">
-        <div class="attendance-fill" :style="{ width: attendancePercentage + '%' }"></div>
+        <div
+          class="attendance-fill"
+          :class="attendanceColor"
+          :style="{ width: attendancePercentage + '%' }"
+        ></div>
       </div>
-    <div class="col-3">
-      <span>{{ attendancePercentage }}%</span>
+      <div class="col-3">
+        <span>{{ attendancePercentage }}%</span>
+      </div>
     </div>
-    </div>
-
   </div>
 </template>
 
 <script>
 import hackathon_vector from 'src/assets/hackathon_vector.png';
+
 export default {
-  components: {
-    hackathon_vector,
-  },
   data() {
     return {
-      attendancePercentage: 60, // Example percentage
-      hackathon_vector: hackathon_vector,
+      attendancePercentage: 58, // Example percentage
+      hackathon_vector,
     };
+  },
+  computed: {
+    attendanceColor() {
+      if (this.attendancePercentage < 30) {
+        return "red-fill";
+      } else if (this.attendancePercentage < 60) {
+        return "orange-fill";
+      } else {
+        return "blue-fill";
+      }
+    },
   },
 };
 </script>
 
 <style scoped>
 .attendance-box {
-  width: 80%;
-  margin-right: auto;
-  margin-left: auto;
+  width: 95%;
+  margin: auto;
   padding: 10px;
-  /* border: 1px solid #ccc; */
   border-radius: 20px;
   background-color: #fff;
-  /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
   text-align: center;
 }
 
@@ -57,16 +65,17 @@ export default {
 }
 
 .attendance-vector {
-  width:60%;
-  height: 60%;
+  width: 60%;
+  height: auto;
   margin-right: 8px;
 }
 
 .attendance-title {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
   color: #333;
 }
+
 .attendance-content {
   display: flex;
   align-items: center;
@@ -84,7 +93,18 @@ export default {
 .attendance-fill {
   height: 100%;
   border-radius: 10px;
-  background-color: #0255C4;
   transition: width 0.3s ease;
+}
+
+.red-fill {
+  background-color: red;
+}
+
+.orange-fill {
+  background-color: orange;
+}
+
+.blue-fill {
+  background-color: #0255C4;
 }
 </style>

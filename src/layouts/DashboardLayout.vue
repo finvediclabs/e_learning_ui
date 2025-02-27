@@ -266,19 +266,19 @@
   <q-list>
     <!-- Close Button -->
     <q-item>
-          <q-btn 
-            flat 
-            dense 
-            round 
-            icon="close" 
-            class="menu-close-button" 
-            @click="drawerLeft = false" 
+          <q-btn
+            flat
+            dense
+            round
+            icon="close"
+            class="menu-close-button"
+            @click="drawerLeft = false"
           />
         </q-item>
         <template v-for="(module, index) in modules" :key="index">
-      <q-item 
-        clickable 
-        @click="changeLocation(module)" 
+      <q-item
+        clickable
+        @click="changeLocation(module)"
         :class="{ 'active-nav-item': isActive(module) }"
       >
         <q-item-section>
@@ -291,9 +291,9 @@
     <q-separator class="q-my-md" />
     <!-- <q-item-label header>More</q-item-label> -->
     <template v-for="(module, index) in otherModules" :key="'other-' + index">
-      <q-item 
-        clickable 
-        @click="changeLocation(module)" 
+      <q-item
+        clickable
+        @click="changeLocation(module)"
         :class="{ 'active-nav-item': isActive(module) }"
       >
         <q-item-section>
@@ -367,7 +367,7 @@ export default {
       modulesList: [
 
 
-        {label: "Home", value: "home", icon: 'home'},
+        {label: "Home", value: "homeProfile", icon: 'home'},
         // { icon: 'event', label: 'Calendar', value: 'calendar' },
         {
     icon: 'computer', label: 'Labs', value: 'labs',
@@ -426,7 +426,7 @@ export default {
       // allAccess: [ "profile", "help","program","assignment","class-room","elearning","admin","library","hackathon","read-pdf"],54
 
 
-      allAccess: [ "profile", "help","home","labs","library","reports","channel","class-room","calendar","books","videos","presentations","chat","read-pdf","program"],
+      allAccess: [ "profile", "help","home","labs","library","homeProfile","reports","channel","class-room","calendar","books","videos","presentations","chat","read-pdf","program"],
       profiles: [], // Store fetched profiles here
       roles: [], // Store fetched roles here
       userRoles: [],
@@ -1157,7 +1157,7 @@ background-attachment: fixed;
 }
 
 .active-nav-item {
-  background-color: #E6E6E6 !important; 
+  background-color: #E6E6E6 !important;
   color: #000 !important;
   border-radius: 8px;
   margin: 0px 10px;

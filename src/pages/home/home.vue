@@ -5,19 +5,26 @@
  <div class="row">
   <!-- Left Column -->
   <div class="col-12 col-md-8">
-    <div class="row">
+    <div class="row w-100">
       <!-- Attendance Card -->
-      <div class="col-12 col-sm-6 col-lg-4 margin-bottom">
+      <div class="col-12 col-sm-3 col-lg-3 margin-bottom">
         <attendance-card />
       </div>
       <!-- Assignment Card -->
-      <div class="col-12 col-sm-6 col-lg-4 margin-bottom">
+      <div class="col-12 col-sm-3 col-lg-3 margin-bottom">
         <assignment-card />
       </div>
       <!-- Hackathon Card -->
-      <div class="col-12 col-sm-6 col-lg-4 margin-bottom">
+      <div class="col-12 col-sm-3 col-lg-3 margin-bottom">
         <hackathon-card />
       </div>
+      <div class="col-12 col-sm-3 col-lg-3 margin-bottom">
+        <labReport />
+      </div>
+    </div>
+
+    <div class="row w-100">
+      <MostPopular />
     </div>
   </div>
   <!-- Right Column -->
@@ -30,6 +37,8 @@
 import { useSessionStore } from "src/stores/session";
 import { useProfileStore } from "src/stores/profile";
 import AttendanceCard from "src/pages/home/attendance.vue";
+import MostPopular from "src/pages/home/mostPopular.vue";
+import labReport from "src/pages/home/labReport.vue";
 import AssignmentCard from "src/pages/home/assignmentCard.vue";
 import HackathonCard from "src/pages/home/hackathonCard.vue";
 import { storeToRefs } from "pinia";
@@ -38,7 +47,9 @@ export default {
   components: {
     AttendanceCard,
     AssignmentCard,
-    HackathonCard
+    HackathonCard,
+    MostPopular,
+    labReport
   },
 
   name: "Home",

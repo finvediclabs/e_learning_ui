@@ -2,10 +2,10 @@
   <div class="attendance-box">
     <div class="attendance-header row">
       <div class="col-4">
-        <q-img :src="assignment_vector" class="attendance-vector" alt="Assignment Icon" />
+        <q-img :src="assignment_vector" class="attendance-vector" alt="Lab Usage Icon" />
       </div>
       <div class="col-8">
-        <h3 class="attendance-title text-left">Assignment</h3>
+        <h3 class="attendance-title text-left">Lab Usage</h3>
       </div>
     </div>
     <div class="row attendance-content">
@@ -29,7 +29,7 @@ import assignment_vector from 'src/assets/assignment_vector.png';
 export default {
   data() {
     return {
-      attendancePercentage: 25, // Example percentage
+      attendancePercentage: 60, // Example percentage
       assignment_vector,
     };
   },

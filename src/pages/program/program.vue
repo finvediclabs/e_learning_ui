@@ -13,7 +13,7 @@
             <q-btn
               class="course-button"
               :style="{ backgroundImage: `url(${course.imagePath})` }"
-              flat 
+              flat
             >
           </q-btn>
             <div class="course-content">
@@ -29,8 +29,27 @@
 <script>
 import 'src/css/libraryProgram.css';
 import DummyBook from 'src/assets/dummyBook.jpg';
-
+import { useSessionStore } from "src/stores/session";
+import { storeToRefs } from "pinia";
+import { useProfileStore } from "src/stores/profile";
 export default {
+  setup() {
+    const session = useSessionStore();
+    const { token, userType } = storeToRefs(session);
+    const { setUserType, setSessionToken } = session;
+    const profileStore = useProfileStore();
+    const { user } = storeToRefs(profileStore);
+    console.log('user', user.value);
+
+
+    return {
+      token,
+      userType,
+      setUserType,
+      setSessionToken,
+      user
+    }
+  },
   name: 'ElearningCourses',
   data() {
     return {
@@ -114,8 +133,24 @@ export default {
           console.log('fetchCourses: Finished fetching courses.');
         }
       },
-      navigateToCourse(courseId) {
+      async navigateToCourse(courseId) {
   console.log('Navigating to course with ID:', courseId);
+
+  if (!this.user) {
+    console.error('User data is not available!');
+    return;
+  }
+
+  const userPayload = this.user; // Directly use this.user
+  const url = `http://localhost:8087/api/recently-viewed/add?programId=${courseId}`;
+
+  try {
+    await this.$api.post(url, userPayload);
+    console.log('Successfully added to recently viewed:', userPayload);
+  } catch (error) {
+    console.error('Error adding to recently viewed:', error);
+  }
+
   this.$router.push({ name: 'ProgramDetails', params: { id: courseId } });
 },
   },
