@@ -54,8 +54,8 @@ export default {
             this.reviews = [];
             const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
             try {
-                const getCourse = baseUrl + 'api/programFeedback/program';
-                const response = await axios.get(`${getCourse}/1`); // Replace 1 with dynamic programId
+                const getCourse = baseUrl + 'api/programFeedback';
+                const response = await axios.get(`${getCourse}`); // Replace 1 with dynamic programId
 
                 if (response.data.success) {
                     this.reviews = await Promise.all(
