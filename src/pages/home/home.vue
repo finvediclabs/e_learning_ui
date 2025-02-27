@@ -27,8 +27,12 @@
       <MostPopular />
     </div>
   </div>
+
   <!-- Right Column -->
-  <div class="col-12 col-md-4 mb-3 mb-sm-3"></div>
+  <div class="col-12 col-md-4 mb-3 mb-sm-3 ">
+    <profile-card/>
+  </div>
+  
 </div>
 
 </template>
@@ -41,6 +45,7 @@ import MostPopular from "src/pages/home/mostPopular.vue";
 import labReport from "src/pages/home/labReport.vue";
 import AssignmentCard from "src/pages/home/assignmentCard.vue";
 import HackathonCard from "src/pages/home/hackathonCard.vue";
+import ProfileCard from "src/pages/home/profileCard.vue";
 import { storeToRefs } from "pinia";
 
 export default {
@@ -49,7 +54,8 @@ export default {
     AssignmentCard,
     HackathonCard,
     MostPopular,
-    labReport
+    labReport,
+    ProfileCard
   },
 
   name: "Home",
