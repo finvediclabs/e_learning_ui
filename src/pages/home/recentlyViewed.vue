@@ -132,7 +132,7 @@ export default {
   try {
     const baseUrl = (process.env.VUE_APP_CORE_URL || "").replace(/\/$/g, "") + "/";
     let url = `${baseUrl}api/recently-viewed/${this.user.id}`;
-    const response = await axios.get(url, {
+    const response = await this.$api.get(url, {
       headers: { Authorization: `Bearer ${this.token}` },
     });
 
@@ -199,7 +199,7 @@ export default {
   try {
     const baseUrl1 = (process.env.VUE_APP_CORE_URL || "").replace(/\/$/g, "") + "/";
     const getURL = `${baseUrl1}api/programs`;
-    const response = await axios.get(getURL);
+    const response = await this.$api.get(getURL);
     this.loading = false;
     console.log("fetchDefaultPrograms: Response received.", response);
 
