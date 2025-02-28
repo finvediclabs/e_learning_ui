@@ -9,7 +9,7 @@
       <div
         v-for="category in filteredCategories"
         :key="category.id"
-         class="col-lg-3 col-md-4 col-sm-6 col-12 mb-4 d-flex justify-content-center q-pt-sm"
+         class="col-lg-3 col-md-3 col-sm-6 col-12 mb-4 d-flex justify-content-center q-pt-sm"
         style="margin-left: auto;margin-right: auto;"
       >
       <q-card class="course-card ">

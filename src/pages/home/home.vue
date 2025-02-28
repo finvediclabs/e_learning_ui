@@ -32,7 +32,13 @@
   <div class="col mb-3 mb-sm-3 profile-column q-ml-md ">
     <profile-card/>
   </div>
-  
+
+</div>
+<div class="row q-px-md">
+  <div class="col-12 col-md-8">
+    <RecentlyViewed />
+  </div>
+  <div class="col-12 col-md-4"></div>
 </div>
 
 </template>
@@ -46,6 +52,7 @@ import labReport from "src/pages/home/labReport.vue";
 import AssignmentCard from "src/pages/home/assignmentCard.vue";
 import HackathonCard from "src/pages/home/hackathonCard.vue";
 import ProfileCard from "src/pages/home/profileCard.vue";
+import RecentlyViewed from "src/pages/home/recentlyViewed.vue";
 import { storeToRefs } from "pinia";
 
 export default {
@@ -55,7 +62,8 @@ export default {
     HackathonCard,
     MostPopular,
     labReport,
-    ProfileCard
+    ProfileCard,
+    RecentlyViewed
   },
 
   name: "Home",
