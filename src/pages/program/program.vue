@@ -142,7 +142,9 @@ export default {
   }
 
   const userPayload = this.user; // Directly use this.user
-  const url = `http://localhost:8087/api/recently-viewed/add?programId=${courseId}`;
+  const baseUrl = (process.env.VUE_APP_CORE_URL || "").replace(/\/$/g, "") + "/";
+  let url = `${baseUrl}api/recently-viewed/add?programId=${courseId}`;
+  // const url = `http://localhost:8087/api/recently-viewed/add?programId=${courseId}`;
 
   try {
     await this.$api.post(url, userPayload);
