@@ -192,70 +192,73 @@ export default {
   }
 },
 
-    async fetchDefaultPrograms() {
-  console.log("fetchDefaultPrograms: Start fetching default programs.");
-  this.loading = true;
+async fetchDefaultPrograms() {
+  console.log("fetchDefaultPrograms: Fetching default programs...");
 
   try {
-    const baseUrl1 = (process.env.VUE_APP_CORE_URL || "").replace(/\/$/g, "") + "/";
-    const getURL = `${baseUrl1}api/programs`;
-    const response = await this.$api.get(getURL);
-    this.loading = false;
-    console.log("fetchDefaultPrograms: Response received.", response);
+    const baseUrl = (process.env.VUE_APP_CORE_URL || "").replace(/\/$/g, "") + "/";
+    let url = `${baseUrl}api/programs`;
+    const response = await this.$api.get(url, {
+      headers: { Authorization: `Bearer ${this.token}` },
+    });
 
-    if (Array.isArray(response.data)) {
-      console.log("fetchDefaultPrograms: Parsing item data.");
-      this.defaultPrograms = response.data.map((item) => ({
-        id: item.id,
-        name: item.programHeading,
-        imagePath: item.programImagePath ? item.programImagePath : this.DummyBook, // Default if no image
-        description: item.programDescription,
-      }));
+    console.log("fetchDefaultPrograms: Raw response received.", response);
 
-      console.log("fetchDefaultPrograms: Items parsed successfully.", this.defaultPrograms);
+    // Extracting the correct array from response
+    let data = response.data.data; // <-- Extract 'data' key
 
-      // Fetch images using POST if they are from a downloadable source
-      const baseUrl = (process.env.VUE_APP_CORE_URL || "").replace(/\/$/g, "") + "/";
-      this.defaultPrograms.forEach((item, index) => {
-        console.log(`fetchDefaultPrograms: Processing item [${index}] with ID: ${item.id}.`);
-        const imgBaseUrl = `${baseUrl}fs/download/`;
-
-        if (item.imagePath && item.imagePath.startsWith(imgBaseUrl)) {
-          console.log(`fetchDefaultPrograms: Item [${index}] has a downloadable image: ${item.imagePath}`);
-          const downloadUrl = `${baseUrl}fs/download`;
-          const removePrefix = imgBaseUrl;
-          const filename = item.imagePath.replace(removePrefix, "");
-          console.log(`fetchDefaultPrograms: Extracted filename for item [${index}]: ${filename}`);
-
-          const formData = new FormData();
-          formData.append("filename", filename);
-
-          console.log(`fetchDefaultPrograms: Sending POST request for image of item [${index}].`);
-          axios
-            .post(downloadUrl, formData, { responseType: "blob" })
-            .then((downloadResponse) => {
-              console.log(`fetchDefaultPrograms: Received image blob for item [${index}].`);
-              const blob = new Blob([downloadResponse.data]);
-              const url = window.URL.createObjectURL(blob);
-              item.imagePath = url; // Update item with the received blob URL
-              console.log(`fetchDefaultPrograms: Updated image for item [${index}]: ${url}`);
-            })
-            .catch((error) => {
-              console.error(`fetchDefaultPrograms: Error fetching image for item [${index}]:`, error);
-              item.imagePath = this.DummyBook; // Fallback to default image on error
-            });
-        } else {
-          console.log(`fetchDefaultPrograms: Item [${index}] has a static or missing image.`);
-        }
-      });
-    } else {
+    if (!Array.isArray(data)) {
       console.error("fetchDefaultPrograms: Unexpected API response format:", response);
+      return; // Stop execution if data format is unknown
     }
+
+    this.defaultPrograms = data.slice(0, 2).map((item) => ({
+      id: item.programId, // Correct key name
+      name: item.heading, // Correct key name
+      imagePath: item.imagePath ? item.imagePath : this.DummyBook,
+      description: item.description, // Correct key name
+    }));
+
+    console.log("fetchDefaultPrograms: Default programs parsed successfully.", this.defaultPrograms);
+
+    // Fetch images if they are from a downloadable source
+    const imgBaseUrl = `${baseUrl}fs/download/`;
+
+    this.defaultPrograms.forEach((item, index) => {
+      console.log(`fetchDefaultPrograms: Processing item [${index}] with ID: ${item.id}.`);
+
+      if (item.imagePath && item.imagePath.startsWith(imgBaseUrl)) {
+        console.log(`fetchDefaultPrograms: Item [${index}] has a downloadable image: ${item.imagePath}`);
+        const downloadUrl = `${baseUrl}fs/download`;
+        const removePrefix = imgBaseUrl;
+        const filename = item.imagePath.replace(removePrefix, "");
+        console.log(`fetchDefaultPrograms: Extracted filename for item [${index}]: ${filename}`);
+
+        const formData = new FormData();
+        formData.append("filename", filename);
+
+        console.log(`fetchDefaultPrograms: Sending POST request for image of item [${index}].`);
+        axios
+          .post(downloadUrl, formData, { responseType: "blob" })
+          .then((downloadResponse) => {
+            console.log(`fetchDefaultPrograms: Received image blob for item [${index}].`);
+            const blob = new Blob([downloadResponse.data]);
+            const url = window.URL.createObjectURL(blob);
+            item.imagePath = url; // Update item with the received blob URL
+            console.log(`fetchDefaultPrograms: Updated image for item [${index}]: ${url}`);
+          })
+          .catch((error) => {
+            console.error(`fetchDefaultPrograms: Error fetching image for item [${index}]:`, error);
+            item.imagePath = this.DummyBook; // Fallback to default image on error
+          });
+      } else {
+        console.log(`fetchDefaultPrograms: Item [${index}] has a static or missing image.`);
+      }
+    });
   } catch (error) {
-    this.loading = false;
-    console.error("fetchDefaultPrograms: Error occurred during fetch:", error);
+    console.error("fetchDefaultPrograms: Error occurred while fetching default programs:", error);
   } finally {
-    console.log("fetchDefaultPrograms: Finished fetching default programs.");
+    console.log("fetchDefaultPrograms: Finished processing.");
   }
 },
   },
