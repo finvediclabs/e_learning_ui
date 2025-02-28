@@ -1,8 +1,8 @@
-<template>
-  <div class="home">
+<template >
+  <div class="home q-px-md">
     <h3>Welcome back {{ user?.name }}</h3>
   </div>
- <div class="row">
+ <div class="row q-px-md">
   <!-- Left Column -->
   <div class="col-12 col-md-8">
     <div class="row w-100">
@@ -29,7 +29,7 @@
   </div>
 
   <!-- Right Column -->
-  <div class="col-12 col-md-4 mb-3 mb-sm-3 ">
+  <div class="col mb-3 mb-sm-3 profile-column q-ml-md ">
     <profile-card/>
   </div>
   
@@ -85,7 +85,6 @@ export default {
 .home {
   font-family: "Poppins";
   text-align: left;
-
   margin-left: 1%;
 }
 
@@ -97,4 +96,6 @@ h3 {
 .margin-bottom {
   margin-bottom: 1rem;
 }
+
+
 </style>
