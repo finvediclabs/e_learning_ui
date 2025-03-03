@@ -29,7 +29,7 @@ import assignment_vector from 'src/assets/assignment_vector.png';
 export default {
   data() {
     return {
-      attendancePercentage: 10, // Example percentage
+      attendancePercentage: 60, // Example percentage
       assignment_vector,
     };
   },
