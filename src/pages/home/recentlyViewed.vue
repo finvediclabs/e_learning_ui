@@ -10,21 +10,21 @@
     <q-spinner v-if="loading" color="primary" size="2em" />
 
     <!-- Show recently viewed programs -->
-    <q-list class="row col-12" v-else-if="recentlyViewed.length" style="width: 100%;">
+    <q-list class="row col-12" v-else-if="recentlyViewed.length" style="width: 100%; ">
       <div class="row" style="display: flex; flex-wrap: wrap; width: 100%;">
         <div v-for="item in recentlyViewed.slice(0, 2)" :key="item.id"
              class="col-md-6 col-sm-6 col-xs-12 q-px-sm"
              style="display: flex;">
 
           <q-card class="program-card"
-                  style="width: 100%; height: 300px; display: flex; flex-direction: column;">
+                  style="width: 100%; height: 300px; display: flex; flex-direction: column; padding: 8px;">
 
             <div class="row" style="width: 100%; height: 100%;">
 
               <!-- Left Side: Image (Full Height) -->
-              <div class="col-6" style="display: flex;">
+              <div class="col-6" style="display: flex; padding: 8px;">
                 <q-img :src="item.imagePath" fit="fill"
-                       style="width: 100%; height: 100%;" />
+                       style="width: 100%; height: 100%; border-radius: 8px;" />
               </div>
 
               <!-- Right Side: Text (Centered) -->
@@ -54,14 +54,14 @@
              style="display: flex;">
 
           <q-card class="program-card"
-                  style="width: 100%; height: 300px; display: flex; flex-direction: column;">
+                  style="width: 100%; height: 300px; display: flex; flex-direction: column; padding: 8px;">
 
             <div class="row" style="width: 100%; height: 100%;">
 
               <!-- Left Side: Image (Full Height) -->
-              <div class="col-6" style="display: flex;">
+              <div class="col-6" style="display: flex; padding: 8px;">
                 <q-img :src="item.imagePath" fit="fill"
-                       style="width: 100%; height: 100%;" />
+                       style="width: 100%; height: 100%; border-radius: 8px;" />
               </div>
 
               <!-- Right Side: Text (Centered) -->
@@ -87,6 +87,9 @@
     <div v-else class="no-programs" style="display: flex; align-items: center; justify-content: center; height: 200px; text-align: center;">
       <p style="font-size: 1.2em; font-weight: bold; color: gray;">No programs available.</p>
     </div>
+    <div class="col-12 q-mt-none text-right q-pt-sm" style="width: 98%;margin-left: auto;margin-right: auto;">
+          <span style="color: #4E5BF8;">View More Courses →</span>
+        </div>
   </div>
 </template>
 

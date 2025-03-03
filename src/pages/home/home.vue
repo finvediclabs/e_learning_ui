@@ -2,7 +2,7 @@
   <div class="home q-px-md">
     <h3>Welcome back {{ user?.name }}</h3>
   </div>
- <div class="row q-px-md">
+  <div class="row q-px-md">
   <!-- Left Column -->
   <div class="col-12 col-md-8">
     <div class="row w-100">
@@ -23,23 +23,22 @@
       </div>
     </div>
 
+    <!-- MostPopular & RecentlyViewed in One Row -->
     <div class="row w-100">
       <MostPopular />
+      <RecentlyViewed class="q-mt-md" />
     </div>
   </div>
 
   <!-- Right Column -->
-  <div class="col mb-3 mb-sm-3 profile-column q-ml-md ">
-    <profile-card/>
+  <div class="col mb-3 profile-column q-ml-md">
+    <profile-card />
+    <NotifCard class="q-mt-md" />
+    <ClassCard class="q-mt-md" />
+    <ChatsCard class="q-my-md" />
   </div>
+</div>
 
-</div>
-<div class="row q-px-md">
-  <div class="col-12 col-md-8">
-    <RecentlyViewed />
-  </div>
-  <div class="col-12 col-md-4"></div>
-</div>
 
 </template>
 
@@ -52,6 +51,9 @@ import labReport from "src/pages/home/labReport.vue";
 import AssignmentCard from "src/pages/home/assignmentCard.vue";
 import HackathonCard from "src/pages/home/hackathonCard.vue";
 import ProfileCard from "src/pages/home/profileCard.vue";
+import NotifCard from "src/pages/home/notifications.vue";
+import ClassCard from "src/pages/home/ClassSched.vue";
+import ChatsCard from "src/pages/home/ChatsCard.vue";
 import RecentlyViewed from "src/pages/home/recentlyViewed.vue";
 import { storeToRefs } from "pinia";
 
@@ -63,7 +65,10 @@ export default {
     MostPopular,
     labReport,
     ProfileCard,
-    RecentlyViewed
+    RecentlyViewed,
+    NotifCard,
+    ClassCard,
+    ChatsCard
   },
 
   name: "Home",
@@ -104,6 +109,5 @@ h3 {
 .margin-bottom {
   margin-bottom: 1rem;
 }
-
 
 </style>
