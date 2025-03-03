@@ -118,7 +118,7 @@
        </span>!</span>
 </q-banner>
 
-<q-page class=" q-pb-md q-px-md q-mt-md q-mx-xl" style="min-height: auto;" >
+<q-page class=" q-pb-md q-px-md q-mt-md q-mx-xl mobile_view" style="min-height: auto;" >
   <div class="page_class q-mt-lg row" >
     <p><b>Launch a new career in as little as 6 months</b></p>
     <span class="q-pl-md all_courses">view all courses →</span>
@@ -562,7 +562,12 @@ border-radius: 20px;
 }
 
 
-
+@media (max-width: 600px) {
+  .mobile_view {
+    padding: 1% !important;
+    margin: 0 !important;
+  }
+}
 
 </style>
 
