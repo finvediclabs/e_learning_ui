@@ -1,103 +1,126 @@
 <template>
-    <div class="profile-container">
-      <div class="header">
-        <div class="profile-title">Your Profile</div>
-        <q-icon name="more_vert" class="more-icon cursor-pointer" />
-      </div>
-      <q-img :src="imageUrl || ProfileImg" class="profileImg cursor-pointer rounded" />
-      <div class="greeting">{{ greeting }} {{ user?.name || 'Guest' }}</div>
-      <div class="leaderboard" v-if="topProfiles?.length">
-        <div class="podium-container">
-          <div :class="['podium', 'position-2']">
-            <img :src="topProfiles[1]?.pic || defaultProfileImg" alt="ProPic" class="podium-pic podium-pic-2 rounded-circle" />
-            <div class="profile-name">{{ topProfiles[1]?.name || 'Unknown' }}</div>
-            <div class="podium-poll">2nd<br><span class="points rounded-borders">{{ topProfiles[1]?.points }} Pts</span></div>
-          </div>
-          <div :class="['podium', 'position-1']">
-            <img :src="topProfiles[0]?.pic || defaultProfileImg" alt="ProPic" class="podium-pic podium-pic-1 rounded-circle" />
-            <div class="profile-name">{{ topProfiles[0]?.name || 'Unknown' }}</div>
-            <div class="podium-poll">1st<br><span class="points">{{ topProfiles[0]?.points }} Pts</span></div>
-          </div>
-          <div :class="['podium', 'position-3']">
-            <img :src="topProfiles[2]?.pic || defaultProfileImg" alt="ProPic" class="podium-pic podium-pic-3 rounded-circle" />
-            <div class="profile-name">{{ topProfiles[2]?.name || 'Unknown' }}</div>
-            <div class="podium-poll">3rd<br><span class="points">{{ topProfiles[2]?.points }} Pts</span></div>
-          </div>
+  <div class="profile-container">
+    <div class="header">
+      <div class="profile-title">Your Profile</div>
+      <q-icon name="more_vert" class="more-icon cursor-pointer" />
+    </div>
+    <q-img :src="imageUrl || defaultProfileImg" class="profileImg cursor-pointer rounded" />
+    <div class="greeting">{{ greeting }} {{ profile.name || "Guest" }}</div>
+
+    <div class="leaderboard" v-if="topProfiles.length">
+      <div class="podium-container">
+        <div :class="['podium', 'position-2']">
+          <q-img :src="topProfiles[1]?.pic || defaultProfileImg" alt="ProPic" class="podium-pic podium-pic-2 rounded-circle" />
+          <div class="profile-name">{{ topProfiles[1]?.name || "Unknown" }}</div>
+          <div class="podium-poll">2nd<br><span class="points rounded-borders">{{ topProfiles[1]?.points }} Pts</span></div>
+        </div>
+        <div :class="['podium', 'position-1']">
+          <q-img :src="topProfiles[0]?.pic || defaultProfileImg" alt="ProPic" class="podium-pic podium-pic-1 rounded-circle" />
+          <div class="profile-name">{{ topProfiles[0]?.name || "Unknown" }}</div>
+          <div class="podium-poll">1st<br><span class="points">{{ topProfiles[0]?.points }} Pts</span></div>
+        </div>
+        <div :class="['podium', 'position-3']">
+          <q-img :src="topProfiles[2]?.pic || defaultProfileImg" alt="ProPic" class="podium-pic podium-pic-3 rounded-circle" />
+          <div class="profile-name">{{ topProfiles[2]?.name || "Unknown" }}</div>
+          <div class="podium-poll">3rd<br><span class="points">{{ topProfiles[2]?.points }} Pts</span></div>
         </div>
       </div>
-      <div v-else>
-        <p>No leaderboard data available</p>
-      </div>
     </div>
-  </template>
-  
-  <script>
-  import { ref, computed, onMounted } from "vue";
-  import { useProfileStore } from "src/stores/profile";
-  import { storeToRefs } from "pinia";
-  import { api } from "src/boot/axios";
-  
-  export default {
-    name: "ProfileCard",
-    setup() {
-      const profileStore = useProfileStore();
-      const { user } = storeToRefs(profileStore);
-      const imageUrl = ref("");
-      const greeting = ref("");
-  
-      const topProfiles = [
+    <div v-else>
+      <p>No leaderboard data available</p>
+    </div>
+  </div>
+</template>
+
+<script>
+import { mapState } from "pinia";
+import { useProfileStore } from "src/stores/profile";
+import { api } from "src/boot/axios";
+
+export default {
+  name: "ProfileCard",
+  data() {
+    return {
+      profile: {},
+      imageUrl: "",
+      greeting: "",
+      defaultProfileImg: "https://via.placeholder.com/100",
+      topProfiles: [
         { name: "Alice", pic: "src/assets/add-user.png", points: 1500 },
         { name: "Bob", pic: "src/assets/add-user.png", points: 1200 },
         { name: "Charlie", pic: "src/assets/add-user.png", points: 1000 },
-      ];
-  
-      const defaultProfileImg = "https://via.placeholder.com/100";
-      const ProfileImg = computed(() => {
-        return user.value?.profileImg || defaultProfileImg;
-      });
-
-      const setGreeting = () => {
-      const hour = new Date().getHours();
-      if (hour < 12) {
-        greeting.value = "Good Morning";
-      } else if (hour < 18) {
-        greeting.value = "Good Afternoon";
-      } else {
-        greeting.value = "Good Evening";
-      }
+      ],
     };
-  
-      const fetchImage = async (filename) => {
-        if (!filename) return;
+  },
+  computed: {
+    ...mapState(useProfileStore, ["user"]),
+  },
+  methods: {
+    setGreeting() {
+      const hour = new Date().getHours();
+      this.greeting = hour < 12 ? "Good Morning" : hour < 18 ? "Good Afternoon" : "Good Evening";
+    },
+    async getUserData() {
+      try {
+        const response = await api.get(`api/users/${this.user.id}`);
+        if (response.data.success) {
+          const userData = response.data.data;
+          this.profile = {
+            name: userData.name,
+            dob: userData.dob,
+            graduationDegree: userData.graduationDegree,
+            qualificationYear: userData.qualificationYear,
+            specialization: userData.specialization,
+            gender: userData.gender,
+            email: userData.email,
+            phoneNumber: userData.phoneNumber,
+            role: userData.roles ? userData.roles[0] : [],
+          };
+
+          if (
+            this.user.type === "Student" &&
+            Object.values(this.profile).some((value) => value === null || value === undefined)
+          ) {
+            this.$router.push("/profile");
+          }
+
+          this.fetchProfileImage(userData.uploadDocumentPath);
+        } else {
+          console.error(response.data.message);
+        }
+      } catch (error) {
+        console.error(error.response?.data.message || error.message);
+      }
+    },
+    async fetchProfileImage(uploadDocumentPath) {
+      if (!uploadDocumentPath) {
+        this.imageUrl = "";
+        return;
+      }
+
+      try {
+        const baseUrl = (process.env.VUE_APP_CORE_URL || "").replace(/\/$/g, "") + "/";
+        const filename = uploadDocumentPath.replace(baseUrl + "fs/download/", "");
         const formData = new FormData();
         formData.append("filename", filename);
-        try {
-          const response = await api.post("fs/download", formData, {
-            responseType: "blob",
-          });
-          imageUrl.value = URL.createObjectURL(response.data);
-        } catch (error) {
-          console.error(error.response?.data.message || error.message);
-          imageUrl.value = "";
-        }
-      };
-  
-      onMounted(() => {
-        setGreeting();
-        fetchImage(user.value?.uploadDocumentPath);
-      });
-  
-      return {
-        user,
-        topProfiles,
-        imageUrl,
-        ProfileImg,
-        greeting,
-      };
+
+        const imageResponse = await api.post(baseUrl + "fs/download", formData, {
+          responseType: "blob",
+        });
+
+        this.imageUrl = URL.createObjectURL(imageResponse.data);
+      } catch (error) {
+        console.error(error.response?.data.message || error.message);
+      }
     },
-  };
-  </script>
-  
+  },
+  mounted() {
+    this.setGreeting();
+    this.getUserData();
+  },
+};
+</script>
+
   <style scoped>
 .profile-container {
   border: 1px solid grey;
@@ -211,4 +234,3 @@
 
 
   </style>
-  

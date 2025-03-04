@@ -1,8 +1,5 @@
 <template >
-  <div class="home q-px-md">
-    <h3>Welcome back {{ user?.name }}</h3>
-  </div>
-  <div class="row q-px-md">
+  <div class="row q-px-md q-my-sm">
   <!-- Left Column -->
   <div class="col-12 col-md-8">
     <div class="row w-100">
