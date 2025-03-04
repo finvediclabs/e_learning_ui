@@ -19,7 +19,7 @@
           <q-card class="program-card"
                   style="width: 100%; height: 300px; display: flex; flex-direction: column; padding: 8px;">
 
-            <div class="row" style="width: 100%; height: 100%;">
+            <div class="row" style="width: 100%; height: 100%; ">
 
               <!-- Left Side: Image (Full Height) -->
               <div class="col-6" style="display: flex; padding: 8px;">
@@ -29,7 +29,7 @@
 
               <!-- Right Side: Text (Centered) -->
               <div class="col-6"
-                   style="display: flex; align-items: center; justify-content: center; height: 100%;">
+                   style="display: flex; align-items: center; justify-content: center; height: 100%; ">
                 <q-card-section style="width: 100%; text-align: center;">
                   <q-item-label style="font-size: 1.2em; font-weight: bold; text-align: left;">{{ item.name }}</q-item-label>
                   <q-item-label caption
@@ -65,7 +65,7 @@
               </div>
 
               <!-- Right Side: Text (Centered) -->
-              <div class="col-6"
+              <div class="col-6 rgt"
                    style="display: flex; align-items: center; justify-content: center; height: 100%;">
                 <q-card-section style="width: 100%; text-align: center;">
                   <q-item-label style="font-size: 1.2em; font-weight: bold; text-align: left;">{{ item.name }}</q-item-label>
@@ -290,4 +290,26 @@ async fetchDefaultPrograms() {
   font-weight: bold;
   color: gray;
 }
+
+@media (max-width: 768px) {
+  .program-card {
+    margin-bottom: 1rem;
+    height: 95% !important;
+    padding: 0px !important;
+  }
+  .q-item-label {
+    font-size: 0.9em !important;
+  }
+  .col-6 {
+    flex: 1 1 100%;
+    padding: 4px;
+    
+  }
+
+  .rgt{
+    align-items: start !important;
+    padding-top: 0px !important;
+  }
+}
+
 </style>

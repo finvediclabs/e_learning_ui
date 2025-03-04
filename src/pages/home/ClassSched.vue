@@ -22,10 +22,11 @@
                 </q-item-label>
                 <q-item-label class="event-title">
                   <span class="live-dot"></span>
-                  <a :href="event.link" target="_blank">{{ event.title }}</a>
+                  {{ event.title }}
                 </q-item-label>
               </div>
-              <div>
+              <div class="flex items-center">
+                <q-icon name="img:src/assets/google_meet.svg" size="16px" color="#4E5BF8" class="q-mr-sm" />
                 <q-item-label caption>
                   <a :href="event.link" target="_blank" class="go-to-meet">Go to Meet Link</a>
                 </q-item-label>
@@ -59,6 +60,10 @@ export default {
     };
   },
   methods: {
+//     viewAll() {
+//     console.log("View All Clicked");
+//     this.$router.push("/class-room"); 
+//   },
     getEventsData() {
       const request = {
         categoryId: this.selectedCategory?.id,

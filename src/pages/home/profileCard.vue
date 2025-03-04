@@ -232,5 +232,17 @@ export default {
   font-weight: 600;
 }
 
+@media (max-width: 1024px) {
+  .podium-pic {
+    width: 50px;
+    height: 50px;
+  }
+  .podium-poll {
+    width: 80px;
+    font-size: 0.9rem;
+  }
+}
+
+
 
   </style>

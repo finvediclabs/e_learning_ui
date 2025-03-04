@@ -107,4 +107,14 @@ h3 {
   margin-bottom: 1rem;
 }
 
+@media (max-width: 768px){
+  .row {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+  .profile-column {
+    margin-left: 0 !important;
+  }
+}
 </style>
