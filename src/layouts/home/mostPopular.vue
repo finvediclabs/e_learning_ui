@@ -157,5 +157,16 @@ export default {
   transform: scale(1.05); /* Enlarges by 5% */
   transition: transform 0.3s ease;
 }
-
+@media (max-width: 600px) {
+  .header_mostPopular{
+  font-family: sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+.desc_mostPopular{
+  font-size: 0.6rem;
+  font-weight: 500;
+  font-family: sans-serif;
+}
+}
 </style>

@@ -231,7 +231,7 @@
     <!-- Right Side: Course List -->
     <div class="col-12 col-md-6" >
       <div>
-          <span class="text-h5 text-bold text-left q-ml-md ">Recommended Professional Courses</span>
+          <span class="text-h5 text-bold text-left q-ml-md mobile_view">Recommended Professional Courses</span>
         </div>
       <div v-if="courses.length" class="row q-col-gutter-md  flex justify-start q-ml-none" >
 
@@ -567,6 +567,10 @@ border-radius: 20px;
     padding: 1% !important;
     margin: 0 !important;
   }
+  .left-section {
+    width: 100% !important;
+  }
+
 }
 
 </style>
