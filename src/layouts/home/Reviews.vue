@@ -1,10 +1,10 @@
 <template>
     <div class="reviews q-py-xl">
-        <div class="row w-100 text-center ">
+        <div class="row w-100 text-center head ">
             <span class="text-black text-h4 text-bold" style="width: 100%;">From the Fintech Community</span>
             <span class="text-subtitle1" style="width: 100%;">Explore our student reviews, how our course boosted their skills and <br> helped to accelerate their learning journey!</span>
         </div>
-        <div class="row q-col-gutter-md q-mx-xl q-my-md q-px-xl">
+        <div class="row q-col-gutter-md q-mx-xl q-my-md q-px-xl reviewContainer">
             <div v-for="(review, index) in visibleReviews" :key="review.id" class="col-12 col-md-4">
                 <q-card class="review-card">
                     <!-- Reviewer Info -->
@@ -130,5 +130,23 @@ export default {
     padding: 8px 20px;
     background-color: #0062ED !important;
     border-radius: 10px;
+}
+
+@media (max-width: 768px) {
+    .reviewContainer{
+        padding: 10px;
+        margin: 10px;
+    }
+    .q-col-gutter-x-md > *, .q-col-gutter-md > * {
+        padding-left: 0px !important;
+    }
+    .review-card {
+        width: 100%;
+    }
+    /* .head{
+        text-align: left;
+        margin-left: 10px;
+   } */
+    
 }
 </style>

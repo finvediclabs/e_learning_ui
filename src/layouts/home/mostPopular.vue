@@ -10,7 +10,7 @@
       <div
         v-for="category in filteredCategories"
         :key="category.id"
-        class="col-md-3 mb-5 q-py-lg"
+        class="col-md-3 mb-5 q-py-lg outerCard"
         style="margin-left: auto;margin-right: auto;"
       >
       <q-card class="course-card ">
@@ -27,7 +27,7 @@
 </q-card>
 
       </div>
-      <div class="col-12 q-mt-none text-right my-5" style="width: 92%;margin-left: auto;margin-right: auto;">
+      <div class="col-12 q-mt-none text-right my-5 View" style="width: 92%;margin-left: auto;margin-right: auto;">
           <span style="color: #4E5BF8;">View More Courses →</span>
         </div>
     </div>
@@ -164,9 +164,18 @@ export default {
   font-weight: 700;
 }
 .desc_mostPopular{
-  font-size: 0.6rem;
+  font-size: 0.9rem;
   font-weight: 500;
   font-family: sans-serif;
+}
+.container{
+  margin-top: 0px;
+}
+.outerCard{
+  padding-bottom: 0px;
+}
+.View{
+  margin-top: 10px;
 }
 }
 </style>

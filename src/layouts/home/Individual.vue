@@ -570,6 +570,15 @@ border-radius: 20px;
   .left-section {
     width: 100% !important;
   }
+  .review-container{
+    display: flex;
+    flex-direction: column !important;
+    padding-left: 5px;
+  }
+
+  .blue_border{
+    margin-right: 0px;
+  }
 
 }
 
