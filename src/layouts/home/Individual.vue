@@ -118,23 +118,29 @@
       </q-toolbar>
 
       <q-drawer v-model="leftDrawerOpen" side="left" overlay class="bg-white">
-      <q-list>
-        <q-item clickable v-ripple>
-          <q-item-section>Courses</q-item-section>
-        </q-item>
-        <q-item clickable v-ripple>
-          <q-item-section>Career</q-item-section>
-        </q-item>
-        <q-item clickable v-ripple :to="'/login'">
-          <q-item-section>Login</q-item-section>
-        </q-item>
-        <q-item clickable v-ripple>
-          <q-item-section>
-            <q-btn noCaps label="Join for Free" unelevated class="full-width" style="background-color: #4E5BF8; color: white;" />
-          </q-item-section>
-        </q-item>
-      </q-list>
-    </q-drawer>
+  <!-- Close Button -->
+  <div class="row justify-end q-pa-md">
+    <q-btn flat dense round icon="close" @click="leftDrawerOpen = false" />
+  </div>
+
+  <q-list>
+    <q-item clickable v-ripple>
+      <q-item-section>Courses</q-item-section>
+    </q-item>
+    <q-item clickable v-ripple>
+      <q-item-section>Career</q-item-section>
+    </q-item>
+    <q-item clickable v-ripple :to="'/login'">
+      <q-item-section>Login</q-item-section>
+    </q-item>
+    <q-item clickable v-ripple>
+      <q-item-section>
+        <q-btn noCaps label="Join for Free" unelevated class="full-width" style="background-color: #4E5BF8; color: white;" />
+      </q-item-section>
+    </q-item>
+  </q-list>
+</q-drawer>
+
     <q-page-container>
       <!-- 	Alice blue Bar -->
 
