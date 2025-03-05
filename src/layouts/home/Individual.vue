@@ -2,11 +2,23 @@
   <q-layout view="lHh Lpr lFf ">
     <!-- Navigation Bar -->
 
-      <q-toolbar>
+    <q-toolbar>
         <!-- Left Side: Logo, q-select, q-search -->
-        <q-toolbar-title class="row items-center q-py-sm">
-<!-- space for logo will add later -->
-<q-item>
+        <q-toolbar-title class="row items-center">
+          <!-- Menu for small screens -->
+          <q-btn
+            flat
+            dense
+            round
+            icon="menu"
+            class="lt-md"
+            @click="leftDrawerOpen = !leftDrawerOpen"
+          />
+
+          <!-- Placeholder for logo -->
+          <div class="q-ml-md logo">
+            <!-- Logo will be added here later -->
+            <q-item>
         <q-item-section class="text-h5 text-weight-bolder logo">
             <svg xmlns="http://www.w3.org/2000/svg" :width="widthSVG" height="30" viewBox="0 0 197 30" fill="none">
               <path d="M197 25.0071H174.011V0.961853H185.507L185.532 13.5971H197V25.0071Z" fill="#4E5BF8" />
@@ -61,8 +73,10 @@
             </svg>
           </q-item-section>
         </q-item>
+          </div>
 
-        <q-select
+          <q-select
+  v-if="!$q.screen.lt.sm"
   v-model="selectedExplore"
   :options="exploreOptions"
   clearable
@@ -75,7 +89,9 @@
   class="q-ml-md explore"
   style="min-width: 140px;"
 />
+
 <q-input
+  v-if="!$q.screen.lt.md"
   dense
   outlined
   placeholder="What do you want to learn?"
@@ -89,22 +105,36 @@
     <q-icon name="search" />
   </template>
 </q-input>
+
         </q-toolbar-title>
 
-        <!-- Right Side: Navigation Links -->
-
-        <q-btn noCaps flat label="Courses" class="nav-link" />
-<q-btn noCaps flat label="Career" class="nav-link" />
-<q-btn noCaps flat label="Login" class="nav-link" :to="'/login'" style="color: #4E5BF8"/>
-
-<q-btn
-  noCaps
-  label="Join for Free"
-  unelevated
-  class="join-btn"
-  style="background-color: #4E5BF8; color: white;"
-/>
+        <!-- Right Side: Navigation Links (Hidden on Mobile) -->
+        <div class="row items-center q-gutter-md gt-sm">
+          <q-btn noCaps flat label="Courses" class="nav-link" />
+          <q-btn noCaps flat label="Career" class="nav-link" />
+          <q-btn noCaps flat label="Login" class="nav-link" :to="'/login'" style="color: #4E5BF8" />
+          <q-btn noCaps label="Join for Free" unelevated class="join-btn" style="background-color: #4E5BF8; color: white;" />
+        </div>
       </q-toolbar>
+
+      <q-drawer v-model="leftDrawerOpen" side="left" overlay class="bg-white">
+      <q-list>
+        <q-item clickable v-ripple>
+          <q-item-section>Courses</q-item-section>
+        </q-item>
+        <q-item clickable v-ripple>
+          <q-item-section>Career</q-item-section>
+        </q-item>
+        <q-item clickable v-ripple :to="'/login'">
+          <q-item-section>Login</q-item-section>
+        </q-item>
+        <q-item clickable v-ripple>
+          <q-item-section>
+            <q-btn noCaps label="Join for Free" unelevated class="full-width" style="background-color: #4E5BF8; color: white;" />
+          </q-item-section>
+        </q-item>
+      </q-list>
+    </q-drawer>
     <q-page-container>
       <!-- 	Alice blue Bar -->
 
@@ -294,6 +324,8 @@ export default {
   data() {
     return {
       reviews: [],
+      leftDrawerOpen: false,
+      selectedExplore: null,
       programs: [], // List of programs
       courses: [], // List of courses (chapter categories)
       selectedProgram: "", // Selected program name
@@ -560,7 +592,11 @@ border-radius: 20px;
 .left-section {
   width: 200px;
 }
-
+.logo{
+    align-items: center;
+    justify-content: center;
+    display: flex;
+  }
 
 @media (max-width: 600px) {
   .mobile_view {
@@ -578,6 +614,13 @@ border-radius: 20px;
 
   .blue_border{
     margin-right: 0px;
+  }
+  .logo{
+    margin-right: auto;
+    margin-left: auto;
+    align-items: center;
+    justify-content: center;
+    display: flex;
   }
 
 }
