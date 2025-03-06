@@ -1,7 +1,7 @@
 <template>
   <div class="free-courses q-pb-lg q-mb-lg">
     <div class="row w-100 text-left q-mt-lg q-mx-lg">
-    <span class="text-black header_freeCourses" style="width: 100%;">Start learning with free courses</span>
+    <span class="text-black header_freeCourses" style="width: 100%;">Begin your learning journey with our <span class="blue_color">FREE COURSES</span></span>
     <span class="text-black desc_mostPopular" style="width: 100%;">"Unlock endless learning opportunities with our free courses,designed to expand your knowledge at no cost!"</span>
   </div>
   <div class="container mt-4 q-mx-lg">
@@ -20,7 +20,7 @@
     class="course-image q-pa-lg"
   />
   <q-card-section>
-    <p class="text-bold text-left">{{ category.categoryName }}</p>
+    <p class="text-bold text-left blue_color">{{ category.categoryName }}</p>
     <span class="text-caption text-grey">{{ category.description }}</span>
   </q-card-section>
 </q-card>
@@ -189,6 +189,11 @@ export default {
   /* margin-bottom: 10px; */
   cursor: pointer;
 }
+.blue_color{
+  color: #4e5bf8 !important;
+  /* font-size: 18px; */
+}
+
 .course-card:hover {
   transform: scale(1.05); /* Enlarges by 5% */
   transition: transform 0.3s ease;
@@ -216,5 +221,13 @@ export default {
   font-size: 0.9rem;
   text-decoration: underline;
   margin-left: 5px;
+}
+@media (max-width: 600px){
+  .header_freeCourses{
+  font-family: sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+}
+
 }
 </style>

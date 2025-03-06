@@ -1,7 +1,7 @@
 <template>
     <div class="reviews q-py-xl">
         <div class="row w-100 text-center head ">
-            <span class="text-black text-h4 text-bold" style="width: 100%;">From the Fintech Community</span>
+            <span class="text-black text-h4 text-bold" style="width: 100%;"><span style=" color: #4e5bf8 ">ScaleGrad</span> Hub Insight</span>
             <span class="text-subtitle1" style="width: 100%;">Explore our student reviews, how our course boosted their skills and <br> helped to accelerate their learning journey!</span>
         </div>
         <div class="row q-col-gutter-md q-mx-xl q-my-md q-px-xl reviewContainer">
@@ -147,6 +147,6 @@ export default {
         text-align: left;
         margin-left: 10px;
    } */
-    
+
 }
 </style>

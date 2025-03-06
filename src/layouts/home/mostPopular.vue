@@ -1,8 +1,9 @@
 <template>
   <div class="most-popular q-py-xl">
     <div class="row w-100 text-center ">
-    <span class="text-black header_mostPopular" style="width: 100%;">Most Popular Courses</span>
-    <span class="text-black desc_mostPopular" style="width: 100%;">"Explore our most popular course, designed to boost your skills and <br>accelerate your learning journey!"</span>
+    <span class="text-black header_mostPopular q-pt-xl q-mt-lg" style="width: 100%;">Most <span style=" color: #4e5bf8 ">Popular</span> Courses</span>
+    <span class="text-black desc_mostPopular" style="width: 100%;">"Explore our most popular course, designed to boost your skills and <span class="web_view">
+      <br></span>accelerate your learning journey!"</span>
   </div>
 
   <div class="container mt-4 q-mx-lg q-my-xl" >
@@ -21,13 +22,13 @@
     class="course-image q-pa-lg"
   />
   <q-card-section>
-    <p class="text-bold text-left">{{ category.categoryName }}</p>
+    <p class="text-bold text-left blue_color">{{ category.categoryName }}</p>
     <span class="text-caption">{{ category.description }}</span>
   </q-card-section>
 </q-card>
 
       </div>
-      <div class="col-12 q-mt-none text-right my-5 View" style="width: 92%;margin-left: auto;margin-right: auto;">
+      <div class="col-12 q-mt-none text-right q-my-lg View" style="width: 92%;margin-left: auto;margin-right: auto;">
           <span style="color: #4E5BF8;">View More Courses →</span>
         </div>
     </div>
@@ -114,12 +115,12 @@ export default {
 .most-popular {
   height: 100%;
   width: 100vw;
-  /* padding-top: 10%; */
-  /* padding-bottom: 10%; */
+  padding-top: 0%;
+  padding-bottom: 5%;
   background-color: #F6F6F6;
   background-image: url('../../assets/most_popularBG.png');
   background-size: 100% 100%;
-  background-position: center;
+  background-position: cover;
   background-repeat: no-repeat;
 }
 .header_mostPopular{
@@ -139,6 +140,10 @@ export default {
   width: 100%;
   height:100%;
   overflow: hidden;
+}
+.blue_color{
+  color: #4e5bf8 !important;
+  font-size: 18px;
 }
 
 .course-image {
@@ -160,22 +165,35 @@ export default {
 @media (max-width: 600px) {
   .header_mostPopular{
   font-family: sans-serif;
-  font-size: 1.5rem;
+  font-size: 20px;
   font-weight: 700;
 }
 .desc_mostPopular{
-  font-size: 0.9rem;
+  font-size: 16px;
   font-weight: 500;
   font-family: sans-serif;
 }
 .container{
   margin-top: 0px;
 }
+.most-popular {
+  height: 100%;
+  width: 100vw;
+  padding-top: 0%;
+  padding-bottom: 5%;
+  background: #F6F6F6;
+  background-size: 100% 100%;
+  background-position: cover;
+  background-repeat: no-repeat;
+}
 .outerCard{
   padding-bottom: 0px;
 }
 .View{
   margin-top: 10px;
+}
+.web_view{
+  display: none;
 }
 }
 </style>

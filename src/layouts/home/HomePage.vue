@@ -1,7 +1,7 @@
 <template>
   <q-layout view="lHh Lpr lFf">
     <!-- Navigation Bar -->
-    <q-header class="bg-black text-white" elevated>
+    <q-header class="bg-Customblue text-white" elevated>
       <q-toolbar>
         <div class="nav-container">
           <q-btn
@@ -42,9 +42,9 @@ export default {
     return {
       activeTab: "individuals", // Default tab
       navItems: [
-        { label: "For Individuals", key: "individuals" },
-        { label: "For Corporates", key: "corporates" },
-        { label: "For COE (Center of Excellence)", key: "coe" }
+        { label: "Individuals", key: "individuals" },
+        { label: "Corporates", key: "corporates" },
+        { label: "Colleges", key: "coe" }
       ]
     };
   },
@@ -93,7 +93,11 @@ export default {
   width: 100%;
   left: 0;
 }
-
+.bg-Customblue{
+  background-color: #4E5BF8;
+  /* background-color: #7C89FA; */
+  /* background-color: gray; */
+}
 /* Responsive Font Adjustments */
 @media (max-width: 768px) {
   .nav-item {
@@ -104,7 +108,7 @@ export default {
 
 @media (max-width: 480px) {
   .nav-container {
-    flex-direction: row; 
+    flex-direction: row;
   }
   .nav-item {
     font-size: 11px;
