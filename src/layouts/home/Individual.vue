@@ -44,7 +44,7 @@
         </q-toolbar-title>
 
         <!-- Right Side: Navigation Links (Hidden on Mobile) -->
-        <div class="row items-center q-gutter-md gt-sm">
+        <div class="row items-center q-gutter-md gt-sm q-mt-sm">
           <q-select
   v-if="!$q.screen.lt.sm"
   v-model="selectedExplore"
