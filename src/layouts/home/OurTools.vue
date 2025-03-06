@@ -1,6 +1,6 @@
 <template>
   <div class="background_grey q-py-xl">
-    <span class="text-black header_toolsd">Learn With Us to Get Placed</span>
+    <span class="text-black header_toolsd">Master Essential Tools for Career Success</span>
     <div class="scroll-container">
       <div class="scroll-content autoplay">
         <img v-for="(tool, index) in tools" :key="index" class="custom_img" :src="tool" alt="Tool Logo" />
