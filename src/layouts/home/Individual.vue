@@ -433,7 +433,7 @@ border-radius: 20px;
   flex-direction: column;
   overflow: hidden;
   /* justify-content: center; */
-  height: 84vh;
+  height: 86vh;
   max-height: 100vh;
   margin-bottom: 0% !important;
 }
