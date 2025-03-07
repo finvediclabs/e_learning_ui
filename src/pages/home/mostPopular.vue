@@ -12,7 +12,11 @@
          class="col-lg-3 col-md-3 col-sm-6 col-12 mb-4 d-flex justify-content-center q-pt-sm"
         style="margin-left: auto;margin-right: auto;"
       >
-      <q-card class="course-card ">
+
+     <q-card
+  class="course-card cursor-pointer"
+  @click="$router.push({ path: `/course/${category.id}` })"
+>
   <q-img
     v-if="category.imagePath"
     :src="category.imagePath"

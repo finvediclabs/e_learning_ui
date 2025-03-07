@@ -246,6 +246,22 @@ const routes = [
     ],
   },
   {
+    path: '/course',
+    meta: { title: 'Course', module: 'course' },
+    props:{
+      showDrawer: false,
+  },
+    component: () => import('layouts/DashboardLayout.vue'),
+    children: [
+      {
+        path: ':id',
+        component: () => import('pages/courses/courses.vue'),
+        meta: { item: '' },
+      },
+
+    ],
+  },
+  {
     path: '/channel',
     meta: { title: 'Channel', module: 'channel' },
     component: () => import('layouts/DashboardLayout.vue'),
