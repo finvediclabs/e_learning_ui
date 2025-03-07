@@ -722,6 +722,9 @@ setAccessPaths() {
       else if  (this.$route.path === '/program') {
         this.backgroundStyle = 'Program_BackgroundStyle'; // Apply the background style class
       }
+      else if  (this.$route.path === '/labs') {
+        this.backgroundStyle = 'Program_BackgroundStyle'; // Apply the background style class
+      }
 
       else if (this.$route.path === '/library/elearning') {
         this.backgroundStyle = 'Assignment_BackgroundStyle'; // Apply the background style class
@@ -1163,8 +1166,4 @@ background-attachment: fixed;
   margin: 0px 10px;
   font-size:medium;
 }
-
-
-
-
 </style>

@@ -54,9 +54,14 @@ const routes = [
     children: [
       {
         path: '',
-        component: () => import('pages/labs/Index.vue'),
+        component: () => import('pages/labs/lab.vue'),
         meta: { item: '' }
       },
+      // {
+      //   path: '',
+      //   component: () => import('pages/labs/Index.vue'),
+      //   meta: { item: '' }
+      // },
       {
         path: 'reports',
         component: () => import('pages/reports/Index.vue'),
