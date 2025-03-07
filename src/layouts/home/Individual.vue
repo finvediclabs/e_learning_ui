@@ -144,8 +144,12 @@
 
 
 
-    <div class="image_div">
-       <q-img :src=bg_img></q-img>
+    <div class="image_div row">
+      <div class="col-11">
+        <q-img :src=bg_img></q-img>
+      </div>
+
+       <div class="col-1"></div>
     </div>
 </div>
 </q-page>
@@ -440,7 +444,7 @@ border-radius: 20px;
 .image_div{
   position: absolute;
   width: 60%;
-  right: 4%;
+  right: 0%;
   bottom: 0%;
 }
 .header_blue{
