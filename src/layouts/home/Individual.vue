@@ -160,7 +160,8 @@
 <mostPopular />
 <freeCourses />
 <OurTools />
-<Reviews/>
+<Reviews />
+<Footer />
 
 </template>
 <script>
@@ -172,6 +173,7 @@ import Reviews from "./Reviews.vue";
 import bg_img from "src/assets/scalefradepng1.png"
 import OurTools from "./OurTools.vue";
 import Associated from "./Associated.vue";
+import Footer from "./footer.vue";
 
 export default {
   components: {
@@ -179,7 +181,8 @@ export default {
     freeCourses,
     OurTools,
     Reviews,
-    Associated
+    Associated,
+    Footer
   },
   name: "Individual",
   data() {
