@@ -14,12 +14,15 @@
       <div class="row" style="display: flex; flex-wrap: wrap; width: 100%;">
         <div v-for="item in recentlyViewed.slice(0, 2)" :key="item.id"
              class="col-md-6 col-sm-6 col-xs-12 q-px-sm"
-             style="display: flex;">
+             style="display: flex;"
+
+             >
 
           <q-card class="program-card"
-                  style="width: 100%; height: 300px; display: flex; flex-direction: column; padding: 8px;">
+                  style="width: 100%; height: 300px; display: flex; flex-direction: column; padding: 8px;"
+                  >
 
-            <div class="row" style="width: 100%; height: 100%; ">
+            <div class="row" style="width: 100%; height: 100%; cursor: pointer;" @click="navigateToCourse(item.programId)">
 
               <!-- Left Side: Image (Full Height) -->
               <div class="col-6" style="display: flex; padding: 8px;">
@@ -141,6 +144,7 @@ export default {
 
     if (Array.isArray(response.data) && response.data.length > 0) {
       this.recentlyViewed = response.data.slice(0, 2).map((item) => ({
+        programId: item.programId,
         id: item.id,
         name: item.programHeading,
         imagePath: item.programImagePath ? item.programImagePath : this.DummyBook,
@@ -194,7 +198,28 @@ export default {
     this.loading = false;
   }
 },
+async navigateToCourse(courseId) {
+  console.log('Navigating to course with ID:', courseId);
 
+  if (!this.user) {
+    console.error('User data is not available!');
+    return;
+  }
+
+  const userPayload = this.user; // Directly use this.user
+  const baseUrl = (process.env.VUE_APP_CORE_URL || "").replace(/\/$/g, "") + "/";
+  let url = `${baseUrl}api/recently-viewed/add?programId=${courseId}`;
+  // const url = `http://localhost:8087/api/recently-viewed/add?programId=${courseId}`;
+
+  try {
+    await this.$api.post(url, userPayload);
+    console.log('Successfully added to recently viewed:', userPayload);
+  } catch (error) {
+    console.error('Error adding to recently viewed:', error);
+  }
+
+  this.$router.push({ name: 'ProgramDetails', params: { id: courseId } });
+},
 async fetchDefaultPrograms() {
   console.log("fetchDefaultPrograms: Fetching default programs...");
 
@@ -303,7 +328,7 @@ async fetchDefaultPrograms() {
   .col-6 {
     flex: 1 1 100%;
     padding: 4px;
-    
+
   }
 
   .rgt{
