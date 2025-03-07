@@ -17,9 +17,27 @@
         :class="{ 'active-category': course.catgoryId[index] === activeCategoryId }"
         @click="handleCategoryClick(course.catgoryId[index])"
       >
-        <span>{{ name }}</span>
+        <span>{{ name }}</span><br>
+        <div class="text-body1"
+              :class="{
+                'category-description': true,
+                'expanded': expandedIndexes.includes(index)
+              }"
+            >
+              {{ course.categoryDescription[index] }}
+            </div>
+
+            <!-- Read More / Read Less Toggle -->
+            <a
+              href="javascript:void(0);"
+              @click="toggleDescription(index)"
+              class="read-more-link"
+            >
+              {{ expandedIndexes.includes(index) ? 'Read Less' : 'Read More' }}
+            </a>
       </div>
       <span v-if="index < course.categoryName.length - 1"><hr /></span>
+
     </li>
   </ul>
 </div>
@@ -160,6 +178,8 @@ export default {
       elProfiles: [],
       videos: [],
       presentations: [],
+      expandedIndexes: [],
+      categoryLoading: false,
       category: {
         bookChapters: [],
         videoChapters: [],
@@ -201,6 +221,13 @@ created() {
     // Remove 'programs/' prefix if it exists
     return profileName.replace(/^programs\//, '');
 
+  },
+  toggleDescription(index) {
+    if (this.expandedIndexes.includes(index)) {
+      this.expandedIndexes = this.expandedIndexes.filter(i => i !== index);
+    } else {
+      this.expandedIndexes.push(index);
+    }
   },
   async fetchProfiles() {
   try {
@@ -252,6 +279,7 @@ created() {
             description: course.description,
             categoryName: course.chapterCategoryNames,
             catgoryId: course.chapterCategoryIds,
+            categoryDescription: course.chapterCategoryDescriptions,
             abstractt: course.description,
             imagePath: course.imagePath || this.DummyBook, // Use dummy image as fallback
           };
@@ -300,7 +328,7 @@ created() {
       const { courseId } = this.$route.params; // Get courseId from route params
       console.log('Selected category ID:', selectedCategoryId);
       console.log('Course ID:', courseId);
-
+      this.categoryLoading = true;
       // Set the active category ID
       this.activeCategoryId = selectedCategoryId;
 
@@ -309,6 +337,9 @@ created() {
         name: this.$route.name, // Keep the same route name
         params: { courseId, categoryId: selectedCategoryId }, // Update categoryId
       });
+      this.fetchCategoryDetails().finally(() => {
+    this.categoryLoading = false; // Stop loader
+  });
     },
     async fetchBookImages() {
       const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
