@@ -126,7 +126,7 @@
 <div class="text-left row">
   <div class="col-1 d-none d-md-block"></div>
   <span class="header_black col-12 col-md-5 pt-2 me-xl">
-    Bridging the gap between education and industry by providing comprehensive, hands-on training in real-world fintech environments...
+    Bridging the gap between education and industry by providing comprehensive, hands-on training in <span class="web_view"><br></span> real-world fintech environments...
   </span>
 </div>
 
@@ -351,7 +351,7 @@ const response = await axios.get(`${getCourse}/${programId}`);
   background-color: #f3f3f4;
   color: #4E5BF8 !important;
   width: 60%;
-  font-size: 1.75rem !important;
+  font-size: 1.5vw !important;
   margin-right: auto;
   border-top-right-radius: 50px;
   border-bottom-right-radius: 50px;
@@ -402,7 +402,7 @@ const response = await axios.get(`${getCourse}/${programId}`);
   text-underline-offset: 6px;
 }
 .scaleGrad_head{
-  font-size: 44px;
+  font-size: 2.6vw;
 }
 
 .program_view {
@@ -423,7 +423,7 @@ border-radius: 20px;
 
 }
 .dev_css{
-  padding-left: 12%;margin-top: 10%;
+  padding-left: 7vw;margin-top: 10%;
 }
 .combined_heading{
   position: relative;
@@ -434,6 +434,7 @@ border-radius: 20px;
   overflow: hidden;
   /* justify-content: center; */
   height: 84vh;
+  max-height: 100vh;
   margin-bottom: 0% !important;
 }
 .image_div{
@@ -445,7 +446,7 @@ border-radius: 20px;
 .header_blue{
   color: #000;
   font-weight: bold;
-  font-size: 38px;
+  font-size: 2.2vw;
   text-align:left !important;
 }
 .Join_Free_btn{
@@ -467,13 +468,13 @@ border-radius: 20px;
 .header_black{
   color: black;
   /* font-weight: bold; */
-  font-size: 26px;
+  font-size: 1.5vw;
   text-align: left !important;
 }
 .header_purple{
   color: #4E5BF8;
   font-weight: bold;
-  font-size: 44px;
+  font-size: 2.6vw;
   text-align: left !important;
 }
 .blue_box{
