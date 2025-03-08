@@ -16,7 +16,7 @@
                   <q-card-section>
                     <div class="action-buttons">
                       <q-btn label="Restart" color="" outline class="q-mr-sm act-btn" />
-                      <q-btn label="Start" class="act-btn" />
+                      <q-btn label="Start" class="act-btn"   @click="handleStart(lab.title)"  />
                     </div>
                   </q-card-section>
                 </q-card>
@@ -34,7 +34,7 @@
                 <q-card-section>
                   <div class="action-buttons">
                     <q-btn label="Restart" color="" outline class="q-mr-sm act-btn" />
-                    <q-btn label="Start" class="act-btn" />
+                    <q-btn label="Start" class="act-btn" @click="handleStart(lab.title)" />
                   </div>
                 </q-card-section>
               </q-card>
@@ -116,6 +116,14 @@ export default {
     openTool(link) {
         window.open(link, "_blank");
     },
+    handleStart(title) {
+    if (title === "Tech Sandbox") {
+      console.log("Tech Sandbox Start button pressed");
+      // Add any specific logic here for Tech Sandbox
+    } else {
+      console.log(`${title} Start button pressed`);
+    }
+  },
     nextSlide() {
       this.currentSlide++;
       if (this.currentSlide >= this.labs.length) {

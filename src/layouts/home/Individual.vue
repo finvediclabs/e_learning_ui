@@ -160,6 +160,7 @@
 <mostPopular />
 <freeCourses />
 <OurTools />
+<Certification />
 <Reviews />
 <Footer />
 
@@ -172,6 +173,11 @@ import freeCourses from "./freeCourses.vue";
 import Reviews from "./Reviews.vue";
 import bg_img from "src/assets/scalefradepng1.png"
 import OurTools from "./OurTools.vue";
+import Certification from "./Certification.vue";
+
+
+
+
 import Associated from "./Associated.vue";
 import Footer from "./footer.vue";
 
@@ -181,6 +187,7 @@ export default {
     freeCourses,
     OurTools,
     Reviews,
+    Certification,
     Associated,
     Footer
   },
@@ -547,25 +554,17 @@ border-radius: 20px;
   margin-right: auto;
   border-top-right-radius: 50px;
   border-bottom-right-radius: 50px;
-  margin-top: 3%;
-}
-.Join_Free_btn{
-  padding: 0px 20px;
-}
-.Explore_btn{
-  padding: 0px 20px;
 }
 .combined_heading{
 
   display: flex;
+  padding-top: 5%;
   /* align-items: center; */
   flex-direction: column;
   overflow: hidden;
   /* justify-content: center; */
   height: fit-content;
   margin-bottom: 0% !important;
-  padding: 5%;
-  padding-bottom: 0%;
 }
 
 
@@ -586,19 +585,19 @@ border-radius: 20px;
 .header_blue{
   color: #000;
   font-weight: bold;
-  font-size: 19px;
+  font-size: 20px;
   text-align:left !important;
 }
 .header_black{
   color: black;
   /* font-weight: bold; */
-  font-size: 16px;
+  font-size: 18px;
   text-align: left !important;
 }
 .header_purple{
   color: #4E5BF8;
   font-weight: bold;
-  font-size: 18px;
+  font-size: 20px;
   text-align: left !important;
 }
 .scaleGrad_head{
@@ -625,27 +624,6 @@ border-radius: 20px;
     display: flex;
   }
 
-  .btns{
-    padding: 0px 20px;
-  }
-
-}
-
-@media (max-width: 1024px) and (min-width: 768px) {
-  .btns{
-    padding: 0px 20%;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-  }
-  .combined_heading{
-    padding: 5%;
-    padding-bottom: 0%;
-  }
-.header_black{
-padding-left: 10%;
-}
- 
 }
 
 </style>
