@@ -5,7 +5,7 @@
         <span class="text-h5 text-bold">Labs</span>
         <div class="carousel-container q-mt-md" v-if="!isMobile">
           <q-btn icon="arrow_left" flat @click="prevSlide" class="arrow-btn" />
-    <div class="q-mb-xl CircD1"> <q-img src="src/assets/Circ_D1.png" /> </div>
+    <!-- <div class="q-mb-xl CircD1"> <q-img :src="circ_d1" style="width: 100%;" /> </div> -->
 
           <div class="carousel-view">
             <div class="carousel-row" :style="{ transform: `translateX(-${currentSlide * (100 / itemsPerSlide)}%)` }">
@@ -44,7 +44,7 @@
       </div>
     </div>
 
-      <div class="row q-mt-xl">
+      <div class="row q-mt-xl q-pb-xl">
           <!-- <div class="q-mb-xl CircD2"> <img src="src/assets/Circ_D1.png"> </div> -->
         <div class="col-12">
           <span class="text-h5 text-bold">Tools</span>
@@ -69,6 +69,7 @@ import MySql_lab from "src/assets/MySql_lab.jpg";
 import redis_lab from "src/assets/redis_lab.jpg";
 import extra_lab1 from "src/assets/extra_lab1.jpg";
 import extra_lab2 from "src/assets/extra_lab2.jpg";
+import circ_d1 from "src/assets/Circ_D1.png";
 import extra_lab3 from "src/assets/extra_lab3.jpg";
 import dojo from "src/assets/dojo.jpg";
 import white_board from "src/assets/white_board.jpg";
@@ -81,6 +82,7 @@ export default {
       MySql_lab: MySql_lab,
       redis_lab: redis_lab,
       extra_lab1: extra_lab1,
+      circ_d1:circ_d1,
       extra_lab2: extra_lab2,
       extra_lab3: extra_lab3,
       dojo: dojo,

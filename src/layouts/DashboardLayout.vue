@@ -900,12 +900,15 @@ setAccessPaths() {
 
 
 .labs_BackgroundStyle {
-  background-color: #FFFFFF;
-  background-image:  url("src/assets/Circ_D1.png");
-  background-position:  93vw 20vh; 
-  background-repeat:  no-repeat;
-  background-size:  150px 120px;
-  margin-top: 2%;
+  height: 100%;
+  width: 100%;
+  /* padding-top: 0%; */
+  /* padding-bottom: 5%; */
+  background-color: #FFFF;
+  background-image: url('src/assets/Labs_tools.png');
+  background-size: 100% 100%;
+  background-position: cover;
+  background-repeat: no-repeat;
 }
 
 
