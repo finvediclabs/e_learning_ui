@@ -5,6 +5,8 @@
         <span class="text-h5 text-bold">Labs</span>
         <div class="carousel-container q-mt-md" v-if="!isMobile">
           <q-btn icon="arrow_left" flat @click="prevSlide" class="arrow-btn" />
+    <div class="q-mb-xl CircD1"> <img src="src/assets/Circ_D1.png"> </div>
+
           <div class="carousel-view">
             <div class="carousel-row" :style="{ transform: `translateX(-${currentSlide * (100 / itemsPerSlide)}%)` }">
               <div v-for="(lab, index) in loopLabs" :key="index" class="lab-card-container">
@@ -43,6 +45,7 @@
     </div>
 
       <div class="row q-mt-xl">
+          <!-- <div class="q-mb-xl CircD2"> <img src="src/assets/Circ_D1.png"> </div> -->
         <div class="col-12">
           <span class="text-h5 text-bold">Tools</span>
           <div class="row justify-center q-mt-md">
@@ -50,12 +53,13 @@
               <div class="card-title text-weight-medium text-h6">{{ tool.title }}</div>
               <q-card class="sandbox-card"  clickable @click="openTool(tool.link)">
                 <q-img :src="tool.img" class="sandbox-img" />
-              </q-card>
-            </div>
-          </div>
+            </q-card>
         </div>
-      </div>
     </div>
+</div>
+
+</div>
+</div>
 </template>
 
 <script>
@@ -127,6 +131,20 @@ export default {
 </script>
 
 <style scoped>
+.CircD1{
+  position: absolute;
+  top: 1%;
+  left: 7%;
+  transform: translate(-50%, -50%);
+  rotate: -60deg;
+}
+/* .CircD2{
+  position: absolute;
+  bottom: 0%;
+  left: 61%;
+  transform: translate(-50%, -50%);
+  rotate: -60deg;
+} */
 .sandbox-card {
   width: 100%;
   aspect-ratio: 16 / 9;
@@ -247,6 +265,5 @@ export default {
     grid-template-columns: repeat(1, 1fr);
   }
 }
-
 
 </style>

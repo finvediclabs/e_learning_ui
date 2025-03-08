@@ -723,7 +723,7 @@ setAccessPaths() {
         this.backgroundStyle = 'Program_BackgroundStyle'; // Apply the background style class
       }
       else if  (this.$route.path === '/labs') {
-        this.backgroundStyle = 'Program_BackgroundStyle'; // Apply the background style class
+        this.backgroundStyle = 'labs_BackgroundStyle'; // Apply the background style class
       }
 
       else if (this.$route.path === '/library/elearning') {
@@ -897,6 +897,19 @@ setAccessPaths() {
   background-size: 100% 100%;
   margin-top:3%;
 }
+
+
+.labs_BackgroundStyle {
+  background-color: #FFFFFF;
+  background-image:  url("src/assets/Circ_D1.png");
+  background-position:  93vw 20vh; 
+  background-repeat:  no-repeat;
+  background-size:  150px 120px;
+  margin-top: 2%;
+}
+
+
+
 body{
   background-color: #F6F6F6;
   background-size: 100% 100%;
