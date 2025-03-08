@@ -1,13 +1,13 @@
 <template>
   <div class="background_grey q-py-xl">
-    <span class="text-black header_toolsd">Master Essential Tools for Career Success</span>
-    <div class="scroll-container">
+    <span class="text-black header_toolsd ">Master Latest and Essential Tools & Technologies with ScaleGrad for Your Career Success</span>
+    <div class="scroll-container q-mt-xl">
       <div class="scroll-content autoplay">
         <img v-for="(tool, index) in tools" :key="index" class="custom_img" :src="tool" alt="Tool Logo" />
       </div>
     </div>
 
-    <div class="scroll-container q-mt-lg">
+    <div class="scroll-container q-mt-lg q-py-lg">
       <div class="scroll-content autoplay1">
         <img v-for="(tool, index) in tools_2" :key="index" class="custom_img2" :src="tool" alt="Tool Logo" />
       </div>
@@ -37,24 +37,30 @@ import tools12 from 'src/assets/Logos_all/12.png';
 import tools13 from 'src/assets/Logos_all/13.png';
 import tools14 from 'src/assets/Logos_all/14.png';
 
+import tools15 from 'src/assets/Logos_all/15.png';
+import tools16 from 'src/assets/Logos_all/16.png';
+
 export default {
   name: 'OurTools',
   data() {
     return {
-      tools: [tools1, tools2, tools3, tools4, tools5, tools6, tools7],
+      tools: [tools1, tools2, tools3, tools4, tools5, tools6, tools9,tools15],
 
-      tools_2: [tools9, tools10, tools11, tools12, tools8, tools13, tools14]
+      tools_2: [tools7, tools10, tools11, tools12, tools8, tools13, tools14, tools16]
     };
   },
   mounted() {
     $(document).ready(() => {
       $('.autoplay').slick({
         slidesToShow: 6,
-        slidesToScroll: 1,
+        centerMode: true,
+        centerPadding: '60px',
+        slidesToScroll: 3,
         autoplay: true,
-        autoplaySpeed: 200,
+        autoplaySpeed: 800,
         arrows: false, // 💡 No navigation buttons
-        dots: false
+        dots: false,
+        variableWidth: true
       });
 
     });
@@ -62,11 +68,14 @@ export default {
     $(document).ready(() => {
       $('.autoplay1').slick({
         slidesToShow: 6,
-        slidesToScroll: 1,
+        centerMode: true,
+        centerPadding: '60px',
+        slidesToScroll: 3,
         autoplay: true,
-        autoplaySpeed: 200,
+        autoplaySpeed: 800,
         arrows: false, // 💡 No navigation buttons
-        dots: false
+        dots: false,
+        variableWidth: true
       });
 
     });
@@ -85,7 +94,7 @@ export default {
 
 .header_toolsd {
   font-family: sans-serif;
-  font-size: 3rem;
+  font-size: 2rem;
   font-weight: 700;
 }
 
@@ -97,23 +106,23 @@ export default {
 }
 
 .custom_img {
-  max-width: 60%; /* Adjust as needed */
+  max-width: 50%; /* Adjust as needed */
   flex-shrink: 0;
-  margin-left: 20px;
+  /* margin-left: 20px; */
   max-height: 80px !important;
-  padding-left: 20px;
-  padding-right: 20px;
-  margin-right: 20px; /* Adds space between images */
+  /* padding-left: 20px; */
+  /* padding-right: 20px; */
+  /* margin-right: 20px; Adds space between images */
 }
 
 .custom_img2 {
-  max-width: 60%; /* Adjust as needed */
+  max-width: 50%; /* Adjust as needed */
   flex-shrink: 0;
-  margin-left: 20px;
+  /* margin-left: 20px; */
   max-height: 120px !important;
-  padding-left: 20px;
-  padding-right: 20px;
-  margin-right: 20px; /* Adds space between images */
+  /* padding-left: 20px; */
+  /* padding-right: 20px; */
+  /* margin-right: 20px; Adds space between images */
 }
 
 
@@ -124,6 +133,7 @@ export default {
 .autoplay{
   margin-top: 2%;
 }
+
 @media (max-width: 600px){
   .header_toolsd {
   font-family: sans-serif;

@@ -66,18 +66,18 @@ export default {
       itemsPerSlide: this.getItemsPerSlide(),
       isMobile: window.innerWidth <= 768,
       labs: [
-        { title: "Tech Sandbox", img: "src/assets/windows.png" },
-        { title: "Linux Sandbox", img: "src/assets/linux-sandbox.jpg" },
-        { title: "MySQL Server", img: "src/assets/mysql-server.jpg" },
-        { title: "Redis Server", img: "src/assets/redis-server.jpg" },
-        { title: "Extra Lab 1", img: "src/assets/extra-lab1.jpg" },
-        { title: "Extra Lab 2", img: "src/assets/extra-lab2.jpg" },
-        { title: "Extra Lab 2", img: "src/assets/extra-lab2.jpg" }
+        { title: "Tech Sandbox", img: "src/assets/windows_lab.jpg" },
+        { title: "Linux Sandbox", img: "src/assets/ubuntu_lab.jpg" },
+        { title: "MySQL Server", img: "src/assets/MySql_lab.jpg" },
+        { title: "Redis Server", img: "src/assets/redis_lab.jpg" },
+        { title: "Extra Lab 1", img: "src/assets/extra_lab1.jpg" },
+        { title: "Extra Lab 2", img: "src/assets/extra_lab2.jpg" },
+        { title: "Extra Lab 3", img: "src/assets/extra_lab3.jpg" }
       ],
       tools: [
-        { title: "Gurukul Dojo", img: "src/assets/windows.png" },
-        { title: "Gurukul Whiteboard", img: "src/assets/gurukul-whiteboard.jpg" },
-        { title: "Gurukul Notebook", img: "src/assets/gurukul-notebook.jpg" }
+        { title: "Gurukul Dojo", img: "src/assets/dojo.jpg" },
+        { title: "Gurukul Whiteboard", img: "src/assets/white_board.jpg" },
+        { title: "Gurukul Notebook", img: "src/assets/jupyter.jpg" }
       ]
     };
   },

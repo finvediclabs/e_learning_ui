@@ -1,7 +1,7 @@
 <template>
   <div class="background_grey q-pa-xl">
     <span class="text-black header_Associated">Learn With Us to Get Placed</span>
-    <div class="row w-100 col-12 q-pt-md q-pb-md first_row">
+    <div class="row w-100 col-12 q-pt-xl q-mt-sm q-pb-md first_row">
   <div class="col-4 col-md-2">
     <q-img class="custom_img" :src="Associate1"></q-img>
   </div>
@@ -85,10 +85,13 @@ export default {
 .first_row{
   justify-content: center;
   align-items: center;
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
 }
 .header_Associated{
   font-family: sans-serif;
-  font-size: 3rem;
+  font-size: 2rem;
   font-weight: 700;
 }
 .custom_img{
