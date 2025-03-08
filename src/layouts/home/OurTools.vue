@@ -1,6 +1,6 @@
 <template>
   <div class="background_grey q-py-xl">
-    <span class="text-black header_toolsd ">Master Latest and Essential Tools & Technologies with ScaleGrad for Your Career Success</span>
+    <span class="text-black header_toolsd ">Master Latest and Essential Tools & Technologies<br> with ScaleGrad for Your Career Success</span>
     <div class="scroll-container q-mt-xl">
       <div class="scroll-content autoplay">
         <img v-for="(tool, index) in tools" :key="index" class="custom_img" :src="tool" alt="Tool Logo" />

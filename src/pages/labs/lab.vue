@@ -48,7 +48,7 @@
           <div class="row justify-center q-mt-md">
             <div v-for="(tool, index) in tools" :key="index" class="tool-card-container">
               <div class="card-title text-weight-medium text-h6">{{ tool.title }}</div>
-              <q-card class="sandbox-card">
+              <q-card class="sandbox-card"  clickable @click="openTool(tool.link)">
                 <q-img :src="tool.img" class="sandbox-img" />
               </q-card>
             </div>
@@ -75,10 +75,10 @@ export default {
         { title: "Extra Lab 3", img: "src/assets/extra_lab3.jpg" }
       ],
       tools: [
-        { title: "Gurukul Dojo", img: "src/assets/dojo.jpg" },
-        { title: "Gurukul Whiteboard", img: "src/assets/white_board.jpg" },
-        { title: "Gurukul Notebook", img: "src/assets/jupyter.jpg" }
-      ]
+    { title: "Gurukul Dojo", img: "src/assets/dojo.jpg", link: "https://gurukul.finvedic.com/dojo/" },
+    { title: "Gurukul Whiteboard", img: "src/assets/white_board.jpg", link: "#" },
+    { title: "Gurukul Notebook", img: "src/assets/jupyter.jpg", link: "#" }
+]
     };
   },
   computed: {
@@ -87,6 +87,9 @@ export default {
     }
   },
   methods: {
+    openTool(link) {
+        window.open(link, "_blank");
+    },
     nextSlide() {
       this.currentSlide++;
       if (this.currentSlide >= this.labs.length) {
@@ -132,6 +135,7 @@ export default {
   margin-bottom: 1rem;
   display: flex;
   flex-direction: column;
+  cursor: pointer;
   box-shadow: none!important;
 }
 .sandbox-img {
