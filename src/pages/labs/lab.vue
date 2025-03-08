@@ -63,25 +63,45 @@
 </template>
 
 <script>
+import windows_lab from "src/assets/windows_lab.jpg";
+import ubuntu_lab from "src/assets/ubuntu_lab.jpg";
+import MySql_lab from "src/assets/MySql_lab.jpg";
+import redis_lab from "src/assets/redis_lab.jpg";
+import extra_lab1 from "src/assets/extra_lab1.jpg";
+import extra_lab2 from "src/assets/extra_lab2.jpg";
+import extra_lab3 from "src/assets/extra_lab3.jpg";
+import dojo from "src/assets/dojo.jpg";
+import white_board from "src/assets/white_board.jpg";
+import jupyter from "src/assets/jupyter.jpg";
 export default {
   data() {
     return {
+      windows_lab: windows_lab,
+      ubuntu_lab: ubuntu_lab,
+      MySql_lab: MySql_lab,
+      redis_lab: redis_lab,
+      extra_lab1: extra_lab1,
+      extra_lab2: extra_lab2,
+      extra_lab3: extra_lab3,
+      dojo: dojo,
+      white_board: white_board,
+      jupyter: jupyter,
       currentSlide: 0,
       itemsPerSlide: this.getItemsPerSlide(),
       isMobile: window.innerWidth <= 768,
       labs: [
-        { title: "Tech Sandbox", img: "src/assets/windows_lab.jpg" },
-        { title: "Linux Sandbox", img: "src/assets/ubuntu_lab.jpg" },
-        { title: "MySQL Server", img: "src/assets/MySql_lab.jpg" },
-        { title: "Redis Server", img: "src/assets/redis_lab.jpg" },
-        { title: "Extra Lab 1", img: "src/assets/extra_lab1.jpg" },
-        { title: "Extra Lab 2", img: "src/assets/extra_lab2.jpg" },
-        { title: "Extra Lab 3", img: "src/assets/extra_lab3.jpg" }
+        { title: "Tech Sandbox", img: windows_lab },
+        { title: "Linux Sandbox", img: ubuntu_lab },
+        { title: "MySQL Server", img: MySql_lab },
+        { title: "Redis Server", img: redis_lab },
+        { title: "Extra Lab 1", img: extra_lab1 },
+        { title: "Extra Lab 2", img: extra_lab2 },
+        { title: "Extra Lab 3", img: extra_lab3 }
       ],
       tools: [
-    { title: "Gurukul Dojo", img: "src/assets/dojo.jpg", link: "https://gurukul.finvedic.com/dojo/" },
-    { title: "Gurukul Whiteboard", img: "src/assets/white_board.jpg", link: "#" },
-    { title: "Gurukul Notebook", img: "src/assets/jupyter.jpg", link: "#" }
+    { title: "Gurukul Dojo", img: dojo, link: "https://gurukul.finvedic.com/dojo/" },
+    { title: "Gurukul Whiteboard", img: white_board, link: "#" },
+    { title: "Gurukul Notebook", img: jupyter, link: "#" }
 ]
     };
   },
