@@ -691,4 +691,34 @@ export default {
   object-fit: cover; /* Cover the space, cropping if necessary */
 }
 
+@media (max-width: 768px) {
+  .faq-page {
+    display: flex;
+    flex-direction: column; 
+  }
+
+  .search-container {
+    width: 100%;
+    height: 70vh;
+    order: -1; 
+  }
+
+  .faq-content {
+    width: 100%;
+    order: 1; 
+  }
+}
+
+@media (min-width: 376px) and (max-width: 768px){
+  .search-container {
+    width: 100%;
+    height:50vh;
+    order: -1; 
+  }
+
+}
+
+
+
+
 </style>

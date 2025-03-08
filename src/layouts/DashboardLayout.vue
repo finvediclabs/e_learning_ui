@@ -147,13 +147,15 @@
   <template v-slot:append>
     <q-icon name="search" />
   </template>
+
 </q-input>
+
 
 
 <!-- ================================== -->
 <template v-for="(module, index) in otherModules2" :key="index">
   <q-btn
-    v-if="!module.menu"
+  v-if="!module.menu && !isMobile" 
     flat
     class="text-body1 secondary-nav-btn help_button"
     @click="changeLocation(module)"
@@ -300,7 +302,14 @@
           {{ module.label }}
         </q-item-section>
       </q-item>
+
     </template>
+
+     <!-- ✅ Help Button Inside Drawer (ONLY FOR MOBILE) -->
+     <q-item v-if="isMobile" clickable @click="changeLocation({ value: 'help' })">
+      
+      <q-item-section>Help</q-item-section>
+    </q-item>
   </q-list>
 </q-drawer>
 
@@ -1071,6 +1080,10 @@ background-attachment: fixed;
 }
 }
 @media (max-width: 768px) {
+  .help_backgroundStyle{
+  top: 60px;
+  }
+
   .Elearning_BackgroundStyle {
     background-image: url('/src/assets/ai_set_bg.jpg');
   background-repeat:no-repeat;
