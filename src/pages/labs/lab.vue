@@ -5,7 +5,7 @@
         <span class="text-h5 text-bold">Labs</span>
         <div class="carousel-container q-mt-md" v-if="!isMobile">
           <q-btn icon="arrow_left" flat @click="prevSlide" class="arrow-btn" />
-    <div class="q-mb-xl CircD1"> <img src="src/assets/Circ_D1.png"> </div>
+    <div class="q-mb-xl CircD1"> <q-img src="src/assets/Circ_D1.png" /> </div>
 
           <div class="carousel-view">
             <div class="carousel-row" :style="{ transform: `translateX(-${currentSlide * (100 / itemsPerSlide)}%)` }">
