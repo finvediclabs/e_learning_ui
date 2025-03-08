@@ -132,7 +132,7 @@
 
 <div class="text-left row col-12 q-mt-md">
   <div class="col-1 q-none q-md-block"></div>
-  <div class="col-12 col-md-5 row">
+  <div class="col-12 col-md-5 row btns">
     <div class="col-12 col-md-auto q-mb-sm">
       <q-btn class="Join_Free_btn q-px-xl q-py-md full-width" no-caps>Join For Free</q-btn>
     </div>
@@ -547,17 +547,25 @@ border-radius: 20px;
   margin-right: auto;
   border-top-right-radius: 50px;
   border-bottom-right-radius: 50px;
+  margin-top: 3%;
+}
+.Join_Free_btn{
+  padding: 0px 20px;
+}
+.Explore_btn{
+  padding: 0px 20px;
 }
 .combined_heading{
 
   display: flex;
-  padding-top: 5%;
   /* align-items: center; */
   flex-direction: column;
   overflow: hidden;
   /* justify-content: center; */
   height: fit-content;
   margin-bottom: 0% !important;
+  padding: 5%;
+  padding-bottom: 0%;
 }
 
 
@@ -578,19 +586,19 @@ border-radius: 20px;
 .header_blue{
   color: #000;
   font-weight: bold;
-  font-size: 20px;
+  font-size: 19px;
   text-align:left !important;
 }
 .header_black{
   color: black;
   /* font-weight: bold; */
-  font-size: 18px;
+  font-size: 16px;
   text-align: left !important;
 }
 .header_purple{
   color: #4E5BF8;
   font-weight: bold;
-  font-size: 20px;
+  font-size: 18px;
   text-align: left !important;
 }
 .scaleGrad_head{
@@ -617,6 +625,27 @@ border-radius: 20px;
     display: flex;
   }
 
+  .btns{
+    padding: 0px 20px;
+  }
+
+}
+
+@media (max-width: 1024px) and (min-width: 768px) {
+  .btns{
+    padding: 0px 20%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+  }
+  .combined_heading{
+    padding: 5%;
+    padding-bottom: 0%;
+  }
+.header_black{
+padding-left: 10%;
+}
+ 
 }
 
 </style>
