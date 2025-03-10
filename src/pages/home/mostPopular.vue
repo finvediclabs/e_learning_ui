@@ -117,7 +117,7 @@ export default {
 .most-popular {
   /* padding-top: 10%; */
   /* padding-bottom: 10%; */
-  background-color: #F6F6F6;
+  background-color: #Ffff;
 }
 .header_mostPopular{
   font-family: sans-serif;

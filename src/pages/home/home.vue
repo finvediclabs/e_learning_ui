@@ -5,18 +5,28 @@
     <div class="row w-100">
       <!-- Attendance Card -->
       <div class="col-12 col-sm-3 col-lg-3 margin-bottom">
-        <attendance-card />
+        <div class="box">
+          <attendance-card />
+        </div>
       </div>
       <!-- Assignment Card -->
       <div class="col-12 col-sm-3 col-lg-3 margin-bottom">
-        <assignment-card />
+        <div class="box">
+          <assignment-card />
+        </div>
       </div>
       <!-- Hackathon Card -->
       <div class="col-12 col-sm-3 col-lg-3 margin-bottom">
-        <hackathon-card />
+        <div class="box">
+          <hackathon-card />
+        </div>
+
       </div>
       <div class="col-12 col-sm-3 col-lg-3 margin-bottom">
-        <labReport />
+
+        <div class="box">
+          <labReport />
+        </div>
       </div>
     </div>
 
@@ -105,7 +115,21 @@ h3 {
 }
 .margin-bottom {
   margin-bottom: 1rem;
+
 }
+.box{
+  width: 90% !important;
+  /* margin-left: 5%; */
+  /* margin-right: 5%; */
+/* border: 1px solid black; */
+box-shadow: 0px 2px 1px rgba(0, 0, 0, 0.2),
+               0px 1px 1px rgba(0, 0, 0, 0.2),
+               0px 1px 1px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 
 @media (max-width: 768px){
   .row {
