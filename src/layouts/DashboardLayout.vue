@@ -81,7 +81,7 @@
 
 
     <!-- Horizontal Navigation Bar -->
-    <div class="nav-bar row items-center q-gutter-sm" v-if="!isMobile">
+    <div class="nav-bar row items-center q-gutter-sm" v-if="!isMobile" >
 
       <template v-for="(module, index) in modules">
 
@@ -95,7 +95,7 @@
           @click="changeLocation(module)"
           v-ripple
         >
-          <q-icon :name="module.icon" class="q-mr-sm" />
+          <q-icon :name="module.icon" class="q-mr-sm ham"  />
           {{ module.label }}
         </q-btn>
 
@@ -225,6 +225,7 @@
         v-if="!module.menu"
         flat
         class="q-mx-sm text-body1 secondary-nav-btn"
+        :class="{ 'active-nav-item': isActive(module) }"
         @click="changeLocation(module)"
         v-ripple
       >
@@ -373,7 +374,7 @@ export default {
       notificationList: [],
       notificationInterval: null,
       batchNumber:null,
-      modulesList: [
+      otherModulesList: [
 
 
         {label: "Home", value: "homeProfile", icon: 'home'},
@@ -400,13 +401,12 @@ export default {
         {label:"help", value:"help", icon: 'help'},
       ],
 
-      otherModulesList: [
+       modulesList: [
 
   { label: "Calendar", value: "class-room", icon: 'event' },
 
         { label: "Assignments", value: "assignment", icon: 'task' },
         { label: "Hackathons", value: "hackathons", icon: 'celebration' },
-        { label: "Calendar", value: "class-room", icon: 'event' },
         {
           icon: 'library_books', label: 'Libraries', value: 'library', menu: [
             { label: "Books", value: 'books', icon: 'menu_book' },
@@ -747,6 +747,9 @@ setAccessPaths() {
       else if (this.$route.path === '/StudentProfile') {
         this.backgroundStyle = 'StudentProfile_backgroundStyle';
       }
+      else if (this.$route.path === '/') {
+        this.backgroundStyle = 'Dashboard_backgroundStyle';
+      }
       else {
         this.backgroundStyle = ''; // Do not apply any background style
       }
@@ -881,6 +884,16 @@ setAccessPaths() {
 }
 </script>
 <style>
+.active-web-nav {
+  color: #5479F7 !important;
+  font-weight: bold;
+}
+
+.active-nav-item {
+  color: #5479F7 !important;
+  font-weight: bold;
+}
+
 .module-select {
   border-radius: 10px 0px 0px 10px;
 }
@@ -923,7 +936,8 @@ setAccessPaths() {
 
 
 body{
-  background-color: #F6F6F6;
+  background-color: #fff;
+  /* background-color: #F6F6F6; */
   background-size: 100% 100%;
 background-size: cover;
 background-position: center;
@@ -1017,7 +1031,8 @@ background-attachment: fixed;
   font-family: 'Poppins', sans-serif;
   font-size: small;
   font-weight: 500; /* Adjust weight as needed (300, 400, 600, etc.) */
-  color: var(--q-color-primary); /* Optional: Use your primary theme color */
+  /* color: var(--q-color-primary);  */
+  color: #7D7D7D;
   text-transform: capitalize !important;
 }
 .nav-bar{
@@ -1029,12 +1044,13 @@ background-attachment: fixed;
   font-family: 'Poppins', sans-serif;
 }
 .second_navbar{
-  background-color: #ffff;
-  color: #7D7D7D;
+  color: #ffff;
+  background-color: #F6F6F6;
   width: 100%;
 }
 .mainHeader {
-  background: #5479F7;
+  background: #fff;
+  /* background: #5479F7; */
   backdrop-filter: blur(19px);
 }
 
@@ -1099,7 +1115,8 @@ background-attachment: fixed;
 }
 /* ======================= */
 .menu-button {
-  color: white;
+  /* color: white; */
+  color: #7D7D7D;
   margin-left: auto;
 }
 
@@ -1112,6 +1129,18 @@ background-attachment: fixed;
 .q-drawer {
   background: #fff;
   width: 250px;
+}
+
+.help_button{
+  color: #7D7D7D;
+}
+
+.notifs{
+  color: #7D7D7D !important;
+}
+
+.cursor-pointer {
+color: #7D7D7D !important;
 }
 
 @media (max-width: 600px) {
@@ -1188,11 +1217,11 @@ background-attachment: fixed;
   right: 10px;
 }
 
-.active-nav-item {
+/* .active-nav-item {
   background-color: #E6E6E6 !important;
   color: #000 !important;
   border-radius: 8px;
   margin: 0px 10px;
   font-size:medium;
-}
+} */
 </style>
