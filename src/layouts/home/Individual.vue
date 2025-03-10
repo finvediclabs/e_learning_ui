@@ -134,10 +134,10 @@
   <div class="col-1 q-none q-md-block"></div>
   <div class="col-12 col-md-5 row btns">
     <div class="col-12 col-md-auto q-mb-sm">
-      <q-btn class="Join_Free_btn q-px-xl q-py-md full-width" no-caps>Join For Free</q-btn>
-    </div>
+    <q-btn class="Join_Free_btn q-px-xl q-py-md full-width" no-caps to="/login">Join For Free</q-btn>
+  </div>
     <div class="col-12 col-md-6 q-mb-sm q-md-ml-md margin_left">
-      <q-btn class="Explore_btn q-py-md full-width" no-caps>Explore Our Certifications</q-btn>
+      <q-btn class="Explore_btn q-py-md full-width" no-caps :to="firstProgramLink">  Explore Our Certifications</q-btn>
     </div>
   </div>
 </div>
@@ -237,6 +237,7 @@ export default {
         console.error("Error fetching programs:", error);
       }
     },
+
     navigateToAllCourses() {
   if (this.selectedProgramId) {
     this.$router.push({
@@ -353,6 +354,14 @@ const response = await axios.get(`${getCourse}/${programId}`);
   }
 },
   },
+  computed: {
+  firstProgramLink() {
+    if (this.programs.length > 0) {
+      return `/finassociate/?programId=${this.programs[0].programId}`;
+    }
+    return "/finassociate/"; // Default fallback if no programs are available
+  }
+},
 };
 </script>
 
