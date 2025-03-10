@@ -16,7 +16,7 @@
                   <q-card-section>
                     <div class="action-buttons">
                       <q-btn label="Restart" color="" outline class="q-mr-sm act-btn" />
-                      <q-btn label="Start" class="act-btn"   @click="handleStart(lab.title)"  />
+                      <q-btn  :label="isCreatingVm ? '' : 'Start'"  :loading="isCreatingVm" class="act-btn"   @click="handleStart(lab.title)"  />
                     </div>
                   </q-card-section>
                 </q-card>
@@ -34,7 +34,7 @@
                 <q-card-section>
                   <div class="action-buttons">
                     <q-btn label="Restart" color="" outline class="q-mr-sm act-btn" />
-                    <q-btn label="Start" class="act-btn" @click="handleStart(lab.title)" />
+                    <q-btn  :label="isCreatingVm ? '' : 'Start'"  :loading="isCreatingVm" class="act-btn"   @click="handleStart(lab.title)"  />
                   </div>
                 </q-card-section>
               </q-card>
@@ -74,9 +74,12 @@ import extra_lab3 from "src/assets/extra_lab3.jpg";
 import dojo from "src/assets/dojo.jpg";
 import white_board from "src/assets/white_board.jpg";
 import jupyter from "src/assets/jupyter.jpg";
+import { useProfileStore } from "src/stores/profile";
+import { version } from "jszip";
 export default {
   data() {
     return {
+      isCreatingVm:false,
       windows_lab: windows_lab,
       ubuntu_lab: ubuntu_lab,
       MySql_lab: MySql_lab,
@@ -91,6 +94,9 @@ export default {
       currentSlide: 0,
       itemsPerSlide: this.getItemsPerSlide(),
       isMobile: window.innerWidth <= 768,
+      instance: "Standard_D2s_v3=3",
+      region: "East US",
+      version:"windows",
       labs: [
         { title: "Tech Sandbox", img: windows_lab },
         { title: "Linux Sandbox", img: ubuntu_lab },
@@ -117,13 +123,19 @@ export default {
         window.open(link, "_blank");
     },
     handleStart(title) {
-    if (title === "Tech Sandbox") {
-      console.log("Tech Sandbox Start button pressed");
-      // Add any specific logic here for Tech Sandbox
-    } else {
-      console.log(`${title} Start button pressed`);
-    }
-  },
+  console.log(`${title} Start button pressed`);
+
+  let osMapping = {
+    "Tech Sandbox": "Windows",
+    "Linux Sandbox": "Linux",
+    "MySQL Server": "Linux",
+    "Redis Server": "Linux"
+  };
+
+  let selectedOS = osMapping[title] || "Windows"; // Default to Windows
+
+  this.createVm(selectedOS);
+},
     nextSlide() {
       this.currentSlide++;
       if (this.currentSlide >= this.labs.length) {
@@ -132,6 +144,64 @@ export default {
         }, 400);
       }
     },
+    showMsg(message, type) {
+    this.$q.notify({
+      type: type, // 'positive' or 'negative'
+      message: message,
+      position: 'top'
+    });
+  },
+
+    logProfile(){
+      const profileStore = useProfileStore();
+      const userNameAdmin = profileStore.user.username;
+      const userRoleAdmin = profileStore.user.roles.length >= 0 ? profileStore.user.roles[0].name : "";
+      console.log(userNameAdmin, userRoleAdmin);
+    },
+
+    async createVm(selectedOS) {
+  if (!selectedOS) {
+    this.showMsg('Please select an operating system.', 'negative');
+    return;
+  }
+
+  const profileStore = useProfileStore();
+  const user = profileStore.user;
+  const createdAt = user.createdAt ? user.createdAt : new Date().toISOString();
+  const userRole = user.roles.length > 0 ? user.roles[0].name : "";
+
+  const requestData = {
+    userId: user.id,
+    accountId: user.accountId,
+    name: user.name,
+    username: user.username,
+    email: user.email,
+    userRole: userRole,
+    createdAt: createdAt,
+    timestamp: new Date().toISOString(),
+    status: 'Requested',
+    operatingSystem: selectedOS
+  };
+
+  console.log("Requesting VM with data:", requestData);
+
+  try {
+    const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
+    const requestVMsUrl = baseUrl + 'api/request-vms';
+
+    this.isCreatingVm = true; // Show loading indicator
+    const response = await this.$api.post(requestVMsUrl, requestData);
+    this.isCreatingVm = false; // Hide loading after response
+
+    this.showMsg(response.data.message, 'positive');
+  } catch (error) {
+    this.isCreatingVm = false; // Hide loading if there's an error
+    console.error('Error sending VM request:', error);
+    const errorMessage = error.response?.data?.message || 'Something went wrong!';
+    this.showMsg(errorMessage, 'negative');
+  }
+},
+
     prevSlide() {
       this.currentSlide--;
       if (this.currentSlide < 0) {
@@ -140,6 +210,7 @@ export default {
         }, 400);
       }
     },
+
     getItemsPerSlide() {
       const width = window.innerWidth;
       if (width <= 768) return 1;
