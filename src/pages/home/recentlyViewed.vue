@@ -331,9 +331,10 @@ async fetchDefaultPrograms() {
 
   }
 
-  .rgt{
+  .rgt {
+    display: flex;
     align-items: start !important;
-    padding-top: 0px !important;
+    justify-content: start !important;
   }
 }
 

@@ -563,17 +563,25 @@ border-radius: 20px;
   margin-right: auto;
   border-top-right-radius: 50px;
   border-bottom-right-radius: 50px;
+  margin-top: 3%;
+}
+.Join_Free_btn{
+  padding: 0px 20px;
+}
+.Explore_btn{
+  padding: 0px 20px;
 }
 .combined_heading{
 
   display: flex;
-  padding-top: 5%;
   /* align-items: center; */
   flex-direction: column;
   overflow: hidden;
   /* justify-content: center; */
   height: fit-content;
   margin-bottom: 0% !important;
+  padding: 5%;
+  padding-bottom: 0%;
 }
 
 
@@ -600,18 +608,41 @@ border-radius: 20px;
 .header_black{
   color: black;
   /* font-weight: bold; */
-  font-size: 18px;
+  font-size: 16px;
   text-align: left !important;
 }
 .header_purple{
   color: #4E5BF8;
   font-weight: bold;
-  font-size: 20px;
+  font-size: 18px;
   text-align: left !important;
 }
 .scaleGrad_head{
   font-size: 24px;
 }
+
+.btns{
+    padding: 0px 20px;
+  }
+
+}
+
+@media (max-width: 1022px) and (min-width: 768px) {
+  .btns{
+    padding: 0px 20%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: baseline;
+  }
+  .combined_heading{
+    padding: 5%;
+    padding-bottom: 0%;
+  }
+.header_black{
+padding-left: 10%;
+}
+ 
 
   .review-container{
     display: flex;

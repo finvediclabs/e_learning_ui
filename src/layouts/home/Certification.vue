@@ -3,11 +3,11 @@
     <div class="q-pb-xl">
       <span class="text-black header_Program">Our Certifications</span>
     </div>
-<div class="row col-12">
-  <div class="col-6">
+<div class="row col-12 mob_column">
+  <div class="col-6 girl-img">
     <q-img :src="Hero_section" style="width: 60%;"></q-img>
   </div>
-    <div class="row q-col-gutter-md col-6">
+    <div class="row q-col-gutter-md col-6 mob_column" >
       <div class="col-6" v-for="program in programs" :key="program.programId">
         <q-card class="course-card">
           <q-img
@@ -125,4 +125,26 @@ export default {
   transform: scale(1.05);
   transition: transform 0.3s ease;
 }
+
+@media (max-width: 768px) {
+  .mob_column {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center; 
+    width: 100%; 
+  }
+  
+  .col-6 {
+    width: 100% !important; 
+  }
+
+  .girl-img {
+    display: none;
+  }
+
+  .course-card {
+    width: 100% !important;
+  }
+}
+
 </style>
