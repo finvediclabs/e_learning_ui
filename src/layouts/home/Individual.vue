@@ -134,10 +134,10 @@
   <div class="col-1 q-none q-md-block"></div>
   <div class="col-12 col-md-5 row btns">
     <div class="col-12 col-md-auto q-mb-sm">
-      <q-btn class="Join_Free_btn q-px-xl q-py-md full-width" no-caps>Join For Free</q-btn>
-    </div>
+    <q-btn class="Join_Free_btn q-px-xl q-py-md full-width" no-caps to="/login">Join For Free</q-btn>
+  </div>
     <div class="col-12 col-md-6 q-mb-sm q-md-ml-md margin_left">
-      <q-btn class="Explore_btn q-py-md full-width" no-caps>Explore Our Certifications</q-btn>
+      <q-btn class="Explore_btn q-py-md full-width" no-caps :to="firstProgramLink">  Explore Our Certifications</q-btn>
     </div>
   </div>
 </div>
@@ -160,6 +160,7 @@
 <mostPopular />
 <freeCourses />
 <OurTools />
+<Certification />
 <Reviews />
 <Footer />
 
@@ -172,6 +173,11 @@ import freeCourses from "./freeCourses.vue";
 import Reviews from "./Reviews.vue";
 import bg_img from "src/assets/scalefradepng1.png"
 import OurTools from "./OurTools.vue";
+import Certification from "./Certification.vue";
+
+
+
+
 import Associated from "./Associated.vue";
 import Footer from "./footer.vue";
 
@@ -181,6 +187,7 @@ export default {
     freeCourses,
     OurTools,
     Reviews,
+    Certification,
     Associated,
     Footer
   },
@@ -230,6 +237,7 @@ export default {
         console.error("Error fetching programs:", error);
       }
     },
+
     navigateToAllCourses() {
   if (this.selectedProgramId) {
     this.$router.push({
@@ -346,6 +354,14 @@ const response = await axios.get(`${getCourse}/${programId}`);
   }
 },
   },
+  computed: {
+  firstProgramLink() {
+    if (this.programs.length > 0) {
+      return `/finassociate/?programId=${this.programs[0].programId}`;
+    }
+    return "/finassociate/"; // Default fallback if no programs are available
+  }
+},
 };
 </script>
 
@@ -586,7 +602,7 @@ border-radius: 20px;
 .header_blue{
   color: #000;
   font-weight: bold;
-  font-size: 19px;
+  font-size: 20px;
   text-align:left !important;
 }
 .header_black{
@@ -604,6 +620,29 @@ border-radius: 20px;
 .scaleGrad_head{
   font-size: 24px;
 }
+
+.btns{
+    padding: 0px 20px;
+  }
+
+}
+
+@media (max-width: 1022px) and (min-width: 768px) {
+  .btns{
+    padding: 0px 20%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: baseline;
+  }
+  .combined_heading{
+    padding: 5%;
+    padding-bottom: 0%;
+  }
+.header_black{
+padding-left: 10%;
+}
+ 
 
   .review-container{
     display: flex;
@@ -625,27 +664,6 @@ border-radius: 20px;
     display: flex;
   }
 
-  .btns{
-    padding: 0px 20px;
-  }
-
-}
-
-@media (max-width: 1024px) and (min-width: 768px) {
-  .btns{
-    padding: 0px 20%;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-  }
-  .combined_heading{
-    padding: 5%;
-    padding-bottom: 0%;
-  }
-.header_black{
-padding-left: 10%;
-}
- 
 }
 
 </style>
