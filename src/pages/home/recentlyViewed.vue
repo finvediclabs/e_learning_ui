@@ -31,7 +31,7 @@
               </div>
 
               <!-- Right Side: Text (Centered) -->
-              <div class="col-6"
+              <div class="col-6 rgt"
                    style="display: flex; align-items: center; justify-content: center; height: 100%; ">
                 <q-card-section style="width: 100%; text-align: center;">
                   <q-item-label style="font-size: 1.2em; font-weight: bold; text-align: left;">{{ item.name }}</q-item-label>
