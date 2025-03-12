@@ -158,8 +158,9 @@
   </q-layout>
   <Associated />
 <mostPopular />
-<freeCourses />
 <OurTools />
+<freeCourses />
+
 <Certification />
 <Reviews />
 <Footer />
@@ -642,7 +643,7 @@ border-radius: 20px;
 .header_black{
 padding-left: 10%;
 }
- 
+
 
   .review-container{
     display: flex;

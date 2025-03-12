@@ -127,7 +127,8 @@ export default {
 
 /* Image Styling */
 .custom_img, .custom_img2 {
-  max-width: 100px;
+  max-width: 80px;
+  width: 80px;
   height: auto;
   flex-shrink: 0;
 }
@@ -144,14 +145,14 @@ export default {
 /* ================================== */
 /* Increase Tool Image Size */
 .custom_img, .custom_img2 {
-  max-width: 180px; 
+  max-width: 180px;
   height: auto;
   flex-shrink: 0;
 }
 
 /* Increase Gap Between Logos */
 .scroll-content {
-  gap: 100px; 
+  gap: 100px;
 }
 
 /* Responsive Adjustments */
@@ -161,11 +162,11 @@ export default {
   }
 
   .custom_img, .custom_img2 {
-    max-width: 100px; 
+    max-width: 100px;
   }
 
   .scroll-content {
-    gap: 30px; 
+    gap: 30px;
   }
 }
 
