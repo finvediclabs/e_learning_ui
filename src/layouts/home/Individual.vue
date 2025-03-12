@@ -107,27 +107,35 @@
 
 <q-page class="q-mt-md mobile_view" style="min-height: auto;" >
   <div class="banner q-py-sm q-pl-lg q-mt-xl">
-  <span
+    <div v-for="page in marketingPages" :key="page.id">
+      <span
     class="text-black dev_css"
 
   >
-    <i>Get Trained on GCCs’ Dev like Environment with SCALEGRAD</i>
+  <i>{{ page.topBar }}</i>
   </span>
+</div>
 </div>
 <div class="combined_heading container row">
 <div class="row">
   <div class="col-1 q-none q-md-block web_view"></div>
-  <span class="header_blue"><span class="scaleGrad_head">ScaleGrad</span> Bridges the Gap</span>
+  <div v-for="page in marketingPages" :key="page.id">
+  <span class="header_blue"><span class="scaleGrad_head">ScaleGrad</span> {{ page.heading }}</span>
+</div>
 </div>
 <div  class="text-left row">
   <div class="col-1 q-none q-md-block web_view"></div>
-  <span class="header_purple">- We build Day One Onboarding Talent</span>
+  <div v-for="page in marketingPages" :key="page.id">
+  <span class="header_purple">{{ page.subHeading }}</span>
+</div>
 </div>
 <div class="text-left row">
   <div class="col-1 d-none d-md-block"></div>
-  <span class="header_black col-12 col-md-5 pt-2 me-xl">
-    Bridging the gap between education and industry by providing comprehensive, hands-on training in <span class="web_view"><br></span> real-world fintech environments...
+
+  <span v-for="page in marketingPages" :key="page.id" class="header_black col-12 col-md-5 pt-2 me-xl">
+   {{ page.description }}
   </span>
+
 </div>
 
 <div class="text-left row col-12 q-mt-md">
@@ -145,9 +153,9 @@
 
 
     <div class="image_div row">
-      <div class="col-11">
-        <q-img :src=bg_img></q-img>
-      </div>
+      <div class="col-11" v-for="page in marketingPages" :key="page.id">
+  <q-img :src="page.imagePath"></q-img>
+</div>
 
        <div class="col-1"></div>
     </div>
@@ -197,6 +205,12 @@ export default {
     return {
       reviews: [],
       bg_img: bg_img,
+      marketingPages: [],
+      topBar: "", // Initialize topBar
+      heading: "",
+      imagePath: "",
+      subHeading: "",
+      description:"",
       new_logo: new_logo,
       leftDrawerOpen: false,
       selectedExplore: null,
@@ -212,6 +226,7 @@ export default {
   },
   async created() {
     await this.fetchPrograms();
+    await this.fetchMarketingPages();
     if (this.programs.length > 0) {
       // Automatically fetch courses for the first program
       this.fetchCourses(
@@ -222,6 +237,7 @@ export default {
     }
   },
   methods: {
+
     async fetchPrograms() {
       try {
         const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
@@ -304,6 +320,53 @@ const response = await axios.get(`${getProgramCourse}/${programId}`);
     );
   } catch (error) {
     console.error("Error fetching courses:", error);
+  }
+},
+async fetchMarketingPages() {
+  this.marketingPages = []; // Clear previous data before fetching new ones
+  const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
+  const getMarketingPagesUrl = baseUrl + 'api/marketing-pages';
+
+  try {
+    const response = await axios.get(getMarketingPagesUrl);
+
+    if (response.data.success) {
+      // Process each page to fetch its image
+      this.marketingPages = await Promise.all(
+        response.data.data.map(async (page) => {
+          let imageUrl = page.imagePath || null;
+
+          if (imageUrl && imageUrl.startsWith(`${baseUrl}fs/download/`)) {
+            console.log(`Fetching image for: ${page.heading}`);
+            const downloadUrl = `${baseUrl}fs/download`;
+            const filename = imageUrl.replace(`${baseUrl}fs/download/`, '');
+
+            try {
+              const formData = new FormData();
+              formData.append('filename', filename);
+
+              const downloadResponse = await this.$api.post(downloadUrl, formData, { responseType: 'blob' });
+              const blob = new Blob([downloadResponse.data]);
+              imageUrl = window.URL.createObjectURL(blob);
+
+              console.log(`Fetched image for: ${page.heading}`);
+            } catch (error) {
+              console.error(`Error fetching image for: ${page.heading}`, error);
+              imageUrl = this.DummyBook; // Fallback image
+            }
+          }
+
+          return {
+            ...page,
+            imagePath: imageUrl, // Replace with the fetched or fallback image
+          };
+        })
+      );
+    } else {
+      console.error("Failed to fetch marketing pages");
+    }
+  } catch (error) {
+    console.error("Error fetching marketing pages:", error);
   }
 },
 async fetchReviews(programId) {

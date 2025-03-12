@@ -60,6 +60,59 @@
 
 </div>
 </div>
+<fin-portlet-item>
+        <div class="scroll_on">
+          <div class="row" style="width: 100%;margin-left: auto;margin-right: auto;">
+            <div class="col-12 col-sm-6 col-md-6 col-lg-6 q-pa-lg" v-for="(lab, index) in filteredLabs" :key="lab.id"
+              style="padding-top: 0;">
+              <q-card class="shadow-8"
+                :style="{ border: getBorderColor(lab.provisioningState, lab.locked), height: '100%' }"
+                style="background-color: #5479F7">
+                <q-card-section horizontal>
+                  <q-card-section class="q-pa-md lab-img flex items-center">
+                    <q-img :src="labImg" class="full-width" />
+                  </q-card-section>
+                  <q-card-section class="" style="width: 70%;font-size: 13px;">
+                    <div class="column full-width">
+                      <div class="col flex items-center">
+                        <span  style="color: white;"><strong>VM Name :</strong> {{ lab.name }}</span>
+                        <q-space />
+                        <q-img v-if="lab.provisioningState === 'Creating'" :src="loader"
+                          style="width: 30px; height: 30px;" />
+                      </div>
+                      <div class="flex" style="color: white;">
+                        <span><strong>Created By :</strong> {{ lab.studentName }}</span>
+                      </div>
+                      <div class="flex" style="color: white;">
+                        <p><strong>Date :</strong> {{ lab.createdDate }}</p>
+                      </div>
+
+                      <div class="col flex">
+                        <div class="q-px-md shadow-4 rounded-borders q-pa-xs text-center"
+                          style="width:90px;font-size: 8px;background-color: white;"
+                          @click="lab.provisioningState !== 'Deleting' && lab.provisioningState !== 'Deleted' && lab.provisioningState !== 'Failed' ? download(lab) : null"
+                          :class="{ 'pointer-events-none': lab.locked }">
+                          {{ lab.provisioningState === 'Deleting' || lab.provisioningState === 'Failed' ||
+                            lab.provisioningState === 'Deleted' ? lab.provisioningState : "Download" }}
+                        </div>
+                        <q-space />
+                        <q-btn :label="lab.locked ? 'Locked' : 'Shutdown'" size="8px" dense
+                          class="q-px-md text-weight-bold" rounded
+                          :style="{ background: (lab.locked || lab.provisioningState === 'Deleting' || lab.provisioningState === 'Deleted' || lab.provisioningState === 'Failed') ? '#D49F8A' : '#7BFF90' }"
+                          :disable="!canShutdown(lab)" @click="shutdown(lab)">
+                          <q-icon name="lock" size="14px" class="q-pl-sm"></q-icon>
+                        </q-btn>
+                      </div>
+
+                    </div>
+                  </q-card-section>
+                </q-card-section>
+              </q-card>
+            </div>
+
+          </div>
+        </div>
+      </fin-portlet-item>
 </template>
 
 <script>
@@ -69,14 +122,21 @@ import MySql_lab from "src/assets/MySql_lab.jpg";
 import redis_lab from "src/assets/redis_lab.jpg";
 import extra_lab1 from "src/assets/extra_lab1.jpg";
 import extra_lab2 from "src/assets/extra_lab2.jpg";
+import FinPortletItem from "src/components/Portlets/FinPortletItem.vue";
 import circ_d1 from "src/assets/Circ_D1.png";
 import extra_lab3 from "src/assets/extra_lab3.jpg";
 import dojo from "src/assets/dojo.jpg";
 import white_board from "src/assets/white_board.jpg";
 import jupyter from "src/assets/jupyter.jpg";
+import { urls } from "./Urls";
+
+import windows from "../../assets/Windows.png";
 import { useProfileStore } from "src/stores/profile";
 import { version } from "jszip";
 export default {
+  components: {
+    FinPortletItem,
+  },
   data() {
     return {
       isCreatingVm:false,
@@ -97,6 +157,8 @@ export default {
       instance: "Standard_D2s_v3=3",
       region: "East US",
       version:"windows",
+      labImg: windows,
+      labsData: [],
       labs: [
         { title: "Tech Sandbox", img: windows_lab },
         { title: "Linux Sandbox", img: ubuntu_lab },
@@ -116,6 +178,40 @@ export default {
   computed: {
     loopLabs() {
       return [...this.labs, ...this.labs];
+    },
+    canShutdown() {
+      return (lab) => {
+        const profileStore = useProfileStore();
+        const profileUsername = profileStore.user.username;
+        const isAdmin = profileStore.user.roles.some(role => role.name === 'Admin');
+        return (isAdmin || lab.userName === profileUsername) &&
+          lab.provisioningState !== 'Deleting' &&
+          lab.provisioningState !== 'Deleted' &&
+          lab.provisioningState !== 'Failed';
+
+      };
+    },
+    getBorderColor() {
+      return function (provisioningState, locked) {
+        return locked ? '0px solid #FF7F50' : (provisioningState === 'Succeeded' ? '0px solid #FF7F50' : '0px solid #FF7F50');
+      };
+    },
+    filteredLabs() {
+      const profileStore = useProfileStore();
+      const profileUsername = profileStore.user.username;
+      const isAdmin = profileStore.user.roles.some(role => role.name === 'Admin');
+
+      if (isAdmin) {
+        return this.labsData;
+      } else {
+        return this.labsData.filter(lab => lab.userName === profileUsername || lab.userRole === 'Admin');
+      }
+    },
+    isUserExistsInLabs() {
+      const profileStore = useProfileStore();
+      const profileUsername = profileStore.user.username;
+
+      return this.labsData.some(lab => lab.userName === profileUsername && lab.provisioningState === 'Succeeded' || lab.userName === profileUsername && lab.provisioningState === 'Creating');
     }
   },
   methods: {
@@ -136,6 +232,139 @@ export default {
 
   this.createVm(selectedOS);
 },
+download(lab) {
+      const sessionStore = useSessionStore(); // Access session store
+      const profileStore = useProfileStore();
+
+      console.log("profile username:", profileStore.user.username);
+      console.log("lab username:", lab.userName);
+
+      // Ensure profileStore.user is defined
+      if (!profileStore.user) {
+        this.showMsg('User profile is not available.', 'negative');
+        return;
+      }
+
+      // Check if the user is an Admin
+      const isAdmin = profileStore.user.roles.some(role => role.name === 'Admin');
+      if (isAdmin) {
+        console.log('User is Admin, download allowed');
+      } else {
+        // If the user is not an Admin, check if the profile username matches the lab username
+        if (profileStore.user.username !== lab.userName) {
+          this.showMsg('You are not authorized to download this file.', 'negative');
+          return; // Exit the method if usernames don't match
+        }
+      }
+
+      const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
+      const downloadUrl = `${baseUrl}download/${lab.name}`;
+
+      // Fetch the RDP file with authorization
+      fetch(downloadUrl, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${sessionStore.token}` // Include the token from session store
+        }
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.blob(); // Convert response to Blob
+        })
+        .then(blob => {
+          const url = URL.createObjectURL(blob); // Create a URL for the blob
+          const a = document.createElement('a'); // Create an anchor element
+          a.href = url; // Set the href to the blob URL
+          a.download = `${lab.name}.rdp`; // Set the file name for download with .rdp extension
+          document.body.appendChild(a); // Append anchor to body
+          a.click(); // Programmatically click the anchor to trigger download
+          a.remove(); // Clean up by removing the anchor
+          URL.revokeObjectURL(url); // Free up memory
+        })
+        .catch(error => {
+          console.error('There was a problem with the fetch operation:', error.message);
+        });
+    },
+    async shutdown(lab) {
+      const profileStore = useProfileStore();
+      const profileUsername = profileStore.user.username;
+      const isAdmin = profileStore.user.roles.some(role => role.name === 'Admin');
+
+      // Check if the user is an Admin or if the lab belongs to the user
+      if (!isAdmin && lab.userName !== profileUsername) {
+        this.showMsg('You do not have permission to perform this action.', 'negative');
+        return;
+      }
+
+      if (lab.provisioningState === 'Deleted' || lab.provisioningState === 'Deleting' || lab.provisioningState === 'Failed') {
+        this.showMsg('Cannot perform shutdown action as the lab is already deleted or deleting or failed.', 'negative');
+        return;
+      }
+
+      try {
+        const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
+        const getDeleteVMUrl = baseUrl + 'deletevm/';
+        const response = await this.$api.get(getDeleteVMUrl + lab.name);
+        // console.log('success');
+        lab.locked = true;
+        this.saveLockedStates(); // Save locked states to local storage
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    loadLockedStates() {
+      const lockedStates = JSON.parse(localStorage.getItem('lockedStates')) || {};
+      this.labsData.forEach((lab) => {
+        if (lockedStates.hasOwnProperty(lab.name)) {
+          lab.locked = lockedStates[lab.name];
+        }
+      });
+    },
+    saveLockedStates() {
+      const lockedStates = {};
+      this.labsData.forEach((lab) => {
+        lockedStates[lab.name] = lab.locked;
+      });
+      localStorage.setItem('lockedStates', JSON.stringify(lockedStates));
+    },
+    showMsg(message, type) {
+      this.$q.notify({
+        message: message || "Something Went Wrong!",
+        type: type,
+        position: 'top-right',
+        actions: [
+          { icon: 'close', color: 'white', handler: () => { } }
+        ]
+      });
+    },
+    getAzureVmsData() {
+      this.loading = true;
+      this.$api.get(urls.getAzureVmsUrl).then(response => {
+        this.loading = false;
+        this.labsData = response.data.data.map(vm => {
+          const createdDateIST = new Date(vm.createdDate).toLocaleString('en-IN', {
+            timeZone: 'Asia/Kolkata',
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+          });
+
+          return {
+            ...vm,
+            userName: vm.userName,
+            createdDate: createdDateIST, // Replace with IST formatted date
+          };
+        });
+      }).catch(error => {
+        this.loading = false;
+        this.showMsg(error.response?.data.message || error.message, 'negative');
+      });
+    },
     nextSlide() {
       this.currentSlide++;
       if (this.currentSlide >= this.labs.length) {
@@ -224,6 +453,8 @@ export default {
   },
   mounted() {
     window.addEventListener("resize", this.handleResize);
+    this.getAzureVmsData();
+    this.loadLockedStates();
   },
   beforeDestroy() {
     window.removeEventListener("resize", this.handleResize);
@@ -323,6 +554,136 @@ export default {
   background-color: #4E5BF8;
   color: #fff;
 }
+.lab-img {
+  width: 30%;
+  box-shadow: 0px 0px 10px 0px #bbbbbb inset !important;
+  background-color: #81D265;
+}
+
+.q-btn:before {
+  box-shadow: none !important;
+}
+
+.scroll_on {
+  height: 62vh;
+  /* border: 2px solid red; */
+  overflow-y: auto;
+  margin-left: auto;
+  margin-right: auto;
+  width: 60vw;
+}
+
+.image-btn-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.image-btn-container1 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* border: 2px solid red; */
+  /* margin-top: 28%; */
+}
+
+.image-btn {
+  width: 180px;
+  height: 180px;
+  margin: 0 10px;
+  /* Adjust as needed */
+}
+
+.image-btn1 {
+  width: 220px;
+  height: 220px;
+  margin: 0 10px;
+  /* Adjust as needed */
+}
+
+.outer {
+  width: 1px;
+  height: 180px;
+  margin: auto;
+  position: relative;
+  overflow: hidden;
+}
+
+.inner {
+  position: absolute;
+  width: 100%;
+  height: 40%;
+  background: #5479F7;
+  top: 30%;
+  box-shadow: 0px 0px 30px 20px #5479F7;
+}
+
+.outer1 {
+  width: 1px;
+  height: 340px;
+  margin: auto;
+  position: relative;
+  overflow: hidden;
+}
+
+.inner1 {
+  position: absolute;
+  width: 100%;
+  height: 40%;
+  background: #5479F7;
+  top: 30%;
+  box-shadow: 0px 0px 30px 20px #5479F7;
+}
+
+.bg-green {
+  background: #b2ccfc !important;
+  border-radius: 20px;
+}
+
+.scroll_on::-webkit-scrollbar {
+  width: 10px;
+  /* Width of the scrollbar */
+}
+
+.scroll_on::-webkit-scrollbar-track {
+  background-color: white;
+  /* margin-top: 18px;  */
+  border-radius: 5px;
+  /* Color of the track */
+}
+
+.scroll_on::-webkit-scrollbar-thumb {
+  background-color: #5479F7;
+  /* Color of the thumb */
+  border-radius: 5px;
+  height: 3%;
+  /* Rounded corners for the thumb */
+}
+
+.User_heading {
+  color: #5479F7;
+  margin-left: 4%;
+}
+
+.styled-link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+  width: 60% !important;
+
+  padding: 8px 14px;
+  font-size: 16px;
+  font-weight: bold;
+  text-decoration: none;
+  background-color: #5479F7;
+  color: white;
+  border-radius: 10px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+}
+
 @media (max-width: 768px) {
   .lab-card-container, .tool-card-container {
     width: 100%;
