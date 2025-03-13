@@ -3,13 +3,13 @@
     <!-- Sidebar -->
     <div class="w-64 bg-white shadow-md h-full p-4 fixed">
       <!-- Profile Section -->
-      <div class="flex items-center space-x-3 pb-4 border-b">
+      <!-- <div class="flex items-center space-x-3 pb-4 border-b">
         <img class="w-12 h-12 rounded-full" :src="user.profileImage" alt="User Image" />
         <div>
           <h2 class="text-lg font-semibold">{{ user.name }}</h2>
           <p class="text-gray-500 text-sm">{{ user.email }}</p>
         </div>
-      </div>
+      </div> -->
 
       <!-- Menu List (Sidebar) -->
       <ul class="mt-4">
@@ -24,7 +24,7 @@
     </div>
 
     <!-- Main Content Area -->
-    <div class="flex-1 ml-64 main-content">
+    <div class="flex-1 main-content" style="width: 100% !important;">
       <!-- Top Navigation Bar -->
       <div class="top-nav">
         <button v-for="item in menuItems" :key="item.name"
@@ -45,9 +45,9 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import axios from 'axios';
 import MenuContent from 'src/components/MenuContent.vue';
 
-// User data
 const user = ref({
   name: '',
   email: '',
@@ -55,43 +55,57 @@ const user = ref({
   role: 'Basic Member'
 });
 
-// Sidebar menu items
 const menuItems = ref([
-  { name: "View Public Profile" },
-  { name: "Photo" },
-  { name: "Account Security" },
+  { name: "View Profile" },
   { name: "Subscriptions" },
   { name: "Payment Method" },
-  { name: "Notification Preferences" },
-  { name: "API Clients" },
   { name: "Close Account" },
 ]);
 
-// Track selected menu
 const selectedMenu = ref(menuItems.value[0].name);
 
-// Fetch user data
 const fetchUserData = async () => {
   try {
-    const response = await fetch('https://api.example.com/user'); 
-    const data = await response.json();
-    user.value = {
-      name: data.name,
-      email: data.email,
-      profileImage: data.profileImage || user.value.profileImage,
-      role: data.role || 'Basic Member'
-    };
+    const response = await axios.get(`/api/users/${user.value.id}`);
+    if (response.data.success) {
+      const data = response.data.data;
+      let imageUrl = '';
+      
+      if (data.uploadDocumentPath) {
+        const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
+        const removeImagePath = baseUrl + 'fs/download/';
+        const filename = data.uploadDocumentPath.replace(removeImagePath, '');
+        
+        const formData = new FormData();
+        formData.append('filename', filename);
+        const imagePath = baseUrl + 'fs/download';
+        
+        try {
+          const imgResponse = await axios.post(imagePath, formData, { responseType: 'blob' });
+          imageUrl = window.URL.createObjectURL(new Blob([imgResponse.data]));
+        } catch (imgError) {
+          console.error("Failed to fetch user image:", imgError);
+        }
+      }
+
+      user.value = {
+        name: data.name,
+        email: data.email,
+        profileImage: imageUrl || 'https://via.placeholder.com/150',
+        role: data.roles ? data.roles[0] : 'Basic Member'
+      };
+    } else {
+      console.error("Failed to fetch user data:", response.data.message);
+    }
   } catch (error) {
     console.error("Failed to fetch user data:", error);
   }
 };
 
-// Fetch user data on component mount
 onMounted(fetchUserData);
 </script>
 
 <style scoped>
-/* Sidebar styles */
 ul {
   list-style-type: none;
   padding: 0;
@@ -100,51 +114,67 @@ ul {
 
 .list-item {
   width: 16rem;
-  margin-bottom: 8px;
 }
 
 .list-link {
   display: block;
   width: 100%;
-  padding: 12px 16px;
+  padding: 14px 18px;
   text-align: left;
-  background-color: #f8f9fa;
+  background: linear-gradient(to right, #f9fafb, #eef1f5);
   color: #333;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  transition: all 0.3s ease;
+  border: none;
+  border-radius: 6px;
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+  outline: none;
+  position: relative;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .list-link:hover, .list-link.active {
-  background-color: #d1d5db;
-  color: #000;
+  background: linear-gradient(to right, #e2e8f0, #cbd5e1);
+  color: #1a202c;
   font-weight: 600;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Fix Sidebar Position */
+.list-link:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
 .fixed {
   position: fixed;
   height: 100vh;
   overflow-y: auto;
 }
 
-/* Top Navigation Bar */
 .top-nav {
   display: flex;
-  justify-content: center;
-  gap: 16px;
-  padding: 12px 0;
-  background: white;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  position:absolute;
+  align-items: center;
+  gap: 20px;
+  padding: 14px 24px;
+  background: linear-gradient(to right, #ffffff, #f8fafc);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+  border-bottom: 2px solid #e2e8f0;
+  position: sticky;
   top: 0;
-  z-index: 1000;
+  width: 100%;
+  z-index: 1050;
+  transition: all 0.3s ease-in-out;
 }
 
+.top-nav:hover {
+  background: linear-gradient(to right, #f8fafc, #e2e8f0);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
+}
+
+
 .menu-button {
-  padding: 10px 14px;
   font-size: 14px;
   font-weight: 500;
   color: #333;
@@ -160,15 +190,8 @@ ul {
   font-weight: 600;
 }
 
-/* Main Content */
-.main-content
-{
+.main-content {
   margin-left: 16rem;
-}
-.content-area {
-  padding-top: 20px;
-  min-height: calc(100vh - 50px);
-  background: #f5f5f5;
 }
 
 </style>
