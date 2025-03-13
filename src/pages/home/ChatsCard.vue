@@ -2,7 +2,7 @@
   <div class="chats-card q-pa-md">
     <div class="row items-center justify-between q-mb-sm">
       <!-- Left Side -->
-      <div class="row items-center">
+      <div class="row items-center  left-side">
         <span class="text-h6 text-bold q-mr-md">Chats</span>
         <q-btn v-for="group in limitedGroups" :key="group.groupId" unelevated no-caps :label="group.groupName"
           class="chat-btn q-mr-sm text-weight-regular"
@@ -190,5 +190,14 @@ export default {
   background-color: #bcbcbc;
   border-radius: 10px;
   margin-left: 10px;
+}
+
+@media (max-width: 768px) {
+
+.left-side {
+  display: flex;
+  gap: 10px;
+}
+
 }
 </style>
