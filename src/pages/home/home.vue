@@ -122,7 +122,7 @@ h3 {
   /* margin-left: 5%; */
   /* margin-right: 5%; */
 /* border: 1px solid black; */
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.10);
+box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   border-radius: 10px;
   margin-left: auto;
   margin-right: auto;
