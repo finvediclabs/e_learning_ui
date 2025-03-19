@@ -51,6 +51,28 @@
               <q-btn label="Edit" no-caps class="custom-btn edit-btn" @click="disableEdit = false" size="md" v-if="disableEdit" />
               <q-btn label="Cancel" no-caps class="custom-btn cancel-btn" @click="cancelEdit()" size="md" v-if="!disableEdit" />
               <q-btn label="Update" no-caps class="custom-btn update-btn" type="submit" :disable="loading" size="md" v-if="!disableEdit" />
+              <q-btn label="Reset Password" no-caps class="custom-btn edit-btn" @click="showResetPasswordDialog" size="md" />
+
+    <!-- Reset Password Dialog -->
+    <q-dialog v-model="showResetPassword" class="custom-dialog">
+      <q-card class="custom-card">
+        <q-card-section>
+          <div class="text-h6">Reset Password</div>
+        </q-card-section>
+
+        <q-card-section>
+          <q-input class="shadow-3 q-px-md fin-br-8 q-ma-md" v-model="resetPasswordForm.oldPassword" type="password" label="Enter Old Password" />
+          <q-input class="shadow-3 q-px-md fin-br-8 q-ma-md" v-model="resetPasswordForm.newPassword" type="password" label="Enter New Password" />
+          <q-input class="shadow-3 q-px-md fin-br-8 q-ma-md" v-model="resetPasswordForm.confirmNewPassword" type="password" label="Confirm New Password" />
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn flat label="Cancel" class="custom-button " v-close-popup />
+          <q-btn flat label="Submit" class="custom-button" @click="resetPassword"/>
+        </q-card-actions>
+      </q-card>
+    </q-dialog> 
+
               </div>
               </q-form>
 
@@ -125,6 +147,8 @@
 
 
 
+
+
   <!-- Default Content for Other Menu Items -->
   <div v-else>
     <h2 class="text-xl font-semibold mb-2">{{ selectedMenu }}</h2>
@@ -182,6 +206,7 @@ data() {
   return {
     profile: {},
     error: {},
+    selectedFile: null,
     loading: false,
     disableEdit: true,
     profileData: {},
@@ -628,9 +653,9 @@ transform: translateY(-2px);
 }
 
 .edit-btn {
-background: hsl(225, 100%, 50%); /* Standard blue */
-filter: brightness(150%); /* Decrease brightness to reduce contrast */
-color: #fff; /* Dark text for contrast */
+background: hsl(225, 100%, 50%); 
+/* filter: brightness(150%);  */
+color: #fff; 
 transition: background 0.3s ease-in-out;
 margin-left: 1%;
 }

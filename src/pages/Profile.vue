@@ -30,7 +30,8 @@
         <button v-for="item in menuItems" :key="item.name"
                 @click="selectedMenu = item.name"
                 class="menu-button"
-                :class="{ 'active': selectedMenu === item.name }">
+                :class="{ 'active': selectedMenu === item.name }"
+                style="margin-left: 20px;">
           {{ item.name }}
         </button>
       </div>
