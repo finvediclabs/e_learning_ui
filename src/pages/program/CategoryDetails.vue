@@ -2,46 +2,54 @@
   <div class="row parent-container">
     <div class="col-12 col-md-4 left-container mb-3">
       <div class="chapter-categories">
-        <div class="course-details">
-          <span>Course Details</span>
-        </div>
+  <div class="course-details">
+    <span>Course Details</span>
+  </div>
 
   <ul>
-    <li
-      v-for="(name, index) in course.categoryName"
-      :key="index"
-      class="category-item1"
-    >
+    <li v-for="(name, index) in course.categoryName" :key="index" class="category-item1">
       <div
         class="category-row1"
         :class="{ 'active-category': course.catgoryId[index] === activeCategoryId }"
         @click="handleCategoryClick(course.catgoryId[index])"
       >
         <span>{{ name }}</span><br>
+
         <div class="text-body1"
-              :class="{
-                'category-description': true,
-                'expanded': expandedIndexes.includes(index)
-              }"
-            >
-              {{ course.categoryDescription[index] }}
-            </div>
+          :class="{
+            'category-description': true,
+            'expanded': expandedIndexes.includes(index)
+          }"
+        >
+          {{ course.categoryDescription[index] }}
+        </div>
 
-            <!-- Read More / Read Less Toggle -->
-            <a
-              href="javascript:void(0);"
-              @click="toggleDescription(index)"
-              class="read-more-link"
-            >
-              {{ expandedIndexes.includes(index) ? 'Read Less' : 'Read More' }}
-            </a>
+        <!-- Display Modules Below Description -->
+
+
+        <!-- Read More / Read Less Toggle -->
+        <a href="javascript:void(0);" @click="toggleDescription(index)" class="read-more-link">
+          {{ expandedIndexes.includes(index) ? 'Read Less' : 'Read More' }}
+        </a>
       </div>
-      <span v-if="index < course.categoryName.length - 1"><hr /></span>
+      <div>
+        <ul>
+          <li v-if="!(course.modulesByCategory && course.modulesByCategory[course.catgoryId[index]]?.length)">
+            No modules available.
+          </li>
+          <li
+            v-for="module in course.modulesByCategory[course.catgoryId[index]]"
+            :key="module.moduleId"
+          >
+            {{ module.moduleName }}
+          </li>
+        </ul>
+      </div>
 
+      <span v-if="index < course.categoryName.length - 1"><hr /></span>
     </li>
   </ul>
 </div>
-
 </div>
 
 <div class="col-12 col-md-8 mb-3">
@@ -190,10 +198,13 @@ export default {
         title: '',
         description: '',
         categoryName: [],
+        moduleId: [],
+        moduleName: [],
         catgoryId: [],
         abstractt: '',
         imagePath: '',
       },
+      modules: [],
       loading: true,
       error: null,
       activeTab: 'books', // Default active tab
@@ -260,39 +271,73 @@ created() {
   }
 },
 
-    async fetchCourseDetails() {
-      const { courseId } = this.$route.params; // Get courseId from route params
-      const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
-      const apiUrl = `${baseUrl}api/programs/${courseId}`;
+async fetchCourseDetails() {
+  const { courseId } = this.$route.params;
+  const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
+  const apiUrl = `${baseUrl}api/programs/${courseId}`;
 
-      try {
-        this.loading = true;
-        const response = await this.$api.get(apiUrl);
+  try {
+    this.loading = true;
+    const response = await this.$api.get(apiUrl);
 
-        if (response.data && response.data.success) {
-          const course = response.data.data;
+    if (response.data && response.data.success) {
+      const course = response.data.data;
 
-          // Process the course details
-          this.course = {
-            id: course.programId,
-            title: course.heading,
-            description: course.description,
-            categoryName: course.chapterCategoryNames,
-            catgoryId: course.chapterCategoryIds,
-            categoryDescription: course.chapterCategoryDescriptions,
-            abstractt: course.description,
-            imagePath: course.imagePath || this.DummyBook, // Use dummy image as fallback
-          };
-        } else {
-          throw new Error('Failed to fetch course details');
-        }
-      } catch (error) {
-        this.error = 'Error loading course details. Please try again later.';
-        console.error(error);
-      } finally {
-        this.loading = false;
+      // Store initial course data
+      this.course = {
+        id: course.programId,
+        title: course.heading,
+        description: course.description,
+        categoryName: course.chapterCategoryNames,
+        catgoryId: course.chapterCategoryIds,
+        categoryDescription: course.chapterCategoryDescriptions,
+        abstractt: course.description,
+        imagePath: course.imagePath || this.DummyBook,
+        moduleId: [], // Initialize empty array for module IDs
+        moduleName: [], // Initialize empty array for module names
+      };
+
+      // Fetch modules after setting course details
+      await this.fetchModulesForCategories(this.course.catgoryId);
+    } else {
+      throw new Error('Failed to fetch course details');
+    }
+  } catch (error) {
+    this.error = 'Error loading course details. Please try again later.';
+    console.error(error);
+  } finally {
+    this.loading = false;
+  }
+},
+
+async fetchModulesForCategories(categoryIds) {
+  const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
+
+  let modulesByCategory = {}; // Store modules per category
+
+  for (const categoryId of categoryIds.map(id => Number(id))) {
+    const apiUrl = `${baseUrl}api/modules/${categoryId}`;
+
+    try {
+      const response = await this.$api.get(apiUrl);
+      console.log("Modules response for category:", categoryId, response.data);
+
+      if (Array.isArray(response.data)) {
+        modulesByCategory[categoryId] = response.data.map(module => ({
+          moduleId: module.id,
+          moduleName: module.moduleName,
+        }));
       }
-    },
+    } catch (error) {
+      console.error(`Error fetching modules for category ${categoryId}:`, error);
+      modulesByCategory[categoryId] = []; // Ensure empty array if there's an error
+    }
+  }
+
+  // Assign to `course` so it's reactive
+  this.course.modulesByCategory = { ...modulesByCategory };
+  console.log("Updated course with categorized modules:", this.course.modulesByCategory);
+},
     async fetchCategoryDetails() {
       const { courseId, categoryId } = this.$route.params; // Get courseId and categoryId from the route
       const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
