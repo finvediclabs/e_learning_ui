@@ -24,7 +24,7 @@
     </div>
 
     <!-- Main Content Area -->
-    <div class="flex-1 main-content bg-white" style="width: 100% !important;">
+    <div class="flex-1 main-content  " style="width: 100% !important;">
       <!-- Top Navigation Bar -->
       <div class="top-nav">
         <button v-for="item in menuItems" :key="item.name"
@@ -59,8 +59,8 @@ const user = ref({
 const menuItems = ref([
   { name: "View Profile" },
   { name: "Subscriptions" },
-  { name: "Payment Method" },
-  { name: "Close Account" },
+  // { name: "Payment Method" },
+  // { name: "Close Account" },
 ]);
 
 const selectedMenu = ref(menuItems.value[0].name);

@@ -678,6 +678,9 @@ setAccessPaths() {
       else if (this.$route.path === '/StudentProfile') {
         this.backgroundStyle = 'StudentProfile_backgroundStyle';
       }
+      else if (this.$route.path === 'MenuContent') {
+        this.backgroundStyle = 'MenuContent_backgroundStyle';
+      }
       else if (this.$route.path === '/') {
         this.backgroundStyle = 'Dashboard_backgroundStyle';
       }
