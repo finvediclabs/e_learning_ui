@@ -1,5 +1,5 @@
 <template>
-  <div class="attendance-box">
+  <div class="attendance-box"  @click="viewAll">
     <div class="attendance-header row">
       <div class="col-4">
         <q-img :src="assignment_vector" class="attendance-vector" alt="Lab Usage Icon" />
@@ -44,6 +44,11 @@ export default {
       }
     },
   },
+  methods: {
+    viewAll() {
+      this.$router.push("/labs");
+    },
+  },
 };
 </script>
 
@@ -52,6 +57,7 @@ export default {
   width: 95%;
   margin: auto;
   padding: 10px;
+  cursor: pointer;
   border-radius: 20px;
   background-color: #fff;
   text-align: center;

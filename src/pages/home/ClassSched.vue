@@ -60,10 +60,10 @@ export default {
     };
   },
   methods: {
-//     viewAll() {
-//     console.log("View All Clicked");
-//     this.$router.push("/class-room"); 
-//   },
+    viewAll() {
+    console.log("View All Clicked");
+    this.$router.push("/class-room");
+  },
     getEventsData() {
       const request = {
         categoryId: this.selectedCategory?.id,
@@ -108,9 +108,6 @@ export default {
           this.showMsg(error.response?.data.message || error.message, 'negative');
         });
     },
-    viewAll() {
-      console.log("View All Clicked");
-    }
   },
   mounted() {
     this.getEventsData();

@@ -91,7 +91,7 @@
       <p style="font-size: 1.2em; font-weight: bold; color: gray;">No programs available.</p>
     </div>
     <div class="col-12 q-mt-none text-right q-pt-sm" style="width: 98%;margin-left: auto;margin-right: auto;">
-          <span style="color: #4E5BF8;">View More Courses →</span>
+          <span style="color: #4E5BF8;cursor: pointer;" @click="viewAll">View More Courses →</span>
         </div>
   </div>
 </template>
@@ -124,6 +124,10 @@ export default {
   },
 
   methods: {
+    viewAll() {
+      this.$router.push("/program");
+      console.log("View All Clicked");
+    },
     async fetchRecentlyViewed() {
   console.log("Fetching recently viewed programs...");
 
@@ -132,6 +136,7 @@ export default {
     this.fetchDefaultPrograms(); // Fetch default programs if user is not available
     return;
   }
+
 
   this.loading = true;
 

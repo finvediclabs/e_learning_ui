@@ -146,7 +146,7 @@ const routes = [
     children: [
       {
         path: '',
-        component: () => import('pages/libraries/Assignments.vue'),
+        component: () => import('pages/assignments/assignments.vue'),
         meta: { item: '' }
       }
     ]
