@@ -96,7 +96,7 @@
 
         <q-card-actions align="right">
           <q-btn label="Cancel" color="grey" v-close-popup />
-          <q-btn  v-if="filePreviewUrl" label="Submit" color="primary" @click="handleSubmit" style="margin-top: 20px;" />
+          <q-btn  v-if="filePreviewUrl" label="Submit" color="primary" @click="handleSubmit"/>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -175,14 +175,15 @@ export default {
       } else {
         console.log('No file selected for upload.');
       }
-
+      const userId = this.user?.id;
+      const userEmail = this.user?.email;
       const data = {
         assignmentId: this.dialogAssignmentId,
         assignmentTitle: this.dialogAssignmentTitle,
-        batchId: this.dialogBatchTitle,
-        batchTitle: this.dialogBatchId,
-        studentId: this.userId,
-        studentName: this.userEmail,
+        batchId: this.dialogBatchId,
+        batchTitle: this.dialogBatchTitle,
+        studentId: userId,
+        studentName: userEmail,
         type: "assignment",
         submittedFile: fileUri,
         createdDate: new Date().toISOString(),
@@ -213,11 +214,15 @@ export default {
         this.fileType = '';
         this.fileName = '';
         this.selectedFile = null;
+
+        this.fetchAssignments();
       } else {
         console.error('Failed to submit assignment');
+        this.fetchAssignments();
       }
     } catch (error) {
       console.error('Error submitting assignment:', error);
+      this.fetchAssignments();
     }
   },
 
@@ -251,6 +256,10 @@ export default {
 
     openUploadDialog(assignment) {
       this.selectedAssignment = assignment;
+      this.dialogAssignmentId = assignment.id;
+      this.dialogAssignmentTitle = assignment.assignmentTitle;
+      this.dialogBatchId = assignment.batchId;
+      this.dialogBatchTitle = assignment.batchName;
       this.uploadDialog = true;
     },
 
