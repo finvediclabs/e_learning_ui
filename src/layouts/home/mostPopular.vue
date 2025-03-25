@@ -117,7 +117,7 @@ export default {
   width: 100vw;
   padding-top: 0%;
   padding-bottom: 5%;
-  background-color: #F6F6F6;
+  background-color: #ffff;
   background-image: url('../../assets/most_popularBG.png');
   background-size: 100% 100%;
   background-position: cover;

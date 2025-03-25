@@ -138,6 +138,7 @@ export default {
   padding: 20px;
   height: 100%; /* Set height to 80% of viewport */
   overflow-y: auto; /* Adds scroll if content overflows */
+  background-color: #fff;
 }
 
 .free-courses h1 {

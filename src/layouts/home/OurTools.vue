@@ -1,7 +1,7 @@
 <template>
   <div class="background_grey q-py-xl">
     <span class="text-black header_toolsd">
-      Master Latest and Essential Tools & Technologies<br>
+      Master <span style=" color: #4e5bf8 ">Latest and Essential Tools  & Technologies </span> <br>
       with ScaleGrad for Your Career Success
     </span>
 
@@ -15,7 +15,7 @@
     </div>
 
     <!-- Second Row (Right Sliding) -->
-    <div class="scroll-container q-mt-lg q-py-lg">
+    <div class="scroll-container q-py-lg">
       <div class="scroll-wrapper">
         <div class="scroll-content scroll-right">
           <img v-for="(tool, index) in infiniteTools_2" :key="'row2-' + index" class="custom_img2" :src="tool" alt="Tool Logo" />
@@ -66,7 +66,8 @@ export default {
 <style scoped>
 /* General Styling */
 .background_grey {
-  background-color: #fff;
+  /* background-color: #fff; */
+  background-color: #f6f6f6 !important;
   text-align: center;
   width: 100%;
   overflow: hidden;
@@ -127,10 +128,14 @@ export default {
 
 /* Image Styling */
 .custom_img, .custom_img2 {
-  max-width: 80px;
-  width: 80px;
+  max-width: 90px;
+  width: 90px;
   height: auto;
   flex-shrink: 0;
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Responsive Adjustments */
