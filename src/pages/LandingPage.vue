@@ -13,7 +13,7 @@
 
     <!-- Right Section: Login Page -->
     <div class="col-12 col-sm-6 col-lg-4 self-center">
-        <create-account-page v-if="currentPage === 'createPage'" @changePage="changePage" style="padding-top: 10%;" />
+        <create-account-page v-if="currentPage === 'createPage'" @changePage="changePage" style="padding-top: 10%;" class="create-account-page" />
         <log-in-page v-if="currentPage === 'loginPage'" @changePage="changePage" />
         <reset-password-page v-if="currentPage === 'resetPasswordPage'" @changePage="changePage" />
     </div>
@@ -79,6 +79,9 @@ export default defineComponent({
 
     .whole{
       background: #f6f6f6;
+    }
+    .create-account-page{
+      padding-top: 3% !important;
     }
    
     

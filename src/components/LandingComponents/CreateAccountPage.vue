@@ -43,7 +43,7 @@
             </template>
           </q-input>
 
-          <q-btn color="primary" class="full-width sub-btn text-body1 text-weight-medium" padding="md" label="Sign up" style="background-color: #4E5BF8 !important; color: #ffffff;"
+          <q-btn color="primary" class="full-width sub-btn text-body1 text-weight-medium sign-up" padding="md" label="Sign up" style="background-color: #4E5BF8 !important; color: #ffffff;"
             type="submit" />
 
         </q-form>
@@ -113,13 +113,48 @@ export default {
 </script>
 <style>
 @media screen and (max-width: 576px) {
-  .input{
-    margin-top: 1px !important;  
-    margin-bottom: 1px !important;  
-  }
-  .create{
+  
+  .create {
     margin-bottom: 5px;
   }
-}
 
+  .input .q-field__control {
+    border-radius: 12px; 
+    padding: 0 12px; 
+    box-shadow: 0 4px 2px -2px rgba(0, 0, 0, 0.2); 
+    overflow: hidden; 
+  }
+
+  .sign-up {
+    border-radius: 12px; 
+    padding: 10px 12px !important; 
+    background: #4E5BF8 !important;
+    margin-top: 10px;
+  }
+
+  .login-btn {
+    border-radius: 12px; 
+    padding: 0 12px; 
+    border: none !important;
+  }
+
+  .q-field__bottom{
+    margin: 5px 0px;
+  } 
+  .login-btn:before {
+    border: none;
+  }
+  .already{
+    text-align: center;
+    font-size:medium;
+    color: #737373;
+    font-weight: 500;
+  }
+  .login-btn {
+  margin: 0 !important;
+  padding: 0 !important;
+  color: #0176FE;
+
+}
+}
 </style>

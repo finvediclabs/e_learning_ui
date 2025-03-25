@@ -6,10 +6,10 @@
     <div class="">
       <div class="">
         <q-form @submit="onSubmit">
-          <q-input outlined class="q-my-sm" v-model="email" label="Email Address" dense lazy-rules
+          <q-input outlined class="q-my-sm input" v-model="email" label="Email Address" dense lazy-rules
             :rules="[val => val && val.length > 0 || 'Email field is required']" />
 
-          <q-input v-model="password" outlined class="q-my-sm" label="Password" dense :type="isPwd ? 'password' : 'text'"
+          <q-input v-model="password" outlined class="q-my-sm input" label="Password" dense :type="isPwd ? 'password' : 'text'"
             lazy-rules :rules="[val => val && val.length > 0 || 'Password is required']">
             <template v-slot:append>
               <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer" @click="isPwd = !isPwd" />
@@ -20,7 +20,7 @@
             <q-checkbox v-model="rememberMe" label="Remember me" />
             <a @click="changePage('resetPasswordPage')" class="cursor-pointer fin-text-blue">Forget password</a>
           </div>
-          <q-btn no-caps class="full-width sub-btn text-body1 text-weight-medium" padding="md" label="Login" type="submit" style="background-color: #4E5BF8 !important; color: #ffffff;"
+          <q-btn no-caps class="full-width sub-btn text-body1 text-weight-medium sign-up" padding="md" label="Login" type="submit" style="background-color: #4E5BF8 !important; color: #ffffff;"
             :disable="loading">
             <q-spinner-ios color="white" class="q-pl-sm" v-if="loading" />
           </q-btn>
@@ -28,9 +28,9 @@
       </div>
 
     </div>
-    <div class="q-my-md">
+    <div class="q-my-md already">
       Need an account?
-      <q-btn outline label="Sign Up" dense class="q-px-lg q-mx-md sub-btn-outline" @click="changePage('createPage')" />
+      <q-btn outline label="Sign Up" dense class="q-px-lg q-mx-md sub-btn-outline login-btn" @click="changePage('createPage')" />
     </div>
   </div>
 </template>
