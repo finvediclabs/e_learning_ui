@@ -360,8 +360,8 @@ export default {
       console.error("User ID is missing in profile store");
       return;
     }
-
-    const url = `http://localhost:8087/api/enrollments/student/${studentId}`;
+    const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
+    const url = `${baseUrl}api/enrollments/student/${studentId}`;
     console.log("Fetching enrollments from:", url); // Debugging
 
     const response = await this.$api.get(url);
