@@ -1,25 +1,25 @@
 <template>
   <div>
-    <div class="text-h5 text-weight-bolder">Create Account</div>
+    <div class="text-h5 text-weight-bolder create">Create Account</div>
     <!-- <account-log-in />
     <div class="full-width text-center q-py-sm">OR</div> -->
     <div class="">
       <div class="">
         <q-form @submit="onSubmit">
 
-          <q-input outlined class="q-my-sm" v-model="name" label="Name" dense lazy-rules
+          <q-input outlined class="q-my-sm input" v-model="name" label="Name" dense lazy-rules
             :rules="[val => val && val.length > 0 || 'Name is required']" />
 
-          <q-input outlined class="q-my-sm" v-model="userName" label="User Name" dense lazy-rules
+          <q-input outlined class="q-my-sm input" v-model="userName" label="User Name" dense lazy-rules
             :rules="[val => val && val.length > 0 || 'User Name is required']" />
 
-          <q-input outlined class="q-my-sm" v-model="email" label="Email Address" dense lazy-rules
+          <q-input outlined class="q-my-sm input" v-model="email" label="Email Address" dense lazy-rules
             :rules="[
               val => val && val.length > 0 || 'Email is required',
               val => /@finvedic\.com$|@gmail\.com$/.test(val) || 'Email must end with @finvedic.com or @gmail.com'
             ]" />
 
-          <q-input v-model="password" class="q-my-sm" outlined label="Password" dense :type="isPwd ? 'password' : 'text'"
+          <q-input v-model="password" class="q-my-sm input" outlined label="Password" dense :type="isPwd ? 'password' : 'text'"
             lazy-rules :rules="[
               val => val && val.length > 0 || 'Password is required',
               val => val.length >= 8 || 'Password must be at least 8 characters long',
@@ -31,7 +31,7 @@
             </template>
           </q-input>
 
-          <q-input v-model="confirmPassword" class="q-my-sm" outlined label="Confirm Password" dense
+          <q-input v-model="confirmPassword" class="q-my-sm input" outlined label="Confirm Password" dense
             :type="isCrmPwd ? 'password' : 'text'" lazy-rules
             :rules="[
               val => val && val.length > 0 || 'Confirm Password is required',
@@ -43,14 +43,14 @@
             </template>
           </q-input>
 
-          <q-btn color="primary" class="full-width sub-btn text-weight-bolder" padding="md" label="Sign up" style="background-color: #4E5BF8 !important; color: #ffffff;"
+          <q-btn color="primary" class="full-width sub-btn text-body1 text-weight-medium" padding="md" label="Sign up" style="background-color: #4E5BF8 !important; color: #ffffff;"
             type="submit" />
 
         </q-form>
       </div>
-      <div class="q-my-lg">
+      <div class="q-my-lg text-body2 already">
         Already have an account?
-        <q-btn outline label="Log In" dense class="q-px-lg q-mx-md sub-btn-outline" @click="changePage('loginPage')" />
+        <q-btn outline label="Log In" dense class="q-px-lg q-mx-md sub-btn-outline login-btn " @click="changePage('loginPage')" />
       </div>
     </div>
   </div>
@@ -111,3 +111,15 @@ export default {
   }
 }
 </script>
+<style>
+@media screen and (max-width: 576px) {
+  .input{
+    margin-top: 1px !important;  
+    margin-bottom: 1px !important;  
+  }
+  .create{
+    margin-bottom: 5px;
+  }
+}
+
+</style>

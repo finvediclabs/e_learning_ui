@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="text-h5 text-weight-bolder">Login and start learning</div>
+    <div class="text-h5 text-weight-bolder start">Login and start learning</div>
     <!-- <account-log-in />
     <div class="full-width text-center q-py-sm">OR</div> -->
     <div class="">
@@ -20,7 +20,7 @@
             <q-checkbox v-model="rememberMe" label="Remember me" />
             <a @click="changePage('resetPasswordPage')" class="cursor-pointer fin-text-blue">Forget password</a>
           </div>
-          <q-btn no-caps class="full-width sub-btn" padding="md" label="Login" type="submit" style="background-color: #4E5BF8 !important; color: #ffffff;"
+          <q-btn no-caps class="full-width sub-btn text-body1 text-weight-medium" padding="md" label="Login" type="submit" style="background-color: #4E5BF8 !important; color: #ffffff;"
             :disable="loading">
             <q-spinner-ios color="white" class="q-pl-sm" v-if="loading" />
           </q-btn>
@@ -129,4 +129,14 @@ export default {
   }
 }
 </script>
+<style>
+@media screen and (max-width: 576px) {
+  .q-input{
+    padding-bottom: 10px !important;
+  }
+  .start{
+    margin-bottom: 10px !important;
+  }
+}
+</style>
 ./Urls

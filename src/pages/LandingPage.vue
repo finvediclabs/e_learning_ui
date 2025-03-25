@@ -1,12 +1,12 @@
 <template>
-  <div class="row justify-center">
+  <div class="row justify-center whole">
     <div class="col-12" >
       <div class="row">
     <!-- Left Section: Gurukul Text + Image -->
     <div class="col-12 col-sm-6 col-lg-7 flex q-pb-md">
         <div class="gurukul-text flex column q-mr-md" style="padding-right: 3%;" >
-            <h5 class="text-h5 text-weight-bolder" style="margin-bottom: 1%; font-size:3rem;">Welcome to <br> <span style="font-size: 3.2rem;line-height: 2;">GURUKUL</span></h5>
-            <p>FinVedic Gurukul Portal is an interactive learning platform offering financial education through curated resources, courses, and collaborative tools for students, faculty, and professionals.</p>
+            <h5 class="text-h5 text-weight-bolder" style="margin-bottom: 1%; font-size:3rem;">Welcome to <br> <span class="gur" style="font-size: 3.2rem;line-height: 2;">GURUKUL</span></h5>
+            <p class="descr">FinVedic Gurukul Portal is an interactive learning platform offering financial education through curated resources, courses, and collaborative tools for students, faculty, and professionals.</p>
         </div>
         <q-img :src="LandingImg" class="responsive-img" fit="contain" />
     </div>
@@ -59,4 +59,30 @@ export default defineComponent({
     display: block;
     margin: 0 ; 
 }
+
+@media (max-width: 600px) {  
+    .gurukul-text h5, .gur {
+        font-size: 2rem !important;  
+    }
+
+    .gurukul-text p {
+        display: none;  
+    }
+
+    .responsive-img {
+        max-width: 100%;  
+        width: 100%;
+        height: auto;
+        display: block;
+        margin: 0 auto;  
+    }
+
+    .whole{
+      background: #f6f6f6;
+    }
+   
+    
+}
+
+
 </style>

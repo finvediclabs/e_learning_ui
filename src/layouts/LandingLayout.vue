@@ -2,7 +2,7 @@
   <q-layout>
     <q-page-container>
       <q-page class="login-class relative-position" style="height: 100vh;">
-        <q-page style="z-index: 1; display: flex; flex-direction: column; justify-content: center; padding-top: 0px; " class="q-pt-xl q-px-xl" >
+        <q-page style="z-index: 1; display: flex; flex-direction: column; justify-content: center; padding-top: 0px; " class="q-pt-xl q-px-xl whole" >
           <!-- <div class="text-h3 text-weight-bolder gurukul-text">
             <svg xmlns="http://www.w3.org/2000/svg" width="180" height="35" viewBox="0 0 241 41" :fill="logoColor">
               <path d="M236.176 34.0211H207.469V4.91602H221.824L221.855 20.2101H236.176V34.0211Z" />
@@ -68,7 +68,7 @@
             <h5 class="text-h5 text-weight-bolder col-6" style="margin-bottom: 1%;">Welcome to <br> GURUKUL</h5>
             <p class="col-6 self-start" >Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi.</p>
           </div> -->
-          <landing-page style="z-index: 1" />
+          <landing-page style="z-index: 1;" />
           <!-- <div class="row justify-between q-pt-lg" style="padding-top: 0px;">
             <div class="text-center gurukul-text">
               <span class="text-subtitle2" >A product by</span> <br>
@@ -154,5 +154,12 @@ export default {
     z-index: 0;
     border-radius: 20px 0px 0px 20px;
   }
+  .whole{
+    min-height: 0px !important;
+  }
+  .q-px-xl{
+    padding: 0px 25px;
+  }
+  
 }
 </style>
