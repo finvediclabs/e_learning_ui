@@ -1,124 +1,251 @@
 <template>
   <div class="assignments">
     <div class="row col-12 w-100">
-      <div class="col-3 row">
-        <h3>Assignment List</h3>
-      </div>
-
-      <div class="col-9 row">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Title</th>
-              <th>Description</th>
-              <th>Due Date</th>
-              <th>Course</th>
-              <th>File</th>
-              <th>Status</th>
-              <th>Submit</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(assignment, index) in assignments" :key="assignment.id">
-              <td>{{ index + 1 }}</td>
-              <td>{{ assignment.assignmentTitle }}</td>
-              <td>{{ assignment.assignmentDesc }}</td>
-              <td>{{ formatDate(assignment.dueDate) }}</td>
-              <td>{{ assignment.course }}</td>
-              <td><a :href="assignment.file" target="_blank">Download</a></td>
-              <td :class="{ 'done': assignment.status === 'Done', 'pending': assignment.status === 'Pending' }">
-                {{ assignment.status }}
-              </td>
-              <td>
-                <span v-if="assignment.status === 'Done'" class="submitted">Submitted</span>
-                <q-btn v-else label="Upload" color="primary" @click="openUploadDialog(assignment)" />
-              </td>
-              <td>
-                <q-btn dense flat icon="more_vert">
-                  <q-menu>
-                    <q-list>
-                      <q-item clickable @click="viewAssignment(assignment)">
-                        <q-item-section>View</q-item-section>
-                      </q-item>
-                      <q-item clickable @click="editAssignment(assignment)">
-                        <q-item-section>Edit</q-item-section>
-                      </q-item>
-                    </q-list>
-                  </q-menu>
-                </q-btn>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Upload Dialog -->
-    <q-dialog v-model="uploadDialog" persistent>
-  <q-card class="upload-dialog-container">
-    <!-- Close button -->
-    <q-btn flat icon="close" @click="closeDialog" class="close-button" />
-
-    <!-- Left Section: Assignment Description & File Preview -->
-    <q-card-section class="left-section">
-      <div class="assignment-instructions">
-        <fin-portlet-header>
-          <fin-portlet-heading :loading="loading">
-            <span class="User_heading">Instructions</span>
-          </fin-portlet-heading>
-        </fin-portlet-header>
-        <span><strong>Assignment Title:</strong> {{ dialogAssignmentTitle }}</span>
-      </div>
-
-      <div class="file-preview">
-        <!-- Image Preview -->
-        <q-img v-if="isImage(dialogFileUrl)" :src="dialogFileUrl" alt="File" class="image-preview" />
-
-        <!-- PDF Preview -->
-        <PDFViewer v-else-if="isPDF(dialogFileUrl)" :source="dialogFileUrl" class="pdf-preview"
-          :controls="['rotate', 'zoom', 'catalog', 'switchPage']" />
-      </div>
-    </q-card-section>
-
-    <!-- Right Section: Upload Feature -->
-     <div class="row" style="display: block;">
-      <div class="row">
-    <q-card-section class="right-section">
-      <div class="text-h6">Upload Assignment</div>
-
-      <!-- Drag & Drop Box -->
-       <div class="row" >
-        <div class="row">
-      <div class="upload-box" v-if="!filePreviewUrl" @dragover.prevent @drop="handleDrop" @click="$refs.fileInput.click()">
-        <span>Drag & Drop or Click to Upload (PDF, JPG, PNG, Java, Python)</span>
-      </div>
-      <input ref="fileInput" type="file" @change="handleFileSelect" accept=".jpg,.jpeg,.png,.pdf,.java,.py" style="display: none;">
-    </div>
-      <!-- File Preview -->
-      <div class="file-preview-box" v-if="filePreviewUrl">
-        <q-btn flat icon="close" @click="removeFile" class="remove-file-btn" />
-
-        <q-img v-if="fileType.startsWith('image/')" :src="filePreviewUrl" class="image-preview" />
-        <iframe v-else-if="fileType === 'application/pdf'" :src="filePreviewUrl" class="pdf-preview"></iframe>
-        <pre v-else-if="['text/x-java-source', 'text/x-python', 'text/plain', 'application/octet-stream'].includes(fileType)" class="code-preview">
-          <code>{{ fileContent }}</code>
-        </pre>
-      </div>
-    </div>
-    </q-card-section>
+  <div class="col-3">
+    <q-list>
+      <q-item clickable @click="filterAssignments(null)">
+        <q-item-section>All Courses</q-item-section>
+      </q-item>
+      <q-item v-for="course in uniqueCourses" :key="course" clickable @click="filterAssignments(course)">
+        <q-item-section>{{ course }}</q-item-section>
+      </q-item>
+    </q-list>
   </div>
 
-    <!-- Actions -->
-     <div class="row">
-    <q-card-actions style="width: 100%;">
-      <q-btn v-if="filePreviewUrl" label="Submit" color="primary" @click="handleSubmit" style="margin-left: auto;margin-right: 1%;" />
-    </q-card-actions>
+  <div class="col-9 row">
+    <!-- Display the selected course dynamically -->
+    <span>{{ selectedCourse ? selectedCourse : 'All Courses' }}</span>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Title</th>
+          <th>Description</th>
+          <th>Due Date</th>
+          <th>Course</th>
+          <th>File</th>
+          <th>Status</th>
+          <th>Submit</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(assignment, index) in filteredAssignments" :key="assignment.id">
+          <td>{{ index + 1 }}</td>
+          <td>{{ assignment.assignmentTitle }}</td>
+          <td>{{ assignment.assignmentDesc }}</td>
+          <td>{{ formatDate(assignment.dueDate) }}</td>
+          <td>{{ assignment.course }}</td>
+          <td><a :href="assignment.file" target="_blank">Download</a></td>
+          <td :class="{ 'done': assignment.status === 'Done', 'pending': assignment.status === 'Pending' }">
+            {{ assignment.status }}
+          </td>
+          <td>
+            <span v-if="assignment.status === 'Done'" class="submitted">Submitted</span>
+            <q-btn v-else label="Upload" color="primary" @click="openDialog(assignment)" />
+          </td>
+          <td>
+            <q-btn dense flat icon="more_vert">
+              <q-menu>
+                <q-list>
+                  <q-item clickable @click="viewAssignment(assignment)">
+                    <q-item-section>View</q-item-section>
+                  </q-item>
+                  <q-item clickable @click="editAssignment(assignment)">
+                    <q-item-section>Edit</q-item-section>
+                  </q-item>
+                </q-list>
+              </q-menu>
+            </q-btn>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
-  </q-card>
-</q-dialog>
+
+    <!-- Upload Dialog -->
+    <q-dialog v-model="dialogVisible" full-width full-height persistent>
+      <q-card style="height: 100vh; display: flex; flex-direction: row; position: relative;">
+
+        <!-- Close button at the top-right corner -->
+        <q-btn flat icon="close" @click="closeDialog"
+          style="position: absolute; top: 10px; right: 10px; z-index: 1000;" />
+
+        <!-- Left half for the image -->
+
+        <q-card-section
+          style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+          <!-- First row: Assignment Description -->
+          <div style="width: 100%; text-align: center; margin-bottom: 20px;">
+            <div style="padding: 10px;">
+              <fin-portlet-header>
+                <fin-portlet-heading :loading="loading">
+                  <span class="User_heading">Instructions</span>
+                </fin-portlet-heading>
+              </fin-portlet-header>
+              <!-- Display the assignment description -->
+              <span><strong>Assignment Title:</strong> {{ dialogAssignmentTitle }}</span>
+            </div>
+          </div>
+
+          <!-- Second row: Image -->
+          <div style="width: 100%; display: flex; align-items: center; justify-content: center;">
+            <q-img v-if="dialogFileUrl.split('.').pop().toLowerCase() === 'jpg' ||
+              dialogFileUrl.split('.').pop().toLowerCase() === 'jpeg' ||
+              dialogFileUrl.split('.').pop().toLowerCase() === 'png' ||
+              dialogFileUrl.split('.').pop().toLowerCase() === 'gif' ||
+              dialogFileUrl.split('.').pop().toLowerCase() === 'bmp' ||
+              dialogFileUrl.split('.').pop().toLowerCase() === 'webp'" :src="dialogFileUrl" alt="File"
+              style="max-width: 100%; max-height: 100%; object-fit: contain;" />
+
+            <PDFViewer v-else-if="dialogFileUrl.split('.').pop().toLowerCase() === 'pdf'" :source="dialogFileUrl"
+              style="height: calc(60vh - 70px)" :controls="['rotate', 'zoom', 'catalog', 'switchPage']" />
+          </div>
+        </q-card-section>
+
+        <!-- Right half for drag and drop and actions -->
+        <!-- Right half for drag and drop and actions -->
+
+
+        <q-card-section
+          style="flex: 1; display: flex; flex-direction: column; align-items: center; border-left: 1px solid #ddd; padding: 20px;">
+
+          <div v-if="studentAssignments.length > 0">
+            <fin-portlet style="background-color:transparent;margin-bottom:0px;max-height:100vh;width: 100%;">
+              <fin-portlet-header style="width: 50vw;">
+                <fin-portlet-heading :loading="loading">
+                  <span class="User_heading text-center">Submitted Assignment</span>
+                </fin-portlet-heading>
+              </fin-portlet-header>
+              <fin-portlet style="background-color:transparent;">
+                <fin-portlet-item>
+                  <div class="assignment-container">
+                    <div v-for="assignment in studentAssignments" :key="assignment.id">
+                      <div>
+                        <span><strong>Assignment Title:</strong> {{ assignment.assignmentTitle }}</span>
+                      </div>
+                      <div>
+                        <span><strong>Batch :</strong> {{ assignment.batchTitle }}</span>
+                      </div>
+                      <div>
+                        <span><strong>Submission Date:</strong> {{ new Date(assignment.createdDate).toLocaleDateString()
+                          }}</span>
+                      </div>
+                      <div>
+                        <span><strong>Is Verified:</strong>
+                          <template v-if="assignment.isVerified === 'Yes'">
+                            Your Assignment has been <strong>VERIFIED</strong>
+
+                          </template>
+
+                        </span>
+                      </div>
+
+                      <!-- Conditionally render button if not verified -->
+                      <div class="q-row items-center no-wrap">
+                        <!-- Conditional message and Edit button -->
+                        <div v-if="assignment.isVerified === 'N'" class="q-col-auto row items-center">
+                          <div>Your assignment is not yet verified</div>
+                          <q-btn v-if="!onlyView" label="Edit" color="primary" @click="handleSupport(assignment.id)" class="q-ml-sm" />
+                        </div>
+
+                        <div class="q-row items-center no-wrap q-gutter-sm" style="margin-top: 10px">
+                          <!-- Download File button -->
+                          <q-btn label="Download File" color="green" @click="downloadFileAsPdf" class="q-ml-sm" />
+
+                          <!-- View in New Tab button -->
+                          <q-btn v-if="dialogFileUrl2" label="View in New Tab" icon="open_in_new" color="primary"
+                            @click="openInNewTab(dialogFileUrl2)" class="q-ml-sm" />
+                        </div>
+                      </div>
+
+                      <div v-if="EditisNotCLicked">
+                        <!-- Image preview logic -->
+                        <q-img
+                          v-if="['jpg', 'jpeg', 'png', 'gif'].includes(dialogFileUrl2.split('.').pop().toLowerCase())"
+                          :src="dialogFileUrl2" alt="Image File"
+                          style="max-width: 100%; max-height: 100%; object-fit: contain; margin-top: 20px;" />
+
+                        <!-- PDF display logic -->
+                        <template v-else-if="dialogFileUrl2 && dialogFileUrl2.endsWith('.pdf')">
+                          <div>
+                            <vue-pdf-app style="height: calc(60vh - 70px)" :pdf="dialogFileUrl2" :title="true"
+                              :theme="theme" class="q-pt-sm pdf" page-scale="20" :config="config">
+                              <template #toolbar-right-prepend>
+                                <div style="min-height:30px" class="flex flex-center">
+                                  <q-icon name="contrast" @click="toggleTheme" size="sm" color="white"
+                                    class="q-ma-md cursor-pointer" />
+                                </div>
+                              </template>
+                            </vue-pdf-app>
+                          </div>
+                        </template>
+
+                        <template
+                          v-else-if="dialogFileUrl2 && ['java', 'py'].includes(dialogFileUrl2.split('.').pop().toLowerCase())">
+                          <pre v-if="dialogFileContent">
+        <code class="language-{{ dialogFileType }}">
+          {{ dialogFileContent }}
+        </code>
+      </pre>
+                        </template>
+
+
+                        <template v-else>File Preview Not Available</template>
+
+                      </div>
+
+                    </div>
+                  </div>
+                </fin-portlet-item>
+              </fin-portlet>
+            </fin-portlet>
+          </div>
+
+          <div v-if="showDragAndDrop"
+            style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;position: relative;">
+            <fin-portlet-header style="width: 50vw;">
+              <fin-portlet-heading :loading="loading" class="text-center">
+                <span class="User_heading">Submit Your Assignment</span>
+              </fin-portlet-heading>
+            </fin-portlet-header>
+            <div v-if="!filePreviewUrl"
+              style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 2px dashed #aaa; padding: 20px; box-sizing: border-box; position: relative;"
+              @dragover.prevent @drop="handleDrop">
+              <span>Drag & Drop Image, PDF, .Java or .py files Here</span>
+              <input type="file" ref="fileInput" @change="handleFileSelect" accept="image/*,.pdf,.java,.py"
+                style="position: absolute; top: 50%; transform: translateY(-50%); opacity: 0; width: 100%; height: 100%; cursor: pointer;" />
+            </div>
+
+            <!-- File Preview and Remove Button -->
+            <div v-if="filePreviewUrl"
+              style="width: 100%; display: flex; flex-direction: column; align-items: center; margin-top: 20px;">
+              <div style="position: relative; width: 100%; max-width: 600px;">
+                <q-btn flat icon="close" @click="removeFile"
+                  style="position: absolute; top: 10px; right: 10px; z-index: 1000; background: rgba(255, 255, 255, 0.8);" />
+                <!-- Display image preview -->
+                <q-img v-if="fileType.startsWith('image/')" :src="filePreviewUrl" alt="File Preview"
+                  style="max-width: 100%; max-height: 400px; object-fit: contain;" />
+                <!-- Display PDF preview -->
+                <iframe
+                  v-else-if="fileType === 'application/pdf' || fileType === 'text/x-java-source' || fileType === 'text/x-python' || fileType === 'text/plain' || fileType === 'application/octet-stream'"
+                  :src="filePreviewUrl" style="width: 100%; height: 500px;"></iframe>
+
+                <!-- Display message for other types -->
+                <div v-else>
+                  <span>File preview not available for this file type.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <q-btn v-if="filePreviewUrl" label="Submit" @click="onSubmit" style="margin-top: 20px;" />
+        </q-card-section>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 
@@ -132,7 +259,11 @@ import FinPortletHeader from "src/components/Portlets/FinPortletHeader.vue";
 import FinPortletHeading from "src/components/Portlets/FinPortletHeading.vue";
 import FinPortletItem from "src/components/Portlets/FinPortletItem.vue";
 import Prism from 'prismjs';
+
+import VuePdfApp from "vue3-pdf-app";
 import PDFViewer from 'pdf-viewer-vue';
+
+import "vue3-pdf-app/dist/icons/main.css";
 import 'prismjs/components/prism-python'; // Load syntax highlighting for Python
 import 'prismjs/components/prism-java';   // Load syntax highlighting for Java
 import 'prismjs/themes/prism.css';
@@ -155,13 +286,51 @@ export default {
   },
   data() {
     return {
+      pdfPath: '',
+      chapterFilePath: '',
+      numPages: 0,
+      theme: 'light',
+      config: {
+        sidebar: {
+          viewThumbnail: true,
+          viewOutline: false,
+          viewAttachments: false
+        },
+        toolbar: {
+          toolbarViewerRight: {
+            presentationMode: true,
+            openFile: false,
+            print: false,
+            download: false,
+            viewBookmark: false
+          }
+        },
+        secondaryToolbar: {
+          presentationMode: true,
+          secondaryOpenFile: false,
+          secondaryPrint: false,
+          secondaryDownload: false,
+          secondaryViewBookmark: false,
+
+        },
+      },
       assignments: [],
-      uploadDialog: false,
+      filteredAssignments: [],
+      enrollments: [],
+    selectedCourse: null,
       selectedAssignment: null,
+      onlyView: false,
+      EditisNotCLicked: true,
+      showDragAndDrop: true,
+      studentAssignments: [],
       filePreviewUrl: "",
       fileType: "",
       fileContent: "",
+      dialogVisible: false,
       dialogFileUrl: '',
+      dialogFileUrl2: '',
+      dialogFileContent: '', // The file content for Java and Python files
+      dialogFileType: '',
 
     };
   },
@@ -171,95 +340,322 @@ export default {
     FinPortletHeader,
     FinPortletHeading,
     FinPortletItem,
+    VuePdfApp,
   },
+  computed: {
+  uniqueCourses() {
+    return [...new Set(this.assignments.map(a => a.course))]; // Extract unique courses
+  }
+},
+
   methods: {
-    async fetchAssignments() {
-      try {
-        const response = await this.$api.get("api/batch-assignments/batch/1001");
-        if (response.data.success) {
-          let assignmentsData = response.data.data;
-          const studentId = this.user?.id;
+    async fetchEnrollments() {
+  this.loading = true;
 
-          // Fetch assignment status
-          const statusPromises = assignmentsData.map(async (assignment) => {
-            try {
-              const url = `api/student-assignments?studentId=${studentId}&assignmentId=${assignment.id}`;
-              const statusResponse = await this.$api.get(url);
-              assignment.status = statusResponse.data.data.length > 0 ? "Done" : "Pending";
-            } catch (error) {
-              assignment.status = "Pending";
-            }
-          });
+  try {
+    const profileStore = useProfileStore();
+    const studentId = profileStore.user?.id;
 
-          await Promise.all(statusPromises);
-          this.assignments = assignmentsData;
+    if (!studentId) {
+      console.error("User ID is missing in profile store");
+      return;
+    }
+
+    const url = `http://localhost:8087/api/enrollments/student/${studentId}`;
+    console.log("Fetching enrollments from:", url); // Debugging
+
+    const response = await this.$api.get(url);
+
+    console.log("API Response:", response.data); // Log full response
+    this.enrollments = response.data.data; // Store enrollments
+
+    // Extract cycleId from the first enrollment and fetch assignments
+    const cycleId = this.enrollments.length > 0 ? this.enrollments[0].cycleid : null;
+    if (cycleId) {
+      this.fetchAssignments(cycleId);
+    } else {
+      console.error("No cycle ID found in enrollments.");
+    }
+  } catch (error) {
+    console.error("Error fetching enrollments:", error.response ? error.response.data : error);
+  } finally {
+    this.loading = false;
+  }
+},
+async fetchAssignments(cycleId) {
+  try {
+    if (!cycleId) {
+      console.error("Cycle ID is missing.");
+      return;
+    }
+
+    const url = `api/batch-assignments/batch/${cycleId}`;
+    console.log("Fetching assignments from:", url); // Debugging
+
+    const response = await this.$api.get(url);
+    if (response.data.success) {
+      let assignmentsData = response.data.data;
+      const studentId = this.user?.id;
+
+      // Fetch assignment status
+      const statusPromises = assignmentsData.map(async (assignment) => {
+        try {
+          const statusUrl = `api/student-assignments?studentId=${studentId}&assignmentId=${assignment.id}`;
+          const statusResponse = await this.$api.get(statusUrl);
+          assignment.status = statusResponse.data.data.length > 0 ? "Done" : "Pending";
+        } catch (error) {
+          assignment.status = "Pending";
         }
-      } catch (error) {
-        console.error("Error fetching assignments:", error);
+      });
+
+      await Promise.all(statusPromises);
+      this.assignments = assignmentsData;
+      this.filteredAssignments = assignmentsData; // Initially show all assignments
+    }
+  } catch (error) {
+    console.error("Error fetching assignments:", error);
+  }
+},
+
+filterAssignments(course) {
+    this.selectedCourse = course; // Update selected course
+    this.filteredAssignments = course
+      ? this.assignments.filter(a => a.course === course)
+      : this.assignments;
+  },
+
+    handleSupport(assignmentId) {
+      // If the clicked assignment is the same as the currently selected one, toggle the states
+      if (this.selectedAssignmentId === assignmentId) {
+        this.showDragAndDrop = !this.showDragAndDrop;
+        this.EditisNotCLicked = !this.EditisNotCLicked;
+      } else {
+        // Set the selected assignment ID and reset states if a different assignment is clicked
+        this.selectedAssignmentId = assignmentId;
+        console.log("selectedAssignmentId:", assignmentId);
+        this.showDragAndDrop = true;  // Show the drag-and-drop area
+        this.EditisNotCLicked = false; // Set to false when a new assignment is clicked
+      }
+    },
+    async fetchStudentAssignments(userId, assignmentId) {
+  this.loading = true;
+  try {
+    const profileStore = useProfileStore();
+    this.userId = profileStore.user?.id;
+    this.userEmail = profileStore.user?.email;
+
+    if (!this.userId || !assignmentId) {
+      console.error("Missing userId or assignmentId.");
+      this.loading = false;
+      return;
+    }
+
+    console.log("Fetching student assignments for:", this.userId, assignmentId);
+
+    const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
+    const url = `${baseUrl}api/student-assignments?studentId=${this.userId}&assignmentId=${assignmentId}`;
+
+    const response = await this.$api.get(url);
+    const result = response.data;
+
+    if (result.success && Array.isArray(result.data)) {
+      this.studentAssignments = result.data || [];
+      this.showDragAndDrop = this.studentAssignments.length === 0;
+
+      if (this.studentAssignments.length > 0) {
+        // Set the first file found as the dialogFileUrl2
+        this.dialogFileUrl2 = this.studentAssignments[0]?.submittedFile || "";
+        console.log("Setting dialogFileUrl2:", this.dialogFileUrl2);
+      }
+
+      const fetchFiles = this.studentAssignments.map(async (assignment) => {
+        const fileName = assignment.submittedFile || "";
+        if (!fileName.trim()) {
+          console.log("No file submitted.");
+          return;
+        }
+
+        console.log("Submit file:", fileName);
+        const fileType = fileName.split('.').pop().toLowerCase();
+        const isImage = ["jpg", "jpeg", "png", "gif"].includes(fileType);
+        const isPdf = fileType === "pdf";
+        const isCode = ["java", "py"].includes(fileType);
+
+        if (isImage) {
+          console.log("File type:", fileType, "Is image:", isImage);
+        } else if (isPdf) {
+          this.chapterFilePath = fileName;
+          console.log("File type:", fileType, "Is PDF:", isPdf);
+        } else if (isCode) {
+          try {
+            const fileResponse = await this.$api.get(fileName);
+            this.dialogFileContent = fileResponse.data;
+            this.dialogFileType = fileType;
+          } catch (error) {
+            console.error("Error fetching file content:", error);
+          }
+        } else {
+          console.log("Unsupported file type:", fileType);
+        }
+      });
+
+      await Promise.all(fetchFiles);
+    } else {
+      console.error("Invalid data format:", result);
+      this.studentAssignments = [];
+    }
+  } catch (error) {
+    console.error("Error fetching student assignments:", error);
+    this.studentAssignments = [];
+  } finally {
+    this.loading = false;
+  }
+},
+highlightCode() {
+      this.$nextTick(() => {
+        Prism.highlightAll(); // Highlight the code using PrismJS
+      });
+    },
+onSubmit() {
+      if (this.selectedAssignmentId) {
+        console.log("StudentAssignmentId", this.selectedAssignmentId)
+        // If studentAssignment.id exists, call the update method
+        this.updateSubmit();
+      } else {
+        // Otherwise, call the handleSubmit method for new submission
+        this.handleSubmit();
+        // this.fetchBatchAssignments();
+
       }
     },
     async handleSubmit() {
-    try {
-      let fileUri = '';
+      try {
+        let fileUri = '';
 
-      if (this.selectedFile) {
-        fileUri = await this.uploadFile(this.selectedFile);
-        console.log('Uploaded file URI:', fileUri);
-      } else {
-        console.log('No file selected for upload.');
-      }
-      const userId = this.user?.id;
-      const userEmail = this.user?.email;
-      const data = {
-        assignmentId: this.dialogAssignmentId,
-        assignmentTitle: this.dialogAssignmentTitle,
-        batchId: this.dialogBatchId,
-        batchTitle: this.dialogBatchTitle,
-        studentId: userId,
-        studentName: userEmail,
-        type: "assignment",
-        submittedFile: fileUri,
-        createdDate: new Date().toISOString(),
-        isVerified: "N",
-      };
+        // Check if a file is selected
+        if (this.selectedFile) {
+          fileUri = await this.uploadFile(this.selectedFile); // Use the stored file
+          console.log('Uploaded file URI:', fileUri); // Log the URI
+        } else {
+          console.log('No file selected for upload.');
+        }
 
-      const jsonData = JSON.stringify(data);
-      console.log('Submission data:', jsonData);
+        // Prepare the data for submission
+        const data = {
+          assignmentId: this.dialogAssignmentId,
+          assignmentTitle: this.dialogAssignmentTitle,
+          batchId: this.dialogBatchTitle,
+          batchTitle: this.dialogBatchId,
+          studentId: this.userId,
+          studentName: this.userEmail,
+          type:"assignment",
+          submittedFile: fileUri, // Use the uploaded file URI
+          createdDate: new Date().toISOString(),
+          isVerified: "N",
+        };
 
-      const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
-      const studentAssignmentUrl = baseUrl + 'api/student-assignments';
-      const sessionStore = useSessionStore();
-      const token = sessionStore.token;
+        // Convert data to JSON
+        const jsonData = JSON.stringify(data);
+        console.log('Submission data:', jsonData);
 
-      const response = await fetch(studentAssignmentUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: jsonData,
-      });
+        // POST request to submit the assignment
+        const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
+        const studentAssignmentUrl = baseUrl + 'api/student-assignments';
+        const sessionStore = useSessionStore(); // Get the session store
+        const token = sessionStore.token;
+        const response = await fetch(studentAssignmentUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: jsonData,
+        });
 
-      if (response.ok) {
-        console.log('Assignment submitted successfully');
-        this.uploadDialog = false; // Close popup
-        this.filePreviewUrl = '';
-        this.fileType = '';
-        this.fileName = '';
-        this.selectedFile = null;
-
+        if (response.ok) {
+          console.log('Assignment submitted successfully');
+          // this.fetchBatchAssignments();
+          this.fetchAssignments();
+          // Optionally, you can reset the dialog and clear the file preview
+          this.dialogVisible = false;
+          this.filePreviewUrl = '';
+          this.fileType = '';
+          this.fileName = ''; // Clear the file name
+          this.selectedFile = null; // Clear the selected file
+        } else {
+          console.error('Failed to submit assignment');
+          this.fetchAssignments();
+        }
+      } catch (error) {
+        console.error('Error submitting assignment:', error);
         this.fetchAssignments();
-      } else {
-        console.error('Failed to submit assignment');
-        this.fetchAssignments();
       }
-    } catch (error) {
-      console.error('Error submitting assignment:', error);
-      this.fetchAssignments();
-    }
-  },
+    },
+    async updateSubmit() {
+      try {
+        const studentAssignmentId = this.selectedAssignmentId // Ensure the studentAssignmentId is available
+        console.log("StudentAssignmentId:", studentAssignmentId);
+        let fileUri = '';
+
+        // Check if a file is selected and upload it if necessary
+        if (this.selectedFile) {
+          fileUri = await this.uploadFile(this.selectedFile); // Upload the file
+          console.log('Uploaded file URI:', fileUri); // Log the uploaded file URI
+        } else {
+          console.log('No file selected for upload.');
+        }
+
+        // Prepare the data for submission
+        const data = {
+          assignmentId: this.dialogAssignmentId,
+          assignmentTitle: this.dialogAssignmentTitle,
+          batchId: this.dialogBatchTitle,
+          batchTitle: this.dialogBatchId,
+          studentId: this.userId,
+          studentName: this.userEmail,
+          type:"assignment",
+          submittedFile: fileUri, // Use the uploaded file URI
+          createdDate: new Date().toISOString(),
+          isVerified: "N", // Default value for verification status
+        };
+
+        // Convert the data to JSON
+        const jsonData = JSON.stringify(data);
+        console.log('Update submission data:', jsonData);
+
+        // Define the API URL for updating the student assignment
+        const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
+        const url = `${baseUrl}api/student-assignments/${studentAssignmentId}`;
+        const sessionStore = useSessionStore(); // Get the session store
+        const token = sessionStore.token;
+        // Send the PUT request to update the existing student assignment
+        const response = await fetch(url, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`, // Attach the token in the request headers
+          },
+          body: jsonData, // Send the JSON data as the request body
+        });
+
+        if (response.ok) {
+          console.log('Assignment updated successfully');
+          // Optionally, you can reset the dialog and clear the file preview after a successful update
+          this.dialogVisible = false;
+          this.filePreviewUrl = '';
+          this.fileType = '';
+          this.fileName = ''; // Clear the file name
+          this.selectedFile = null; // Clear the selected file
+        } else {
+          console.error('Failed to update assignment');
+        }
+      } catch (error) {
+        console.error('Error updating assignment:', error);
+      }
+    },
   closeDialog() {
-      this.uploadDialog = false;
+      this.dialogVisible = false;
+      this.EditisNotCLicked = true;
       this.dialogFileUrl = '';
       this.filePreviewUrl = '';
       this.fileType = '';
@@ -308,15 +704,44 @@ export default {
     },
 
 
-    openUploadDialog(assignment) {
-      this.selectedAssignment = assignment;
-      this.dialogAssignmentId = assignment.id;
-      this.dialogAssignmentTitle = assignment.assignmentTitle;
-      this.dialogBatchId = assignment.batchId;
-      this.dialogBatchTitle = assignment.batchName;
-      this.dialogFileUrl = assignment.file;
-      this.uploadDialog = true;
-    },
+    async openDialog(assignment) {
+  this.loading = true;
+  console.log("Opening dialog for assignment:", assignment); // Log the assignment object for debugging
+
+  try {
+    const cleanFileName = assignment.file || ""; // Ensure fileName exists
+
+    // Set dialog properties
+    this.dialogAssignmentDesc = assignment.description;
+    this.dialogAssignmentId = assignment.id;
+    this.dialogAssignmentTitle = assignment.assignmentTitle;
+    this.dialogBatchId = assignment.batchId;
+    this.dialogBatchTitle = assignment.batchName;
+    this.dialogUserId = this.user?.id;
+    this.dialogUserEmail = this.user?.email;
+    this.dialogFileUrl = cleanFileName;
+
+    // Log all dialog attributes
+    console.log("Dialog Attributes:", {
+      dialogAssignmentDesc: this.dialogAssignmentDesc,
+      dialogAssignmentId: this.dialogAssignmentId,
+      dialogAssignmentTitle: this.dialogAssignmentTitle,
+      dialogBatchId: this.dialogBatchId,
+      dialogBatchTitle: this.dialogBatchTitle,
+      dialogUserId: this.dialogUserId,
+      dialogUserEmail: this.dialogUserEmail,
+      dialogFileUrl: this.dialogFileUrl
+    });
+
+    // Open the dialog
+    this.dialogVisible = true;
+  } catch (error) {
+    console.error("Error processing assignment for dialog:", error);
+  } finally {
+    this.loading = false;
+    await this.fetchStudentAssignments(this.dialogUserId, assignment.id);
+  }
+},
 
     handleFileSelect(event) {
   const file = event.target.files[0];
@@ -375,36 +800,110 @@ export default {
       this.fileContent = "";
     },
 
-    async viewAssignment(assignment) {
+  async viewAssignment(assignment) {
+    this.onlyView = true;
+  this.loading = true;
   try {
-    const studentId = this.user?.id;
-    const url = `api/student-assignments?studentId=${studentId}&assignmentId=${assignment.id}`;
+    this.dialogAssignmentDesc = assignment.description;
+    this.dialogAssignmentId = assignment.id;
+    this.dialogAssignmentTitle = assignment.assignmentTitle;
+    this.dialogBatchId = assignment.batchId;
+    this.dialogBatchTitle = assignment.batchName;
+    this.dialogFileUrl = assignment.file;
 
-    const response = await this.$api.get(url);
-
-    if (response.data.success && response.data.data.length > 0) {
-      this.dialogFileUrl = response.data.data[0].submittedFile; // Set the submitted file
-    } else {
-      this.dialogFileUrl = ""; // No file submitted
+    if (!assignment.id) {
+      console.error("No assignment ID provided.");
+      this.loading = false;
+      return;
     }
 
-    // Open the dialog
-    this.selectedAssignment = assignment;
-    this.uploadDialog = true;
+    // Fetch student assignments and wait for results
+    await this.fetchStudentAssignments(this.user?.id, assignment.id);
 
+    // Ensure dialogFileUrl2 is available before opening dialog
+    console.log("Final File URL:", this.dialogFileUrl2);
+
+    this.dialogVisible = true; // Open the dialog after fetching data
   } catch (error) {
-    console.error("Error fetching submitted assignment:", error);
-    this.dialogFileUrl = ""; // Handle error scenario gracefully
+    console.error("Error viewing assignment:", error);
+  } finally {
+    this.loading = false;
   }
 },
+async downloadFileAsPdf() {
+      try {
+        // Fetch the file from the URL
+        const response = await fetch(this.dialogFileUrl2);
 
-    editAssignment(assignment) {
-      alert(`Editing assignment: ${assignment.assignmentTitle}`);
+        // Check if the response is OK
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        // Convert the response to a Blob
+        const blob = await response.blob();
+
+        // Create a URL for the Blob
+        const url = URL.createObjectURL(blob);
+
+        // Create a temporary link element
+        const link = document.createElement('a');
+        link.href = url;
+
+        // Set the filename directly from the URL
+        const filename = this.dialogFileUrl2.split('/').pop();
+        link.download = filename;
+
+        // Append the link to the body and trigger a click
+        document.body.appendChild(link);
+        link.click();
+
+        // Clean up by removing the link and revoking the object URL
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      } catch (error) {
+        console.error('Error downloading file:', error);
+      }
     },
+
+    async editAssignment(assignment) {
+  this.loading = true;
+  this.onlyView = true;
+  try {
+    this.dialogAssignmentDesc = assignment.description;
+    this.dialogAssignmentId = assignment.id;
+    this.dialogAssignmentTitle = assignment.assignmentTitle;
+    this.dialogBatchId = assignment.batchId;
+    this.dialogBatchTitle = assignment.batchName;
+    this.dialogFileUrl = assignment.file;
+
+    if (!assignment.id) {
+      console.error("No assignment ID provided.");
+      this.loading = false;
+      return;
+    }
+
+    // Fetch student assignments and wait for results
+    await this.fetchStudentAssignments(this.user?.id, assignment.id);
+
+    // Ensure dialogFileUrl2 is available before opening dialog
+    console.log("Final File URL:", this.dialogFileUrl2);
+
+    // Call handleSupport to update states instead of using onlyView
+    this.handleSupport(assignment.id);
+
+    this.dialogVisible = true; // Open the dialog after fetching data
+  } catch (error) {
+    console.error("Error viewing assignment:", error);
+  } finally {
+    this.loading = false;
+  }
+},
   },
 
   mounted() {
-    this.fetchAssignments();
+
+    this.fetchEnrollments();
   },
 };
 </script>
