@@ -57,49 +57,68 @@
 
     <!-- Upload Dialog -->
     <q-dialog v-model="uploadDialog" persistent>
-      <q-card style="width: 90vw; height: 90vh; padding: 20px;">
-        <q-card-section>
-          <div class="text-h6">Upload Assignment</div>
-        </q-card-section>
+  <q-card class="upload-dialog-container">
+    <!-- Close button -->
+    <q-btn flat icon="close" @click="closeDialog" class="close-button" />
 
-        <q-card-section>
-          <!-- Drag & Drop Box -->
-          <div
-  v-if="!filePreviewUrl"
-  style="border: 2px dashed #aaa; padding: 20px; text-align: center; cursor: pointer;"
-  @dragover.prevent
-  @drop="handleDrop"
-  @click="$refs.fileInput.click()"
->
-  <span>Drag & Drop or Click to Upload (PDF, JPG, PNG, Java, Python)</span>
+    <!-- Left Section: Assignment Description & File Preview -->
+    <q-card-section class="left-section">
+      <div class="assignment-instructions">
+        <fin-portlet-header>
+          <fin-portlet-heading :loading="loading">
+            <span class="User_heading">Instructions</span>
+          </fin-portlet-heading>
+        </fin-portlet-header>
+        <span><strong>Assignment Title:</strong> {{ dialogAssignmentTitle }}</span>
+      </div>
+
+      <div class="file-preview">
+        <!-- Image Preview -->
+        <q-img v-if="isImage(dialogFileUrl)" :src="dialogFileUrl" alt="File" class="image-preview" />
+
+        <!-- PDF Preview -->
+        <PDFViewer v-else-if="isPDF(dialogFileUrl)" :source="dialogFileUrl" class="pdf-preview"
+          :controls="['rotate', 'zoom', 'catalog', 'switchPage']" />
+      </div>
+    </q-card-section>
+
+    <!-- Right Section: Upload Feature -->
+     <div class="row" style="display: block;">
+      <div class="row">
+    <q-card-section class="right-section">
+      <div class="text-h6">Upload Assignment</div>
+
+      <!-- Drag & Drop Box -->
+       <div class="row" >
+        <div class="row">
+      <div class="upload-box" v-if="!filePreviewUrl" @dragover.prevent @drop="handleDrop" @click="$refs.fileInput.click()">
+        <span>Drag & Drop or Click to Upload (PDF, JPG, PNG, Java, Python)</span>
+      </div>
+      <input ref="fileInput" type="file" @change="handleFileSelect" accept=".jpg,.jpeg,.png,.pdf,.java,.py" style="display: none;">
+    </div>
+      <!-- File Preview -->
+      <div class="file-preview-box" v-if="filePreviewUrl">
+        <q-btn flat icon="close" @click="removeFile" class="remove-file-btn" />
+
+        <q-img v-if="fileType.startsWith('image/')" :src="filePreviewUrl" class="image-preview" />
+        <iframe v-else-if="fileType === 'application/pdf'" :src="filePreviewUrl" class="pdf-preview"></iframe>
+        <pre v-else-if="['text/x-java-source', 'text/x-python', 'text/plain', 'application/octet-stream'].includes(fileType)" class="code-preview">
+          <code>{{ fileContent }}</code>
+        </pre>
+      </div>
+    </div>
+    </q-card-section>
+  </div>
+
+    <!-- Actions -->
+     <div class="row">
+    <q-card-actions style="width: 100%;">
+      <q-btn v-if="filePreviewUrl" label="Submit" color="primary" @click="handleSubmit" style="margin-left: auto;margin-right: 1%;" />
+    </q-card-actions>
+  </div>
 </div>
-          <input ref="fileInput" type="file" @change="handleFileSelect" accept=".jpg,.jpeg,.png,.pdf,.java,.py" style="display: none;">
-
-          <!-- File Preview -->
-          <!-- File Preview Section (Uses Full Space) -->
-<div v-if="filePreviewUrl" style="margin-top: 20px; width: 100%; height: 80vh; display: flex; flex-direction: column; align-items: center;">
-  <q-btn flat icon="close" @click="removeFile" style="align-self: flex-end;" />
-
-  <!-- Image Preview -->
-  <q-img v-if="fileType.startsWith('image/')" :src="filePreviewUrl" style="max-width: 100%; max-height: 100%;" />
-
-  <!-- PDF Preview -->
-  <iframe v-else-if="fileType === 'application/pdf'" :src="filePreviewUrl" style="width: 100%; height: 100%;"></iframe>
-
-  <!-- Java & Python Code Preview -->
-  <pre v-else-if="['text/x-java-source', 'text/x-python', 'text/plain', 'application/octet-stream'].includes(fileType)"
-    style="width: 100%; height: 100%; overflow: auto; background: #f5f5f5; padding: 10px; border-radius: 5px;">
-    <code class="code-preview">{{ fileContent }}</code>
-  </pre>
-</div>
-        </q-card-section>
-
-        <q-card-actions align="right">
-          <q-btn label="Cancel" color="grey" v-close-popup />
-          <q-btn  v-if="filePreviewUrl" label="Submit" color="primary" @click="handleSubmit"/>
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
+  </q-card>
+</q-dialog>
   </div>
 </template>
 
@@ -108,7 +127,12 @@
 import { storeToRefs } from "pinia";
 import { useProfileStore } from "src/stores/profile";
 import { useSessionStore } from "src/stores/session";
+import FinPortlet from "src/components/Portlets/FinPortlet.vue";
+import FinPortletHeader from "src/components/Portlets/FinPortletHeader.vue";
+import FinPortletHeading from "src/components/Portlets/FinPortletHeading.vue";
+import FinPortletItem from "src/components/Portlets/FinPortletItem.vue";
 import Prism from 'prismjs';
+import PDFViewer from 'pdf-viewer-vue';
 import 'prismjs/components/prism-python'; // Load syntax highlighting for Python
 import 'prismjs/components/prism-java';   // Load syntax highlighting for Java
 import 'prismjs/themes/prism.css';
@@ -137,7 +161,16 @@ export default {
       filePreviewUrl: "",
       fileType: "",
       fileContent: "",
+      dialogFileUrl: '',
+
     };
+  },
+  components: {
+    PDFViewer,
+    FinPortlet,
+    FinPortletHeader,
+    FinPortletHeading,
+    FinPortletItem,
   },
   methods: {
     async fetchAssignments() {
@@ -225,6 +258,13 @@ export default {
       this.fetchAssignments();
     }
   },
+  closeDialog() {
+      this.uploadDialog = false;
+      this.dialogFileUrl = '';
+      this.filePreviewUrl = '';
+      this.fileType = '';
+      this.fileContent = '';
+    },
 
   async uploadFile(file) {
     const formData = new FormData();
@@ -254,12 +294,27 @@ export default {
       return date.toLocaleDateString("en-GB");
     },
 
+    isImage(fileUrl) {
+      if (!fileUrl) return false;
+      const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'];
+      const fileExtension = fileUrl.split('.').pop().toLowerCase();
+      return imageExtensions.includes(fileExtension);
+    },
+
+    // Function to check if the file is a PDF
+    isPDF(fileUrl) {
+      if (!fileUrl) return false;
+      return fileUrl.split('.').pop().toLowerCase() === 'pdf';
+    },
+
+
     openUploadDialog(assignment) {
       this.selectedAssignment = assignment;
       this.dialogAssignmentId = assignment.id;
       this.dialogAssignmentTitle = assignment.assignmentTitle;
       this.dialogBatchId = assignment.batchId;
       this.dialogBatchTitle = assignment.batchName;
+      this.dialogFileUrl = assignment.file;
       this.uploadDialog = true;
     },
 
@@ -320,9 +375,28 @@ export default {
       this.fileContent = "";
     },
 
-    viewAssignment(assignment) {
-      alert(`Viewing assignment: ${assignment.assignmentTitle}`);
-    },
+    async viewAssignment(assignment) {
+  try {
+    const studentId = this.user?.id;
+    const url = `api/student-assignments?studentId=${studentId}&assignmentId=${assignment.id}`;
+
+    const response = await this.$api.get(url);
+
+    if (response.data.success && response.data.data.length > 0) {
+      this.dialogFileUrl = response.data.data[0].submittedFile; // Set the submitted file
+    } else {
+      this.dialogFileUrl = ""; // No file submitted
+    }
+
+    // Open the dialog
+    this.selectedAssignment = assignment;
+    this.uploadDialog = true;
+
+  } catch (error) {
+    console.error("Error fetching submitted assignment:", error);
+    this.dialogFileUrl = ""; // Handle error scenario gracefully
+  }
+},
 
     editAssignment(assignment) {
       alert(`Editing assignment: ${assignment.assignmentTitle}`);
@@ -370,5 +444,91 @@ export default {
 .submitted {
   color: green;
   font-weight: bold;
+}
+.upload-dialog-container {
+  height: 90vh;
+  width: 80vw;
+  max-width:  80vw;
+  display: flex;
+  flex-direction: row;
+  position: relative;
+}
+
+.left-section, .right-section {
+  flex: 1; /* Each section takes 50% */
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.left-section {
+  border-right: 1px solid #ddd;
+}
+
+.assignment-instructions {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 20px;
+  padding: 10px;
+}
+
+.file-preview {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-preview {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.pdf-preview {
+  width: 100%;
+  height: calc(60vh - 70px);
+}
+
+.upload-box {
+  border: 2px dashed #aaa;
+  display: flex; /* Enables flexbox */
+  align-items: center; /* Centers content vertically */
+  justify-content: center; /* Centers content horizontally */
+  text-align: center;
+  cursor: pointer;
+  width: 38vw;
+  height: 60vh;
+}
+
+.file-preview-box {
+  margin-top: 20px;
+  width: 40vw;
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.remove-file-btn {
+  align-self: flex-end;
+}
+
+.code-preview {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background: #f5f5f5;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1000;
 }
 </style>
