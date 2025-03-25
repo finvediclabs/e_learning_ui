@@ -144,6 +144,7 @@ export default {
 .blue_color{
   color: #4e5bf8 !important;
   font-size: 18px;
+  text-align: center;
 }
 
 .course-image {
@@ -159,7 +160,7 @@ export default {
   cursor: pointer;
 }
 .course-card:hover {
-  transform: scale(1.05); /* Enlarges by 5% */
+  transform: scale(1.05); 
   transition: transform 0.3s ease;
 }
 @media (max-width: 600px) {
@@ -188,12 +189,58 @@ export default {
 }
 .outerCard{
   padding-bottom: 0px;
+  margin-top: 20px;
+
 }
 .View{
-  margin-top: 10px;
+  text-align: center;
+    margin-top: 15px;
 }
 .web_view{
   display: none;
 }
+
+  .header_mostPopular {
+    font-size: 22px; 
+  }
+
+  .desc_mostPopular {
+    font-size: 14px;
+  }
+
 }
+
+.course-card {
+  position: relative;
+  border: 1px solid #ddd;
+  border-radius: 25px;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  background-color: #f6f6f6;
+  padding-top: 50px ;
+  padding: 50px 20px 10px 20px;
+  color: #7D7D7D;
+}
+
+.course-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 50% !important;
+  position: absolute;
+  top: -40px;
+  left: 45%;
+  transform: translate(-50%, 0); 
+  background-size: cover;
+  background-position: center;
+  display: block; 
+  box-shadow: 0px 2px 8px rgba(5, 0, 0, 0.5);
+}
+
+.text-caption{
+  font-size: 14px;
+  color: #7D7D7D;
+}
+
+
 </style>
