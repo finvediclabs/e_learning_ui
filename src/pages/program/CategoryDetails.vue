@@ -33,7 +33,7 @@
         </a>
       </div>
       <div>
-        <q-btn
+        <!-- <q-btn
   v-if="!(course.modulesByCategory && course.modulesByCategory[course.catgoryId[index]]?.length)"
   disable
   color="grey"
@@ -50,7 +50,7 @@
   class="q-mb-sm q-mr-sm"
   :class="{ 'selected-module': module.moduleId === activeModuleId }"
   @click="handleModuleClick(module)"
-/>
+/> -->
       </div>
 
       <span v-if="index < course.categoryName.length - 1"><hr /></span>
