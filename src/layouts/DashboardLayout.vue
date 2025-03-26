@@ -139,8 +139,8 @@
         </q-avatar>
 
   </q-toolbar>
-  <q-toolbar v-if="!isMobile" class="second_navbar q-pr-lg">
-  <!-- Secondary Navigation Bar (Desktop) -->
+  <!-- <q-toolbar v-if="!isMobile" class="second_navbar q-pr-lg">
+
   <div class="nav-bar row items-center">
     <template v-for="(module, index) in otherModules" :key="index">
       <q-btn
@@ -182,7 +182,7 @@
       </q-btn-dropdown>
     </template>
   </div>
-</q-toolbar>
+</q-toolbar> -->
 
 </q-header>
 
@@ -1080,7 +1080,7 @@ background-attachment: fixed;
   /* color: white; */
   color: #7D7D7D;
   margin-left: auto;
-  
+
 }
 
 .menu-button .q-item{
