@@ -20,7 +20,7 @@
       <q-list separator class="ChatList col q-mr-xs">
         <q-item v-for="(chat, index) in limitedChats" :key="index" clickable @click="viewAll">
           <q-item-section avatar>
-            <img src="src/assets/User_icon.png" class="chat-img" alt="Profile Image" />
+            <q-img :src=personImage class="chat-img" alt="Profile Image" />
           </q-item-section>
           <q-item-section>
             <q-item-label class="chat-profile text-bold">{{ chat.username }}</q-item-label>
@@ -43,6 +43,7 @@
 
 <script>
 import axios from "axios";
+import personImage from "src/assets/User_icon.png";
 
 export default {
   name: "ChatsCard",
@@ -50,7 +51,8 @@ export default {
     return {
       activeGroup: "",
       groups: [],
-      chats: []
+      chats: [],
+      personImage: personImage
     };
   },
   computed: {
