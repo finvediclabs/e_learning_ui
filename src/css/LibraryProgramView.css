@@ -45,6 +45,7 @@
   text-overflow: ellipsis;
   transition: all 0.3s ease;
 }
+
 .read-more-link {
   color: #007bff;
   cursor: pointer;
@@ -123,8 +124,12 @@
 }
 
 .category-row1:hover {
-  background-color: #007bff; /* Optional hover effect */
-  color:#F5F5F5;
+  background-color: #B1B1B1; /* Optional hover effect */
+  color:#F5F5F5 !important;
+  border-radius: 10px;
+}
+.category-row1:hover .category-description {
+  color: #F5F5F5 !important;/* Optional background change */
   border-radius: 10px;
 }
 

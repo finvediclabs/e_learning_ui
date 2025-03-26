@@ -11,11 +11,22 @@
       <div
         class="category-row1"
         :class="{ 'active-category': course.catgoryId[index] === activeCategoryId }"
-        @click="handleCategoryClick(course.catgoryId[index])"
-      >
-        <span>{{ name }}</span><br>
 
-        <div class="text-body1"
+      >
+      <div class="row col-12"  @click="handleCategoryClick(course.catgoryId[index])">
+        <div class="col-4">
+          <img
+  v-if="course.categoryImagePaths && course.categoryImagePaths[index] && course.catgoryId[index] === activeCategoryId"
+  :src="course.categoryImagePaths[index]"
+  alt="Category Image"
+  class="category-image"
+/>
+        </div>
+        <div class="col-8">
+          <div class="row">
+            <span>{{ name }}</span><br>
+          </div>
+          <div class="text-body1"
           :class="{
             'category-description': true,
             'expanded': expandedIndexes.includes(index)
@@ -31,31 +42,48 @@
         <a href="javascript:void(0);" @click="toggleDescription(index)" class="read-more-link">
           {{ expandedIndexes.includes(index) ? 'Read Less' : 'Read More' }}
         </a>
+        </div>
       </div>
-      <div>
-        <!-- <q-btn
-  v-if="!(course.modulesByCategory && course.modulesByCategory[course.catgoryId[index]]?.length)"
-  disable
-  color="grey"
-  label="No modules available"
-  class="q-mb-sm"
-/>
 
-<q-btn
-  v-for="module in course.modulesByCategory?.[course.catgoryId?.[index]] || []"
-  :key="module.moduleId"
-  :label="module.moduleName"
-  :value="module.moduleId"
-  color="primary"
-  class="q-mb-sm q-mr-sm"
-  :class="{ 'selected-module': module.moduleId === activeModuleId }"
-  @click="handleModuleClick(module)"
-/> -->
+
+
+        <div
+  v-if="course.catgoryId[index] === activeCategoryId"
+  class="module-table"
+>
+  <table v-if="course.modulesByCategory && course.modulesByCategory[course.catgoryId[index]]?.length">
+    <thead>
+      <tr>
+        <th style="font-size: 14px;">Table of Contents</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        v-for="module in course.modulesByCategory?.[course.catgoryId?.[index]] || []"
+        :key="module.moduleId"
+        :class="{ 'selected-module': module.moduleId === activeModuleId }"
+        @click="handleModuleClick(module)"
+
+      >
+        <td style="font-size: 12px;">{{ module.moduleName }}</td>
+        <td v-if="activeTab !== 'books'" class="arrow">→</td>
+
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- If no modules are available, show a message -->
+  <div v-else class="no-modules">No modules available</div>
+</div>
       </div>
+
+
 
       <span v-if="index < course.categoryName.length - 1"><hr /></span>
     </li>
   </ul>
+
 </div>
 </div>
 
@@ -291,7 +319,6 @@ async fetchCourseDetails() {
     if (response.data && response.data.success) {
       const course = response.data.data;
 
-      // Store initial course data
       this.course = {
         id: course.programId,
         title: course.heading,
@@ -299,13 +326,13 @@ async fetchCourseDetails() {
         categoryName: course.chapterCategoryNames,
         catgoryId: course.chapterCategoryIds,
         categoryDescription: course.chapterCategoryDescriptions,
-        abstractt: course.description,
+        categoryImagePaths: [], // Initialize empty array for images
         imagePath: course.imagePath || this.DummyBook,
-        moduleId: [], // Initialize empty array for module IDs
-        moduleName: [], // Initialize empty array for module names
       };
 
-      // Fetch modules after setting course details
+      // Fetch category images dynamically
+      await this.fetchCategoryImages(course.chapterCategoryImagePaths);
+
       await this.fetchModulesForCategories(this.course.catgoryId);
     } else {
       throw new Error('Failed to fetch course details');
@@ -316,6 +343,29 @@ async fetchCourseDetails() {
   } finally {
     this.loading = false;
   }
+},
+async fetchCategoryImages(imagePaths) {
+  const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
+  const downloadUrl = `${baseUrl}fs/download`;
+
+  this.course.categoryImagePaths = await Promise.all(
+    imagePaths.map(async (imagePath) => {
+      const formData = new FormData();
+      const removePrefix = `${baseUrl}fs/download/`;
+      const filename = imagePath.replace(removePrefix, ''); // Extract actual filename
+
+      formData.append('filename', filename);
+
+      try {
+        const response = await this.$api.post(downloadUrl, formData, { responseType: 'blob' });
+        const blob = new Blob([response.data]);
+        return window.URL.createObjectURL(blob); // Create object URL for the image
+      } catch (error) {
+        console.error(`Error fetching category image: ${filename}`, error);
+        return this.DummyBook; // Fallback image
+      }
+    })
+  );
 },
 
 async fetchModulesForCategories(categoryIds) {
@@ -387,6 +437,9 @@ async fetchCategoryDetails() {
   }
 },
     handleModuleClick(selectedModule) {
+      if (this.activeTab === 'books') {
+    return; // Prevents selection when "books" is the active profile
+  }
     const { courseId, categoryId } = this.$route.params; // Get current params
     const selectedModuleId = selectedModule.moduleId; // Extract moduleId
 
@@ -593,3 +646,13 @@ async fetchCategoryDetails() {
 };
 </script>
 
+<style>
+.category-image {
+  width: 100%;
+  max-width: 120px;
+  height: auto;
+  display: block;
+  margin-bottom: 10px;
+  border-radius: 8px;
+}
+</style>
