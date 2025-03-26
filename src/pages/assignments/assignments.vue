@@ -13,8 +13,14 @@
   </div>
 
   <div class="col-9 row">
-    <!-- Display the selected course dynamically -->
-    <span>{{ selectedCourse ? selectedCourse : 'All Courses' }}</span>
+<!-- Add a flex container to separate the course label and search bar -->
+<div class="row items-center justify-between q-mb-md">
+  <!-- Selected Course Label (Aligned to Left) -->
+  <span class="text-h6">{{ selectedCourse ? selectedCourse : 'All Courses' }}</span>
+
+  <!-- Search Input (Aligned to Right) -->
+  <q-input v-model="searchQuery" label="Search Assignments" rounded outlined class="q-ml-xl" style="max-width: 300px;" />
+</div>
 
     <table class="table">
       <thead>
@@ -314,6 +320,7 @@ export default {
 
         },
       },
+      searchQuery: "", 
       assignments: [],
       filteredAssignments: [],
       enrollments: [],
@@ -343,8 +350,16 @@ export default {
     VuePdfApp,
   },
   computed: {
+    filteredAssignments() {
+    return this.assignments.filter(assignment => {
+      const matchesCourse = !this.selectedCourse || assignment.course === this.selectedCourse;
+      const matchesSearch = !this.searchQuery || 
+        assignment.assignmentTitle.toLowerCase().includes(this.searchQuery.toLowerCase());
+      return matchesCourse && matchesSearch;
+    });
+  },
   uniqueCourses() {
-    return [...new Set(this.assignments.map(a => a.course))]; // Extract unique courses
+    return [...new Set(this.assignments.map(a => a.course))]; 
   }
 },
 
@@ -418,12 +433,8 @@ async fetchAssignments(cycleId) {
 },
 
 filterAssignments(course) {
-    this.selectedCourse = course; // Update selected course
-    this.filteredAssignments = course
-      ? this.assignments.filter(a => a.course === course)
-      : this.assignments;
-  },
-
+  this.selectedCourse = course; 
+},
     handleSupport(assignmentId) {
       // If the clicked assignment is the same as the currently selected one, toggle the states
       if (this.selectedAssignmentId === assignmentId) {
@@ -910,7 +921,7 @@ async downloadFileAsPdf() {
 
 <style scoped>
 .assignments {
-  text-align: center;
+  text-align: left;
   padding: 20px;
   background-color: #fff;
 }

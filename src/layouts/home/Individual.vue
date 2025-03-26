@@ -112,7 +112,7 @@
     class="text-black dev_css"
 
   >
-  <i>{{ page.topBar }}</i>
+  <i>{{ page.topBar }} <span class="SG_Bar"> SCALEGRAD</span></i>
   </span>
 </div>
 </div>
@@ -510,7 +510,8 @@ border-radius: 20px;
 
 }
 .dev_css{
-  padding-left: 7vw;margin-top: 10%;
+  padding-left: 7vw;
+  margin-top: 10%;
 }
 .combined_heading{
   position: relative;
@@ -613,21 +614,24 @@ border-radius: 20px;
 
 @media (max-width: 600px) {
   .mobile_view {
-    padding: 1% !important;
+    /* padding: 1% !important; */
     margin: 0 !important;
   }
   .left-section {
     width: 100% !important;
   }
   .banner{
-  background-color: #f3f3f4;
+    background: #E3EEFD;
   color: #4E5BF8 !important;
-  width: 90%;
-  font-size: 1rem !important;
+  width: 100%;
+  font-size: 0.7rem !important;
   margin-right: auto;
-  border-top-right-radius: 50px;
-  border-bottom-right-radius: 50px;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
   margin-top: 3%;
+}
+.dev_css{
+  padding-left: 0%;
 }
 .Join_Free_btn{
   padding: 0px 20px;
@@ -688,6 +692,12 @@ border-radius: 20px;
 .btns{
     padding: 0px 20px;
   }
+
+  .SG_Bar{
+    color: #4E5BF8;
+    font-weight: bold;
+  }
+ 
 
 }
 
