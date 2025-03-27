@@ -67,7 +67,9 @@
 
       >
         <td style="font-size: 12px;">{{ module.moduleName }}</td>
+
         <td v-if="activeTab !== 'books'" class="arrow">→</td>
+        <td v-else style="visibility: hidden;"> .</td>
 
       </tr>
     </tbody>
@@ -254,7 +256,21 @@ export default {
     if (to.params.categoryId !== from.params.categoryId) {
       this.fetchCategoryDetails(); // Automatically fetch new category data
     }
-  },
+
+    // Remove moduleId when switching to the "books" tab
+    if (this.activeTab === 'books' && to.params.moduleId) {
+      this.activeModuleId = null;
+
+      // Update the route to remove moduleId
+      this.$router.push({
+        name: this.$route.name,
+        params: {
+          courseId: to.params.courseId,
+          categoryId: to.params.categoryId
+        }
+      });
+    }
+  }
 },
 created() {
     const { categoryId } = this.$route.params; // Get categoryId from the route params
@@ -436,35 +452,39 @@ async fetchCategoryDetails() {
     this.loading = false;
   }
 },
-    handleModuleClick(selectedModule) {
-      if (this.activeTab === 'books') {
-    return; // Prevents selection when "books" is the active profile
+handleModuleClick(selectedModule) {
+  if (this.activeTab === 'books') {
+    this.activeModuleId = null; // Reset module selection when switching to books
+    return; // Prevent module selection
   }
-    const { courseId, categoryId } = this.$route.params; // Get current params
-    const selectedModuleId = selectedModule.moduleId; // Extract moduleId
 
-    console.log('Selected Module ID:', selectedModuleId);
+  const { courseId, categoryId } = this.$route.params; // Get current params
+  const selectedModuleId = selectedModule.moduleId; // Extract moduleId
 
-    // If a module is clicked, store it, otherwise, reset to no module state
-    this.activeModuleId = this.activeModuleId === selectedModuleId ? null : selectedModuleId;
+  console.log('Selected Module ID:', selectedModuleId);
 
-    // Update the route params dynamically
-    this.$router.push({
-      name: this.$route.name, // Keep the same route name
-      params: {
-        courseId,
-        categoryId,
-        ...(this.activeModuleId ? { moduleId: this.activeModuleId } : {}) // Only include moduleId if selected
-      },
-    });
+  // Toggle module selection
+  this.activeModuleId = this.activeModuleId === selectedModuleId ? null : selectedModuleId;
 
-    this.fetchCategoryDetails(); // Fetch data with or without moduleId
-  },
+  // Update the route params dynamically
+  this.$router.push({
+    name: this.$route.name, // Keep the same route name
+    params: {
+      courseId,
+      categoryId,
+      ...(this.activeModuleId && this.activeTab !== 'books' ? { moduleId: this.activeModuleId } : {}) // Only include moduleId if not in books tab
+    },
+  });
+
+  this.fetchCategoryDetails(); // Fetch data with or without moduleId
+},
     handleCategoryClick(selectedCategoryId) {
       const { courseId } = this.$route.params; // Get courseId from route params
       console.log('Selected category ID:', selectedCategoryId);
       console.log('Course ID:', courseId);
       this.categoryLoading = true;
+
+
       // Set the active category ID
       this.activeCategoryId = selectedCategoryId;
 

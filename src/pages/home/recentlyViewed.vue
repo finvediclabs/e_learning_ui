@@ -129,7 +129,7 @@ export default {
       console.log("View All Clicked");
     },
     async fetchRecentlyViewed() {
-  console.log("Fetching recently viewed programs...");
+  console.log("Fetching programs...");
 
   if (!this.user || !this.user.id) {
     console.warn("User not found, skipping API call.");
@@ -137,26 +137,25 @@ export default {
     return;
   }
 
-
   this.loading = true;
 
   try {
     const baseUrl = (process.env.VUE_APP_CORE_URL || "").replace(/\/$/g, "") + "/";
-    let url = `${baseUrl}api/recently-viewed/${this.user.id}`;
+    let url = `${baseUrl}api/programs`; // Updated URL
     const response = await this.$api.get(url, {
       headers: { Authorization: `Bearer ${this.token}` },
     });
 
-    if (Array.isArray(response.data) && response.data.length > 0) {
-      this.recentlyViewed = response.data.slice(0, 2).map((item) => ({
+    if (Array.isArray(response.data.data) && response.data.data.length > 0) {
+      this.recentlyViewed = response.data.data.slice(0, 2).map((item) => ({
         programId: item.programId,
         id: item.id,
-        name: item.programHeading,
-        imagePath: item.programImagePath ? item.programImagePath : this.DummyBook,
-        description: item.programDescription,
+        name: item.heading, // Updated field
+        imagePath: item.imagePath ? item.imagePath : this.DummyBook,
+        description: item.description, // Updated field
       }));
 
-      console.log("Fetched recently viewed programs:", this.recentlyViewed);
+      console.log("Fetched programs:", this.recentlyViewed);
 
       // Fetch images if they are from a downloadable source
       const imgBaseUrl = `${baseUrl}fs/download/`;
@@ -193,16 +192,17 @@ export default {
         }
       });
     } else {
-      console.log("No recently viewed programs found. Fetching default programs.");
+      console.log("No programs found. Fetching default programs.");
       this.fetchDefaultPrograms();
     }
   } catch (error) {
-    console.error("Error fetching recently viewed programs:", error);
+    console.error("Error fetching programs:", error);
     this.fetchDefaultPrograms();
   } finally {
     this.loading = false;
   }
 },
+
 async navigateToCourse(courseId) {
   console.log('Navigating to course with ID:', courseId);
 
@@ -213,8 +213,7 @@ async navigateToCourse(courseId) {
 
   const userPayload = this.user; // Directly use this.user
   const baseUrl = (process.env.VUE_APP_CORE_URL || "").replace(/\/$/g, "") + "/";
-  let url = `${baseUrl}api/recently-viewed/add?programId=${courseId}`;
-  // const url = `http://localhost:8087/api/recently-viewed/add?programId=${courseId}`;
+  let url = `${baseUrl}api/programs/add?programId=${courseId}`; // Updated URL
 
   try {
     await this.$api.post(url, userPayload);
@@ -225,6 +224,7 @@ async navigateToCourse(courseId) {
 
   this.$router.push({ name: 'ProgramDetails', params: { id: courseId } });
 },
+
 async fetchDefaultPrograms() {
   console.log("fetchDefaultPrograms: Fetching default programs...");
 
@@ -238,7 +238,7 @@ async fetchDefaultPrograms() {
     console.log("fetchDefaultPrograms: Raw response received.", response);
 
     // Extracting the correct array from response
-    let data = response.data.data; // <-- Extract 'data' key
+    let data = response.data.data.data; // <-- Extract 'data' key
 
     if (!Array.isArray(data)) {
       console.error("fetchDefaultPrograms: Unexpected API response format:", response);
@@ -275,7 +275,7 @@ async fetchDefaultPrograms() {
           .post(downloadUrl, formData, { responseType: "blob" })
           .then((downloadResponse) => {
             console.log(`fetchDefaultPrograms: Received image blob for item [${index}].`);
-            const blob = new Blob([downloadResponse.data]);
+            const blob = new Blob([downloadresponse.data.data]);
             const url = window.URL.createObjectURL(blob);
             item.imagePath = url; // Update item with the received blob URL
             console.log(`fetchDefaultPrograms: Updated image for item [${index}]: ${url}`);
