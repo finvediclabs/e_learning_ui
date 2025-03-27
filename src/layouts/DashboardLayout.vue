@@ -250,7 +250,7 @@
 
 <script>
 import { storeToRefs } from "pinia";
-import new_logo from "src/assets/new_logo.png";
+import new_logo from "src/assets/new_logo1.svg";
 import { useSessionStore } from "src/stores/session";
 import { toRaw } from 'vue';
 import { setToken } from "src/boot/axios";
@@ -1024,6 +1024,10 @@ background-attachment: fixed;
 .logo {
   /* height: 40px; */
   width: auto;
+}
+
+.logo_in{
+  min-height: 0px !important;
 }
 
 

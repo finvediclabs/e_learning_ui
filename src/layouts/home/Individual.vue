@@ -18,7 +18,7 @@
           <!-- Placeholder for logo -->
           <div class="q-ml-md logo">
             <!-- Logo will be added here later -->
-            <q-item>
+            <q-item class="logo_in">
               <q-img :src="new_logo" style="width: 220px;"></q-img>
         </q-item>
           </div>
@@ -177,7 +177,7 @@
 <script>
 import axios from "axios";
 import mostPopular from "./mostPopular.vue";
-import new_logo from "src/assets/new_logo.png";
+import new_logo from "src/assets/new_logo1.svg";
 import freeCourses from "./freeCourses.vue";
 import Reviews from "./Reviews.vue";
 import bg_img from "src/assets/scalefradepng1.png"
@@ -430,6 +430,9 @@ const response = await axios.get(`${getCourse}/${programId}`);
 </script>
 
 <style scoped>
+.logo_in{
+  min-height: 0px !important;
+}
 .logo {
   /* height: 40px; */
   width: auto;
