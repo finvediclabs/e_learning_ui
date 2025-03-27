@@ -1,18 +1,29 @@
 <template>
   <div class="assignments">
     <div class="row col-12 w-100">
-  <div class="col-3">
-    <q-list>
-      <q-item clickable @click="filterAssignments(null)">
-        <q-item-section>All Courses</q-item-section>
-      </q-item>
-      <q-item v-for="course in uniqueCourses" :key="course" clickable @click="filterAssignments(course)">
-        <q-item-section>{{ course }}</q-item-section>
-      </q-item>
-    </q-list>
-  </div>
+      <div class="col-3 left">
+  <q-list>
+    <q-item 
+      clickable 
+      @click="filterAssignments(null)"
+      :class="{ 'selected-course': selectedCourse === null }"
+    >
+      <q-item-section>All Courses</q-item-section>
+    </q-item>
+    <q-item 
+      v-for="course in uniqueCourses" 
+      :key="course" 
+      clickable 
+      @click="filterAssignments(course)"
+      :class="{ 'selected-course': selectedCourse === course }"
+    >
+      <q-item-section>{{ course }}</q-item-section>
+    </q-item>
+  </q-list>
+</div>
 
-  <div class="col-9 row">
+
+  <div class="col-9 row right q-pl-lg">
 <!-- Add a flex container to separate the course label and search bar -->
 <div class="row items-center justify-between q-mb-md">
   <!-- Selected Course Label (Aligned to Left) -->
@@ -20,38 +31,68 @@
 
   <!-- Search Input (Aligned to Right) -->
   <q-input v-model="searchQuery" label="Search Assignments" rounded outlined class="q-ml-xl" style="max-width: 300px;" />
+  <q-btn label="Filter by Date | Status" color="primary" @click="filterDialog = true" class="q-ml-xl" />
+  <q-dialog v-model="filterDialog">
+  <q-card style="min-width: 400px;">
+    <q-card-section>
+      <div class="text-h6">Filter Assignments</div>
+    </q-card-section>
+
+    <q-card-section class="q-gutter-md">
+      <!-- Date Picker -->
+      <q-input v-model="selectedDate" label="Select Date" type="date" outlined />
+
+      <!-- Status Multi-Select -->
+      <q-select 
+        v-model="selectedStatuses" 
+        :options="statusOptions" 
+        label="Select Status"
+        multiple 
+        outlined 
+        use-chips 
+      />
+    </q-card-section>
+
+    <q-card-actions align="right">
+      <q-btn label="Clear Filter" flat color="negative" @click="clearFilters" />
+      <q-btn label="Apply Filter" color="primary" @click="applyFilters" />
+    </q-card-actions>
+  </q-card>
+</q-dialog>
+
 </div>
 
     <table class="table">
       <thead>
         <tr>
-          <th>#</th>
-          <th>Title</th>
-          <th>Description</th>
-          <th>Due Date</th>
-          <th>Course</th>
-          <th>File</th>
-          <th>Status</th>
-          <th>Submit</th>
-          <th>Actions</th>
+          <th style=" border-right: none">#</th>
+          <th style="border-left: none; border-right: none">Title</th>
+          <th style="border-left: none; border-right: none">Course</th>
+          <!-- <th>Description</th> -->
+          <th style="border-left: none; border-right: none">Due Date</th>
+          
+          <!-- <th >File</th> -->
+          <th style="border-left: none; border-right: none">Status</th>
+          <th style="border-left: none; border-right: none">Submit</th>
+          <th style="border-left: none">Actions</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="(assignment, index) in filteredAssignments" :key="assignment.id">
-          <td>{{ index + 1 }}</td>
-          <td>{{ assignment.assignmentTitle }}</td>
-          <td>{{ assignment.assignmentDesc }}</td>
-          <td>{{ formatDate(assignment.dueDate) }}</td>
-          <td>{{ assignment.course }}</td>
-          <td><a :href="assignment.file" target="_blank">Download</a></td>
-          <td :class="{ 'done': assignment.status === 'Done', 'pending': assignment.status === 'Pending' }">
+          <td style="border-right: none">{{ index + 1 }}</td>
+          <td style="border-left: none; border-right: none">{{ assignment.assignmentTitle }}</td>
+          <td style="border-left: none; border-right: none">{{ assignment.course }}</td>
+          <!-- <td>{{ assignment.assignmentDesc }}</td> -->
+          <td style="border-left: none; border-right: none">{{ formatDate(assignment.dueDate) }}</td>
+          <!-- <td><a :href="assignment.file" target="_blank">Download</a></td> -->
+          <td style="border-left: none; border-right: none" :class="{ 'done': assignment.status === 'Done', 'pending': assignment.status === 'Pending' }">
             {{ assignment.status }}
           </td>
-          <td>
+          <td style="border-left: none; border-right: none">
             <span v-if="assignment.status === 'Done'" class="submitted">Submitted</span>
             <q-btn v-else label="Upload" color="primary" @click="openDialog(assignment)" />
           </td>
-          <td>
+          <td style="border-left: none">
             <q-btn dense flat icon="more_vert">
               <q-menu>
                 <q-list>
@@ -320,6 +361,10 @@ export default {
 
         },
       },
+      filterDialog: false,
+    selectedDate: "", 
+    selectedStatuses: [], 
+    statusOptions: ["In Progress", "Pending", "Done"], 
       searchQuery: "", 
       assignments: [],
       filteredAssignments: [],
@@ -350,20 +395,50 @@ export default {
     VuePdfApp,
   },
   computed: {
-    filteredAssignments() {
+    uniqueCourses() {
+    return [...new Set(this.assignments.map(a => a.course))];
+  },
+  filteredAssignments() {
+    console.log("Filtering assignments...");
     return this.assignments.filter(assignment => {
       const matchesCourse = !this.selectedCourse || assignment.course === this.selectedCourse;
-      const matchesSearch = !this.searchQuery || 
-        assignment.assignmentTitle.toLowerCase().includes(this.searchQuery.toLowerCase());
+      const matchesSearch = !this.searchQuery || assignment.assignmentTitle.toLowerCase().includes(this.searchQuery.toLowerCase());
+
+      console.log(`Checking assignment: ${assignment.assignmentTitle}, Course: ${assignment.course}`);
+      console.log(`matchesCourse: ${matchesCourse}, matchesSearch: ${matchesSearch}`);
+      console.log("Filtered Assignments:", this.filteredAssignments);
+
+
       return matchesCourse && matchesSearch;
     });
-  },
-  uniqueCourses() {
-    return [...new Set(this.assignments.map(a => a.course))]; 
   }
 },
 
   methods: {
+    applyFilters() {
+  console.log("Before filtering:", this.assignments); // Check original data
+
+  this.filteredAssignments = this.assignments.filter(assignment => {
+    const matchesDate = this.selectedDate
+      ? new Date(assignment.dueDate).toISOString().split("T")[0] === this.selectedDate
+      : true;
+
+    const matchesStatus = this.selectedStatuses.length
+      ? this.selectedStatuses.includes(assignment.status)
+      : true;
+
+    return matchesDate && matchesStatus;
+  });
+
+  console.log("After filtering:", this.filteredAssignments); // Check if filtering works
+  this.filterDialog = false; // Close modal after applying filters
+},
+clearFilters() {
+  this.selectedDate = "";
+  this.selectedStatuses = [];
+  this.filteredAssignments = [...this.assignments]; // Reset to full list
+},
+
     async fetchEnrollments() {
   this.loading = true;
 
@@ -433,8 +508,9 @@ async fetchAssignments(cycleId) {
 },
 
 filterAssignments(course) {
-  this.selectedCourse = course; 
-},
+    this.selectedCourse = course;
+    this.$forceUpdate(); // Force reactivity update
+  },
     handleSupport(assignmentId) {
       // If the clicked assignment is the same as the currently selected one, toggle the states
       if (this.selectedAssignmentId === assignmentId) {
@@ -913,7 +989,9 @@ async downloadFileAsPdf() {
   },
 
   mounted() {
-
+    this.filteredAssignments = this.assignments.filter(a => a.status === "Pending"); // Test a simple filter
+    console.log("Filtered Data on Mount:", this.filteredAssignments);
+    this.filteredAssignments = [...this.assignments]; 
     this.fetchEnrollments();
   },
 };
@@ -923,22 +1001,40 @@ async downloadFileAsPdf() {
 .assignments {
   text-align: left;
   padding: 20px;
-  background-color: #fff;
+  padding-top: 0px;
+  padding-left: 0px;
+  /* background-color: #e5dcdc !important; */
+}
+
+.left{
+  background-color: #fff !important;
+  padding-top: 20px;
+}
+
+.right{
+  padding-top: 20px;
+  /* background-color: #e5dcdc !important; */
+  background-color: #fff !important;
+
 }
 
 .table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate !important;
+  border-spacing: 0 10px; 
 }
 
 .table th, .table td {
-  border: 1px solid #ddd;
+  border: 1px solid #000;
   padding: 10px;
   text-align: left;
 }
 
 .table th {
   background-color: #f4f4f4;
+}
+.table td {
+  background-color: #fff;
 }
 
 .done {
@@ -1041,4 +1137,17 @@ async downloadFileAsPdf() {
   right: 10px;
   z-index: 1000;
 }
+
+.selected-course {
+  background-color: #F5F6F6 !important; 
+  color: #000 !important;
+  /* border-radius: 4px; */
+}
+
+.right{
+  border-left: 2px solid #ddd;
+}
+
+
+
 </style>

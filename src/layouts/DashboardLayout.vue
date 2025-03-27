@@ -667,7 +667,7 @@ setAccessPaths() {
       }
 
       else if (this.$route.path === '/library/elearning') {
-        this.backgroundStyle = 'Assignment_BackgroundStyle'; // Apply the background style class
+        this.backgroundStyle = 'Assignment_BackgroundStyle'; 
       }
 
 
