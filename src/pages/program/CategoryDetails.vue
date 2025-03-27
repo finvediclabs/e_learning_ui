@@ -478,25 +478,38 @@ handleModuleClick(selectedModule) {
 
   this.fetchCategoryDetails(); // Fetch data with or without moduleId
 },
-    handleCategoryClick(selectedCategoryId) {
-      const { courseId } = this.$route.params; // Get courseId from route params
-      console.log('Selected category ID:', selectedCategoryId);
-      console.log('Course ID:', courseId);
-      this.categoryLoading = true;
+handleCategoryClick(selectedCategoryId) {
+  const { courseId } = this.$route.params; // Get courseId from route params
+  console.log('Selected category ID:', selectedCategoryId);
+  console.log('Course ID:', courseId);
 
+  this.categoryLoading = true; // Show loader
+  this.activeCategoryId = selectedCategoryId; // Set active category
 
-      // Set the active category ID
-      this.activeCategoryId = selectedCategoryId;
+  // Reset active module and tab selection
+  this.activeModuleId = null;
+  this.activeTab = 'books'; // Reset tab to books by default
 
-      // Update the route params to include the new categoryId
-      this.$router.push({
-        name: this.$route.name, // Keep the same route name
-        params: { courseId, categoryId: selectedCategoryId }, // Update categoryId
-      });
-      this.fetchCategoryDetails().finally(() => {
-    this.categoryLoading = false; // Stop loader
+  // Properly reset category data using Vue 3 reactivity
+  this.category.bookChapters = [];
+  this.category.videoChapters = [];
+  this.category.presentationChapters = [];
+
+  // Ensure Vue detects deep property changes
+  this.category = { ...this.category };
+
+  // Update the route params with the new categoryId
+  this.$router.push({
+    name: this.$route.name, // Keep the same route name
+    params: { courseId, categoryId: selectedCategoryId }, // Update categoryId
   });
-    },
+
+  // Fetch new category details
+  this.fetchCategoryDetails()
+    .finally(() => {
+      this.categoryLoading = false; // Hide loader once data is loaded
+    });
+},
     async fetchBookImages() {
       const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
       const downloadUrl = `${baseUrl}fs/download`;
