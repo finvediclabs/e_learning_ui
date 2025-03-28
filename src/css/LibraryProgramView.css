@@ -38,7 +38,7 @@
 .category-description {
   overflow: hidden;
   font-size: 12px;
-  color: #B1B1B1;
+  /* color: #B1B1B1; */
   display: -webkit-box;
   -webkit-line-clamp: 2; /* Limit to 2 lines */
   -webkit-box-orient: vertical;
@@ -109,7 +109,7 @@
   cursor: pointer;
   font-family: 'Manrope', sans-serif;
   font-size: large;
-  color: #B1B1B1;
+  /* color: #B1B1B1; */
   transition: background-color 0.3s ease;
 }
 .course-details{
@@ -124,17 +124,20 @@
 }
 
 .category-row1:hover {
-  background-color: #B1B1B1; /* Optional hover effect */
-  color:#F5F5F5 !important;
+  /* background-color: #B1B1B1;  */
+  background-color: #f5f5f5; 
+  /* color:#F5F5F5 !important; */
+  color:#000 !important;
   border-radius: 10px;
 }
 .category-row1:hover .category-description {
-  color: #F5F5F5 !important;/* Optional background change */
+  /* color: #F5F5F5 !important; */
+  color: #000 !important;
   border-radius: 10px;
 }
 
 .active-category {
-  background-color: #F5F5F5; /* Active background color */
+  background-color: #F5F5F5; 
   color: #191919; /* Text color for better contrast */
   border-radius: 10px; /* Optional for rounded corners */
 }

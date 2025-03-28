@@ -678,6 +678,9 @@ setAccessPaths() {
       else if (this.$route.path === '/StudentProfile') {
         this.backgroundStyle = 'StudentProfile_backgroundStyle';
       }
+      else if (this.$route.path === '/assignment') {
+        this.backgroundStyle = 'assignments_backgroundStyle';
+      }
       else if (this.$route.path === 'MenuContent') {
         this.backgroundStyle = 'MenuContent_backgroundStyle';
       }
@@ -843,6 +846,13 @@ setAccessPaths() {
   background-size: 100% 100%;
   margin-top:3%;
 }
+
+.assignments_backgroundStyle {
+  background-color: #fff;
+  min-height: 100vh; /* Ensures it covers full screen height */
+  display: flex;
+}
+
 .Elearning_BackgroundStyle {
  background-color: #F6F6F6;
  background-size: 100% 100%;

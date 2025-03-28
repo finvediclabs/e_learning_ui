@@ -31,7 +31,7 @@
 
   <!-- Search Input (Aligned to Right) -->
   <q-input v-model="searchQuery" label="Search Assignments" rounded outlined class="q-ml-xl" style="max-width: 300px;" />
-  <q-btn label="Filter by Date | Status" color="primary" @click="filterDialog = true" class="q-ml-xl" />
+  <q-btn label="Filter by Date | Status"  @click="filterDialog = true" class="q-ml-xl" />
   <q-dialog v-model="filterDialog">
   <q-card style="min-width: 400px;">
     <q-card-section>
@@ -999,6 +999,7 @@ async downloadFileAsPdf() {
 
 <style scoped>
 .assignments {
+  background-color: #fff !important;
   text-align: left;
   padding: 20px;
   padding-top: 0px;
@@ -1147,7 +1148,4 @@ async downloadFileAsPdf() {
 .right{
   border-left: 2px solid #ddd;
 }
-
-
-
 </style>
