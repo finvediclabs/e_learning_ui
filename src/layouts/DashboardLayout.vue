@@ -25,9 +25,9 @@
       <!-- Placeholder for logo -->
       <div class="q-ml-md logo">
             <!-- Logo will be added here later -->
-            <q-item class="logo_in">
-              <q-img :src="new_logo" style="width: 220px;"></q-img>
-        </q-item>
+            <q-item class="logo_in" clickable @click="$router.push('/homeProfile')">
+                  <q-img :src="new_logo" style="width: 220px;"></q-img>
+            </q-item>
           </div>
     </q-item>
 

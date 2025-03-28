@@ -316,6 +316,10 @@ const routes = [
     path: '/:catchAll(.*)*',
     component: () => import('pages/ErrorNotFound.vue')
   },
+  {
+    path: '/home',
+    component: () => import('src/pages/home/profileCard.vue')
+  },
 
 
 ]
