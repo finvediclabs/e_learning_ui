@@ -11,7 +11,7 @@
     <div class="category-row1">
       <span>{{ course.categoryName }}</span><br>
 
-     <span style="font-size: 12px;">{{ course.description }}</span>
+     <span style="font-size: 13px;">{{ course.description }}</span>
     </div>
 
   </li>
@@ -58,7 +58,8 @@
       <!-- Content Tabs -->
      <!-- Books Tab -->
      <div v-if="activeTab === 'books'" class="tab-content row">
-  <div class="row col-12 col-md-10 main-content">
+      <div v-if="loadingBooks" class="loading-text">Loading books...</div>
+  <div v-else class="row col-12 col-md-10 main-content">
     <div
       v-for="book in books"
       :key="book.id"
@@ -83,14 +84,15 @@
 
 <!-- Videos Tab -->
 <div v-if="activeTab === 'videos'" class="tab-content row">
-  <div class="row col-12 col-md-10 main-content">
+  <div v-if="loadingVideos" class="loading-text">Loading videos...</div>
+  <div v-else class="row col-12 col-md-10 main-content">
     <div
       v-for="video in videos"
       :key="video.id"
       class="col-6 col-sm-4 col-lg-4 mb-4 video-card"
     >
       <div class="card h-100">
-        <q-img :src="video.coverPath" alt="Video Cover" class="card-img-top book_img" @click="visitVideo(video)" />
+        <q-img :src="video.coverPath" alt="Video Cover"  class="card-img-top book_img" @click="visitVideo(video)" />
         <div class="card-body">
           <span class="card-title">{{ video.chapterTitle }}</span>
         </div>
@@ -102,14 +104,15 @@
 
 <!-- Presentations Tab -->
 <div v-if="activeTab === 'presentations'" class="tab-content row">
-  <div class="row col-12 col-md-10 main-content">
+  <div v-if="loadingVideos" class="loading-text">Loading videos...</div>
+  <div v-else class="row col-12 col-md-10 main-content">
     <div
       v-for="presentation in presentations"
       :key="presentation.id"
       class="col-6 col-sm-4 col-lg-4 mb-4 presentation-card"
     >
       <div class="card h-100">
-        <q-img :src="presentation.coverPath" alt="Presentation Cover" class="card-img-top book_img" @click="visitPresentation(presentation)" />
+        <q-img :src="presentation.coverPath" alt="Presentation Cover"  class="card-img-top book_img" @click="visitPresentation(presentation)" />
         <div class="card-body">
           <span class="card-title">{{ presentation.chapterTitle }}</span>
         </div>
@@ -147,6 +150,7 @@ export default {
   },
   data() {
     return {
+      loading: true,
       books: [],
       activeTab: 'books', // Default active tab
       activeCategoryId: null,
@@ -206,6 +210,7 @@ created() {
     }
   },
   async fetchProfiles() {
+    this.loading = true;
   try {
     const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
     const response = await this.$api.get(`${baseUrl}api/userprofiles`);
@@ -233,10 +238,14 @@ created() {
   } catch (error) {
     console.error("Error fetching profiles:", error);
     this.error = error;
-  }
+  } finally {
+        this.loading = false;
+      }
 },
 
 async fetchCourseDetails() {
+  this.loading = true;
+  try {
   const courseId = this.$route.params.id; // ✅ Extract the ID properly
   console.log("Course ID:", courseId); // Debugging
 
@@ -245,8 +254,7 @@ async fetchCourseDetails() {
 
   console.log('API URL:', apiUrl);
 
-  try {
-    this.loading = true;
+
     const response = await this.$api.get(apiUrl);
 
     if (response.data) {
@@ -275,6 +283,9 @@ async fetchCourseDetails() {
   }
 },
 async fetchCategoryDetails() {
+  this.categoryLoading = true;
+  try {
+    
   const courseId = this.$route.params.id; // ✅ Extract course ID correctly
   console.log("Course ID:", courseId); // Debugging
 
@@ -283,8 +294,7 @@ async fetchCategoryDetails() {
 
   console.log('API URL:', apiUrl); // Debugging
 
-  try {
-    this.loading = true;
+  
     const response = await this.$api.get(apiUrl);
 
     if (response.data) {
@@ -316,7 +326,7 @@ async fetchCategoryDetails() {
     this.error = 'Error loading category details. Please try again later.';
     console.error(error);
   } finally {
-    this.loading = false;
+    this.categoryLoading = false;
   }
 },
     handleCategoryClick(selectedCategoryId) {
@@ -434,6 +444,31 @@ async fetchCategoryDetails() {
       );
     },
 
+    async loadMediaAssets() {
+      await Promise.all([
+        this.loadImages('books', 'bookChapters', 'chapterImagePath', this.DummyBook),
+        this.loadImages('videos', 'videoChapters', 'videoCoverPath', this.DummyVideo),
+        this.loadImages('presentations', 'presentationChapters', 'presentationCoverPath', this.DummyPresentation)
+      ]);
+    },
+
+    async loadImages(stateKey, categoryKey, pathKey, defaultImage) {
+      try {
+        this[stateKey] = await Promise.all(this.category[categoryKey].map(async (item) => {
+          try {
+            const response = await this.$api.post(`/fs/download`, { filename: item[pathKey] }, { responseType: 'blob' });
+            return { ...item, imagePath: URL.createObjectURL(new Blob([response.data])) };
+          } catch {
+            return { ...item, imagePath: defaultImage };
+          }
+        }));
+      } catch (error) {
+        console.error(`Error fetching ${stateKey} images:`, error);
+      }
+    },
+    
+
+
     visitChapter(chapter) {
       // console.log('Chapter File Path:', chapter.chapterFilePath); // Log the chapter file path
 
@@ -506,4 +541,3 @@ async fetchCategoryDetails() {
   },
 };
 </script>
-

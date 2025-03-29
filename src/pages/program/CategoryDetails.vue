@@ -2,7 +2,7 @@
   <div class="row parent-container">
     <div class="col-12 col-md-4 left-container mb-3">
       <div class="chapter-categories">
-  <div class="course-details">
+  <div class="course-details" >
     <span>Course Details</span>
   </div>
 
@@ -11,18 +11,17 @@
       <div
         class="category-row1"
         :class="{ 'active-category': course.catgoryId[index] === activeCategoryId }"
-
       >
       <div class="row col-12"  @click="handleCategoryClick(course.catgoryId[index])">
-        <div class="col-4">
+        <div class="col-4 left_img">
           <img
-  v-if="course.categoryImagePaths && course.categoryImagePaths[index] && course.catgoryId[index] === activeCategoryId"
-  :src="course.categoryImagePaths[index]"
-  alt="Category Image"
-  class="category-image"
-/>
+    v-if="course.categoryImagePaths && course.categoryImagePaths[index]"
+    :src="course.categoryImagePaths[index]"
+    alt="Category Image"
+    class="category-image"
+  />
         </div>
-        <div class="col-8">
+        <div class="col-8 right_text" >
           <div class="row">
             <span>{{ name }}</span><br>
           </div>

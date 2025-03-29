@@ -152,3 +152,11 @@
     border-radius: 20px; /* Adjust the radius value as needed */
    }
 }
+
+.card-body{
+  margin-top: 10px;
+}
+
+.card-img-top {
+  border-radius: 10px !important;
+}

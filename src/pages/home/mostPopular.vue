@@ -4,7 +4,11 @@
     <span class="text-black" style="width: 100%; font-size: x-large;color: #141414; font-weight: 600;margin-left: 1%;">Popular Courses</span>
   </div>
 
-  <div class="container mt-4" style="width: 100%;padding-left: 1%;padding-right: 1%;" >
+  <div v-if="isLoading" class="loading-container">
+      <q-spinner color="primary" size="40px" />
+    </div>
+
+  <div v-else class="container mt-4" style="width: 100%;padding-left: 1%;padding-right: 1%;" >
     <div class="row d-flex justify-content-center align-items-center w-100" style="width: 100%;">
       <div
         v-for="category in filteredCategories"
@@ -47,6 +51,7 @@ export default {
     return {
       bgImage: mostPopularBg,
       categories: [],
+      isLoading: true, 
     };
   },
   computed: {
@@ -57,11 +62,20 @@ export default {
         .slice(0, 4);
     },
   },
-  mounted() {
+  created() {
     this.fetchCategories();
   },
   methods: {
+    async preloadImage(url) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.src = url;
+    img.onload = () => resolve(url);
+    img.onerror = () => resolve(require('@/assets/dummy_book.png')); // Fallback image
+  });
+},
     async fetchCategories() {
+      this.isLoading = true;
   try {
     const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
     const getCourse = baseUrl + 'api/chapterCategoriess/all';
@@ -71,42 +85,43 @@ export default {
 
     // Process categories and fetch images
     this.categories = await Promise.all(
-      data.map(async (category) => {
-        let imageUrl = category.imagePath || null;
+  data.map(async (category) => {
+    let imageUrl = category.imagePath || require('@/assets/dummy_book.png');
+    
+    if (imageUrl.startsWith(`${baseUrl}fs/download/`)) {
+      // Fetch the image
+      const downloadUrl = `${baseUrl}fs/download`;
+      const filename = imageUrl.replace(`${baseUrl}fs/download/`, '');
 
-        if (imageUrl && imageUrl.startsWith(`${baseUrl}fs/download/`)) {
-          console.log(`Fetching cover image for: ${category.categoryName}`);
-          const downloadUrl = `${baseUrl}fs/download`;
-          const filename = imageUrl.replace(`${baseUrl}fs/download/`, '');
+      try {
+        const formData = new FormData();
+        formData.append('filename', filename);
 
-          try {
-            const formData = new FormData();
-            formData.append('filename', filename);
+        const downloadResponse = await fetch(downloadUrl, {
+          method: 'POST',
+          body: formData,
+        });
 
-            const downloadResponse = await fetch(downloadUrl, {
-              method: 'POST',
-              body: formData,
-            });
-
-            if (!downloadResponse.ok) {
-              throw new Error(`HTTP error! status: ${downloadResponse.status}`);
-            }
-
-            const blob = await downloadResponse.blob();
-            imageUrl = window.URL.createObjectURL(blob);
-
-            console.log(`Fetched cover image for: ${category.categoryName}`);
-          } catch (error) {
-            console.error(`Error fetching cover image for: ${category.categoryName}`, error);
-            imageUrl = require('@/assets/dummy_book.png'); // Fallback image
-          }
+        if (!downloadResponse.ok) {
+          throw new Error(`HTTP error! status: ${downloadResponse.status}`);
         }
 
-        return { ...category, imagePath: imageUrl };
-      })
-    );
+        const blob = await downloadResponse.blob();
+        imageUrl = await this.preloadImage(window.URL.createObjectURL(blob));
+      } catch (error) {
+        console.error(`Error fetching cover image for: ${category.categoryName}`, error);
+        imageUrl = require('@/assets/dummy_book.png'); // Fallback image
+      }
+    }
+
+    return { ...category, imagePath: imageUrl };
+  })
+);
+
   } catch (error) {
     console.error("Error fetching categories:", error);
+  } finally {
+    this.isLoading = false; // Hide loader
   }
 },
   },
