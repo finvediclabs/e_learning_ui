@@ -250,7 +250,7 @@ download(lab) {
     if (lab.title === "Fintech Sandbox") {
         rdpContent = `full address:s:fnvedicprodlabs2201442271007.eastus.cloudapp.azure.com:58082
 prompt for credentials:i:1
-username:s:srikanth001\\srikanth
+username:s:srikanth001\\fnvedicuser
 connection type:i:6
 networkautodetect:i:1
 disable wallpaper:i:0
@@ -261,9 +261,9 @@ disable menu anims:i:1
 disable themes:i:0`;
         fileName = "FinTech_Sandbox.rdp";
     } else if (lab.title === "Maang Sandbox") {
-        rdpContent = `full address:s:fnvedicprodlabs2201442271007.eastus.cloudapp.azure.com:58082
+        rdpContent = `full address:s:fnvedicprodlabs2201442271007.eastus.cloudapp.azure.com:56638
 prompt for credentials:i:1
-username:s:srikanth002\\srikanth
+username:s:finvedic\\fnvedicuser
 connection type:i:6
 networkautodetect:i:1
 disable wallpaper:i:0
