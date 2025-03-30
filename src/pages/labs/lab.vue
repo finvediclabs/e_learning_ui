@@ -16,7 +16,12 @@
                   <q-card-section>
                     <div class="action-buttons">
                       <q-btn label="Restart" color="" outline class="q-mr-sm act-btn" />
-                      <q-btn  :label="isCreatingVm ? '' : 'Start'"  :loading="isCreatingVm" class="act-btn"   @click="handleStart(lab.title)"  />
+                      <q-btn
+  :label="['Fintech Sandbox', 'Mang Sandbox'].includes(lab.title) ? 'Download' : (isCreatingVm ? '' : 'Start')"
+  :loading="isCreatingVm"
+  class="act-btn"
+  @click="['Fintech Sandbox', 'Mang Sandbox'].includes(lab.title) ? download(lab) : handleStart(lab.title)"
+/>
                     </div>
                   </q-card-section>
                 </q-card>
@@ -34,7 +39,12 @@
                 <q-card-section>
                   <div class="action-buttons">
                     <q-btn label="Restart" color="" outline class="q-mr-sm act-btn" />
-                    <q-btn  :label="isCreatingVm ? '' : 'Start'"  :loading="isCreatingVm" class="act-btn"   @click="handleStart(lab.title)"  />
+                    <q-btn
+  :label="['Fintech Sandbox', 'Mang Sandbox'].includes(lab.title) ? 'Download' : (isCreatingVm ? '' : 'Start')"
+  :loading="isCreatingVm"
+  class="act-btn"
+  @click="['Fintech Sandbox', 'Mang Sandbox'].includes(lab.title) ? download(lab) : handleStart(lab.title)"
+/>
                   </div>
                 </q-card-section>
               </q-card>
@@ -60,7 +70,7 @@
 
 </div>
 </div>
-<fin-portlet-item>
+<!-- <fin-portlet-item>
         <div class="scroll_on">
           <div class="row" style="width: 100%;margin-left: auto;margin-right: auto;">
             <div class="col-12 col-sm-6 col-md-6 col-lg-6 q-pa-lg" v-for="(lab, index) in filteredLabs" :key="lab.id"
@@ -112,7 +122,7 @@
 
           </div>
         </div>
-      </fin-portlet-item>
+      </fin-portlet-item> -->
 </template>
 
 <script>
@@ -160,12 +170,13 @@ export default {
       labImg: windows,
       labsData: [],
       labs: [
+      { title: "Fintech Sandbox", img: extra_lab1 },
+      { title: "Mang Sandbox", img: extra_lab2 },
         { title: "Tech Sandbox", img: windows_lab },
         { title: "Linux Sandbox", img: ubuntu_lab },
         { title: "MySQL Server", img: MySql_lab },
         { title: "Redis Server", img: redis_lab },
-        { title: "Fintech Sandbox", img: extra_lab1 },
-        { title: "Maang Sandbox", img: extra_lab2 },
+
         { title: "Extra Lab 1", img: extra_lab3 }
       ],
       tools: [
@@ -233,60 +244,50 @@ export default {
   this.createVm(selectedOS);
 },
 download(lab) {
-      const sessionStore = useSessionStore(); // Access session store
-      const profileStore = useProfileStore();
+    let rdpContent = "";
+    let fileName = "";
 
-      console.log("profile username:", profileStore.user.username);
-      console.log("lab username:", lab.userName);
-
-      // Ensure profileStore.user is defined
-      if (!profileStore.user) {
-        this.showMsg('User profile is not available.', 'negative');
+    if (lab.title === "Fintech Sandbox") {
+        rdpContent = `full address:s:fnvedicprodlabs2201442271007.eastus.cloudapp.azure.com:58082
+prompt for credentials:i:1
+username:s:srikanth001\\srikanth
+connection type:i:6
+networkautodetect:i:1
+disable wallpaper:i:0
+allow font smoothing:i:0
+allow desktop composition:i:0
+disable full window drag:i:1
+disable menu anims:i:1
+disable themes:i:0`;
+        fileName = "FinTech_Sandbox.rdp";
+    } else if (lab.title === "Mang Sandbox") {
+        rdpContent = `full address:s:mangvedicprodlabs2201442271007.eastus.cloudapp.azure.com:59082
+prompt for credentials:i:1
+username:s:srikanth002\\srikanth
+connection type:i:6
+networkautodetect:i:1
+disable wallpaper:i:0
+allow font smoothing:i:0
+allow desktop composition:i:0
+disable full window drag:i:1
+disable menu anims:i:1
+disable themes:i:0`;
+        fileName = "Mang_Sandbox.rdp";
+    } else {
+        console.warn("No RDP available for this lab.");
         return;
-      }
+    }
 
-      // Check if the user is an Admin
-      const isAdmin = profileStore.user.roles.some(role => role.name === 'Admin');
-      if (isAdmin) {
-        console.log('User is Admin, download allowed');
-      } else {
-        // If the user is not an Admin, check if the profile username matches the lab username
-        if (profileStore.user.username !== lab.userName) {
-          this.showMsg('You are not authorized to download this file.', 'negative');
-          return; // Exit the method if usernames don't match
-        }
-      }
-
-      const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
-      const downloadUrl = `${baseUrl}download/${lab.name}`;
-
-      // Fetch the RDP file with authorization
-      fetch(downloadUrl, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${sessionStore.token}` // Include the token from session store
-        }
-      })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          return response.blob(); // Convert response to Blob
-        })
-        .then(blob => {
-          const url = URL.createObjectURL(blob); // Create a URL for the blob
-          const a = document.createElement('a'); // Create an anchor element
-          a.href = url; // Set the href to the blob URL
-          a.download = `${lab.name}.rdp`; // Set the file name for download with .rdp extension
-          document.body.appendChild(a); // Append anchor to body
-          a.click(); // Programmatically click the anchor to trigger download
-          a.remove(); // Clean up by removing the anchor
-          URL.revokeObjectURL(url); // Free up memory
-        })
-        .catch(error => {
-          console.error('There was a problem with the fetch operation:', error.message);
-        });
-    },
+    const blob = new Blob([rdpContent], { type: "application/x-rdp" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+},
     async shutdown(lab) {
       const profileStore = useProfileStore();
       const profileUsername = profileStore.user.username;
