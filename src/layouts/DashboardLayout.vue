@@ -999,11 +999,21 @@ background-attachment: fixed;
 .q-toolbar {
   font-family: 'Poppins', sans-serif;
 }
-.second_navbar{
+.second_navbar { 
   color: #ffff;
-  background-color: #F6F6F6;
+  background-color: #F6F6F6 !important; 
   width: 100%;
+  height: 15px; 
+  border-top: 2px solid blue;
+  min-height: 15px !important; 
+  max-height: 15px !important; 
+  line-height: 15px; 
+  box-shadow: none !important; 
+  border-bottom: none !important;
+  overflow: hidden; 
 }
+
+
 .mainHeader {
   background: #fff;
   /* background: #5479F7; */
