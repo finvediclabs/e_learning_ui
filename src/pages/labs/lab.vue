@@ -181,8 +181,8 @@ export default {
       ],
       tools: [
     { title: "Gurukul Dojo", img: dojo, link: "https://gurukul.finvedic.com/dojo/" },
-    { title: "Gurukul Whiteboard", img: white_board, link: "#" },
-    { title: "Gurukul Notebook", img: jupyter, link: "#" }
+    { title: "Gurukul Whiteboard", img: white_board, link: "#"},
+    { title: "Gurukul Notebook", img: jupyter, link: "https://jupyter.finvedic.in/" }
 ]
     };
   },
