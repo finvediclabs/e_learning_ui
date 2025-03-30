@@ -1,7 +1,7 @@
 <template>
     <div class="sandbox q-px-lg q-mx-md">
         <div class="row">
-      <div class="col-12">
+      <div class="col-12 q-pt-lg">
         <span class="text-h5 text-bold">Labs</span>
         <div class="carousel-container q-mt-md" v-if="!isMobile">
           <q-btn icon="arrow_left" flat @click="prevSlide" class="arrow-btn" />
