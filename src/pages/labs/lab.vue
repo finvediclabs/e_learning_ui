@@ -17,10 +17,10 @@
                     <div class="action-buttons">
                       <q-btn label="Restart" color="" outline class="q-mr-sm act-btn" />
                       <q-btn
-  :label="['Fintech Sandbox', 'Mang Sandbox'].includes(lab.title) ? 'Download' : (isCreatingVm ? '' : 'Start')"
+  :label="['Fintech Sandbox', 'Maang Sandbox'].includes(lab.title) ? 'Download' : (isCreatingVm ? '' : 'Start')"
   :loading="isCreatingVm"
   class="act-btn"
-  @click="['Fintech Sandbox', 'Mang Sandbox'].includes(lab.title) ? download(lab) : handleStart(lab.title)"
+  @click="['Fintech Sandbox', 'Maang Sandbox'].includes(lab.title) ? download(lab) : handleStart(lab.title)"
 />
                     </div>
                   </q-card-section>
@@ -40,10 +40,10 @@
                   <div class="action-buttons">
                     <q-btn label="Restart" color="" outline class="q-mr-sm act-btn" />
                     <q-btn
-  :label="['Fintech Sandbox', 'Mang Sandbox'].includes(lab.title) ? 'Download' : (isCreatingVm ? '' : 'Start')"
+  :label="['Fintech Sandbox', 'Maang Sandbox'].includes(lab.title) ? 'Download' : (isCreatingVm ? '' : 'Start')"
   :loading="isCreatingVm"
   class="act-btn"
-  @click="['Fintech Sandbox', 'Mang Sandbox'].includes(lab.title) ? download(lab) : handleStart(lab.title)"
+  @click="['Fintech Sandbox', 'Maang Sandbox'].includes(lab.title) ? download(lab) : handleStart(lab.title)"
 />
                   </div>
                 </q-card-section>
@@ -171,7 +171,7 @@ export default {
       labsData: [],
       labs: [
       { title: "Fintech Sandbox", img: extra_lab1 },
-      { title: "Mang Sandbox", img: extra_lab2 },
+      { title: "Maang Sandbox", img: extra_lab2 },
         { title: "Tech Sandbox", img: windows_lab },
         { title: "Linux Sandbox", img: ubuntu_lab },
         { title: "MySQL Server", img: MySql_lab },
@@ -260,8 +260,8 @@ disable full window drag:i:1
 disable menu anims:i:1
 disable themes:i:0`;
         fileName = "FinTech_Sandbox.rdp";
-    } else if (lab.title === "Mang Sandbox") {
-        rdpContent = `full address:s:mangvedicprodlabs2201442271007.eastus.cloudapp.azure.com:59082
+    } else if (lab.title === "Maang Sandbox") {
+        rdpContent = `full address:s:fnvedicprodlabs2201442271007.eastus.cloudapp.azure.com:58082
 prompt for credentials:i:1
 username:s:srikanth002\\srikanth
 connection type:i:6
@@ -272,7 +272,7 @@ allow desktop composition:i:0
 disable full window drag:i:1
 disable menu anims:i:1
 disable themes:i:0`;
-        fileName = "Mang_Sandbox.rdp";
+        fileName = "Maang_Sandbox.rdp";
     } else {
         console.warn("No RDP available for this lab.");
         return;
