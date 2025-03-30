@@ -37,12 +37,15 @@
   </template>
 
   <script>
+  import BackImg from 'src/assets/BackImg.png';
+  
   export default {
     name: "NotificationCard",
     data() {
       return {
+
         notifications: [
-          { img: "src/assets/BackImg.png", key: "New Course", title: "Data Science Available" },
+          { img: BackImg , key: "New Course", title: "Data Science Available" },
         //   { img: "src/assets/BG_New.png", key: "Update", title: "Python Course Updated" }
         ],
       };
