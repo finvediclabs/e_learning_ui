@@ -164,9 +164,9 @@ export default {
         { title: "Linux Sandbox", img: ubuntu_lab },
         { title: "MySQL Server", img: MySql_lab },
         { title: "Redis Server", img: redis_lab },
-        { title: "Extra Lab 1", img: extra_lab1 },
-        { title: "Extra Lab 2", img: extra_lab2 },
-        { title: "Extra Lab 3", img: extra_lab3 }
+        { title: "Fintech Sandbox", img: extra_lab1 },
+        { title: "Maang Sandbox", img: extra_lab2 },
+        { title: "Extra Lab 1", img: extra_lab3 }
       ],
       tools: [
     { title: "Gurukul Dojo", img: dojo, link: "https://gurukul.finvedic.com/dojo/" },

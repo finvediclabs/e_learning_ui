@@ -3,15 +3,15 @@
     <div class="col-12 col-md-4 left-container mb-3">
       <div class="chapter-categories">
         <div class="course-details">
-          <span>Course Details</span>
+          <span class="text-weight-bolder">Course Details</span>
         </div>
 
         <ul>
   <li class="category-item1">
     <div class="category-row1">
-      <span>{{ course.categoryName }}</span><br>
+      <span class="text-weight-bold" >{{ course.categoryName }}</span><br>
 
-     <span style="font-size: 13px;">{{ course.description }}</span>
+     <span class="text-weight-light" style="font-size: 14px;">{{ course.description }}</span>
     </div>
 
   </li>

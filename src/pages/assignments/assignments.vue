@@ -1032,7 +1032,8 @@ async downloadFileAsPdf() {
 }
 
 .table th {
-  background-color: #f4f4f4;
+  /* background-color: #f4f4f4; */
+  background-color: #e7f0ff;
 }
 .table td {
   background-color: #fff;
@@ -1140,12 +1141,19 @@ async downloadFileAsPdf() {
 }
 
 .selected-course {
-  background-color: #F5F6F6 !important; 
-  color: #000 !important;
+  /* background-color: #F5F6F6 !important;  */
+  background-color: #e7f0ff !important; 
+  color: #4e5bf8 !important;
   /* border-radius: 4px; */
 }
 
 .right{
   border-left: 2px solid #ddd;
 }
+
+.q-item:hover {
+  background-color: #e7f0ff !important; 
+  color: #4e5bf8 !important; 
+}
+
 </style>

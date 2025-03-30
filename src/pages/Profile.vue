@@ -122,7 +122,8 @@ ul {
   width: 100%;
   padding: 14px 18px;
   text-align: left;
-  background: linear-gradient(to right, #f9fafb, #eef1f5);
+  /* background: linear-gradient(to right, #f9fafb, #eef1f5); */
+  background: none;
   color: #333;
   font-size: 15px;
   font-weight: 500;
@@ -132,13 +133,15 @@ ul {
   cursor: pointer;
   outline: none;
   position: relative;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); */
 }
 
 .list-link:hover, .list-link.active {
-  background: linear-gradient(to right, #e2e8f0, #cbd5e1);
-  color: #1a202c;
-  font-weight: 600;
+  /* background: linear-gradient(to right, #e2e8f0, #cbd5e1); */
+  background: #e7f0ff;
+  color:  #4e5bf8;
+  /* color: #1a202c; */
+  font-weight: 500;
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }

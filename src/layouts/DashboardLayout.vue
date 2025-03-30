@@ -139,9 +139,15 @@
         </q-avatar>
 
   </q-toolbar>
-  <!-- <q-toolbar v-if="!isMobile" class="second_navbar q-pr-lg">
 
-  <div class="nav-bar row items-center">
+  <!-- second nav -->
+  <q-toolbar v-if="!isMobile" class="second_navbar q-pr-lg scrollable-toolbar">
+</q-toolbar>
+
+
+ <!-- <q-toolbar v-if="!isMobile" class="second_navbar q-pr-lg">
+
+   <div class="nav-bar row items-center">
     <template v-for="(module, index) in otherModules" :key="index">
       <q-btn
         v-if="!module.menu"
@@ -181,7 +187,7 @@
         </q-list>
       </q-btn-dropdown>
     </template>
-  </div>
+  </div> 
 </q-toolbar> -->
 
 </q-header>
@@ -1208,4 +1214,7 @@ color: #7D7D7D !important;
   margin: 0px 10px;
   font-size:medium;
 } */
+
+
+
 </style>
