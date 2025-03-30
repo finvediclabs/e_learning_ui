@@ -130,7 +130,7 @@ import windows_lab from "src/assets/windows_lab.jpg";
 import ubuntu_lab from "src/assets/ubuntu_lab.jpg";
 import MySql_lab from "src/assets/MySql_lab.jpg";
 import redis_lab from "src/assets/redis_lab.jpg";
-import extra_lab1 from "src/assets/extra_lab1.jpg";
+import extra_lab1 from "src/assets/fintech_banks.jpeg";
 import extra_lab2 from "src/assets/extra_lab2.jpg";
 import FinPortletItem from "src/components/Portlets/FinPortletItem.vue";
 import circ_d1 from "src/assets/Circ_D1.png";
