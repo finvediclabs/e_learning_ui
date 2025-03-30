@@ -171,7 +171,7 @@ export default {
       labsData: [],
       labs: [
       { title: "Fintech Sandbox", img: extra_lab1 },
-      { title: "Maang Sandbox", img: extra_lab2 },
+      { title: "MAANG Sandbox", img: extra_lab2 },
         { title: "Tech Sandbox", img: windows_lab },
         { title: "Linux Sandbox", img: ubuntu_lab },
         { title: "MySQL Server", img: MySql_lab },
