@@ -17,10 +17,10 @@
                     <div class="action-buttons">
                       <q-btn label="Restart" color="" outline class="q-mr-sm act-btn" />
                       <q-btn
-  :label="['Fintech Sandbox', 'Maang Sandbox'].includes(lab.title) ? 'Download' : (isCreatingVm ? '' : 'Start')"
+  :label="['Fintech Sandbox', 'MAANG Sandbox'].includes(lab.title) ? 'Download' : (isCreatingVm ? '' : 'Start')"
   :loading="isCreatingVm"
   class="act-btn"
-  @click="['Fintech Sandbox', 'Maang Sandbox'].includes(lab.title) ? download(lab) : handleStart(lab.title)"
+  @click="['Fintech Sandbox', 'MAANG Sandbox'].includes(lab.title) ? download(lab) : handleStart(lab.title)"
 />
                     </div>
                   </q-card-section>
@@ -40,10 +40,10 @@
                   <div class="action-buttons">
                     <q-btn label="Restart" color="" outline class="q-mr-sm act-btn" />
                     <q-btn
-  :label="['Fintech Sandbox', 'Maang Sandbox'].includes(lab.title) ? 'Download' : (isCreatingVm ? '' : 'Start')"
+  :label="['Fintech Sandbox', 'MAANG Sandbox'].includes(lab.title) ? 'Download' : (isCreatingVm ? '' : 'Start')"
   :loading="isCreatingVm"
   class="act-btn"
-  @click="['Fintech Sandbox', 'Maang Sandbox'].includes(lab.title) ? download(lab) : handleStart(lab.title)"
+  @click="['Fintech Sandbox', 'MAANG Sandbox'].includes(lab.title) ? download(lab) : handleStart(lab.title)"
 />
                   </div>
                 </q-card-section>
@@ -260,7 +260,7 @@ disable full window drag:i:1
 disable menu anims:i:1
 disable themes:i:0`;
         fileName = "FinTech_Sandbox.rdp";
-    } else if (lab.title === "Maang Sandbox") {
+    } else if (lab.title === "MAANG Sandbox") {
         rdpContent = `full address:s:fnvedicprodlabs2201442271007.eastus.cloudapp.azure.com:56638
 prompt for credentials:i:1
 username:s:finvedic\\fnvedicuser
@@ -272,7 +272,7 @@ allow desktop composition:i:0
 disable full window drag:i:1
 disable menu anims:i:1
 disable themes:i:0`;
-        fileName = "Maang_Sandbox.rdp";
+        fileName = "MAANG_Sandbox.rdp";
     } else {
         console.warn("No RDP available for this lab.");
         return;
