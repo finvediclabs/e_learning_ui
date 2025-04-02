@@ -152,39 +152,49 @@
 <!-- Videos Tab -->
 <div v-if="activeTab === 'videos'" class="tab-content row">
   <div class="row col-12 col-md-10 main-content">
-    <div
-      v-for="video in videos"
-      :key="video.id"
-      class="col-6 col-sm-4 col-lg-4 mb-4 video-card"
-    >
-      <div class="card h-100">
-        <q-img :src="video.coverPath" alt="Video Cover" class="card-img-top book_img" @click="visitVideo(video)" />
-        <div class="card-body">
-          <span class="card-title">{{ video.chapterTitle }}</span>
+    <div v-for="group in videos" :key="group.videoId" class="col-12">
+      <div class="row  breakable-border" >
+        <div
+          v-for="video in group.videos"
+          :key="video.id"
+          class="col-6 col-sm-4 col-lg-4 mb-4 video-card"
+        >
+          <div class="card h-100">
+            <q-img :src="video.coverPath" alt="Video Cover" class="card-img-top book_img" @click="visitVideo(video)" />
+            <div class="card-body">
+              <span class="card-title">{{ video.chapterTitle }}</span>
+            </div>
+          </div>
         </div>
       </div>
+
+      <div class="mb-4"></div> <!-- Space between different videoId groups -->
     </div>
   </div>
-  <div class="col-1  d-none d-md-block"></div>
 </div>
 
 <!-- Presentations Tab -->
 <div v-if="activeTab === 'presentations'" class="tab-content row">
   <div class="row col-12 col-md-10 main-content">
-    <div
-      v-for="presentation in presentations"
-      :key="presentation.id"
-      class="col-6 col-sm-4 col-lg-4 mb-4 presentation-card"
-    >
-      <div class="card h-100">
-        <q-img :src="presentation.coverPath" alt="Presentation Cover" class="card-img-top book_img" @click="visitPresentation(presentation)" />
-        <div class="card-body">
-          <span class="card-title">{{ presentation.chapterTitle }}</span>
+    <div v-for="group in presentations" :key="group.presentationId" class="col-12">
+      <div class="row breakable-border">
+        <div
+          v-for="presentation in group.presentations"
+          :key="presentation.id"
+          class="col-6 col-sm-4 col-lg-4 mb-4 presentation-card"
+        >
+          <div class="card h-100">
+            <q-img :src="presentation.coverPath" alt="Presentation Cover" class="card-img-top book_img" @click="visitPresentation(presentation)" />
+            <div class="card-body">
+              <span class="card-title">{{ presentation.chapterTitle }}</span>
+            </div>
+          </div>
         </div>
       </div>
+
+      <div class="mb-4"></div> <!-- Space between different presentationId groups -->
     </div>
   </div>
-  <div class="col-1  d-none d-md-block"></div>
 </div>
 
 
@@ -435,6 +445,7 @@ async fetchCategoryDetails() {
       this.category.videoChapters = categoryData.videoChapters || [];
       this.category.presentationChapters = categoryData.presentationChapters || [];
 
+
       // Fetch dynamic images for all sections
       await Promise.all([
         this.fetchBookImages(),
@@ -542,11 +553,23 @@ handleCategoryClick(selectedCategoryId) {
     },
 
     async fetchVideoImages() {
-      const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
-      const downloadUrl = `${baseUrl}fs/download`;
+  const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
+  const downloadUrl = `${baseUrl}fs/download`;
 
-      this.videos = await Promise.all(
-        this.category.videoChapters.map(async (video) => {
+  // Grouping videoChapters by videoId
+  const groupedVideos = this.category.videoChapters.reduce((acc, video) => {
+    if (!acc[video.videoId]) {
+      acc[video.videoId] = [];
+    }
+    acc[video.videoId].push(video);
+    return acc;
+  }, {});
+
+  // Process videos and fetch images
+  this.videos = await Promise.all(
+    Object.entries(groupedVideos).map(async ([videoId, videoList]) => {
+      const processedVideos = await Promise.all(
+        videoList.map(async (video) => {
           const formData = new FormData();
           const removePrefix = `${baseUrl}fs/download/`;
           const filename = video.videoCoverPath.replace(removePrefix, '');
@@ -558,27 +581,36 @@ handleCategoryClick(selectedCategoryId) {
             const blob = new Blob([response.data]);
             const url = window.URL.createObjectURL(blob);
 
-            return {
-              ...video,
-              coverPath: url, // Dynamic video cover path
-            };
+            return { ...video, coverPath: url };
           } catch (error) {
             console.error(`Error fetching video cover: ${video.chapterTitle}`, error);
-            return {
-              ...video,
-              coverPath: this.DummyVideo, // Fallback video cover
-            };
+            return { ...video, coverPath: this.DummyVideo };
           }
         })
       );
-    },
+      return { videoId, videos: processedVideos };
+    })
+  );
+},
 
-    async fetchPresentationImages() {
-      const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
-      const downloadUrl = `${baseUrl}fs/download`;
+async fetchPresentationImages() {
+  const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
+  const downloadUrl = `${baseUrl}fs/download`;
 
-      this.presentations = await Promise.all(
-        this.category.presentationChapters.map(async (presentation) => {
+  // Grouping presentations by presentationId
+  const groupedPresentations = this.category.presentationChapters.reduce((acc, presentation) => {
+    if (!acc[presentation.presentationId]) {
+      acc[presentation.presentationId] = [];
+    }
+    acc[presentation.presentationId].push(presentation);
+    return acc;
+  }, {});
+
+  // Process presentations and fetch images
+  this.presentations = await Promise.all(
+    Object.entries(groupedPresentations).map(async ([presentationId, presentationList]) => {
+      const processedPresentations = await Promise.all(
+        presentationList.map(async (presentation) => {
           const formData = new FormData();
           const removePrefix = `${baseUrl}fs/download/`;
           const filename = presentation.presentationCoverPath.replace(removePrefix, '');
@@ -590,20 +622,17 @@ handleCategoryClick(selectedCategoryId) {
             const blob = new Blob([response.data]);
             const url = window.URL.createObjectURL(blob);
 
-            return {
-              ...presentation,
-              coverPath: url, // Dynamic presentation cover path
-            };
+            return { ...presentation, coverPath: url };
           } catch (error) {
             console.error(`Error fetching presentation cover: ${presentation.chapterTitle}`, error);
-            return {
-              ...presentation,
-              coverPath: this.DummyPresentation, // Fallback presentation cover
-            };
+            return { ...presentation, coverPath: this.DummyPresentation };
           }
         })
       );
-    },
+      return { presentationId, presentations: processedPresentations };
+    })
+  );
+},
 
     visitChapter(chapter) {
       // console.log('Chapter File Path:', chapter.chapterFilePath); // Log the chapter file path
