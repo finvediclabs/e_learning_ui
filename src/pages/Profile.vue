@@ -1,47 +1,37 @@
 <template>
-  <div class="flex h-screen">
-    <!-- Sidebar -->
-    <div class="w-64 bg-white shadow-md h-full p-4 fixed">
-      <!-- Profile Section -->
-      <!-- <div class="flex items-center space-x-3 pb-4 border-b">
-        <img class="w-12 h-12 rounded-full" :src="user.profileImage" alt="User Image" />
-        <div>
-          <h2 class="text-lg font-semibold">{{ user.name }}</h2>
-          <p class="text-gray-500 text-sm">{{ user.email }}</p>
-        </div>
-      </div> -->
-
-      <!-- Menu List (Sidebar) -->
-      <ul class="mt-4">
-        <li v-for="item in menuItems" :key="item.name" class="list-item">
-          <button @click="selectedMenu = item.name"
-                  class="list-link"
-                  :class="{ 'active': selectedMenu === item.name }">
-            {{ item.name }}
-          </button>
-        </li>
-      </ul>
-    </div>
-
-    <!-- Main Content Area -->
-    <div class="flex-1 main-content  " style="width: 100% !important;">
-      <!-- Top Navigation Bar -->
-      <div class="top-nav">
-        <button v-for="item in menuItems" :key="item.name"
-                @click="selectedMenu = item.name"
-                class="menu-button"
-                :class="{ 'active': selectedMenu === item.name }"
-                style="margin-left: 20px;">
+<div class="row" style="display: flex; width: 100%;">
+  <!-- Sidebar (col-2) -->
+  <div class="col-2" style="flex: 2;background-color: #ffff;height: 100vh;">
+    <ul class="mt-4">
+      <li v-for="item in menuItems" :key="item.name" class="list-item">
+        <button @click="selectedMenu = item.name"
+                class="list-link"
+                :class="{ 'active': selectedMenu === item.name }">
           {{ item.name }}
         </button>
-      </div>
-
-      <!-- Content Section -->
-      <div class="content-area">
-        <MenuContent :selectedMenu="selectedMenu" />
-      </div>
-    </div>
+      </li>
+    </ul>
   </div>
+
+  <!-- Main Content (col-10) -->
+  <div class="col-10" style="flex: 10;">
+    <div class="top-nav row">
+      <button v-for="item in menuItems" :key="item.name"
+              @click="selectedMenu = item.name"
+              class="menu-button"
+              :class="{ 'active': selectedMenu === item.name }"
+              style="margin-left: 20px;">
+        {{ item.name }}
+      </button>
+    </div>
+    <div class="row" style="width: 100%; display: flex;">
+  <div class="content-area" style="width: 100%;">
+    <MenuContent :selectedMenu="selectedMenu" />
+  </div>
+</div>
+  </div>
+</div>
+
 </template>
 
 <script setup>
@@ -71,16 +61,16 @@ const fetchUserData = async () => {
     if (response.data.success) {
       const data = response.data.data;
       let imageUrl = '';
-      
+
       if (data.uploadDocumentPath) {
         const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
         const removeImagePath = baseUrl + 'fs/download/';
         const filename = data.uploadDocumentPath.replace(removeImagePath, '');
-        
+
         const formData = new FormData();
         formData.append('filename', filename);
         const imagePath = baseUrl + 'fs/download';
-        
+
         try {
           const imgResponse = await axios.post(imagePath, formData, { responseType: 'blob' });
           imageUrl = window.URL.createObjectURL(new Blob([imgResponse.data]));
@@ -115,11 +105,13 @@ ul {
 
 .list-item {
   width: 16rem;
+  width: 100%;
 }
 
 .list-link {
   display: block;
   width: 100%;
+  border: none;
   padding: 14px 18px;
   text-align: left;
   /* background: linear-gradient(to right, #f9fafb, #eef1f5); */
@@ -127,7 +119,7 @@ ul {
   color: #333;
   font-size: 15px;
   font-weight: 500;
-  border: none;
+  /* border: none; */
   border-radius: 6px;
   transition: all 0.3s ease-in-out;
   cursor: pointer;
@@ -196,6 +188,12 @@ ul {
 
 .main-content {
   margin-left: 16rem;
+}
+
+@media screen and (max-width: 768px) {
+  .col-2 {
+    display: none;
+  }
 }
 
 </style>

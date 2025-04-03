@@ -71,7 +71,7 @@
           <q-btn flat label="Submit" class="custom-button" @click="resetPassword"/>
         </q-card-actions>
       </q-card>
-    </q-dialog> 
+    </q-dialog>
 
               </div>
               </q-form>
@@ -88,10 +88,10 @@
              style="white-space: normal; word-break: break-word; flex: 1 1 auto;">
           {{ category }}
         </div>
-        <q-btn 
-          @click="enroll(category)" 
-          color="primary" 
-          glossy 
+        <q-btn
+          @click="enroll(category)"
+          color="primary"
+          glossy
           class="q-px-sm q-py-xs rounded-borders shadow-2 hover-scale text-caption"
           href="https://finvedic.com/enroll.html"
           target="_blank"
@@ -112,10 +112,10 @@
              style="white-space: normal; word-break: break-word; flex: 1 1 auto;">
           {{ category }}
         </div>
-        <q-btn 
-          @click="enroll(category)" 
-          color="primary" 
-          glossy 
+        <q-btn
+          @click="enroll(category)"
+          color="primary"
+          glossy
           class="q-px-sm q-py-xs rounded-borders shadow-2 hover-scale text-caption"
           label="Enroll"
           style="flex: 0 0 auto;"
@@ -132,10 +132,10 @@
              style="white-space: normal; word-break: break-word; flex: 1 1 auto;">
           {{ category }}
         </div>
-        <q-btn 
-          @click="enroll(category)" 
-          color="primary" 
-          glossy 
+        <q-btn
+          @click="enroll(category)"
+          color="primary"
+          glossy
           class="q-px-sm q-py-xs rounded-borders shadow-2 hover-scale text-caption"
           label="Enroll"
           style="flex: 0 0 auto;"
@@ -509,7 +509,7 @@ filePathPromise
     } finally {
       this.loading = false; // Ensure loading is set to false after completion
     }
-    
+
   }
 },
 
@@ -655,9 +655,9 @@ transform: translateY(-2px);
 }
 
 .edit-btn {
-background: hsl(225, 100%, 50%); 
+background: hsl(225, 100%, 50%);
 /* filter: brightness(150%);  */
-color: #fff; 
+color: #fff;
 transition: background 0.3s ease-in-out;
 margin-left: 1%;
 }
@@ -713,7 +713,7 @@ color: #333;
 
 .q-btn {
   transition: all 0.3s ease-in-out;
-  
+
 }
 
 .q-btn:hover {
