@@ -26,7 +26,7 @@
                 </q-item-label>
               </div>
               <div class="flex items-center">
-                <q-icon name="img:src/assets/google_meet.svg" size="16px" color="#4E5BF8" class="q-mr-sm" />
+                <q-img :src="meet" width="16px" height="16px" class="custom-icon q-mr-xs" />
                 <q-item-label caption>
                   <a :href="event.link" target="_blank" class="go-to-meet">Go to Meet Link</a>
                 </q-item-label>
@@ -50,13 +50,15 @@
 <script>
 
 import { urls } from "../libraries/Urls"
+import meet from 'src/assets/google_meet.svg'
 export default {
   name: "ClassSchedule",
   data() {
     return {
       events: [],
       displayedEvents: [], // Events displayed in UI
-      loading: false
+      loading: false,
+      meet: meet,
     };
   },
   methods: {

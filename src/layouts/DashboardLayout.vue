@@ -1217,6 +1217,11 @@ color: #7D7D7D !important;
   right: 10px;
 }
 
+
+.mainHeader{
+  padding: 10px 8px 10px 0px;
+  min-height: 0px;
+}
 /* .active-nav-item {
   background-color: #E6E6E6 !important;
   color: #000 !important;
