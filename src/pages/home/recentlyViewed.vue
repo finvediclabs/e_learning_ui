@@ -19,7 +19,7 @@
              >
 
           <q-card class="program-card"
-                  style="width: 100%; height: 36vh; display: flex; flex-direction: column; padding: 8px;"
+                  style="width: 100%; height: 300px; display: flex; flex-direction: column; padding: 8px;"
                   >
 
             <div class="row" style="width: 100%; height: 100%; cursor: pointer;" @click="navigateToCourse(item.programId)">
