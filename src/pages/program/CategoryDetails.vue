@@ -716,4 +716,9 @@ async fetchPresentationImages() {
   margin-bottom: 10px;
   border-radius: 8px;
 }
+@media (max-width: 768px) {
+  .category-image {
+    width: 90%;
+  }
+}
 </style>

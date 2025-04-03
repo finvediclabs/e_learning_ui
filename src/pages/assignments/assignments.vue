@@ -25,12 +25,13 @@
 
   <div class="col-9 row right q-pl-lg">
 <!-- Add a flex container to separate the course label and search bar -->
-<div class="row items-center justify-between q-mb-md">
+<div class=" all-courses row items-center justify-between q-mb-md">
   <!-- Selected Course Label (Aligned to Left) -->
   <span class="text-h6">{{ selectedCourse ? selectedCourse : 'All Courses' }}</span>
 
+  <div class="filtering">
   <!-- Search Input (Aligned to Right) -->
-  <q-input v-model="searchQuery" label="Search Assignments" rounded outlined class="q-ml-xl" style="max-width: 300px;" />
+  <q-input v-model="searchQuery" label="Search Assignments" rounded outlined class="q-ml-xl searching" style="max-width: 300px;" />
   <q-btn label="Filter by Date | Status"  @click="filterDialog = true" class="q-ml-xl" />
   <q-dialog v-model="filterDialog">
   <q-card style="min-width: 400px;">
@@ -53,12 +54,16 @@
       />
     </q-card-section>
 
+ 
+
     <q-card-actions align="right">
       <q-btn label="Clear Filter" flat color="negative" @click="clearFilters" />
       <q-btn label="Apply Filter" color="primary" @click="applyFilters" />
     </q-card-actions>
   </q-card>
 </q-dialog>
+
+</div>
 
 </div>
 
@@ -1155,5 +1160,60 @@ async downloadFileAsPdf() {
   background-color: #e7f0ff !important; 
   color: #4e5bf8 !important; 
 }
+
+.filtering{
+  display: flex;
+}
+
+
+
+/* 📱 Mobile View: Stacking left & right sections */
+@media (max-width: 768px) {
+  .left, .right {
+    width: 100%;
+  }
+
+  .table {
+    font-size: 12px; 
+  }
+
+  .table th, .table td {
+    padding: 1px; 
+  }
+
+ 
+  .table th:nth-child(4), 
+  .table td:nth-child(4),
+  .table th:nth-child(5),
+  .table td:nth-child(5) {
+    display: none;
+  }
+
+  .all-courses{
+    display: flex !important;
+    flex-direction: column;
+    justify-content: start !important;
+    align-items: start !important;
+    }
+
+    .filtering{
+      margin-top: 10px;
+    }
+
+    .searching{
+      margin-left: 0px;
+    }
+
+    .assignments{
+      padding: 0px;
+    }
+    .right{
+      padding-left: 0px;
+      padding: 8px;
+    }
+}
+
+
+
 
 </style>
