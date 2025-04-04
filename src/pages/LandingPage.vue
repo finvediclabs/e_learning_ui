@@ -55,28 +55,27 @@ export default defineComponent({
 
 <style>
 .responsive-img {
-    max-width: 60%;
-    width: 100%;
+    max-width: 50%;
     height: auto;
     display: block;
-    margin: 0 ; 
+    margin: 0 ;
 }
 
-@media (max-width: 600px) {  
+@media (max-width: 600px) {
     .gurukul-text h5, .gur {
-        font-size: 2rem !important;  
+        font-size: 2rem !important;
     }
 
     .gurukul-text p {
-        display: none;  
+        display: none;
     }
 
     .responsive-img {
-        max-width: 100%;  
-        width: 100%;
+        max-width: 80%;
+        width: 80%;
         height: auto;
         display: block;
-        margin: 0 auto;  
+        margin: 0 auto;
     }
 
     .whole{
@@ -86,25 +85,25 @@ export default defineComponent({
       padding-top: 3% !important;
     }
 
-   
-    
+
+
 }
 
 
  .wel_logo {
-  width: 25vw !important; 
+  width: 25vw !important;
 }
 
-@media (max-width: 1024px) and (max-width: 1368px) { 
+@media (max-width: 1024px) and (max-width: 1368px) {
   .wel_logo {
-    width: max(35vw, 250px) !important; 
+    width: max(35vw, 250px) !important;
   }
 }
 
 
-@media (max-width: 600px) { 
+@media (max-width: 600px) {
   .wel_logo {
-    width: 50vw !important; 
+    width: 50vw !important;
   }
 }
 
