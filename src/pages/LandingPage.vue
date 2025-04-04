@@ -5,7 +5,7 @@
     <!-- Left Section: Gurukul Text + Image -->
     <div class="col-12 col-sm-6 col-lg-7 flex q-pb-md">
         <div class="gurukul-text flex column q-mr-md" style="padding-right: 3%;" >
-            <h5 class="text-h5 text-weight-bolder" style="margin-bottom: 1%; font-size:3rem;">Welcome to <br> <span class="gur" style="font-size: 3.2rem;line-height: 2;">ScaleGrad</span></h5>
+            <h5 class="text-h5 text-weight-bolder" style="margin-bottom: 1%; font-size:3rem;">Welcome to <br> <span class="gur" style="font-size: 3.2rem;line-height: 2;"><q-img :src="new_logo" width="25vw" class="wel_logo" ></q-img></span></h5>
             <p class="descr">FinVedic Gurukul Portal is an interactive learning platform offering financial education through curated resources, courses, and collaborative tools for students, faculty, and professionals.</p>
         </div>
         <q-img :src="LandingImg" class="responsive-img" fit="contain" />
@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import new_logo from "src/assets/new_logo1.svg";
 import { defineComponent, ref } from 'vue';
 import CreateAccountPage from "../components/LandingComponents/CreateAccountPage.vue";
 import LogInPage from "../components/LandingComponents/LogInPage.vue";
@@ -41,6 +42,7 @@ export default defineComponent({
     return {
       currentPage: ref('loginPage'),
       LandingImg: LandingImg,
+      new_logo: new_logo,
     }
   },
   methods: {
@@ -83,8 +85,27 @@ export default defineComponent({
     .create-account-page{
       padding-top: 3% !important;
     }
+
    
     
+}
+
+
+ .wel_logo {
+  width: 25vw !important; 
+}
+
+@media (max-width: 1024px) and (max-width: 1368px) { 
+  .wel_logo {
+    width: max(35vw, 250px) !important; 
+  }
+}
+
+
+@media (max-width: 600px) { 
+  .wel_logo {
+    width: 50vw !important; 
+  }
 }
 
 
