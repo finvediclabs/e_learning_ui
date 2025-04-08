@@ -186,8 +186,11 @@
                           }}</span>
                       </div>
                       <div>
+                        <div>
+  <span><strong>Selected Student Assignment ID:</strong> {{ dialogStudentAssignmentId }}</span>
+</div>
                         <span><strong>Is Verified:</strong>
-                          <template v-if="assignment.isVerified === 'Yes'">
+                          <template v-if="assignment.isVerified === 'Y'">
                             Your Assignment has been <strong>VERIFIED</strong>
 
                           </template>
@@ -490,12 +493,13 @@ async fetchAssignments(cycleId) {
     const response = await this.$api.get(url);
     if (response.data.success) {
       let assignmentsData = response.data.data;
+      console.log("Assignments Data:", assignmentsData); // Log the fetched assignments
       const studentId = this.user?.id;
 
       // Fetch assignment status
       const statusPromises = assignmentsData.map(async (assignment) => {
         try {
-          const statusUrl = `api/student-assignments?studentId=${studentId}&assignmentId=${assignment.id}`;
+          const statusUrl = `api/student-assignments?studentId=${studentId}&assignmentId=${assignment.assignmentId}`;
           const statusResponse = await this.$api.get(statusUrl);
           assignment.status = statusResponse.data.data.length > 0 ? "Done" : "Pending";
         } catch (error) {
@@ -516,20 +520,43 @@ filterAssignments(course) {
     this.selectedCourse = course;
     this.$forceUpdate(); // Force reactivity update
   },
-    handleSupport(assignmentId) {
-      // If the clicked assignment is the same as the currently selected one, toggle the states
-      if (this.selectedAssignmentId === assignmentId) {
-        this.showDragAndDrop = !this.showDragAndDrop;
-        this.EditisNotCLicked = !this.EditisNotCLicked;
-      } else {
-        // Set the selected assignment ID and reset states if a different assignment is clicked
-        this.selectedAssignmentId = assignmentId;
-        console.log("selectedAssignmentId:", assignmentId);
-        this.showDragAndDrop = true;  // Show the drag-and-drop area
-        this.EditisNotCLicked = false; // Set to false when a new assignment is clicked
-      }
-    },
-    async fetchStudentAssignments(userId, assignmentId) {
+  async handleSupport(assignmentId) {
+  const profileStore = useProfileStore(); // ✅ get the store
+  this.userId = profileStore.user?.id;
+
+  if (!this.userId) {
+    console.error("User ID is not available.");
+    return;
+  }
+
+  if (this.selectedAssignmentId === assignmentId) {
+    this.showDragAndDrop = !this.showDragAndDrop;
+    this.EditisNotCLicked = !this.EditisNotCLicked;
+
+    const studentAssignment = await this.fetchStudentAssignments(this.userId, assignmentId);
+    if (studentAssignment?.id) {
+      this.studentAssignmentId = studentAssignment.id;
+      console.log("studentAssignmentId:", this.studentAssignmentId);
+    } else {
+      console.warn("No student assignment found.");
+    }
+
+  } else {
+    this.selectedAssignmentId = assignmentId;
+    console.log("selectedAssignmentId:", assignmentId);
+    this.showDragAndDrop = true;
+    this.EditisNotCLicked = false;
+
+    const studentAssignment = await this.fetchStudentAssignments(this.userId, assignmentId);
+    if (studentAssignment?.id) {
+      this.studentAssignmentId = studentAssignment.id;
+      console.log("studentAssignmentId:", this.studentAssignmentId);
+    } else {
+      console.warn("No student assignment found.");
+    }
+  }
+},
+async fetchStudentAssignments(userId, assignmentId) {
   this.loading = true;
   try {
     const profileStore = useProfileStore();
@@ -539,26 +566,30 @@ filterAssignments(course) {
     if (!this.userId || !assignmentId) {
       console.error("Missing userId or assignmentId.");
       this.loading = false;
-      return;
+      return null;
     }
 
     console.log("Fetching student assignments for:", this.userId, assignmentId);
 
     const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
     const url = `${baseUrl}api/student-assignments?studentId=${this.userId}&assignmentId=${assignmentId}`;
-
+console.log("API student URL:", url); // Debugging
     const response = await this.$api.get(url);
     const result = response.data;
 
     if (result.success && Array.isArray(result.data)) {
       this.studentAssignments = result.data || [];
+
+      console.log("Student assignments fetched:", this.studentAssignments); // ✅ your requested console log
+
       this.showDragAndDrop = this.studentAssignments.length === 0;
 
       if (this.studentAssignments.length > 0) {
-        // Set the first file found as the dialogFileUrl2
-        this.dialogFileUrl2 = this.studentAssignments[0]?.submittedFile || "";
-        console.log("Setting dialogFileUrl2:", this.dialogFileUrl2);
-      }
+  this.dialogFileUrl2 = this.studentAssignments[0]?.submittedFile || "";
+  this.dialogStudentAssignmentId = this.studentAssignments[0]?.id || null; // ✅ Add this line
+  console.log("Setting dialogFileUrl2:", this.dialogFileUrl2);
+  console.log("Setting dialogStudentAssignmentId:", this.dialogStudentAssignmentId); // ✅ Optional debug
+}
 
       const fetchFiles = this.studentAssignments.map(async (assignment) => {
         const fileName = assignment.submittedFile || "";
@@ -567,7 +598,6 @@ filterAssignments(course) {
           return;
         }
 
-        console.log("Submit file:", fileName);
         const fileType = fileName.split('.').pop().toLowerCase();
         const isImage = ["jpg", "jpeg", "png", "gif"].includes(fileType);
         const isPdf = fileType === "pdf";
@@ -592,13 +622,17 @@ filterAssignments(course) {
       });
 
       await Promise.all(fetchFiles);
+
+      return this.studentAssignments[0]; // ✅ Return first assignment for external use
     } else {
       console.error("Invalid data format:", result);
       this.studentAssignments = [];
+      return null;
     }
   } catch (error) {
     console.error("Error fetching student assignments:", error);
     this.studentAssignments = [];
+    return null;
   } finally {
     this.loading = false;
   }
@@ -609,18 +643,9 @@ highlightCode() {
       });
     },
     onSubmit() {
-  if (this.userType === 'Guest') {
-    this.$q.notify({
-      type: 'warning',
-      message: "Guests are not allowed to submit assignments.",
-      position: 'center',
-    });
-    return;
-  }
-
-  if (this.selectedAssignmentId) {
-    console.log("StudentAssignmentId", this.selectedAssignmentId);
-    this.updateSubmit();
+      if (this.dialogStudentAssignmentId) {
+    console.log("StudentAssignmentId:", this.dialogStudentAssignmentId);
+    this.updateSubmit(this.dialogStudentAssignmentId);
   } else {
     this.handleSubmit();
     // this.fetchBatchAssignments();
@@ -642,8 +667,8 @@ highlightCode() {
         const data = {
           assignmentId: this.dialogAssignmentId,
           assignmentTitle: this.dialogAssignmentTitle,
-          batchId: this.dialogBatchTitle,
-          batchTitle: this.dialogBatchId,
+          batchId: this.dialogBatchId,
+          batchTitle: this.dialogBatchTitle,
           studentId: this.userId,
           studentName: this.userEmail,
           type:"assignment",
@@ -673,7 +698,7 @@ highlightCode() {
         if (response.ok) {
           console.log('Assignment submitted successfully');
           // this.fetchBatchAssignments();
-          this.fetchAssignments();
+          this.fetchAssignments(this.dialogBatchId);
           // Optionally, you can reset the dialog and clear the file preview
           this.dialogVisible = false;
           this.filePreviewUrl = '';
@@ -689,68 +714,64 @@ highlightCode() {
         this.fetchAssignments();
       }
     },
-    async updateSubmit() {
-      try {
-        const studentAssignmentId = this.selectedAssignmentId // Ensure the studentAssignmentId is available
-        console.log("StudentAssignmentId:", studentAssignmentId);
-        let fileUri = '';
+    async updateSubmit(studentAssignmentId) {
+  try {
+    console.log("StudentAssignmentId:", studentAssignmentId);
+    let fileUri = '';
 
-        // Check if a file is selected and upload it if necessary
-        if (this.selectedFile) {
-          fileUri = await this.uploadFile(this.selectedFile); // Upload the file
-          console.log('Uploaded file URI:', fileUri); // Log the uploaded file URI
-        } else {
-          console.log('No file selected for upload.');
-        }
+    // Upload file if selected
+    if (this.selectedFile) {
+      fileUri = await this.uploadFile(this.selectedFile);
+      console.log('Uploaded file URI:', fileUri);
+    } else {
+      console.log('No file selected for upload.');
+    }
 
-        // Prepare the data for submission
-        const data = {
-          assignmentId: this.dialogAssignmentId,
-          assignmentTitle: this.dialogAssignmentTitle,
-          batchId: this.dialogBatchTitle,
-          batchTitle: this.dialogBatchId,
-          studentId: this.userId,
-          studentName: this.userEmail,
-          type:"assignment",
-          submittedFile: fileUri, // Use the uploaded file URI
-          createdDate: new Date().toISOString(),
-          isVerified: "N", // Default value for verification status
-        };
+    const data = {
+      assignmentId: this.dialogAssignmentId,
+      assignmentTitle: this.dialogAssignmentTitle,
+      batchId: this.dialogBatchTitle,
+      batchTitle: this.dialogBatchId,
+      studentId: this.userId,
+      studentName: this.userEmail,
+      type: "assignment",
+      submittedFile: fileUri,
+      createdDate: new Date().toISOString(),
+      isVerified: "N",
+    };
 
-        // Convert the data to JSON
-        const jsonData = JSON.stringify(data);
-        console.log('Update submission data:', jsonData);
+    const jsonData = JSON.stringify(data);
+    console.log('Update submission data:', jsonData);
 
-        // Define the API URL for updating the student assignment
-        const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
-        const url = `${baseUrl}api/student-assignments/${studentAssignmentId}`;
-        const sessionStore = useSessionStore(); // Get the session store
-        const token = sessionStore.token;
-        // Send the PUT request to update the existing student assignment
-        const response = await fetch(url, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`, // Attach the token in the request headers
-          },
-          body: jsonData, // Send the JSON data as the request body
-        });
+    const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
+    const url = `${baseUrl}api/student-assignments/${studentAssignmentId}`; // Using passed ID
 
-        if (response.ok) {
-          console.log('Assignment updated successfully');
-          // Optionally, you can reset the dialog and clear the file preview after a successful update
-          this.dialogVisible = false;
-          this.filePreviewUrl = '';
-          this.fileType = '';
-          this.fileName = ''; // Clear the file name
-          this.selectedFile = null; // Clear the selected file
-        } else {
-          console.error('Failed to update assignment');
-        }
-      } catch (error) {
-        console.error('Error updating assignment:', error);
-      }
-    },
+    const sessionStore = useSessionStore();
+    const token = sessionStore.token;
+
+    const response = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: jsonData,
+    });
+
+    if (response.ok) {
+      console.log('Assignment updated successfully');
+      this.dialogVisible = false;
+      this.filePreviewUrl = '';
+      this.fileType = '';
+      this.fileName = '';
+      this.selectedFile = null;
+    } else {
+      console.error('Failed to update assignment');
+    }
+  } catch (error) {
+    console.error('Error updating assignment:', error);
+  }
+},
   closeDialog() {
       this.dialogVisible = false;
       this.EditisNotCLicked = true;
@@ -811,7 +832,7 @@ highlightCode() {
 
     // Set dialog properties
     this.dialogAssignmentDesc = assignment.description;
-    this.dialogAssignmentId = assignment.id;
+    this.dialogAssignmentId = assignment.assignmentId;
     this.dialogAssignmentTitle = assignment.assignmentTitle;
     this.dialogBatchId = assignment.batchId;
     this.dialogBatchTitle = assignment.batchName;
@@ -903,7 +924,7 @@ highlightCode() {
   this.loading = true;
   try {
     this.dialogAssignmentDesc = assignment.description;
-    this.dialogAssignmentId = assignment.id;
+    this.dialogAssignmentId = assignment.assignmentId;
     this.dialogAssignmentTitle = assignment.assignmentTitle;
     this.dialogBatchId = assignment.batchId;
     this.dialogBatchTitle = assignment.batchName;
@@ -916,7 +937,7 @@ highlightCode() {
     }
 
     // Fetch student assignments and wait for results
-    await this.fetchStudentAssignments(this.user?.id, assignment.id);
+    await this.fetchStudentAssignments(this.user?.id, assignment.assignmentId);
 
     // Ensure dialogFileUrl2 is available before opening dialog
     console.log("Final File URL:", this.dialogFileUrl2);
@@ -969,7 +990,7 @@ async downloadFileAsPdf() {
   this.onlyView = true;
   try {
     this.dialogAssignmentDesc = assignment.description;
-    this.dialogAssignmentId = assignment.id;
+    this.dialogAssignmentId = assignment.assignmentId;
     this.dialogAssignmentTitle = assignment.assignmentTitle;
     this.dialogBatchId = assignment.batchId;
     this.dialogBatchTitle = assignment.batchName;
@@ -980,15 +1001,15 @@ async downloadFileAsPdf() {
       this.loading = false;
       return;
     }
-
+console.log("Assignment ID:", assignment.assignmentId);
     // Fetch student assignments and wait for results
-    await this.fetchStudentAssignments(this.user?.id, assignment.id);
+    await this.fetchStudentAssignments(this.user?.id, assignment.assignmentId);
 
     // Ensure dialogFileUrl2 is available before opening dialog
     console.log("Final File URL:", this.dialogFileUrl2);
 
     // Call handleSupport to update states instead of using onlyView
-    this.handleSupport(assignment.id);
+    this.handleSupport(assignment.assignmentid);
 
     this.dialogVisible = true; // Open the dialog after fetching data
   } catch (error) {
