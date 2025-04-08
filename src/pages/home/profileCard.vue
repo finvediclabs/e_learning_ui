@@ -37,6 +37,7 @@ import { mapState } from "pinia";
 import { useProfileStore } from "src/stores/profile";
 import { api } from "src/boot/axios";
 import topProfiles from "src/assets/add-user.png";
+import defaultProfileImg from "src/assets/profile.png";
 
 
 export default {
@@ -47,7 +48,7 @@ export default {
       imageUrl: "",
       topProfiles: topProfiles,
       greeting: "",
-      defaultProfileImg: "https://via.placeholder.com/100",
+      defaultProfileImg: defaultProfileImg,
       topProfiles: [
   { name: "Alice", pic: topProfiles, points: 1500 },
   { name: "Bob", pic: topProfiles, points: 1200 },
