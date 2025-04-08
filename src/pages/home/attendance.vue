@@ -55,6 +55,7 @@ export default {
   border-radius: 20px;
   background-color: #fff;
   text-align: center;
+  cursor: pointer;
 }
 
 .attendance-header {
