@@ -50,10 +50,9 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { mapState } from "pinia";
 import { useSessionStore } from "src/stores/session";
 import { useProfileStore } from "src/stores/profile";
-import { storeToRefs } from "pinia";
 
 // Components
 import AttendanceCard from "src/pages/home/attendance.vue";
@@ -83,32 +82,26 @@ export default {
     ClassCard,
     ChatsCard,
   },
-  setup() {
-    const session = useSessionStore();
-    const { token, userType } = storeToRefs(session);
-
-    const profileStore = useProfileStore();
-    const { user } = storeToRefs(profileStore);
-
-    const showPopup = ref(false);
-
-    // Reusable guest check
-    const handleDemoUserAccess = () => {
-      if (user.value?.roles?.[0]?.name === "Guest") {
-        showPopup.value = true;
-        return true; // Block access
-      }
-      return false; // Allow access
-    };
-
+  data() {
     return {
-      user,
-      showPopup,
-      handleDemoUserAccess,
+      showPopup: false,
     };
+  },
+  computed: {
+    ...mapState(useProfileStore, ["user"]),
+  },
+  methods: {
+    handleDemoUserAccess() {
+      if (this.user?.roles?.[0]?.name === "Guest") {
+        this.showPopup = true;
+        return true;
+      }
+      return false;
+    },
   },
 };
 </script>
+
 
 <style scoped>
 @font-face {
