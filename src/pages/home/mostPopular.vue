@@ -11,15 +11,15 @@
   <div v-else class="container mt-4" style="width: 100%;padding-left: 1%;padding-right: 1%;" >
     <div class="row d-flex justify-content-center align-items-center w-100" style="width: 100%;">
       <div
-        v-for="category in filteredCategories"
+      v-for="(category, index) in filteredCategories"
         :key="category.id"
          class="col-lg-3 col-md-3 col-sm-6 col-12 mb-4 d-flex justify-content-center q-pt-sm"
         style="margin-left: auto;margin-right: auto;"
       >
 
      <q-card
-  class="course-card cursor-pointer"
-  @click="$router.push({ path: `/course/${category.id}` })"
+ class="course-card cursor-pointer"
+  @click="handleCategoryClick(category, index)"
 >
   <q-img
     v-if="category.imagePath"
@@ -41,18 +41,39 @@
   </div>
 
   </div>
+  <DemoUserPopUp v-if="showDemoPopup" @close="showDemoPopup = false" />
 </template>
 
 <script>
 import mostPopularBg from '../../assets/most_popularBG.png';
+import { useSessionStore } from "src/stores/session";
+import { storeToRefs } from "pinia";
+import { useProfileStore } from "src/stores/profile";
+import DemoUserPopUp from "src/layouts/DemoUserPopUp.vue";
 export default {
   name: 'MostPopular',
+  setup() {
+    const session = useSessionStore();
+    const { token, userType } = storeToRefs(session);
+
+    // console.log('Session Store:', session);
+    return {
+      token,
+      userType,
+      roles: [], // Initialize roles array to store fetched roles
+      courseCount: 3, // Number of courses to show before demo popup
+    };
+  },
   data() {
     return {
       bgImage: mostPopularBg,
       categories: [],
-      isLoading: true, 
+      isLoading: true,
+      showDemoPopup: false,
     };
+  },
+  components: {
+    DemoUserPopUp,
   },
   computed: {
     filteredCategories() {
@@ -74,54 +95,72 @@ export default {
     img.onerror = () => resolve(require('@/assets/dummy_book.png')); // Fallback image
   });
 },
-    async fetchCategories() {
-      this.isLoading = true;
+handleCategoryClick(category, index) {
+  console.log('UserType:', this.userType);
+  console.log('Index:', index);
+  console.log('courseCount:', this.courseCount);
+
+  if (this.userType === 'Guest' && index >= this.courseCount) {
+    this.showDemoPopup = true;
+    return;
+  }
+
+  this.$router.push({ path: `/course/${category.id}` });
+},
+async fetchCategories() {
+  this.isLoading = true;
   try {
     const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
     const getCourse = baseUrl + 'api/chapterCategoriess/all';
     const response = await fetch(getCourse);
     const data = await response.json();
 
+    const categoryNameMap = {
+      "Specialization": "Equities & Electronic Trading",
+      "Introduction to Banking": "Fintech & Financial Services"
+    };
 
-    // Process categories and fetch images
     this.categories = await Promise.all(
-  data.map(async (category) => {
-    let imageUrl = category.imagePath || require('@/assets/dummy_book.png');
-    
-    if (imageUrl.startsWith(`${baseUrl}fs/download/`)) {
-      // Fetch the image
-      const downloadUrl = `${baseUrl}fs/download`;
-      const filename = imageUrl.replace(`${baseUrl}fs/download/`, '');
+      data.map(async (category) => {
+        let imageUrl = category.imagePath || require('@/assets/dummy_book.png');
 
-      try {
-        const formData = new FormData();
-        formData.append('filename', filename);
+        if (imageUrl.startsWith(`${baseUrl}fs/download/`)) {
+          const downloadUrl = `${baseUrl}fs/download`;
+          const filename = imageUrl.replace(`${baseUrl}fs/download/`, '');
 
-        const downloadResponse = await fetch(downloadUrl, {
-          method: 'POST',
-          body: formData,
-        });
+          try {
+            const formData = new FormData();
+            formData.append('filename', filename);
 
-        if (!downloadResponse.ok) {
-          throw new Error(`HTTP error! status: ${downloadResponse.status}`);
+            const downloadResponse = await fetch(downloadUrl, {
+              method: 'POST',
+              body: formData,
+            });
+
+            if (!downloadResponse.ok) {
+              throw new Error(`HTTP error! status: ${downloadResponse.status}`);
+            }
+
+            const blob = await downloadResponse.blob();
+            imageUrl = await this.preloadImage(window.URL.createObjectURL(blob));
+          } catch (error) {
+            console.error(`Error fetching cover image for: ${category.categoryName}`, error);
+            imageUrl = require('@/assets/dummy_book.png');
+          }
         }
 
-        const blob = await downloadResponse.blob();
-        imageUrl = await this.preloadImage(window.URL.createObjectURL(blob));
-      } catch (error) {
-        console.error(`Error fetching cover image for: ${category.categoryName}`, error);
-        imageUrl = require('@/assets/dummy_book.png'); // Fallback image
-      }
-    }
-
-    return { ...category, imagePath: imageUrl };
-  })
-);
+        return {
+          ...category,
+          categoryName: categoryNameMap[category.categoryName] || category.categoryName,
+          imagePath: imageUrl
+        };
+      })
+    );
 
   } catch (error) {
     console.error("Error fetching categories:", error);
   } finally {
-    this.isLoading = false; // Hide loader
+    this.isLoading = false;
   }
 },
   },

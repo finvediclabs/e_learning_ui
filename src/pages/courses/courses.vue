@@ -14,6 +14,7 @@
      <span class="text-weight-light" style="font-size: 14px;">{{ course.description }}</span>
     </div>
 
+
   </li>
 </ul>
 </div>
@@ -61,65 +62,77 @@
       <div v-if="loadingBooks" class="loading-text">Loading books...</div>
   <div v-else class="row col-12 col-md-10 main-content">
     <div
-      v-for="book in books"
-      :key="book.id"
-      class="col-6 col-sm-4 col-md-3 col-lg-3 mb-4 book-card"
-    >
-      <div class="card h-100">
-        <q-img
-          :src="book.imagePath"
-          alt="Book Cover"
-          class="card-img-top book_img"
-          @click="visitChapter(book)"
-        />
-        <div class="card-body">
-          <span class="card-title">{{ book.chapterTitle }}</span>
-        </div>
-      </div>
+  v-for="(book, index) in books"
+  :key="book.id"
+  class="col-6 col-sm-4 col-md-3 col-lg-3 mb-4 book-card"
+>
+  <div class="card h-100">
+    <q-img
+      :src="book.imagePath"
+      alt="Book Cover"
+      class="card-img-top book_img"
+      @click="handleBookClick(book, index)"
+    />
+    <div class="card-body">
+      <span class="card-title">{{ book.chapterTitle }}</span>
     </div>
+  </div>
+</div>
   </div>
   <div class="col-2 d-none d-md-block"></div>
 </div>
-
-
-<!-- Videos Tab -->
+<!-- Video -->
 <div v-if="activeTab === 'videos'" class="tab-content row">
-  <div v-if="loadingVideos" class="loading-text">Loading videos...</div>
-  <div v-else class="row col-12 col-md-10 main-content">
+  <div class="row col-12 col-md-10 main-content">
+    <div v-for="group in videos" :key="group.videoId" class="col-12">
+  <div class="row breakable-border">
     <div
-      v-for="video in videos"
+      v-for="(video, index) in group.videos"
       :key="video.id"
       class="col-6 col-sm-4 col-lg-4 mb-4 video-card"
     >
       <div class="card h-100">
-        <q-img :src="video.coverPath" alt="Video Cover"  class="card-img-top book_img" @click="visitVideo(video)" />
+        <q-img
+          :src="video.coverPath"
+          alt="Video Cover"
+          class="card-img-top book_img"
+          @click="handleGroupedVideoClick(video, getVideoFlatIndex(group.videoId, index))"
+        />
         <div class="card-body">
           <span class="card-title">{{ video.chapterTitle }}</span>
         </div>
       </div>
     </div>
   </div>
-  <div class="col-1  d-none d-md-block"></div>
+</div>
+  </div>
 </div>
 
 <!-- Presentations Tab -->
 <div v-if="activeTab === 'presentations'" class="tab-content row">
-  <div v-if="loadingVideos" class="loading-text">Loading videos...</div>
-  <div v-else class="row col-12 col-md-10 main-content">
+  <div class="row col-12 col-md-10 main-content">
+    <div v-for="group in presentations" :key="group.presentationId" class="col-12">
+  <div class="row breakable-border">
     <div
-      v-for="presentation in presentations"
-      :key="presentation.id"
-      class="col-6 col-sm-4 col-lg-4 mb-4 presentation-card"
-    >
-      <div class="card h-100">
-        <q-img :src="presentation.coverPath" alt="Presentation Cover"  class="card-img-top book_img" @click="visitPresentation(presentation)" />
-        <div class="card-body">
-          <span class="card-title">{{ presentation.chapterTitle }}</span>
-        </div>
-      </div>
+  v-for="(presentation, localIndex) in group.presentations"
+  :key="presentation.id"
+  class="col-6 col-sm-4 col-lg-4 mb-4 presentation-card"
+>
+  <div class="card h-100">
+    <q-img
+      :src="presentation.coverPath"
+      alt="Presentation Cover"
+      class="card-img-top book_img"
+      @click="handleGroupedPresentationClick(presentation, localIndex)"
+    />
+    <div class="card-body">
+      <span class="card-title">{{ presentation.chapterTitle }}</span>
     </div>
   </div>
-  <div class="col-1  d-none d-md-block"></div>
+</div>
+  </div>
+</div>
+  </div>
 </div>
 
 
@@ -128,30 +141,41 @@
   </div>
 </div>
 </div>
+<DemoUserPopUp v-if="showDemoPopup" @close="showDemoPopup = false" />
 </template>
 
 <script>
 import 'src/css/LibraryProgramView.css';
 import { useSessionStore } from "src/stores/session";
+import { useProfileStore } from "src/stores/profile";
+import DemoUserPopUp from "src/layouts/DemoUserPopUp.vue";
 import { storeToRefs } from "pinia";
 import CryptoJS from 'crypto-js'
 export default {
   name: 'Courses',
+  components: {
+    DemoUserPopUp,
+  },
   setup() {
     const session = useSessionStore();
     const { token, userType } = storeToRefs(session);
-
+    console.log('User Type:', userType.value);
     // console.log('Session Store:', session);
     return {
       token,
       userType,
-      roles: [] // Initialize roles array to store fetched roles
+      roles: [], // Initialize roles array to store fetched roles
+      booksCount: 2,
+  videosCount: 0,
+  presentationsCount: 2,
+  presentationsAllowedIndexes: [1], // Allowed indexes for presentations
     };
   },
   data() {
     return {
       loading: true,
       books: [],
+      showDemoPopup: false,
       activeTab: 'books', // Default active tab
       activeCategoryId: null,
       profiles: [], // This will hold all fetched profiles
@@ -285,7 +309,7 @@ async fetchCourseDetails() {
 async fetchCategoryDetails() {
   this.categoryLoading = true;
   try {
-    
+
   const courseId = this.$route.params.id; // ✅ Extract course ID correctly
   console.log("Course ID:", courseId); // Debugging
 
@@ -294,7 +318,7 @@ async fetchCategoryDetails() {
 
   console.log('API URL:', apiUrl); // Debugging
 
-  
+
     const response = await this.$api.get(apiUrl);
 
     if (response.data) {
@@ -348,7 +372,7 @@ async fetchCategoryDetails() {
     this.categoryLoading = false; // Stop loader
   });
     },
-    async fetchBookImages() {
+   async fetchBookImages() {
       const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
       const downloadUrl = `${baseUrl}fs/download`;
 
@@ -381,11 +405,23 @@ async fetchCategoryDetails() {
     },
 
     async fetchVideoImages() {
-      const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
-      const downloadUrl = `${baseUrl}fs/download`;
+  const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
+  const downloadUrl = `${baseUrl}fs/download`;
 
-      this.videos = await Promise.all(
-        this.category.videoChapters.map(async (video) => {
+  // Grouping videoChapters by videoId
+  const groupedVideos = this.category.videoChapters.reduce((acc, video) => {
+    if (!acc[video.videoId]) {
+      acc[video.videoId] = [];
+    }
+    acc[video.videoId].push(video);
+    return acc;
+  }, {});
+
+  // Process videos and fetch images
+  this.videos = await Promise.all(
+    Object.entries(groupedVideos).map(async ([videoId, videoList]) => {
+      const processedVideos = await Promise.all(
+        videoList.map(async (video) => {
           const formData = new FormData();
           const removePrefix = `${baseUrl}fs/download/`;
           const filename = video.videoCoverPath.replace(removePrefix, '');
@@ -397,27 +433,36 @@ async fetchCategoryDetails() {
             const blob = new Blob([response.data]);
             const url = window.URL.createObjectURL(blob);
 
-            return {
-              ...video,
-              coverPath: url, // Dynamic video cover path
-            };
+            return { ...video, coverPath: url };
           } catch (error) {
             console.error(`Error fetching video cover: ${video.chapterTitle}`, error);
-            return {
-              ...video,
-              coverPath: this.DummyVideo, // Fallback video cover
-            };
+            return { ...video, coverPath: this.DummyVideo };
           }
         })
       );
-    },
+      return { videoId, videos: processedVideos };
+    })
+  );
+},
 
-    async fetchPresentationImages() {
-      const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
-      const downloadUrl = `${baseUrl}fs/download`;
+async fetchPresentationImages() {
+  const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
+  const downloadUrl = `${baseUrl}fs/download`;
 
-      this.presentations = await Promise.all(
-        this.category.presentationChapters.map(async (presentation) => {
+  // Grouping presentations by presentationId
+  const groupedPresentations = this.category.presentationChapters.reduce((acc, presentation) => {
+    if (!acc[presentation.presentationId]) {
+      acc[presentation.presentationId] = [];
+    }
+    acc[presentation.presentationId].push(presentation);
+    return acc;
+  }, {});
+
+  // Process presentations and fetch images
+  this.presentations = await Promise.all(
+    Object.entries(groupedPresentations).map(async ([presentationId, presentationList]) => {
+      const processedPresentations = await Promise.all(
+        presentationList.map(async (presentation) => {
           const formData = new FormData();
           const removePrefix = `${baseUrl}fs/download/`;
           const filename = presentation.presentationCoverPath.replace(removePrefix, '');
@@ -429,20 +474,17 @@ async fetchCategoryDetails() {
             const blob = new Blob([response.data]);
             const url = window.URL.createObjectURL(blob);
 
-            return {
-              ...presentation,
-              coverPath: url, // Dynamic presentation cover path
-            };
+            return { ...presentation, coverPath: url };
           } catch (error) {
             console.error(`Error fetching presentation cover: ${presentation.chapterTitle}`, error);
-            return {
-              ...presentation,
-              coverPath: this.DummyPresentation, // Fallback presentation cover
-            };
+            return { ...presentation, coverPath: this.DummyPresentation };
           }
         })
       );
-    },
+      return { presentationId, presentations: processedPresentations };
+    })
+  );
+},
 
     async loadMediaAssets() {
       await Promise.all([
@@ -466,8 +508,50 @@ async fetchCategoryDetails() {
         console.error(`Error fetching ${stateKey} images:`, error);
       }
     },
-    
 
+    handleBookClick(book, index) {
+  if (this.userType === 'Guest' && index >= this.booksCount) {
+    this.showDemoPopup = true;
+  } else {
+    this.visitChapter(book);
+  }
+},
+getVideoFlatIndex(groupId, localIndex) {
+    let index = 0;
+    for (const group of this.videos) {
+      if (group.videoId === groupId) break;
+      index += group.videos.length;
+    }
+    return index + localIndex;
+  },
+
+  handleGroupedVideoClick(video, flatIndex) {
+    if (this.userType === 'Guest' && flatIndex >= this.videosCount) {
+      this.showDemoPopup = true;
+      return;
+    }
+    this.visitVideo(video);
+  },
+
+getPresentationFlatIndex(groupId, localIndex) {
+    let index = 0;
+    for (const group of this.presentations) {
+      if (group.presentationId === groupId) break;
+      index += group.presentations.length;
+    }
+    return index + localIndex;
+  },
+
+  handleGroupedPresentationClick(presentation, localIndex) {
+  if (
+    this.userType === 'Guest' &&
+    !this.presentationsAllowedIndexes.includes(localIndex)
+  ) {
+    this.showDemoPopup = true;
+    return;
+  }
+  this.visitPresentation(presentation);
+},
 
     visitChapter(chapter) {
       // console.log('Chapter File Path:', chapter.chapterFilePath); // Log the chapter file path

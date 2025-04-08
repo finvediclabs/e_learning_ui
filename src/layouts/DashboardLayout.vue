@@ -187,7 +187,7 @@
         </q-list>
       </q-btn-dropdown>
     </template>
-  </div> 
+  </div>
 </q-toolbar> -->
 
 </q-header>
@@ -258,10 +258,11 @@
 import { storeToRefs } from "pinia";
 import new_logo from "src/assets/new_logo1.svg";
 import { useSessionStore } from "src/stores/session";
+import { useProfileStore } from "src/stores/profile";
 import { toRaw } from 'vue';
 import { setToken } from "src/boot/axios";
 import axios from "axios";
-import { useProfileStore } from "src/stores/profile";
+
 import profileImg from "src/assets/profile.png";
 import Chatbot from "src/layouts/ChatBot.vue";
 
@@ -273,7 +274,7 @@ export default {
   setup() {
     const session = useSessionStore();
     const { token, userType } = storeToRefs(session);
-    console.log("Session Token:", token.value);
+    // console.log("Session Token:", token.value);
     const { setUserType, setSessionToken } = session;
     const profileStore = useProfileStore();
     const { user } = storeToRefs(profileStore);
@@ -673,7 +674,7 @@ setAccessPaths() {
       }
 
       else if (this.$route.path === '/library/elearning') {
-        this.backgroundStyle = 'Assignment_BackgroundStyle'; 
+        this.backgroundStyle = 'Assignment_BackgroundStyle';
       }
 
 
@@ -999,18 +1000,18 @@ background-attachment: fixed;
 .q-toolbar {
   font-family: 'Poppins', sans-serif;
 }
-.second_navbar { 
+.second_navbar {
   color: #ffff;
-  background-color: #F6F6F6 !important; 
+  background-color: #F6F6F6 !important;
   width: 100%;
-  height: 15px; 
+  height: 15px;
   border-top: 2px solid blue;
-  min-height: 15px !important; 
-  max-height: 15px !important; 
-  line-height: 15px; 
-  box-shadow: none !important; 
+  min-height: 15px !important;
+  max-height: 15px !important;
+  line-height: 15px;
+  box-shadow: none !important;
   border-bottom: none !important;
-  overflow: hidden; 
+  overflow: hidden;
 }
 
 

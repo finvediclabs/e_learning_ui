@@ -3,17 +3,17 @@
     <div class="row col-12 w-100">
       <div class="col-3 left">
   <q-list>
-    <q-item 
-      clickable 
+    <q-item
+      clickable
       @click="filterAssignments(null)"
       :class="{ 'selected-course': selectedCourse === null }"
     >
       <q-item-section>All Courses</q-item-section>
     </q-item>
-    <q-item 
-      v-for="course in uniqueCourses" 
-      :key="course" 
-      clickable 
+    <q-item
+      v-for="course in uniqueCourses"
+      :key="course"
+      clickable
       @click="filterAssignments(course)"
       :class="{ 'selected-course': selectedCourse === course }"
     >
@@ -44,17 +44,17 @@
       <q-input v-model="selectedDate" label="Select Date" type="date" outlined />
 
       <!-- Status Multi-Select -->
-      <q-select 
-        v-model="selectedStatuses" 
-        :options="statusOptions" 
+      <q-select
+        v-model="selectedStatuses"
+        :options="statusOptions"
         label="Select Status"
-        multiple 
-        outlined 
-        use-chips 
+        multiple
+        outlined
+        use-chips
       />
     </q-card-section>
 
- 
+
 
     <q-card-actions align="right">
       <q-btn label="Clear Filter" flat color="negative" @click="clearFilters" />
@@ -75,7 +75,7 @@
           <th style="border-left: none; border-right: none">Course</th>
           <!-- <th>Description</th> -->
           <th style="border-left: none; border-right: none">Due Date</th>
-          
+
           <!-- <th >File</th> -->
           <th style="border-left: none; border-right: none">Status</th>
           <th style="border-left: none; border-right: none">Submit</th>
@@ -367,10 +367,10 @@ export default {
         },
       },
       filterDialog: false,
-    selectedDate: "", 
-    selectedStatuses: [], 
-    statusOptions: ["In Progress", "Pending", "Done"], 
-      searchQuery: "", 
+    selectedDate: "",
+    selectedStatuses: [],
+    statusOptions: ["In Progress", "Pending", "Done"],
+      searchQuery: "",
       assignments: [],
       filteredAssignments: [],
       enrollments: [],
@@ -608,18 +608,24 @@ highlightCode() {
         Prism.highlightAll(); // Highlight the code using PrismJS
       });
     },
-onSubmit() {
-      if (this.selectedAssignmentId) {
-        console.log("StudentAssignmentId", this.selectedAssignmentId)
-        // If studentAssignment.id exists, call the update method
-        this.updateSubmit();
-      } else {
-        // Otherwise, call the handleSubmit method for new submission
-        this.handleSubmit();
-        // this.fetchBatchAssignments();
+    onSubmit() {
+  if (this.userType === 'Guest') {
+    this.$q.notify({
+      type: 'warning',
+      message: "Guests are not allowed to submit assignments.",
+      position: 'center',
+    });
+    return;
+  }
 
-      }
-    },
+  if (this.selectedAssignmentId) {
+    console.log("StudentAssignmentId", this.selectedAssignmentId);
+    this.updateSubmit();
+  } else {
+    this.handleSubmit();
+    // this.fetchBatchAssignments();
+  }
+},
     async handleSubmit() {
       try {
         let fileUri = '';
@@ -996,7 +1002,7 @@ async downloadFileAsPdf() {
   mounted() {
     this.filteredAssignments = this.assignments.filter(a => a.status === "Pending"); // Test a simple filter
     console.log("Filtered Data on Mount:", this.filteredAssignments);
-    this.filteredAssignments = [...this.assignments]; 
+    this.filteredAssignments = [...this.assignments];
     this.fetchEnrollments();
   },
 };
@@ -1027,7 +1033,7 @@ async downloadFileAsPdf() {
 .table {
   width: 100%;
   border-collapse: separate !important;
-  border-spacing: 0 10px; 
+  border-spacing: 0 10px;
 }
 
 .table th, .table td {
@@ -1147,7 +1153,7 @@ async downloadFileAsPdf() {
 
 .selected-course {
   /* background-color: #F5F6F6 !important;  */
-  background-color: #e7f0ff !important; 
+  background-color: #e7f0ff !important;
   color: #4e5bf8 !important;
   /* border-radius: 4px; */
 }
@@ -1157,8 +1163,8 @@ async downloadFileAsPdf() {
 }
 
 .q-item:hover {
-  background-color: #e7f0ff !important; 
-  color: #4e5bf8 !important; 
+  background-color: #e7f0ff !important;
+  color: #4e5bf8 !important;
 }
 
 .filtering{
@@ -1174,15 +1180,15 @@ async downloadFileAsPdf() {
   }
 
   .table {
-    font-size: 12px; 
+    font-size: 12px;
   }
 
   .table th, .table td {
-    padding: 1px; 
+    padding: 1px;
   }
 
- 
-  .table th:nth-child(4), 
+
+  .table th:nth-child(4),
   .table td:nth-child(4),
   .table th:nth-child(5),
   .table td:nth-child(5) {

@@ -20,7 +20,7 @@
   :label="['Fintech Sandbox', 'MAANG Sandbox'].includes(lab.title) ? 'Download' : (isCreatingVm ? '' : 'Start')"
   :loading="isCreatingVm"
   class="act-btn"
-  @click="['Fintech Sandbox', 'MAANG Sandbox'].includes(lab.title) ? download(lab) : handleStart(lab.title)"
+  @click="handleLabAction(lab)"
 />
                     </div>
                   </q-card-section>
@@ -43,7 +43,7 @@
   :label="['Fintech Sandbox', 'MAANG Sandbox'].includes(lab.title) ? 'Download' : (isCreatingVm ? '' : 'Start')"
   :loading="isCreatingVm"
   class="act-btn"
-  @click="['Fintech Sandbox', 'MAANG Sandbox'].includes(lab.title) ? download(lab) : handleStart(lab.title)"
+  @click="handleLabAction(lab)"
 />
                   </div>
                 </q-card-section>
@@ -123,6 +123,7 @@
           </div>
         </div>
       </fin-portlet-item> -->
+    <DemoUserPopUp v-if="showPopup" @close="showPopup = false" />
 </template>
 
 <script>
@@ -139,17 +140,29 @@ import dojo from "src/assets/dojo.jpg";
 import white_board from "src/assets/white_board.jpg";
 import jupyter from "src/assets/jupyter.jpg";
 import { urls } from "./Urls";
-
+import { useSessionStore } from "src/stores/session";
+import { storeToRefs } from "pinia";
 import windows from "../../assets/Windows.png";
 import { useProfileStore } from "src/stores/profile";
+import DemoUserPopUp from "src/layouts/DemoUserPopUp.vue";
 import { version } from "jszip";
 export default {
   components: {
     FinPortletItem,
+    DemoUserPopUp,
+  },
+  setup() {
+    const session = useSessionStore();
+    const { token, userType } = storeToRefs(session);
+
+    return {
+      userType,
+    }
   },
   data() {
     return {
       isCreatingVm:false,
+      showPopup: false,
       windows_lab: windows_lab,
       ubuntu_lab: ubuntu_lab,
       MySql_lab: MySql_lab,
@@ -202,6 +215,7 @@ export default {
 
       };
     },
+
     getBorderColor() {
       return function (provisioningState, locked) {
         return locked ? '0px solid #FF7F50' : (provisioningState === 'Succeeded' ? '0px solid #FF7F50' : '0px solid #FF7F50');
@@ -340,6 +354,31 @@ disable themes:i:0`;
         ]
       });
     },
+    handleLabAction(lab) {
+  const isDownload = ['Fintech Sandbox', 'MAANG Sandbox'].includes(lab.title);
+  const isGuest = this.userType === 'Guest';
+
+  // console.log('Lab:', lab);
+  // console.log('User Type:', this.userType);
+  // console.log('Is Guest:', isGuest);
+  // console.log('Is Download:', isDownload);
+  // console.log('Is Locked:', lab.locked);
+
+  if (isGuest) {
+    console.log('Guest user → showing popup and blocking action');
+    this.showPopup = true;
+    return;
+  }
+
+  // For non-guests, proceed with action
+  if (isDownload) {
+    console.log('Non-guest → downloading...');
+    this.download(lab);
+  } else {
+    console.log('Non-guest → starting lab...');
+    this.handleStart(lab.title);
+  }
+},
     getAzureVmsData() {
       this.loading = true;
       this.$api.get(urls.getAzureVmsUrl).then(response => {

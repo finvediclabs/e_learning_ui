@@ -1,5 +1,5 @@
 <template>
-  <div class="chats-card q-pa-md">
+  <div class="chats-card q-pa-md q-mt-md">
     <div class="row items-center justify-between q-mb-sm">
       <!-- Left Side -->
       <div class="row items-center  left-side">
@@ -39,25 +39,47 @@
       <div class="chat-bar"></div>
     </div>
   </div>
+  <DemoUserPopUp v-if="showDemoPopup" @close="showDemoPopup = false" />
 </template>
 
 <script>
 import axios from "axios";
 import personImage from "src/assets/User_icon.png";
 
+import { useSessionStore } from "src/stores/session";
+import { storeToRefs } from "pinia";
+import { useProfileStore } from "src/stores/profile";
+import DemoUserPopUp from "src/layouts/DemoUserPopUp.vue";
+
 export default {
   name: "ChatsCard",
+  components: {
+    DemoUserPopUp
+  },
+  setup() {
+    const session = useSessionStore();
+    const { token, userType } = storeToRefs(session);
+    const profileStore = useProfileStore();
+    const { userProfile } = storeToRefs(profileStore);
+
+    return {
+      token,
+      userType,
+      userProfile
+    };
+  },
   data() {
     return {
       activeGroup: "",
       groups: [],
       chats: [],
-      personImage: personImage
+      personImage: personImage,
+      showDemoPopup: false,
     };
   },
   computed: {
     limitedGroups() {
-      return this.groups.slice(0, 3);
+      return this.groups.slice(0, 2);
     },
     limitedChats() {
       return this.chats.slice(-1)
@@ -104,8 +126,13 @@ export default {
       console.log(`Active Group: ${groupId}`);
     },
     viewAll() {
-      this.$router.push("/channel")
-      console.log("View All Clicked");
+      if (this.userType === 'Guest') {
+    console.log("Guest user → popup shown");
+    this.showDemoPopup = true;
+  } else {
+    console.log("Non-guest user → navigating to /channel");
+    this.$router.push("/channel");
+  }
     }
   },
   mounted() {

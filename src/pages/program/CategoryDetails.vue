@@ -124,52 +124,53 @@
 
 
       <!-- Content Tabs -->
-     <!-- Books Tab -->
-     <div v-if="activeTab === 'books'" class="tab-content row">
-  <div class="row col-12 col-md-10 main-content">
+      <div v-if="activeTab === 'books'" class="tab-content row">
+      <div v-if="loadingBooks" class="loading-text">Loading books...</div>
+  <div v-else class="row col-12 col-md-10 main-content">
     <div
-      v-for="book in books"
-      :key="book.id"
-      class="col-6 col-sm-4 col-md-3 col-lg-3 mb-4 book-card"
+  v-for="(book, index) in books"
+  :key="book.id"
+  class="col-6 col-sm-4 col-md-3 col-lg-3 mb-4 book-card"
+>
+  <div class="card h-100">
+    <q-img
+      :src="book.imagePath"
+      alt="Book Cover"
+      class="card-img-top book_img"
+      @click="handleBookClick(book, index)"
+    />
+    <div class="card-body">
+      <span class="card-title">{{ book.chapterTitle }}</span>
+    </div>
+  </div>
+</div>
+  </div>
+  <div class="col-2 d-none d-md-block"></div>
+</div>
+<!-- Video -->
+<div v-if="activeTab === 'videos'" class="tab-content row">
+  <div class="row col-12 col-md-10 main-content">
+    <div v-for="group in videos" :key="group.videoId" class="col-12">
+  <div class="row breakable-border">
+    <div
+      v-for="(video, index) in group.videos"
+      :key="video.id"
+      class="col-6 col-sm-4 col-lg-4 mb-4 video-card"
     >
       <div class="card h-100">
         <q-img
-          :src="book.imagePath"
-          alt="Book Cover"
+          :src="video.coverPath"
+          alt="Video Cover"
           class="card-img-top book_img"
-          @click="visitChapter(book)"
+          @click="handleGroupedVideoClick(video, getVideoFlatIndex(group.videoId, index))"
         />
         <div class="card-body">
-          <span class="card-title">{{ book.chapterTitle }}</span>
+          <span class="card-title">{{ video.chapterTitle }}</span>
         </div>
       </div>
     </div>
   </div>
-  <div class="col-2 d-none d-md-block"></div>
 </div>
-
-
-<!-- Videos Tab -->
-<div v-if="activeTab === 'videos'" class="tab-content row">
-  <div class="row col-12 col-md-10 main-content">
-    <div v-for="group in videos" :key="group.videoId" class="col-12">
-      <div class="row  breakable-border" >
-        <div
-          v-for="video in group.videos"
-          :key="video.id"
-          class="col-6 col-sm-4 col-lg-4 mb-4 video-card"
-        >
-          <div class="card h-100">
-            <q-img :src="video.coverPath" alt="Video Cover" class="card-img-top book_img" @click="visitVideo(video)" />
-            <div class="card-body">
-              <span class="card-title">{{ video.chapterTitle }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="mb-4"></div> <!-- Space between different videoId groups -->
-    </div>
   </div>
 </div>
 
@@ -177,25 +178,29 @@
 <div v-if="activeTab === 'presentations'" class="tab-content row">
   <div class="row col-12 col-md-10 main-content">
     <div v-for="group in presentations" :key="group.presentationId" class="col-12">
-      <div class="row breakable-border">
-        <div
-          v-for="presentation in group.presentations"
-          :key="presentation.id"
-          class="col-6 col-sm-4 col-lg-4 mb-4 presentation-card"
-        >
-          <div class="card h-100">
-            <q-img :src="presentation.coverPath" alt="Presentation Cover" class="card-img-top book_img" @click="visitPresentation(presentation)" />
-            <div class="card-body">
-              <span class="card-title">{{ presentation.chapterTitle }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="mb-4"></div> <!-- Space between different presentationId groups -->
+  <div class="row breakable-border">
+    <div
+  v-for="(presentation, localIndex) in group.presentations"
+  :key="presentation.id"
+  class="col-6 col-sm-4 col-lg-4 mb-4 presentation-card"
+>
+  <div class="card h-100">
+    <q-img
+      :src="presentation.coverPath"
+      alt="Presentation Cover"
+      class="card-img-top book_img"
+      @click="handleGroupedPresentationClick(presentation, localIndex)"
+    />
+    <div class="card-body">
+      <span class="card-title">{{ presentation.chapterTitle }}</span>
     </div>
   </div>
 </div>
+  </div>
+</div>
+  </div>
+</div>
+
 
 
     </div>
@@ -203,6 +208,7 @@
   </div>
 </div>
 </div>
+<DemoUserPopUp v-if="showDemoPopup" @close="showDemoPopup = false" />
 </template>
 
 <script>
@@ -210,8 +216,13 @@ import 'src/css/LibraryProgramView.css';
 import { useSessionStore } from "src/stores/session";
 import { storeToRefs } from "pinia";
 import CryptoJS from 'crypto-js'
+
+import DemoUserPopUp from "src/layouts/DemoUserPopUp.vue";
 export default {
   name: 'CategoryDetails',
+  components: {
+    DemoUserPopUp,
+  },
   setup() {
     const session = useSessionStore();
     const { token, userType } = storeToRefs(session);
@@ -220,12 +231,17 @@ export default {
     return {
       token,
       userType,
-      roles: [] // Initialize roles array to store fetched roles
+      roles: [], // Initialize roles array to store fetched roles
+      booksCount: 2,
+  videosCount: 0,
+  presentationsCount: 2,
+  presentationsAllowedIndexes: [1],
     };
   },
   data() {
     return {
       books: [],
+      showDemoPopup: false,
       activeTab: 'books', // Default active tab
       activeCategoryId: null,
       profiles: [], // This will hold all fetched profiles
@@ -632,6 +648,49 @@ async fetchPresentationImages() {
       return { presentationId, presentations: processedPresentations };
     })
   );
+},
+handleBookClick(book, index) {
+  if (this.userType === 'Guest' && index >= this.booksCount) {
+    this.showDemoPopup = true;
+  } else {
+    this.visitChapter(book);
+  }
+},
+getVideoFlatIndex(groupId, localIndex) {
+    let index = 0;
+    for (const group of this.videos) {
+      if (group.videoId === groupId) break;
+      index += group.videos.length;
+    }
+    return index + localIndex;
+  },
+
+  handleGroupedVideoClick(video, flatIndex) {
+    if (this.userType === 'Guest' && flatIndex >= this.videosCount) {
+      this.showDemoPopup = true;
+      return;
+    }
+    this.visitVideo(video);
+  },
+
+getPresentationFlatIndex(groupId, localIndex) {
+    let index = 0;
+    for (const group of this.presentations) {
+      if (group.presentationId === groupId) break;
+      index += group.presentations.length;
+    }
+    return index + localIndex;
+  },
+
+  handleGroupedPresentationClick(presentation, localIndex) {
+  if (
+    this.userType === 'Guest' &&
+    !this.presentationsAllowedIndexes.includes(localIndex)
+  ) {
+    this.showDemoPopup = true;
+    return;
+  }
+  this.visitPresentation(presentation);
 },
 
     visitChapter(chapter) {
