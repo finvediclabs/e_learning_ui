@@ -1,91 +1,106 @@
 <template>
-  <div class="popup-overlay">
-    <div class="popup-content">
-      <button class="close-btn" @click="$emit('close')">×</button>
-      <div class="icon-wrapper">
-        <q-icon name="lock" size="48px" color="red-6" />
+  <transition name="toast">
+    <div class="toast" v-if="visible">
+      <q-icon name="lock" size="28px" color="red-6" class="q-mr-sm" />
+      <div class="toast-content">
+        <div class="toast-title">Access Denied</div>
+        <div class="toast-subtext">You don’t have permission to access this feature in demo mode.</div>
       </div>
-      <p class="popup-message">Access Denied</p>
-      <p class="popup-subtext">You don’t have permission to access this feature in demo mode.</p>
+      <button class="toast-close" @click="close">×</button>
     </div>
-  </div>
+  </transition>
 </template>
 
 <script>
 export default {
-  name: "DemoUserPopUp",
+  name: "DemoUserToast",
+  data() {
+    return {
+      visible: true,
+    };
+  },
+  mounted() {
+    setTimeout(() => {
+      this.close();
+    }, 4000); // Auto-dismiss after 4 seconds
+  },
+  methods: {
+    close() {
+      this.visible = false;
+      this.$emit('close');
+    },
+  },
 };
 </script>
 
 <style scoped>
-.popup-overlay {
+.toast {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.45);
+  top: 10%;
+  right: 2%;
+  background: #fff;
+  border-left: 6px solid #f44336;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
   display: flex;
-  justify-content: center;
   align-items: center;
-  z-index: 9999;
-  animation: fadeIn 0.3s ease;
+  padding: 1rem 1.25rem;
+  min-width: 300px;
+  max-width: 350px;
+  z-index: 10000;
+  animation: slideIn 0.3s ease;
 }
 
-.popup-content {
-  position: relative;
-  background-color: #ffffff;
-  padding: 2.5rem 2rem;
-  margin: 0 2rem;
-  border-radius: 16px;
-  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
-  text-align: center;
-  min-width: 320px;
-  max-width: 400px;
-  animation: scaleIn 0.3s ease;
+.toast-content {
+  flex-grow: 1;
 }
 
-.close-btn {
-  position: absolute;
-  top: 12px;
-  right: 16px;
+.toast-title {
+  font-size: 16px;
+  font-weight: bold;
+  color: #d32f2f;
+}
+
+.toast-subtext {
+  font-size: 13px;
+  color: #666;
+}
+
+.toast-close {
   background: none;
   border: none;
-  font-size: 26px;
+  font-size: 20px;
   cursor: pointer;
-  color: #555;
+  color: #888;
+  margin-left: 1rem;
   transition: color 0.2s;
 }
-.close-btn:hover {
+.toast-close:hover {
   color: #000;
 }
 
-.icon-wrapper {
-  margin-bottom: 1rem;
-  display: flex;
-  justify-content: center;
+/* Transitions */
+.toast-enter-active,
+.toast-leave-active {
+  transition: all 0.4s ease;
+}
+.toast-enter-from {
+  opacity: 0;
+  transform: translateX(100%);
+}
+.toast-leave-to {
+  opacity: 0;
+  transform: translateX(100%);
 }
 
-.popup-message {
-  font-size: 20px;
-  font-weight: bold;
-  color: #d32f2f;
-  margin-bottom: 0.5rem;
-}
-
-.popup-subtext {
-  font-size: 14px;
-  color: #666;
-  line-height: 1.4;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes scaleIn {
-  from { transform: scale(0.9); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
+@keyframes slideIn {
+  from {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 </style>
