@@ -6,8 +6,15 @@
     <div class="">
       <div class="">
         <q-form @submit="onSubmit">
-          <q-input outlined class="q-my-sm input" v-model="email" label="Email Address" dense lazy-rules
-            :rules="[val => val && val.length > 0 || 'Email field is required']" />
+          <q-input
+  outlined
+  class="q-my-sm"
+  v-model="email"
+  label="Email Address or Phone Number"
+  dense
+  lazy-rules
+  :rules="[val => val && val.length > 0 || 'Email or phone number is required']"
+/>
 
           <q-input v-model="password" outlined class="q-my-sm input" label="Password" dense :type="isPwd ? 'password' : 'text'"
             lazy-rules :rules="[val => val && val.length > 0 || 'Password is required']">
@@ -100,32 +107,38 @@ export default {
       this.$emit('changePage', page);
     },
     onSubmit() {
-      if (!this.loading) {
-        this.loading = true;
-        this.$api.post(urls.signInUrl, {
-          usernameOrEmail: this.email,
-          password: this.password,
-        }).then(response => {
-          this.loading = false;
-          sessionStorage.setItem('accessToken', response.data.accessToken);
-         // sessionStorage.setItem('userType', 1);
-          this.setUserData(response.data.user);
-          this.setSessionToken(response.data.accessToken);
-          var user = response.data.user;
-          sessionStorage.setItem('userType',(user.roles?.length ? user.roles[0].name : 'Student' ));
-          this.setUserType( user.roles?.length ? user.roles[0].name : 'Student' );
+  if (!this.loading) {
+    this.loading = true;
+    const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
+    const url = baseUrl + 'api/auth/signin';
 
-        }).catch(error => {
-          this.loading = false;
-          let errorMessage = error.response?.data.message || error.message;
+    // Clean up input: remove +91 and spaces
+    const cleanedInput = this.email.trim().replace(/^(\+91|0)/, '').replace(/\s+/g, '');
+
+    this.$api.post(url, {
+      usernameOrEmail: cleanedInput,
+      password: this.password,
+    }).then(response => {
+      this.loading = false;
+      sessionStorage.setItem('accessToken', response.data.accessToken);
+      this.setUserData(response.data.user);
+      this.setSessionToken(response.data.accessToken);
+
+      const user = response.data.user;
+      const roleName = user.roles?.length ? user.roles[0].name : 'Student';
+      sessionStorage.setItem('userType', roleName);
+      this.setUserType(roleName);
+
+    }).catch(error => {
+      this.loading = false;
+      let errorMessage = error.response?.data.message || error.message;
       if (errorMessage.includes('properties of undefined')) {
         errorMessage = "You are not authorized to login";
       }
       this.showMsg(errorMessage, 'negative');
-        });
-      }
-
-    }
+    });
+  }
+}
   }
 }
 </script>
