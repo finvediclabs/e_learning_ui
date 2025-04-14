@@ -7,25 +7,25 @@
     <q-img :src="imageUrl || defaultProfileImg" class="profileImg cursor-pointer rounded" />
     <div class="greeting">{{ greeting }} {{ profile.name || "Guest" }}</div>
 
-    <div class="leaderboard" v-if="topProfiles.length">
-      <div class="podium-container">
-        <div :class="['podium', 'position-2']">
-          <q-img :src="topProfiles[1]?.pic || defaultProfileImg" alt="ProPic" class="podium-pic podium-pic-2 rounded-circle" />
-          <div class="profile-name">{{ topProfiles[1]?.name || "Unknown" }}</div>
-          <div class="podium-poll">2nd<br><span class="points rounded-borders">{{ topProfiles[1]?.points }} Pts</span></div>
-        </div>
-        <div :class="['podium', 'position-1']">
-          <q-img :src="topProfiles[0]?.pic || defaultProfileImg" alt="ProPic" class="podium-pic podium-pic-1 rounded-circle" />
-          <div class="profile-name">{{ topProfiles[0]?.name || "Unknown" }}</div>
-          <div class="podium-poll">1st<br><span class="points">{{ topProfiles[0]?.points }} Pts</span></div>
-        </div>
-        <div :class="['podium', 'position-3']">
-          <q-img :src="topProfiles[2]?.pic || defaultProfileImg" alt="ProPic" class="podium-pic podium-pic-3 rounded-circle" />
-          <div class="profile-name">{{ topProfiles[2]?.name || "Unknown" }}</div>
-          <div class="podium-poll">3rd<br><span class="points">{{ topProfiles[2]?.points }} Pts</span></div>
-        </div>
-      </div>
+    <div class="leaderboard" v-if="topProfilesFetched.length">
+  <div class="podium-container">
+    <div :class="['podium', 'position-2']">
+      <q-img :src="topProfiles" alt="ProPic" class="podium-pic podium-pic-2 rounded-circle" />
+      <div class="profile-name">{{ topProfilesFetched[1]?.name || "Unknown" }}</div>
+      <div class="podium-poll">2nd<br><span class="points rounded-borders">{{ topProfilesFetched[1]?.points }} Pts</span></div>
     </div>
+    <div :class="['podium', 'position-1']">
+      <q-img :src="topProfiles" alt="ProPic" class="podium-pic podium-pic-1 rounded-circle" />
+      <div class="profile-name">{{ topProfilesFetched[0]?.name || "Unknown" }}</div>
+      <div class="podium-poll">1st<br><span class="points">{{ topProfilesFetched[0]?.points }} Pts</span></div>
+    </div>
+    <div :class="['podium', 'position-3']">
+      <q-img :src="topProfiles" alt="ProPic" class="podium-pic podium-pic-3 rounded-circle" />
+      <div class="profile-name">{{ topProfilesFetched[2]?.name || "Unknown" }}</div>
+      <div class="podium-poll">3rd<br><span class="points">{{ topProfilesFetched[2]?.points }} Pts</span></div>
+    </div>
+  </div>
+</div>
     <div v-else>
       <p>No leaderboard data available</p>
     </div>
@@ -33,15 +33,28 @@
 </template>
 
 <script>
-import { mapState } from "pinia";
 import { useProfileStore } from "src/stores/profile";
 import { api } from "src/boot/axios";
 import topProfiles from "src/assets/add-user.png";
 import defaultProfileImg from "src/assets/profile.png";
+import { useSessionStore } from "src/stores/session";
+import { mapState, storeToRefs } from "pinia";
 
 
 export default {
   name: "ProfileCard",
+  setup() {
+    const session = useSessionStore();
+    const { token, userType } = storeToRefs(session);
+    const profileStore = useProfileStore();
+    const currentUserId = profileStore.user.id || '';
+    console.log("Current User Id:", currentUserId);
+
+    return {
+      userType,
+      currentUserId,
+    };
+  },
   data() {
     return {
       profile: {},
@@ -49,11 +62,12 @@ export default {
       topProfiles: topProfiles,
       greeting: "",
       defaultProfileImg: defaultProfileImg,
-      topProfiles: [
+      topProfilesStatic: [
   { name: "Alice", pic: topProfiles, points: 1500 },
   { name: "Bob", pic: topProfiles, points: 1200 },
   { name: "Charlie", pic: topProfiles, points: 1000 },
 ],
+topProfilesFetched: [],
 
 
     };
@@ -119,11 +133,72 @@ export default {
         console.error(error.response?.data.message || error.message);
       }
     },
+    async fetchStudentData() {
+  try {
+    // Fetch student data
+    const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
+    const apiUrl = baseUrl + 'api/enrollments/student/' + this.currentUserId;
+    const response = await this.$api.get(apiUrl);
+    console.log("Fetched student data:", response.data.data); // Log the student data
+
+    // Check if the data array is not empty
+    if (response.data.data && response.data.data.length > 0) {
+      const cycleId = response.data.data[0].cycleid; // Extract cycleId from the first object
+      console.log("Cycle ID:", cycleId); // Log the cycleId
+
+      // Call fetchAssignments method with the cycleId
+      this.fetchAssignments(cycleId);
+    } else {
+      console.error("No enrollments found for the student.");
+    }
+  } catch (error) {
+    console.error("Error fetching student data:", error);
+  }
+},
+
+async fetchAssignments(cycleId) {
+  try {
+    // Fetch assignments data using the cycleId
+    const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
+    const apiUrl = baseUrl + 'api/enrollmentsAssignments/with-assignments?cycleid=' + cycleId;
+    // const assignmentsUrl = `https://fnbackendprod.finvedic.in/api/enrollmentsAssignments/with-assignments?cycleid=${cycleId}`;
+    const assignmentsResponse = await this.$api.get(apiUrl);
+
+    // Log the assignments data for that cycleId
+    console.log("Fetched assignments for cycle:", cycleId, assignmentsResponse.data);
+
+    // Sort the assignments by scoredMarks in descending order
+    const sortedAssignments = assignmentsResponse.data.sort((a, b) => b.scoredMarks - a.scoredMarks);
+
+    // Get the top 3 scored assignments
+    const top3Assignments = sortedAssignments.slice(0, 3);
+
+    // Log the top 3 scored assignments
+    console.log("Top 3 scored assignments:", top3Assignments);
+
+    // Now, set the topProfilesFetched based on the top 3 assignments
+    if (this.userType === "Student") {
+      this.topProfilesFetched = top3Assignments.map((assignment) => ({
+        name: assignment.username,
+        points: assignment.scoredMarks,
+      }));
+
+      console.log("Top profiles fetched:", this.topProfilesFetched);
+    }
+  } catch (error) {
+    console.error("Error fetching assignments:", error);
+  }
+},
   },
   mounted() {
-    this.setGreeting();
-    this.getUserData();
-  },
+  this.setGreeting();
+  this.getUserData();
+  if (this.userType === "Student") {
+    this.fetchStudentData();
+  } else {
+    this.topProfilesFetched = this.topProfilesStatic; // For non-student users, use static profiles
+  }
+},
 };
 </script>
 

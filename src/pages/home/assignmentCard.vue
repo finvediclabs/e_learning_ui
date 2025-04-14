@@ -65,9 +65,9 @@ export default {
     },
     async fetchReportData() {
       try {
-        const response = await this.$api.get(
-          `https://fnbackendprod.finvedic.in/api/enrollmentsAssignments/with-assignments?studentId=${this.currentUserId}`
-        );
+        const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
+        const apiUrl = baseUrl + 'api/enrollmentsAssignments/with-assignments?studentId=' + this.currentUserId;
+        const response = await this.$api.get(apiUrl);
         console.log("Fetched report data:", response.data);
 
         // Check if user is not a Student, set attendance to 60%
