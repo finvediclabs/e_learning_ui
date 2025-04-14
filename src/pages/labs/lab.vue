@@ -28,7 +28,7 @@
   :label="
     ['Fintech Sandbox', 'MAANG Sandbox'].includes(lab.title)
       ? 'Download'
-      : (lab.title === 'Tech Sandbox' && labsData.some(vm => vm.userName === currentUserName && vm.provisioningState === 'Success'))
+      : (lab.title === 'Tech Sandbox' && labsData.some(vm => vm.userName === currentUserName && vm.provisioningState === 'Succeeded'))
         ? 'Download VM'
         : (isCreatingVm ? '' : 'Start')
   "
@@ -37,8 +37,8 @@
   @click="
     ['Fintech Sandbox', 'MAANG Sandbox'].includes(lab.title)
       ? handleLabAction(lab)
-      : (lab.title === 'Tech Sandbox' && labsData.some(vm => vm.userName === currentUserName && vm.provisioningState === 'Success'))
-        ? downloadVm(labsData.find(vm => vm.userName === currentUserName && vm.provisioningState === 'Success'))
+      : (lab.title === 'Tech Sandbox' && labsData.some(vm => vm.userName === currentUserName && vm.provisioningState === 'Succeeded'))
+        ? downloadVm(labsData.find(vm => vm.userName === currentUserName && vm.provisioningState === 'Succeeded'))
         : handleLabAction(lab)
   "
 />
@@ -72,7 +72,7 @@
   :label="
     ['Fintech Sandbox', 'MAANG Sandbox'].includes(lab.title)
       ? 'Download'
-      : (lab.title === 'Tech Sandbox' && labsData.some(vm => vm.userName === currentUserName && vm.provisioningState === 'Success'))
+      : (lab.title === 'Tech Sandbox' && labsData.some(vm => vm.userName === currentUserName && vm.provisioningState === 'Succeeded'))
         ? 'Download VM'
         : (isCreatingVm ? '' : 'Start')
   "
@@ -81,8 +81,8 @@
   @click="
     ['Fintech Sandbox', 'MAANG Sandbox'].includes(lab.title)
       ? handleLabAction(lab)
-      : (lab.title === 'Tech Sandbox' && labsData.some(vm => vm.userName === currentUserName && vm.provisioningState === 'Success'))
-        ? downloadVm(labsData.find(vm => vm.userName === currentUserName && vm.provisioningState === 'Success'))
+      : (lab.title === 'Tech Sandbox' && labsData.some(vm => vm.userName === currentUserName && vm.provisioningState === 'Succeeded'))
+        ? downloadVm(labsData.find(vm => vm.userName === currentUserName && vm.provisioningState === 'Succeeded'))
         : handleLabAction(lab)
   "
 />
