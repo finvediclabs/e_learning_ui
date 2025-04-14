@@ -250,7 +250,7 @@ import FinPortletHeader from "src/components/Portlets/FinPortletHeader.vue";
 import FinPortletHeading from "src/components/Portlets/FinPortletHeading.vue";
 import FinPortletItem from "src/components/Portlets/FinPortletItem.vue";
 import { useProfileStore } from "src/stores/profile";
-import SubmittedAssignment from "./SubmitAssignments.vue";
+import SubmittedAssignment from "../assignments/SubmitAssignments.vue";
 // import SubmittedAssignment2 from "./SubmitAssignments2.vue";
 import { useSessionStore } from "src/stores/session";
 import Prism from 'prismjs';

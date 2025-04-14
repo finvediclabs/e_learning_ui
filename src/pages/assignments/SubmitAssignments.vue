@@ -1,18 +1,18 @@
 <template>
   <fin-portlet-header>
     <fin-portlet-heading :loading="masterLoading">
-      <span class="User_heading">Student Assignments</span>
+      <!-- <span class="User_heading">Student Assignments</span> -->
     </fin-portlet-heading>
     </fin-portlet-header>
   <!-- Container for Layout -->
   <div class="layout-container">
     <!-- Search Bar with Same Width as Table -->
-   
+
     <div class="tables-container">
       <!-- Table to Display Batches on Left (20% width) -->
       <div class="batch-table">
         <div class="row col-12" style="display:flex;align-items: center;justify-content: center;">
-        <h6 style="text-align: center;margin-top: -6%;background-color: #5479f7;border-radius: 5px;width: 50%;color: #ffff;margin-bottom: 0%"><b>Batches</b></h6>
+        <!-- <h6 style="text-align: center;margin-top: -6%;background-color: #e7f0ff;border-radius: 5px;width: 50%;color: #ffff;margin-bottom: 0%"><b>Batches</b></h6> -->
         </div>
         <fin-portlet-item class="search-container">
       <q-select
@@ -21,7 +21,7 @@
         option-label="label"
         option-value="value"
         label="Batches"
-        style="margin: 4%;width: 92%;"
+        style="margin: 3%;width: 92%;"
         outlined
         dense
         clearable
@@ -37,7 +37,7 @@
           :row-class="getRowClass(index)"
           row-key="cycleid"
           :pagination.sync="pagination"
-          style="height: 60vh;margin: 4%;"
+          style="height: 60vh;margin-left: 4%;margin-right: 4%;"
         >
           <template v-slot:header="props">
             <q-tr :props="props">
@@ -66,22 +66,26 @@
       <!-- Table to Display Student Assignments on Right (70% width) -->
       <div class="student-assignment-table">
         <div v-if="studentAssignments.length > 0" class="cycle-id-heading row col-4" style="display:flex;align-items: center;margin-right: auto;margin-left: 5%;">
-    <h6 style="text-align: center;background-color: #5479f7;border-radius: 5px;width: 30%;color: #ffff;margin-top: -2%;margin-bottom: 0%">Batch ID: {{ studentAssignments[0].cycleid_new }}</h6>
+    <!-- <h6 style="text-align: center;background-color: #e7f0ff;border-radius: 5px;width: 30%;color: #ffff;margin-top: -2%;margin-bottom: 0%">Batch ID: {{ studentAssignments[0].cycleid_new }}</h6> -->
   </div>
   <fin-portlet-item class="search-container">
-      <q-select
-        v-model="studentSearch"
-        :options="studentOptions"
-        option-label="label1"
-        option-value="value1"
-        label="Students"
-        style="margin-left:auto;margin-right: 2%;margin-bottom: 2%;margin-top: 2%; width: 30%;"
-        outlined
-        dense
-        clearable
-        class="fin-input"
-        @update:model-value="handleSelectChange2"
-      />
+    <div style="display: flex; justify-content: space-between; align-items: center; margin: 1% 2%;">
+  <span class="text-h6">Batch ID: {{ studentAssignments[0].cycleid_new }}</span>
+
+  <q-select
+    v-model="studentSearch"
+    :options="studentOptions"
+    option-label="label1"
+    option-value="value1"
+    label="Students"
+    style="width: 30%;"
+    outlined
+    dense
+    clearable
+    class="fin-input"
+    @update:model-value="handleSelectChange2"
+  />
+</div>
     </fin-portlet-item>
         <q-table
           flat
@@ -92,7 +96,7 @@
           :pagination.sync="pagination"
           style="height: 60vh;text-align:left "
         >
-        
+
           <template v-slot:header="props">
             <q-tr :props="props" style="text-align:left">
               <q-th v-for="col in props.cols" :key="col.name" :props="props"  :style="['submittedRatio', 'scoredMarks','totalMarks'].includes(col.name) ? 'text-align: center;' : 'text-align: left;'" class="theaded">
@@ -114,7 +118,7 @@
                   round
                   dense
                   @click="() => { props.expand = !props.expand;
-                     fetchStudentAssignments(props.row.cycleid, props.row.studentId); 
+                     fetchStudentAssignments(props.row.cycleid, props.row.studentId);
                    }"
                   :icon="props.expand ? 'remove' : 'add'"
                 />
@@ -258,7 +262,7 @@
               color="primary"
               @click="openInNewTab(dialogFileUrl)"
             />
-           
+
             <q-btn
              v-if="!assignmentData.evaluation"
               label="Evaluate"
@@ -312,7 +316,7 @@
           class="q-mt-md"
         /> -->
     <q-card-actions class="q-dialog-actions">
-      
+
       <!-- <q-btn label="Verification Done" color="primary" @click="submitAssignmentData" /> -->
       <q-btn label="Download File" color="secondary" @click="downloadFile" v-if="fileType" />
     </q-card-actions>
@@ -335,11 +339,11 @@ export default {
       dialogFileContent: "", // Content for non-zip files
       extractedFiles: [],
       pdfPath: "",
-      batches: [], 
+      batches: [],
       evaluationTrigger: 0,
       students: [],              // All batches from API
       filteredBatches: [],       // Batches to display based on selection
-      batchSearch: null,  
+      batchSearch: null,
       studentSearch: null,       // Selected batch for filtering
       studentAssignments: [],    // Data for the selected batch's assignments
       columns: [                 // Table column definitions for batches
@@ -501,7 +505,7 @@ export default {
     .then((response) => {
       this.evaluationResult = response.data.response;
       this.masterLoading=false
-      
+
       // Call fetchStudentAssignments only after evaluation completes
       this.fetchStudentAssignments(batchId, studentId);
     })
@@ -516,7 +520,7 @@ export default {
     const baseUrl =
       (process.env.VUE_APP_CORE_URL || "").replace(/\/$/g, "") + "/";
     const submitAssignmentUrl = `${baseUrl}api/student-assignments/${this.assignmentData.id}`;
-    
+
     // Construct the URL with the assignment ID
     const currentDate = Date.now();
     const evaluationString = this.evaluationResult || "";
@@ -634,7 +638,7 @@ async fetchAssignments(cycleid) {
   try {
     const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
     const assignmentUrl = `${baseUrl}api/enrollmentsAssignments/with-assignments?cycleid=${cycleid}`;
-    
+
     const response = await this.$api.get(assignmentUrl);
   //  console.log("Fetched student assignments:", response.data);
 
@@ -690,7 +694,7 @@ closeDialog() {
       console.log("file:",blobUrl);
       if (fileType === 'pdf') {
         this.chapterFilePath = blobUrl;
-        
+
       }else if (['java', 'py'].includes(fileType)) {
     // Fetch content for .java or .py files
     const response = await fetch(blobUrl);
@@ -768,7 +772,7 @@ closeDialog() {
 
           // Generate batchId_new based on the same conditions as cycleid_new
           const batchId_new = batchId.startsWith('0')
-            ? batchId === '0001' 
+            ? batchId === '0001'
               ? `24A${batchId.slice(-3)}`  // Remove an extra zero for 0001
               : `24A${batchId}`
             : `90A${batchId}`;
@@ -830,7 +834,7 @@ handleSelectChange(selectedBatch) {
     }
   }
 },
-    
+
 async handleSelectChange2(value1) {
   const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
   let url = `${baseUrl}api/enrollmentsAssignments/with-assignments?`;
@@ -908,7 +912,7 @@ async handleSelectChange2(value1) {
   }
 }
 ,
-    
+
     handleRowClick(row) {
      // console.log('Row clicked:', row);
       this.selectedCycleId = row.cycleid;
@@ -928,7 +932,7 @@ async handleSelectChange2(value1) {
     this.fetchBatches();
     this.fetchStudents(); // Fetch batches when component is created
   },
-  
+
   watch: {
     dialogFileContent() {
       this.highlightCode();
@@ -947,7 +951,7 @@ async handleSelectChange2(value1) {
     // Call selectFirstRow when component is mounted to simulate the first row click
     this.selectFirstRow();
   },
-  
+
 };
 </script>
 
@@ -992,12 +996,13 @@ async handleSelectChange2(value1) {
   vertical-align: top;
   border-collapse: collapse;
   border-radius: 10px;
+  /* #e7f0ff */
 }
 .student-assignment-table{
   width: 100%;
   margin-left: 2%;
   margin-right: 2%;
-  border:2px solid #34549e;
+  /* border:2px solid #34549e; */
 }
 button {
   background-color: #5479f7;
@@ -1041,13 +1046,13 @@ pre {
   margin: 2%;
 }
 .q-table .theaded  {
-  background-color: #5479F7;
-  color: #ffffff;
+  background-color: #e7f0ff;
+  color: #000000;
 }
 
 .q-table .theaded2  {
-  background-color: #5479F7;
-  color: #ffffff;
+  background-color: #e7f0ff;
+  color: #000000;
   border-radius: 0px 0px 0px 0px;
 }
 
@@ -1114,7 +1119,7 @@ pre {
 .batch-table {
   width: 30%;
   margin-left: 2%;
-  border: 2px solid #34549e;
+  border-right: 1px solid #ddd;
 }
 
 .assignment-table {
@@ -1122,7 +1127,7 @@ pre {
   margin-left: 20px;
 }
 .User_heading {
-  color: #5479f7;
+  color: #e7f0ff;
   margin-left: 4%;
 }
 .fin-input {

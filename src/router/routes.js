@@ -116,7 +116,7 @@ const routes = [
       },
       {
         path: 'assignments/submit',
-        component: () => import('pages/libraries/SubmitAssignments.vue'),
+        component: () => import('src/pages/assignments/SubmitAssignments.vue'),
         meta: { items: 'submit' }
       },
       {

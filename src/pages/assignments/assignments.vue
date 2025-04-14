@@ -1,4 +1,9 @@
 <template>
+   <div v-if="isEligible">
+      <!-- Show assignments or batch assignments based on selected state -->
+      <SubmittedAssignment />
+    </div>
+    <div v-if="userType !== 'Admin' && userType !== 'Faculty'">
   <div class="assignments">
     <div class="row col-12 w-100">
       <div class="col-3 left">
@@ -302,6 +307,7 @@
       </q-card>
     </q-dialog>
   </div>
+</div>
 </template>
 
 
@@ -314,6 +320,7 @@ import FinPortletHeader from "src/components/Portlets/FinPortletHeader.vue";
 import FinPortletHeading from "src/components/Portlets/FinPortletHeading.vue";
 import FinPortletItem from "src/components/Portlets/FinPortletItem.vue";
 import Prism from 'prismjs';
+import SubmittedAssignment from "./SubmitAssignments.vue";
 
 import VuePdfApp from "vue3-pdf-app";
 import PDFViewer from 'pdf-viewer-vue';
@@ -401,11 +408,18 @@ export default {
     FinPortletHeading,
     FinPortletItem,
     VuePdfApp,
+    SubmittedAssignment,
   },
   computed: {
     uniqueCourses() {
     return [...new Set(this.assignments.map(a => a.course))];
   },
+  isEligible() {
+      const profileStore = useProfileStore();
+      const roles = profileStore.user.roles.map(role => role.name);
+      // Check if the user is admin or faculty
+      return roles.includes('Admin') || roles.includes('Faculty');
+    },
   filteredAssignments() {
     console.log("Filtering assignments...");
     return this.assignments.filter(assignment => {
