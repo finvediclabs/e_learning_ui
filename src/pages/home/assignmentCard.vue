@@ -22,15 +22,30 @@
     </div>
   </div>
 </template>
-
 <script>
 import assignment_vector from 'src/assets/assignment_vector.png';
+import { useSessionStore } from "src/stores/session";
+import { storeToRefs } from "pinia";
+import { useProfileStore } from "src/stores/profile";
 
 export default {
+  setup() {
+    const session = useSessionStore();
+    const { token, userType } = storeToRefs(session);
+    const profileStore = useProfileStore();
+    const currentUserId = profileStore.user.id || '';
+    console.log("Current User Id:", currentUserId);
+
+    return {
+      userType,
+      currentUserId,
+    };
+  },
   data() {
     return {
-      attendancePercentage: 25, // Example percentage
+      attendancePercentage: 0, // Initial attendance percentage
       assignment_vector,
+      reportData: [], // To store fetched report data
     };
   },
   computed: {
@@ -48,6 +63,37 @@ export default {
     viewAll() {
       this.$router.push("/assignment");
     },
+    async fetchReportData() {
+      try {
+        const response = await this.$api.get(
+          `https://fnbackendprod.finvedic.in/api/enrollmentsAssignments/with-assignments?studentId=${this.currentUserId}`
+        );
+        console.log("Fetched report data:", response.data);
+
+        // Check if user is not a Student, set attendance to 60%
+        if (this.userType !== 'Student') {
+          this.attendancePercentage = 60;
+          return; // Exit the method since we don't need to process the report data
+        }
+
+        // Assuming the response is an array with at least one object
+        const data = response.data[0];
+        if (data) {
+          const totalAssignments = data.totalAssignments;
+          const totalStudentAssignments = data.totalStudentAssignments;
+
+          // Calculate attendance percentage dynamically
+          if (totalAssignments > 0) {
+            this.attendancePercentage = (totalStudentAssignments / totalAssignments) * 100;
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching report data:", error);
+      }
+    },
+  },
+  mounted() {
+    this.fetchReportData();
   },
 };
 </script>
