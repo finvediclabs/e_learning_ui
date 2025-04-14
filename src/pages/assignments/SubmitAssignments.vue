@@ -70,7 +70,9 @@
   </div>
   <fin-portlet-item class="search-container">
     <div style="display: flex; justify-content: space-between; align-items: center; margin: 1% 2%;">
+      <div v-if="studentAssignments.length > 0">
   <span class="text-h6">Batch ID: {{ studentAssignments[0].cycleid_new }}</span>
+  </div>
 
   <q-select
     v-model="studentSearch"
