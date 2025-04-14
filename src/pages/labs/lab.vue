@@ -15,13 +15,34 @@
                   <q-img :src="lab.img" class="sandbox-img" />
                   <q-card-section>
                     <div class="action-buttons">
-                      <q-btn label="Restart" color="" outline class="q-mr-sm act-btn" />
+                      <q-btn label="Restart" color="" outline class="q-mr-sm act-btn" v-if="lab.title !== 'Tech Sandbox'" />
                       <q-btn
-  :label="['Fintech Sandbox', 'MAANG Sandbox'].includes(lab.title) ? 'Download' : (isCreatingVm ? '' : 'Start')"
+  label="Shutdown"
+  color=""
+  outline
+  class="q-mr-sm act-btn"
+  v-if="lab.title === 'Tech Sandbox'"
+  @click="shutdown(labsData.find(vm => vm.userName === currentUserName))"
+/>
+                      <q-btn
+  :label="
+    ['Fintech Sandbox', 'MAANG Sandbox'].includes(lab.title)
+      ? 'Download'
+      : (lab.title === 'Tech Sandbox' && labsData.some(vm => vm.userName === currentUserName && vm.provisioningState === 'Success'))
+        ? 'Download VM'
+        : (isCreatingVm ? '' : 'Start')
+  "
   :loading="isCreatingVm"
   class="act-btn"
-  @click="handleLabAction(lab)"
+  @click="
+    ['Fintech Sandbox', 'MAANG Sandbox'].includes(lab.title)
+      ? handleLabAction(lab)
+      : (lab.title === 'Tech Sandbox' && labsData.some(vm => vm.userName === currentUserName && vm.provisioningState === 'Success'))
+        ? downloadVm(labsData.find(vm => vm.userName === currentUserName && vm.provisioningState === 'Success'))
+        : handleLabAction(lab)
+  "
 />
+
                     </div>
                   </q-card-section>
                 </q-card>
@@ -38,13 +59,35 @@
                 <q-img :src="lab.img" class="sandbox-img" />
                 <q-card-section>
                   <div class="action-buttons">
-                    <q-btn label="Restart" color="" outline class="q-mr-sm act-btn" />
+                    <q-btn label="Restart" color="" outline class="q-mr-sm act-btn" v-if="lab.title !== 'Tech Sandbox'" />
                     <q-btn
-  :label="['Fintech Sandbox', 'MAANG Sandbox'].includes(lab.title) ? 'Download' : (isCreatingVm ? '' : 'Start')"
+  label="Shutdown"
+  color=""
+  outline
+  class="q-mr-sm act-btn"
+  v-if="lab.title === 'Tech Sandbox'"
+  @click="shutdown(labsData.find(vm => vm.userName === currentUserName))"
+/>
+                    <q-btn
+  :label="
+    ['Fintech Sandbox', 'MAANG Sandbox'].includes(lab.title)
+      ? 'Download'
+      : (lab.title === 'Tech Sandbox' && labsData.some(vm => vm.userName === currentUserName && vm.provisioningState === 'Success'))
+        ? 'Download VM'
+        : (isCreatingVm ? '' : 'Start')
+  "
   :loading="isCreatingVm"
   class="act-btn"
-  @click="handleLabAction(lab)"
+  @click="
+    ['Fintech Sandbox', 'MAANG Sandbox'].includes(lab.title)
+      ? handleLabAction(lab)
+      : (lab.title === 'Tech Sandbox' && labsData.some(vm => vm.userName === currentUserName && vm.provisioningState === 'Success'))
+        ? downloadVm(labsData.find(vm => vm.userName === currentUserName && vm.provisioningState === 'Success'))
+        : handleLabAction(lab)
+  "
 />
+
+
                   </div>
                 </q-card-section>
               </q-card>
@@ -70,59 +113,6 @@
 
 </div>
 </div>
-<!-- <fin-portlet-item>
-        <div class="scroll_on">
-          <div class="row" style="width: 100%;margin-left: auto;margin-right: auto;">
-            <div class="col-12 col-sm-6 col-md-6 col-lg-6 q-pa-lg" v-for="(lab, index) in filteredLabs" :key="lab.id"
-              style="padding-top: 0;">
-              <q-card class="shadow-8"
-                :style="{ border: getBorderColor(lab.provisioningState, lab.locked), height: '100%' }"
-                style="background-color: #5479F7">
-                <q-card-section horizontal>
-                  <q-card-section class="q-pa-md lab-img flex items-center">
-                    <q-img :src="labImg" class="full-width" />
-                  </q-card-section>
-                  <q-card-section class="" style="width: 70%;font-size: 13px;">
-                    <div class="column full-width">
-                      <div class="col flex items-center">
-                        <span  style="color: white;"><strong>VM Name :</strong> {{ lab.name }}</span>
-                        <q-space />
-                        <q-img v-if="lab.provisioningState === 'Creating'" :src="loader"
-                          style="width: 30px; height: 30px;" />
-                      </div>
-                      <div class="flex" style="color: white;">
-                        <span><strong>Created By :</strong> {{ lab.studentName }}</span>
-                      </div>
-                      <div class="flex" style="color: white;">
-                        <p><strong>Date :</strong> {{ lab.createdDate }}</p>
-                      </div>
-
-                      <div class="col flex">
-                        <div class="q-px-md shadow-4 rounded-borders q-pa-xs text-center"
-                          style="width:90px;font-size: 8px;background-color: white;"
-                          @click="lab.provisioningState !== 'Deleting' && lab.provisioningState !== 'Deleted' && lab.provisioningState !== 'Failed' ? download(lab) : null"
-                          :class="{ 'pointer-events-none': lab.locked }">
-                          {{ lab.provisioningState === 'Deleting' || lab.provisioningState === 'Failed' ||
-                            lab.provisioningState === 'Deleted' ? lab.provisioningState : "Download" }}
-                        </div>
-                        <q-space />
-                        <q-btn :label="lab.locked ? 'Locked' : 'Shutdown'" size="8px" dense
-                          class="q-px-md text-weight-bold" rounded
-                          :style="{ background: (lab.locked || lab.provisioningState === 'Deleting' || lab.provisioningState === 'Deleted' || lab.provisioningState === 'Failed') ? '#D49F8A' : '#7BFF90' }"
-                          :disable="!canShutdown(lab)" @click="shutdown(lab)">
-                          <q-icon name="lock" size="14px" class="q-pl-sm"></q-icon>
-                        </q-btn>
-                      </div>
-
-                    </div>
-                  </q-card-section>
-                </q-card-section>
-              </q-card>
-            </div>
-
-          </div>
-        </div>
-      </fin-portlet-item> -->
     <DemoUserPopUp v-if="showPopup" @close="showPopup = false" />
 </template>
 
@@ -154,9 +144,13 @@ export default {
   setup() {
     const session = useSessionStore();
     const { token, userType } = storeToRefs(session);
+    const profileStore = useProfileStore();
+    const currentUserName = profileStore.user.username || '';
+    console.log("Current User Name:", currentUserName);
 
     return {
       userType,
+      currentUserName,
     }
   },
   data() {
@@ -215,6 +209,9 @@ export default {
 
       };
     },
+    userHasVm() {
+    return this.labsData.some(vm => vm.userName === this.currentUserName);
+  },
 
     getBorderColor() {
       return function (provisioningState, locked) {
@@ -302,33 +299,97 @@ disable themes:i:0`;
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
 },
-    async shutdown(lab) {
-      const profileStore = useProfileStore();
-      const profileUsername = profileStore.user.username;
-      const isAdmin = profileStore.user.roles.some(role => role.name === 'Admin');
+downloadVm(lab) {
+  const sessionStore = useSessionStore(); // Access session store
+  const profileStore = useProfileStore();
 
-      // Check if the user is an Admin or if the lab belongs to the user
-      if (!isAdmin && lab.userName !== profileUsername) {
-        this.showMsg('You do not have permission to perform this action.', 'negative');
-        return;
-      }
+  if (!lab) {
+    this.showMsg('Lab data is unavailable.', 'negative');
+    return;
+  }
 
-      if (lab.provisioningState === 'Deleted' || lab.provisioningState === 'Deleting' || lab.provisioningState === 'Failed') {
-        this.showMsg('Cannot perform shutdown action as the lab is already deleted or deleting or failed.', 'negative');
-        return;
-      }
+  console.log("profile username:", profileStore.user?.username);
+  console.log("lab username:", lab.userName);
 
-      try {
-        const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
-        const getDeleteVMUrl = baseUrl + 'deletevm/';
-        const response = await this.$api.get(getDeleteVMUrl + lab.name);
-        // console.log('success');
-        lab.locked = true;
-        this.saveLockedStates(); // Save locked states to local storage
-      } catch (error) {
-        console.error(error);
+  if (!profileStore.user) {
+    this.showMsg('User profile is not available.', 'negative');
+    return;
+  }
+
+  const isAdmin = profileStore.user.roles?.some(role => role.name === 'Admin');
+
+  if (!isAdmin && profileStore.user.username !== lab.userName) {
+    this.showMsg('You are not authorized to download this file.', 'negative');
+    return;
+  }
+
+  const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
+  const downloadUrl = `${baseUrl}download/${lab.name}`;
+
+  fetch(downloadUrl, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${sessionStore.token}`
+    }
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
       }
-    },
+      return response.blob();
+    })
+    .then(blob => {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${lab.name}.rdp`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      this.showMsg('Download started!', 'positive');
+    })
+    .catch(error => {
+      this.showMsg('Download failed: ' + error.message, 'negative');
+      console.error('Fetch error:', error.message);
+    });
+},
+async shutdown(lab) {
+  const profileStore = useProfileStore();
+  const profileUsername = profileStore.user.username;
+  const isAdmin = profileStore.user.roles.some(role => role.name === 'Admin');
+
+  if (!lab) {
+    this.showMsg('No VM found to shut down.', 'negative');
+    return;
+  }
+
+  // 🚫 Access check: only Admin or owner can proceed
+  if (!isAdmin && lab.userName !== profileUsername) {
+    this.showMsg('You do not have permission to perform this action.', 'negative');
+    return;
+  }
+
+  if (['Deleted', 'Deleting', 'Failed'].includes(lab.provisioningState)) {
+    this.showMsg('Cannot perform shutdown action as the lab is already deleted, deleting, or failed.', 'negative');
+    return;
+  }
+
+  try {
+    const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
+    const getDeleteVMUrl = baseUrl + 'deletevm/';
+    await this.$api.get(getDeleteVMUrl + lab.name);
+    lab.locked = true;
+    this.saveLockedStates();
+    this.showMsg('Shutdown initiated!', 'positive');
+    setTimeout(() => {
+  window.location.reload();
+}, 3000);
+  } catch (error) {
+    console.error(error);
+    this.showMsg('There was an error initiating shutdown.', 'negative');
+  }
+},
     loadLockedStates() {
       const lockedStates = JSON.parse(localStorage.getItem('lockedStates')) || {};
       this.labsData.forEach((lab) => {
@@ -383,6 +444,8 @@ disable themes:i:0`;
       this.loading = true;
       this.$api.get(urls.getAzureVmsUrl).then(response => {
         this.loading = false;
+        console.log('Raw API Response:', response.data.data);
+
         this.labsData = response.data.data.map(vm => {
           const createdDateIST = new Date(vm.createdDate).toLocaleString('en-IN', {
             timeZone: 'Asia/Kolkata',
