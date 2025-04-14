@@ -35,7 +35,7 @@
 
       </div>
       <div class="col-12 q-mt-none text-right q-pt-sm" style="width: 98%;margin-left: auto;margin-right: auto;">
-          <span style="color: #4E5BF8;">View More Courses →</span>
+        <span style="color: #4E5BF8; cursor: pointer;" @click="viewAll">View More Courses →</span>
         </div>
     </div>
   </div>
@@ -87,6 +87,10 @@ export default {
     this.fetchCategories();
   },
   methods: {
+    viewAll() {
+    this.$router.push("/course");
+    console.log("View All Clicked from MostPopular");
+  },
     async preloadImage(url) {
   return new Promise((resolve) => {
     const img = new Image();

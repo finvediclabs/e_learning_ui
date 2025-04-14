@@ -254,6 +254,12 @@ const routes = [
         component: () => import('pages/courses/courses.vue'),
         meta: { item: '' },
       },
+      {
+        path: '',
+        name: 'AllCourses',
+        component: () => import('pages/courses/AllCourses.vue'),
+        meta: { item: '' },
+      },
 
     ],
   },
