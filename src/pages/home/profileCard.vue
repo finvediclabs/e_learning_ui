@@ -11,17 +11,20 @@
   <div class="podium-container">
     <div :class="['podium', 'position-2']">
       <q-img :src="topProfiles" alt="ProPic" class="podium-pic podium-pic-2 rounded-circle" />
-      <div class="profile-name">{{ topProfilesFetched[1]?.name || "Unknown" }}</div>
+      <div class="profile-name" :title="topProfilesFetched[1]?.name || 'Unknown'">
+  {{ topProfilesFetched[1]?.name || "Unknown" }}
+</div>
+
       <div class="podium-poll">2nd<br><span class="points rounded-borders">{{ topProfilesFetched[1]?.points }} Pts</span></div>
     </div>
     <div :class="['podium', 'position-1']">
       <q-img :src="topProfiles" alt="ProPic" class="podium-pic podium-pic-1 rounded-circle" />
-      <div class="profile-name">{{ topProfilesFetched[0]?.name || "Unknown" }}</div>
+      <div class="profile-name" :title="topProfilesFetched[0]?.name || 'Unknown'">{{ topProfilesFetched[0]?.name || "Unknown" }}</div>
       <div class="podium-poll">1st<br><span class="points">{{ topProfilesFetched[0]?.points }} Pts</span></div>
     </div>
     <div :class="['podium', 'position-3']">
       <q-img :src="topProfiles" alt="ProPic" class="podium-pic podium-pic-3 rounded-circle" />
-      <div class="profile-name">{{ topProfilesFetched[2]?.name || "Unknown" }}</div>
+      <div class="profile-name" :title="topProfilesFetched[2]?.name || 'Unknown'">{{ topProfilesFetched[2]?.name || "Unknown" }}</div>
       <div class="podium-poll">3rd<br><span class="points">{{ topProfilesFetched[2]?.points }} Pts</span></div>
     </div>
   </div>
@@ -312,11 +315,13 @@ async fetchAssignments(cycleId) {
 .profile-name {
   font-weight: 600;
   max-width: 80px;
-  white-space: normal;
-  word-break: break-word;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   text-align: center;
-  font-size: 0.78rem;
+  font-size: 0.8rem;
 }
+
 
 
 @media (max-width: 1024px) {
