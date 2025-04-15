@@ -311,7 +311,13 @@ async fetchAssignments(cycleId) {
 
 .profile-name {
   font-weight: 600;
+  max-width: 80px;
+  white-space: normal;
+  word-break: break-word;
+  text-align: center;
+  font-size: 0.78rem;
 }
+
 
 @media (max-width: 1024px) {
   .podium-pic {
@@ -323,7 +329,4 @@ async fetchAssignments(cycleId) {
     font-size: 0.9rem;
   }
 }
-
-
-
   </style>
