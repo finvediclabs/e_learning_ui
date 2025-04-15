@@ -57,13 +57,13 @@
     flex-direction: column;
     /* border: 2px solid green; */
   }
-  
+
   .heading_class {
     width: 80%;
     margin-bottom: 20px;
-    text-align: center !important; 
+    text-align: center !important;
   }
-  
+
   h4 {
     color: #032390;
     font-family: 'Playfair Display SC', serif;
@@ -74,11 +74,11 @@
     margin: 0;
     width: fit-content;
     margin-left: auto;
-    margin-right: auto; 
+    margin-right: auto;
     margin-bottom: 15px;
     position: relative;
   }
-  
+
   h4::after {
     content: "";
     position: absolute;
@@ -90,8 +90,8 @@
     background-color: #ffa500;
     border-radius: 5px;
   }
-  
-  
+
+
   /* Styles for the top image */
   .top-image {
     width: 100%;
@@ -99,24 +99,24 @@
     text-align: center;
     /* margin-bottom: 20px; */
   }
-  
+
   .top-image img {
     width: 100%;
     max-height: 300px;
     object-fit: cover;
   }
-  
+
   /* Featured Section */
   .featured-section {
     display: flex;
     flex-wrap: wrap;
     padding: 20px;
     width: 100%;
-    justify-content: space-between; 
+    justify-content: space-between;
   }
-  
+
   .featured-courses {
-    flex: 0 0 90%; 
+    flex: 0 0 90%;
     display: flex;
     flex-wrap: wrap;
     margin-left: auto;
@@ -124,16 +124,16 @@
     gap: 20px;
     /* border: 2px solid red; */
   }
-  
+
   .search-container1 {
-    flex: 0 0 20%; 
+    flex: 0 0 20%;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     padding: 20px;
     padding-top: 0px;
   }
-  
+
   .search-input {
     width: 80%;
     max-width: 300px;
@@ -143,18 +143,18 @@
     font-size: 14px;
     outline: none;
   }
-  
+
   .search-input:focus {
     border-color: #032390;
     box-shadow: 0 0 5px rgba(3, 35, 144, 0.5);
   }
-  
+
   .featured-list {
     list-style: none;
     padding: 0;
     margin: 0;
   }
-  
+
   .featured-course-item {
     padding: 10px;
     border: 1px solid #ddd;
@@ -164,12 +164,12 @@
     background-color: white;
     transition: transform 0.3s ease;
   }
-  
+
   .featured-course-item:hover {
     transform: scale(1.05);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
-  
+
   /* No Results */
   .no-results {
     font-size: 16px;
@@ -177,12 +177,12 @@
     text-align: center;
     width: 100%;
   }
-  
+
   /* Course Styling */
   .elearning-courses {
     padding: 20px;
   }
-  
+
   .courses-container {
     display: flex;
     flex-wrap: wrap;
@@ -190,19 +190,19 @@
     justify-content: center;
     margin-top: 10px;
   }
-  
+
   .course-item {
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
     flex: 0 0 48%;
-    
+
     /* max-width: 300px; */
     /* border: 2px solid blue; */
   }
-  
-  .course-card {
+
+  /* .course-card {
     background-color: #fff;
     border: 1px solid #ddd;
     border-radius: 10px;
@@ -214,13 +214,13 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-  }
-  
-  .course-card:hover {
+  } */
+
+  /* .course-card:hover {
     transform: scale(1.03);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-  }
-  
+  } */
+
   .course-button {
     width: 100%;
     aspect-ratio: 16 / 9;
@@ -230,7 +230,7 @@
     margin-bottom: 10px;
     cursor: pointer;
   }
-  
+
   .course-content {
     flex-grow: 1;
     display: flex;
@@ -238,14 +238,14 @@
     justify-content: flex-start;
     text-align: left;
   }
-  
+
   .course-name {
     font-size: large;
     font-weight: 500;
     color: #032390;
     margin-bottom: 5px;
   }
-  
+
   .course-description {
     font-size: small;
     color: #555;
@@ -257,43 +257,43 @@
     flex-grow: 1;
     margin: 0;
   }
-  
+
   /* Responsive Adjustments */
   @media (max-width: 1024px) {
     .course-item {
       flex: 0 0 30%; /* 3 cards in a row for medium screens */
     }
   }
-  
+
   @media (max-width: 768px) {
     .courses-container {
       gap: 10px;
     }
-  
+
     .course-item {
       flex: 0 0 45%; /* 2 cards in a row for smaller screens */
     }
-  
-    .course-card {
+
+    /* .course-card {
       padding: 10px;
       height: 340px;
-    }
-  
+    } */
+
     .course-name {
       font-size: 16px;
     }
-  
+
     .course-description {
       font-size: 12px;
     }
   }
-  
+
   @media (max-width: 480px) {
     .course-item {
       flex: 0 0 100%; /* 1 card per row for mobile screens */
     }
   }
-  
+
   @media (max-width: 768px) {
     .top-image{
         display: none;
@@ -301,59 +301,105 @@
   .courses-container {
     gap: 10px;
   }
-  
-  .course-card {
+
+  /* .course-card {
     padding: 10px;
     height: 340px;
-  }
-  
+  } */
+
   .course-name {
     font-size: 16px;
   }
-  
+
   .course-description {
     font-size: 12px;
   }
-  
+
   /* Align search container and featured courses vertically */
   .featured-section {
-    flex-direction: column; 
-    align-items: center;    
+    flex-direction: column;
+    align-items: center;
   }
-  
+
   .search-container1 {
       align-items: center;
-    width: 100%;          
-    margin: 20px 0px;  
-    order: 1;             
+    width: 100%;
+    margin: 20px 0px;
+    order: 1;
   }
-  
+
   .search-input{
     width: 100%;
   }
-  
+
   .featured-courses {
-    width: 100%;          
-    justify-content: center; 
-    order: 2;             
+    width: 100%;
+    justify-content: center;
+    order: 2;
   }
   }
-  
+
+  .styled-course-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 15px; /* space between rows */
+  }
+
+  .styled-course-table th {
+    text-align: left;
+    padding: 12px;
+    background-color: #f0f0f0;
+  }
+
+  .styled-course-table td {
+    padding: 16px;
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    vertical-align: middle;
+    transition: background-color 0.3s ease;
+  }
+
+  .course-row {
+    cursor: pointer;
+    border-radius: 8px;
+  }
+
+  .status-done {
+    color: green;
+    font-weight: bold;
+  }
+  .status-pending {
+    color: red;
+    font-weight: bold;
+  }
+
+  .course-row:hover {
+    background-color: #f5f7fa; /* Light gray-blue hover effect */
+  }
+  .course-row {
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .course-row:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Optional shadow for extra pop */
+  }
   .elearning-page {
-  background-image: url('/src/assets/ai_set_bg.jpg'); 
+  /* background-image: url('/src/assets/ai_set_bg.jpg');  */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-attachment: fixed; 
+  background-attachment: fixed;
   }
-  
-  
+
+
 /* Responsive Design */
 @media (max-width: 768px) {
-  .course-card {
+  /* .course-card {
     flex-direction: column;
     align-items: flex-start;
-  }
+  } */
 
   .course-image-container {
     width: 100%;
@@ -378,49 +424,48 @@
 }
 
   @media (min-width: 820px){
-  
+
     .search-container1 {
-      background-color: white; 
+      background-color: white;
       padding: 10px;
-      border-radius: 10px; 
+      border-radius: 10px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      margin-bottom: 20px; 
-      width: 80%; 
-     
+      margin-bottom: 20px;
+      width: 80%;
+
       padding:20px;
     }
   }
-  
-  
+
+
   .search-input {
       width: 100%;
-      max-width: 300px; 
-      padding: 12px 16px; 
-      border: 1px solid #ddd; 
+      max-width: 300px;
+      padding: 12px 16px;
+      border: 1px solid #ddd;
       border-radius: 8px;
-      font-size: 16px; 
-      color: #032390; 
-      background-color: #f9f9f9; 
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
-      transition: all 0.3s ease; 
-      outline: none; 
+      font-size: 16px;
+      color: #032390;
+      background-color: #f9f9f9;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      outline: none;
     }
-    
+
     .search-input:focus {
-      border-color: #ffa500; 
-      box-shadow: 0 4px 8px rgba(255, 165, 0, 0.3); 
-      background-color: #ffffff; 
+      border-color: #ffa500;
+      box-shadow: 0 4px 8px rgba(255, 165, 0, 0.3);
+      background-color: #ffffff;
     }
-    
+
     .search-input::placeholder {
-      color: #aaa; 
+      color: #aaa;
       font-style: italic;
     }
-  
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+

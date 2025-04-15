@@ -367,7 +367,7 @@ export default {
       // allAccess: [ "profile", "help","program","assignment","class-room","elearning","admin","library","hackathon","read-pdf"],54
 
 
-      allAccess: [ "profile", "course","help","home","labs","library","homeProfile","reports","channel","class-room","calendar","books","videos","presentations","chat","read-pdf","program"],
+      allAccess: [ "profile", "course","help","home","labs","library","homeProfile","reports","channel","class-room","calendar","hackathon","books","videos","presentations","chat","read-pdf","program"],
       profiles: [], // Store fetched profiles here
       roles: [], // Store fetched roles here
       userRoles: [],
@@ -1094,7 +1094,7 @@ background-attachment: fixed;
   }
 
   .Elearning_BackgroundStyle {
-    background-image: url('/src/assets/ai_set_bg.jpg');
+    /* background-image: url('/src/assets/ai_set_bg.jpg'); */
   background-repeat:no-repeat;
   background-size: 100% 100%;
   background-position: center;

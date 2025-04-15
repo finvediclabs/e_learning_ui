@@ -1,5 +1,5 @@
 <template>
-  <div class="attendance-box" >
+  <div class="attendance-box"  @click="viewAll">
     <div class="attendance-header row">
       <div class="col-4">
         <q-img :src="hackathon_vector" class="attendance-vector" alt="Hackathon Icon" />
@@ -42,6 +42,11 @@ export default {
       } else {
         return "blue-fill";
       }
+    },
+  },
+  methods: {
+    viewAll() {
+      this.$router.push("/hackathon");
     },
   },
 };

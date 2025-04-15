@@ -8,24 +8,46 @@
       <!-- Courses Section -->
 
       <div class="featured-courses">
-        <div v-for="(course, index) in filteredFeaturedCourses" :key="course.id" class="course-item">
-          <div class="course-card row" @click="openCourse(course.id, course.filePath, course.title)">
-            <!-- Left Side: Course Image -->
-            <div class="col-3 course-image-container" style="display: flex; align-items: center;">
-              <q-btn class="course-button" :style="{ backgroundImage: `url(${course.cover})` }" flat></q-btn>
-            </div>
-
-            <!-- Right Side: Course Content -->
-            <div class="col-9 course-content"
-              style="padding-left: 2%; display: flex; align-items: baseline; justify-content: start; padding-top: 5%; ">
-              <div class="course-text">
-                <div class="course-name">{{ course.title }}</div>
-                <div class="course-description">{{ course.description }}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+  <table class="styled-course-table">
+    <thead>
+      <tr>
+        <th>Image</th>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Status</th> <!-- ✅ New column -->
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        v-for="(course, index) in filteredFeaturedCourses"
+        :key="course.id"
+        class="course-row"
+        @click="openCourse(course.id, course.filePath, course.title)"
+      >
+        <td>
+          <q-btn
+            class="course-button"
+            :style="{
+              backgroundImage: `url(${course.cover})`,
+              backgroundSize: 'cover',
+              width: '100px',
+              height: '60px',
+              borderRadius: '8px'
+            }"
+            flat
+          ></q-btn>
+        </td>
+        <td>{{ course.title }}</td>
+        <td>{{ course.description }}</td>
+        <td>
+          <span :class="isCourseDone(course.id) ? 'status-done' : 'status-pending'">
+            {{ isCourseDone(course.id) ? 'Done' : 'Pending' }}
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
     </div>
   </div>
@@ -391,76 +413,7 @@ export default {
         console.error("Error extracting zip file:", error);
       }
     },
-    async fetchCourses() {
-      console.log('fetchCourses: Start fetching courses.');
-      this.loading = true;
 
-      try {
-        const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
-        let url = `${baseUrl}api/hackathon`;
-        const response = await this.$api.get(url);
-        this.loading = false;
-        console.log('fetchCourses: Response received.', response);
-
-        if (response.data && response.data.success) {
-          console.log('fetchCourses: Parsing course data.');
-          this.courses = response.data.data.map((course) => ({
-            id: course.id,
-            title: course.heading,
-            description: course.description,
-            abstractt: course.abstractt,
-            courseId: course.courseId,
-            filePath: course.filePath,
-            cover: course.imagePath ? course.imagePath : this.DummyBook, // Default cover image if none is provided
-          }));
-
-          console.log('fetchCourses: Courses parsed successfully.', this.courses);
-
-          this.featuredCourses = this.courses; // Initialize featured courses
-          this.filteredFeaturedCourses = this.featuredCourses; // Initially show all featured courses
-
-          this.courses.forEach((course, index) => {
-            console.log(`fetchCourses: Processing course [${index}] with ID: ${course.id}.`);
-            const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
-            let imgurl = `${baseUrl}fs/download/`;
-            if (course.cover && course.cover.startsWith(imgurl)) {
-              console.log(`fetchCourses: Course [${index}] has a downloadable cover: ${course.cover}`);
-              const downloadUrl = `${baseUrl}fs/download`;
-              const removePrefix = `${baseUrl}fs/download/`;
-              const filename = course.cover.replace(removePrefix, '');
-              console.log('fileName', filename);
-              console.log(`fetchCourses: Filename extracted for course [${index}]: ${filename}`);
-              const formData = new FormData();
-              formData.append('filename', filename);
-
-              console.log(`fetchCourses: Sending POST request for cover of course [${index}].`);
-              this.$api
-                .post(downloadUrl, formData, { responseType: 'blob' })
-                .then((downloadResponse) => {
-                  console.log(`fetchCourses: Received cover blob for course [${index}].`);
-                  const blob = new Blob([downloadResponse.data]);
-                  const url = window.URL.createObjectURL(blob);
-                  course.cover = url; // Update cover with the received blob URL
-                  console.log(`fetchCourses: Updated cover for course [${index}]: ${url}`);
-                })
-                .catch((error) => {
-                  console.error(`fetchCourses: Error fetching cover for course [${index}]:`, error);
-                  course.cover = this.DummyBook; // Fallback to default image on error
-                });
-            } else {
-              console.log(`fetchCourses: Course [${index}] has a static or missing cover.`);
-            }
-          });
-        } else {
-          console.error('fetchCourses: Invalid data structure or failure in response:', response);
-        }
-      } catch (error) {
-        this.loading = false;
-        console.error('fetchCourses: Error occurred during fetch:', error);
-      } finally {
-        console.log('fetchCourses: Finished fetching courses.');
-      }
-    },
     async openCourse(courseId, filePath, title) {
       try {
         this.selectedCourse = { id: courseId, filePath }; // Store the selected course details
@@ -587,6 +540,7 @@ export default {
       }
     },
 
+
     handleSupport(assignmentId) {
       // If the clicked assignment is the same as the currently selected one, toggle the states
       if (this.selectedAssignmentId === assignmentId) {
@@ -656,68 +610,170 @@ export default {
         this.loading = false; // End loading state
       }
     },
-    async fetchStudentAssignments(userId, assignmentId) {
-      this.loading = true; // Start loading state
+    isCourseDone(courseId) {
+  console.log(`Checking if course ID ${courseId} has any matching student assignment...`);
+  return this.studentAssignments.some(a => {
+    console.log(`Comparing assignmentId: ${a.assignmentId} === courseId: ${courseId}`);
+    return a.assignmentId === courseId;
+  });
+},
+    async fetchCourses() {
+      console.log('fetchCourses: Start fetching courses.');
+      this.loading = true;
+
       try {
-        const profileStore = useProfileStore();
-        this.userId = profileStore.user.id;
-        const userId = this.userId; // Get the user ID from profile store
-        const assignmentId = this.dialogAssignmentId; // Get the assignment ID from dialog
-
-        console.log(userId, assignmentId);
         const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
-        const url = `${baseUrl}api/student-assignments?studentId=${userId}&assignmentId=${assignmentId}`;
-
-        // Use this.$api to make the request
+        let url = `${baseUrl}api/hackathon`;
         const response = await this.$api.get(url);
-        const result = response.data; // Get data from the response
+        this.loading = false;
+        console.log('fetchCourses: Response received.', response);
 
-        if (result.success) {
-          this.studentAssignments = result.data;
-          this.showDragAndDrop = this.studentAssignments.length === 0;
+        if (response.data && response.data.success) {
+          console.log('fetchCourses: Parsing course data.');
+          this.courses = response.data.data.map((course) => ({
+            id: course.id,
+            title: course.heading,
+            description: course.description,
+            abstractt: course.abstractt,
+            courseId: course.courseId,
+            filePath: course.filePath,
+            cover: course.imagePath ? course.imagePath : this.DummyBook, // Default cover image if none is provided
+          }));
 
-          const fetchFiles = this.studentAssignments.map(async (assignment) => {
-            console.log("submitFile:", assignment.submittedFile);
-            const fileName = assignment.submittedFile;
+          console.log('fetchCourses: Courses parsed successfully.', this.courses);
 
-            const fileType = fileName.split('.').pop().toLowerCase(); // Get the file extension
-            const isImage = ['jpg', 'jpeg', 'png', 'gif'].includes(fileType); // Check if it's an image
-            const isPdf = fileType === 'pdf'; // Check if it's a PDF
-            const isJava = fileType === 'java'; // Check if it's a .java file
-            const isPython = fileType === 'py'; // Check if it's a .py file
-            const iszip=fileType==='zip';
+          this.featuredCourses = this.courses; // Initialize featured courses
+          this.filteredFeaturedCourses = this.featuredCourses; // Initially show all featured courses
 
-            this.dialogFileUrl2 = fileName;
+          this.courses.forEach((course, index) => {
+            console.log(`fetchCourses: Processing course [${index}] with ID: ${course.id}.`);
+            const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
+            let imgurl = `${baseUrl}fs/download/`;
+            if (course.cover && course.cover.startsWith(imgurl)) {
+              console.log(`fetchCourses: Course [${index}] has a downloadable cover: ${course.cover}`);
+              const downloadUrl = `${baseUrl}fs/download`;
+              const removePrefix = `${baseUrl}fs/download/`;
+              const filename = course.cover.replace(removePrefix, '');
+              console.log('fileName', filename);
+              console.log(`fetchCourses: Filename extracted for course [${index}]: ${filename}`);
+              const formData = new FormData();
+              formData.append('filename', filename);
 
-            if (isImage) {
-              console.log("File type:", fileType, "Is image:", isImage);
-            } else if (isPdf) {
-              this.chapterFilePath = fileName;
-              console.log("File type:", fileType, "Is PDF:", isPdf);
-            } else if (isJava || isPython) {
-              // Fetch the file content for Java or Python files
-              const fileResponse = await this.$api.get(fileName); // Use this.$api to fetch file content
-              this.dialogFileContent = await fileResponse.data; // Store the file content
-              this.dialogFileType = fileType; // Set the file type for syntax highlighting
-            } else if(iszip){
-              this.fileType='zip';
-            }
-            else {
-              console.log("Unsupported file type:", fileType);
+              console.log(`fetchCourses: Sending POST request for cover of course [${index}].`);
+              this.$api
+                .post(downloadUrl, formData, { responseType: 'blob' })
+                .then((downloadResponse) => {
+                  console.log(`fetchCourses: Received cover blob for course [${index}].`);
+                  const blob = new Blob([downloadResponse.data]);
+                  const url = window.URL.createObjectURL(blob);
+                  course.cover = url; // Update cover with the received blob URL
+                  console.log(`fetchCourses: Updated cover for course [${index}]: ${url}`);
+                })
+                .catch((error) => {
+                  console.error(`fetchCourses: Error fetching cover for course [${index}]:`, error);
+                  course.cover = this.DummyBook; // Fallback to default image on error
+                });
+            } else {
+              console.log(`fetchCourses: Course [${index}] has a static or missing cover.`);
             }
           });
-
-          await Promise.all(fetchFiles);
-          this.showDragAndDrop = this.studentAssignments.length === 0;
+          await this.fetchAllStudentAssignmentsForUser();
         } else {
-          console.error('Failed to fetch student assignments:', result.message);
+          console.error('fetchCourses: Invalid data structure or failure in response:', response);
         }
       } catch (error) {
-        console.error('Error fetching student assignments:', error);
+        this.loading = false;
+        console.error('fetchCourses: Error occurred during fetch:', error);
       } finally {
-        this.loading = false; // End loading state
+        console.log('fetchCourses: Finished fetching courses.');
       }
     },
+    async fetchStudentAssignments(userId, assignmentId) {
+  this.loading = true; // Start loading state
+  try {
+    const profileStore = useProfileStore();
+    this.userId = profileStore.user.id;
+    const userId = this.userId; // Get the user ID from profile store
+    const assignmentId = this.dialogAssignmentId; // Get the assignment ID from dialog
+
+    console.log(userId, assignmentId);
+    const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
+    const url = `${baseUrl}api/student-assignments?studentId=${userId}&assignmentId=${assignmentId}`;
+
+    // Use this.$api to make the request
+    const response = await this.$api.get(url);
+    const result = response.data; // Get data from the response
+
+    if (result.success) {
+      // Filter to only include Hackathon type assignments
+      this.studentAssignments = result.data.filter(a => a.type === 'Hackathon');
+      this.showDragAndDrop = this.studentAssignments.length === 0;
+
+      const fetchFiles = this.studentAssignments.map(async (assignment) => {
+        console.log("submitFile:", assignment.submittedFile);
+        const fileName = assignment.submittedFile;
+
+        const fileType = fileName.split('.').pop().toLowerCase(); // Get the file extension
+        const isImage = ['jpg', 'jpeg', 'png', 'gif'].includes(fileType); // Check if it's an image
+        const isPdf = fileType === 'pdf'; // Check if it's a PDF
+        const isJava = fileType === 'java'; // Check if it's a .java file
+        const isPython = fileType === 'py'; // Check if it's a .py file
+        const isZip = fileType === 'zip'; // Check if it's a .zip file
+
+        this.dialogFileUrl2 = fileName;
+
+        if (isImage) {
+          console.log("File type:", fileType, "Is image:", isImage);
+        } else if (isPdf) {
+          this.chapterFilePath = fileName;
+          console.log("File type:", fileType, "Is PDF:", isPdf);
+        } else if (isJava || isPython) {
+          // Fetch the file content for Java or Python files
+          const fileResponse = await this.$api.get(fileName);
+          this.dialogFileContent = await fileResponse.data;
+          this.dialogFileType = fileType;
+        } else if (isZip) {
+          this.fileType = 'zip';
+        } else {
+          console.log("Unsupported file type:", fileType);
+        }
+      });
+
+      await Promise.all(fetchFiles);
+      this.showDragAndDrop = this.studentAssignments.length === 0;
+    } else {
+      console.error('Failed to fetch student assignments:', result.message);
+    }
+  } catch (error) {
+    console.error('Error fetching student assignments:', error);
+  } finally {
+    this.loading = false; // End loading state
+  }
+},
+async fetchAllStudentAssignmentsForUser() {
+  try {
+    const profileStore = useProfileStore();
+    const userId = profileStore.user.id;
+    const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
+    const url = `${baseUrl}api/student-assignments?studentId=${userId}`;
+
+    const response = await this.$api.get(url);
+    const result = response.data;
+
+    if (result.success) {
+      this.studentAssignments = result.data.filter(a => a.type === 'Hackathon');
+
+      console.log("All Hackathon student assignments:");
+      this.studentAssignments.forEach(a => {
+        console.log(`assignment.id: ${a.id}, assignment.assignmentId: ${a.assignmentId}`);
+      });
+    } else {
+      console.error("Failed to fetch student assignments:", result.message);
+    }
+  } catch (error) {
+    console.error("Error fetching all student assignments:", error);
+  }
+},
 
     handleFileSelect(event) {
       const file = event.target.files[0];
@@ -922,10 +978,10 @@ export default {
 
 <style scoped>
 @media (max-width: 768px) {
-  .course-card {
+  /* .course-card {
     flex-direction: column;
     align-items: flex-start;
-  }
+  } */
 
   .course-image-container {
     width: 100%;

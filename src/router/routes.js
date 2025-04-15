@@ -159,7 +159,7 @@ const routes = [
     children: [
       {
         path: '',
-        component: () => import('pages/libraries/Hackathons.vue'),
+        component: () => import('src/pages/hackathon/Hackathons.vue'),
         meta: { item: '' }
       }
     ]
