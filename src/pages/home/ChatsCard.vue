@@ -61,11 +61,17 @@ export default {
     const { token, userType } = storeToRefs(session);
     const profileStore = useProfileStore();
     const { userProfile } = storeToRefs(profileStore);
+    const currentUserName = profileStore.user.username || '';
+    const currentUserId = profileStore.user.id || '';
+    console.log("Current User Id:", currentUserId);
+    console.log("Current User Name:", currentUserName);
 
     return {
       token,
       userType,
-      userProfile
+      userProfile,
+      currentUserName,
+      currentUserId,
     };
   },
   data() {
@@ -79,10 +85,15 @@ export default {
   },
   computed: {
     limitedGroups() {
-      return this.groups.slice(0, 2);
+      // If the user is a Student, ensure the second group is the matching one
+      if (this.userType === 'Student') {
+        return this.groups.length > 1 ? [this.groups[0], this.groups[1]] : this.groups;
+      } else {
+        return this.groups.slice(0, 2); // For non-students, use the first two groups
+      }
     },
     limitedChats() {
-      return this.chats.slice(-1)
+      return this.chats.slice(-1);
     },
   },
   methods: {
@@ -98,19 +109,67 @@ export default {
         day: "numeric"
       });
     },
-    async fetchGroups() {
+    async fetchStudentData() {
+      try {
+        // Fetch student data
+        const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
+        const apiUrl = baseUrl + 'api/enrollments/student/' + this.currentUserId;
+        const response = await this.$api.get(apiUrl);
+        console.log("Fetched student data:", response.data.data); // Log the student data
+
+        // Check if the data array is not empty
+        if (response.data.data && response.data.data.length > 0) {
+          const cycleId = response.data.data[0].cycleid; // Extract cycleId from the first object
+          console.log("Cycle ID from student data:", cycleId); // Log the cycleId
+
+          // Fetch cycle data using the cycleId
+          const baseUrl1 = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
+          const cycleApiUrl = baseUrl1 + 'api/cycles/' + cycleId;
+          const cycleResponse = await this.$api.get(cycleApiUrl);
+          const cycleDesc = cycleResponse.data.data.cycleDesc; // Get cycle description
+          console.log("Cycle Description:", cycleDesc); // Log the cycleDesc
+
+          // Now fetch groups and log the matching ones
+          this.fetchGroups(cycleDesc); // Pass cycleDesc to fetchGroups
+        } else {
+          console.error("No enrollments found for the student.");
+        }
+      } catch (error) {
+        console.error("Error fetching student data:", error);
+      }
+    },
+
+    async fetchGroups(cycleDesc) {
       try {
         const response = await this.$api.get("api/channel-batches/groups");
         if (response.data.success) {
           this.groups = response.data.data;
-          //console.log(this.groups)
+          console.log("Fetched groups:", this.groups); // Log all groups
+
+          if (this.userType === 'Student') {
+            // Check if a matching group exists and ensure it's the second group
+            const matchingGroup = this.groups.find(group => group.groupName === cycleDesc);
+            if (matchingGroup) {
+              console.log("Matching Group found:", matchingGroup); // Log the matching group
+
+              // Ensure the second group in the list is the matching group
+              const matchingIndex = this.groups.indexOf(matchingGroup);
+              if (matchingIndex !== -1) {
+                // Move matching group to the second position if it's not already there
+                this.groups.splice(matchingIndex, 1);
+                this.groups.splice(1, 0, matchingGroup);
+              }
+            }
+          }
+
           this.activeGroup = this.groups.length ? this.groups[0].groupId : "";
-          this.fetchMessages()
+          this.fetchMessages();
         }
       } catch (error) {
         console.error("Error fetching groups:", error);
       }
     },
+
     async fetchMessages() {
       try {
         const response = await this.$api.get(`api/getmessages/${this.activeGroup}`);
@@ -122,22 +181,23 @@ export default {
     },
     setActiveGroup(groupId) {
       this.activeGroup = groupId;
-      this.fetchMessages()
+      this.fetchMessages();
       console.log(`Active Group: ${groupId}`);
     },
     viewAll() {
       if (this.userType === 'Guest') {
-    console.log("Guest user → popup shown");
-    this.showDemoPopup = true;
-  } else {
-    console.log("Non-guest user → navigating to /channel");
-    this.$router.push("/channel");
-  }
+        console.log("Guest user → popup shown");
+        this.showDemoPopup = true;
+      } else {
+        console.log("Non-guest user → navigating to /channel");
+        this.$router.push("/channel");
+      }
     }
   },
   mounted() {
     this.fetchGroups();
-    this.fetchMessages()
+    this.fetchMessages();
+    this.fetchStudentData();
   }
 };
 </script>
