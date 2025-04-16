@@ -170,9 +170,16 @@
 <freeCourses />
 
 <Certification />
+<certificateVerqification />
 <Reviews />
 <Footer />
-
+<q-dialog v-model="showOtpDialog" persistent full-width>
+  <q-card style="max-width: 600px; width: 100%">
+    <q-card-section>
+      <CertificateOtpForm :initialUniqueId="routeUniqueId" @close="showOtpDialog = false" />
+    </q-card-section>
+  </q-card>
+</q-dialog>
 </template>
 <script>
 import axios from "axios";
@@ -183,7 +190,8 @@ import Reviews from "./Reviews.vue";
 import bg_img from "src/assets/scalefradepng1.png"
 import OurTools from "./OurTools.vue";
 import Certification from "./Certification.vue";
-
+import certificateVerqification from "./certificateVerifcations.vue";
+import CertificateOtpForm from "src/layouts/home/CertificateOtpForm.vue";
 
 
 
@@ -198,7 +206,9 @@ export default {
     Reviews,
     Certification,
     Associated,
-    Footer
+    certificateVerqification,
+    Footer,
+    CertificateOtpForm,
   },
   name: "Individual",
   data() {
@@ -222,6 +232,8 @@ export default {
     selectedModules: "", // Modules in the program
     selectedEligibility: "", // Eligibility criteria for the program
     selectedCourseFee: "", // Course fee for the program
+     showOtpDialog: false,
+    routeUniqueId: ""
     };
   },
   async created() {
@@ -236,6 +248,21 @@ export default {
     );
     }
   },
+
+  watch: {
+  '$route'(to) {
+    if (to.path === '/certificateValidation' && to.query.uniqueId) {
+      this.routeUniqueId = to.query.uniqueId;
+      this.showOtpDialog = true;
+    }
+  }
+},
+mounted() {
+  if (this.$route.path === '/certificateValidation' && this.$route.query.uniqueId) {
+    this.routeUniqueId = this.$route.query.uniqueId;
+    this.showOtpDialog = true;
+  }
+},
   methods: {
 
     async fetchPrograms() {
@@ -700,7 +727,7 @@ border-radius: 20px;
     color: #4E5BF8;
     font-weight: bold;
   }
- 
+
 
 }
 

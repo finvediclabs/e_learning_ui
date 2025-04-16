@@ -165,6 +165,12 @@ const routes = [
     ]
   },
 
+  {
+    path: '/certificateValidation',
+    meta: { title: 'certificateValidation', module: 'certificateValidation' },
+    component: () => import('layouts/home/CertificateOtpForm.vue'),
+  },
+
   // {
   //   path: 'assignment',
   //   component: () => import('pages/libraries/Assignments.vue'),
