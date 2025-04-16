@@ -5,8 +5,8 @@
         <!-- <div class="col-auto">
           <q-btn flat round icon="arrow_back" @click="$router.back()"  class="all" />
         </div> -->
-        <div class="col">
-          <h4 class="all text-weight-medium q-mt-none q-mb-none">All Courses</h4>
+        <div class="col all-courses-header">
+          <h4 class="all-courses-heading text-weight-medium q-mt-none q-mb-none">All Courses</h4>
         </div>
       </div>
   
@@ -22,7 +22,7 @@
           :key="category.id"
           class="course-col col-lg-3 col-md-4 col-sm-6 col-12 d-flex justify-center"
         >
-        <q-card class="course-card cursor-pointer" @click="handleCategoryClick(category, index)">
+        <q-card class="course-card-top cursor-pointer" @click="handleCategoryClick(category, index)">
           <q-img
             v-if="category.imagePath"
             :src="category.imagePath"
@@ -146,10 +146,11 @@
   </script>
   
   <style scoped>
-  .all{
+  .all-courses-heading{
     color: #4e5bf8;
+    text-align: left !important;
   }
-.course-card {
+.course-card-top{
   border: 1px solid #ddd;
   border-radius: 10px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -158,7 +159,7 @@
   height: 100%;
 }
 
-.course-card:hover {
+.course-card-top:hover {
   transform: scale(1.03);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }

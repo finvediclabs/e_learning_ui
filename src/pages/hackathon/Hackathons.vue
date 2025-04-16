@@ -8,6 +8,19 @@
       <!-- Courses Section -->
 
       <div class="featured-courses">
+
+<q-input
+  v-model="searchQuery"
+  outlined
+  debounce="300"
+  placeholder="Search courses..."
+  class="search-bar"
+  dense
+  clearable
+  prefix="🔍"
+/>
+
+
   <table class="styled-course-table">
     <thead>
       <tr>
@@ -18,12 +31,18 @@
       </tr>
     </thead>
     <tbody>
+      <tr v-if="filteredFeaturedCourses.length === 0">
+      <td colspan="4" class="text-center text-grey q-pa-md">
+        No matching courses found.
+      </td>
+    </tr>
       <tr
         v-for="(course, index) in filteredFeaturedCourses"
         :key="course.id"
         class="course-row"
         @click="openCourse(course.id, course.filePath, course.title)"
       >
+
         <td>
           <q-btn
             class="course-button"
@@ -337,6 +356,7 @@ export default {
       dialogFileContent: '', // The file content for Java and Python files
       dialogFileType: '', // The file type ('java' or 'py')
       // URL for the image blob
+      searchQuery: "",
       featuredCourses: [],
       filteredFeaturedCourses: [],
       searchQuery: '',
@@ -353,6 +373,17 @@ export default {
     PDFViewer,
     // FinPortletItem
   },
+  
+  computed: {
+  filteredFeaturedCourses() {
+    if (!this.searchQuery) return this.featuredCourses || [];
+
+    return this.featuredCourses.filter(course =>
+      course.title.toLowerCase().includes(this.searchQuery.toLowerCase())
+    );
+  }
+},
+
   methods: {
     async fetchAndHandleZip() {
       try {
@@ -435,11 +466,11 @@ export default {
         await this.fetchStudentAssignments();
       }
     },
-    filterFeaturedCourses() {
-      this.filteredFeaturedCourses = this.featuredCourses.filter((course) =>
-        course.title.toLowerCase().includes(this.searchQuery.toLowerCase())
-      );
-    },
+    // filterFeaturedCourses() {
+    //   this.filteredFeaturedCourses = this.featuredCourses.filter((course) =>
+    //     course.title.toLowerCase().includes(this.searchQuery.toLowerCase())
+    //   );
+    // },
     async sendPostRequest(course) {
       try {
         const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
@@ -962,7 +993,7 @@ async fetchAllStudentAssignmentsForUser() {
   },
 
   watch: {
-    searchQuery: 'filterFeaturedCourses',// Watch searchQuery for changes
+    // searchQuery: 'filterFeaturedCourses',
     fileType(newType) {
       if (newType === "zip") {
         this.fetchAndHandleZip();
@@ -977,6 +1008,7 @@ async fetchAllStudentAssignmentsForUser() {
 </script>
 
 <style scoped>
+
 @media (max-width: 768px) {
   /* .course-card {
     flex-direction: column;
@@ -1004,4 +1036,55 @@ async fetchAllStudentAssignmentsForUser() {
     font-size: 13px;
   }
 }
+
+/* Beautify the search input */
+.search-bar {
+  width: 100%;
+  max-width: 400px;
+  margin: 1rem 0;
+}
+
+.styled-course-table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.styled-course-table th,
+.styled-course-table td {
+  border: 1px solid #ddd;
+}
+
+
+
+@media screen and (max-width: 768px) {
+  .styled-course-table {
+    font-size: 14px;
+  }
+
+  .styled-course-table th,
+  .styled-course-table td {
+    padding: 6px;
+  }
+
+  /* Make image smaller and fit the cell */
+  .course-button {
+    width: 60px !important;
+    height: 40px !important;
+    background-size: contain !important; 
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .course-name {
+    font-size: 16px;
+  }
+
+  .course-description {
+    font-size: 13px;
+    white-space: normal;
+    word-break: break-word;
+  }
+}
+
+
 </style>
