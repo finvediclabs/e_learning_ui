@@ -84,8 +84,8 @@ export default {
 
           // Calculate attendance percentage dynamically
           if (totalAssignments > 0) {
-            this.attendancePercentage = (totalStudentAssignments / totalAssignments) * 100;
-          }
+    this.attendancePercentage = Math.round((totalStudentAssignments / totalAssignments) * 100);
+  }
         }
       } catch (error) {
         console.error("Error fetching report data:", error);

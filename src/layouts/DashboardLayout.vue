@@ -359,7 +359,7 @@ export default {
       ],
       expand: {},
       userOwner: '',
-      defaultPath: "/library/books",
+      defaultPath: "/homeProfile",
       userAccess: [],
       userType: '',
 
@@ -715,9 +715,9 @@ setAccessPaths() {
           //owner: user.owner,
       };
 //console.log(this.profile);
-   if (this.userType === 'Student'&& Object.values(this.profile).some(value => value === null || value === undefined)) {
-           this.$router.push('/profile');
-    }
+  //  if (this.userType === 'Student'&& Object.values(this.profile).some(value => value === null || value === undefined)) {
+  //          this.$router.push('/profile');
+  //   }
 
      //console.log(this.profile)
 

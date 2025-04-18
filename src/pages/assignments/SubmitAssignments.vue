@@ -492,21 +492,26 @@ export default {
       return (this.studentAssignments.indexOf(row) % 2 === 0) ? 'even-row' : 'odd-row';
     },
     evaluateFileUrl() {
-      this.masterLoading=true;
+  this.masterLoading = true;
   const baseUrl = (process.env.VUE_APP_CORE_URL || "").replace(/\/$/g, "") + "/";
   const postEvaluateUrl = baseUrl + "api/evaluator/evaluatecode";
 
   const assignmentID = this.assignmentData.assignmentId;
   const batchId = this.assignmentData.batchId;
   const studentId = this.assignmentData.studentId;
-  console.log(batchId, studentId);
 
-  // Use the pre-configured Axios instance (this.$api)
+  // Construct the full request URL
+  const fullUrl = `${postEvaluateUrl}?assignment-id=${encodeURIComponent(assignmentID)}&student-id=${encodeURIComponent(studentId)}`;
+
+  // Log the full URL to the console
+  // console.log("POST Request URL:", fullUrl);
+
+  // Ensure both parameters (assignment-id & student-id) are passed in the request
   this.$api
-    .post(`${postEvaluateUrl}?assignment-id=${encodeURIComponent(assignmentID)}`)
+    .post(fullUrl)
     .then((response) => {
       this.evaluationResult = response.data.response;
-      this.masterLoading=false
+      this.masterLoading = false;
 
       // Call fetchStudentAssignments only after evaluation completes
       this.fetchStudentAssignments(batchId, studentId);
@@ -514,8 +519,8 @@ export default {
     .catch((error) => {
       console.error(error);
       this.evaluationResult = "Error evaluating the file.";
-    })
-
+      this.masterLoading = false;
+    });
 },
     async submitAssignmentData() {
   try {

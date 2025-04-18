@@ -11,41 +11,59 @@
             <div class="carousel-row" :style="{ transform: `translateX(-${currentSlide * (100 / itemsPerSlide)}%)` }">
               <div v-for="(lab, index) in loopLabs" :key="index" class="lab-card-container">
                 <div class="card-title text-weight-medium text-h6">{{ lab.title }}</div>
-                <q-card class="sandbox-card">
-                  <q-img :src="lab.img" class="sandbox-img" />
-                  <q-card-section>
-                    <div class="action-buttons">
-                      <q-btn label="Restart" color="" outline class="q-mr-sm act-btn" v-if="lab.title !== 'Tech Sandbox'" />
-                      <q-btn
-  label="Shutdown"
-  color=""
-  outline
-  class="q-mr-sm act-btn"
-  v-if="lab.title === 'Tech Sandbox'"
-  @click="shutdown(labsData.find(vm => vm.userName === currentUserName))"
-/>
-                      <q-btn
-  :label="
-    ['Fintech Sandbox', 'MAANG Sandbox'].includes(lab.title)
-      ? 'Download'
-      : (lab.title === 'Tech Sandbox' && labsData.some(vm => vm.userName === currentUserName && vm.provisioningState === 'Succeeded'))
-        ? 'Download VM'
-        : (isCreatingVm ? '' : 'Start')
-  "
-  :loading="isCreatingVm"
-  class="act-btn"
-  @click="
-    ['Fintech Sandbox', 'MAANG Sandbox'].includes(lab.title)
-      ? handleLabAction(lab)
-      : (lab.title === 'Tech Sandbox' && labsData.some(vm => vm.userName === currentUserName && vm.provisioningState === 'Succeeded'))
-        ? downloadVm(labsData.find(vm => vm.userName === currentUserName && vm.provisioningState === 'Succeeded'))
-        : handleLabAction(lab)
-  "
-/>
+                <q-card
+  class="sandbox-card"
+  :class="{
+    grayscale: lab.title === 'Tech Sandbox' && hasRequestedVm && !isTechSandboxSucceeded
+  }"
+>
+<div
+    v-if="lab.title === 'Tech Sandbox' && isTechSandboxCreating"
+    class="vm-creating-overlay"
+  >
+    <div class="overlay-content">
+      <q-spinner-dots color="white" size="40px" />
+      <div class="q-mt-sm">Your VM is being created...</div>
+    </div>
+  </div>
 
-                    </div>
-                  </q-card-section>
-                </q-card>
+  <q-img :src="lab.img" class="sandbox-img" />
+
+  <q-card-section>
+    <div class="action-buttons">
+      <q-btn
+        label="Restart"
+        color=""
+        outline
+        class="q-mr-sm act-btn"
+        v-if="lab.title !== 'Tech Sandbox'"
+      />
+      <q-btn
+        label="Shutdown"
+        color=""
+        outline
+        class="q-mr-sm act-btn"
+        v-if="lab.title === 'Tech Sandbox'"
+        @click="shutdown(labsData.find(vm => vm.userName === currentUserName))"
+      />
+      <q-btn
+        :label="['Fintech Sandbox', 'MAANG Sandbox'].includes(lab.title)
+          ? 'Download'
+          : (lab.title === 'Tech Sandbox' && labsData.some(vm => vm.userName === currentUserName && vm.provisioningState === 'Succeeded'))
+          ? 'Download VM'
+          : (isCreatingVm ? '' : 'Start')"
+        :loading="isCreatingVm"
+        class="act-btn"
+        @click="['Fintech Sandbox', 'MAANG Sandbox'].includes(lab.title)
+          ? handleLabAction(lab)
+          : (lab.title === 'Tech Sandbox' && labsData.some(vm => vm.userName === currentUserName && vm.provisioningState === 'Succeeded'))
+          ? downloadVm(labsData.find(vm => vm.userName === currentUserName && vm.provisioningState === 'Succeeded'))
+          : handleLabAction(lab)"
+      />
+    </div>
+  </q-card-section>
+</q-card>
+
               </div>
             </div>
           </div>
@@ -167,7 +185,10 @@ export default {
       extra_lab3: extra_lab3,
       dojo: dojo,
       white_board: white_board,
+      isTechSandboxSucceeded: false,
+      isTechSandboxCreating: false,
       jupyter: jupyter,
+      hasRequestedVm: false,
       currentSlide: 0,
       itemsPerSlide: this.getItemsPerSlide(),
       isMobile: window.innerWidth <= 768,
@@ -240,6 +261,29 @@ export default {
     openTool(link) {
         window.open(link, "_blank");
     },
+    fetchRequestVms() {
+    this.$api.get('/api/request-vms')
+      .then(response => {
+        console.log('Request VMS response:', response.data);
+
+        const vms = response.data.data || [];
+
+        vms.forEach(vm => {
+          console.log('Requested VM username:', vm.username);
+        });
+
+        // compare usernames
+        const session = useSessionStore();
+        const profileStore = useProfileStore();
+        const currentUserName = profileStore.user.username || '';
+
+        this.hasRequestedVm = vms.some(vm => vm.username === currentUserName);
+        console.log('Has requested VM:', this.hasRequestedVm);
+      })
+      .catch(error => {
+        console.error('Error fetching request VMS:', error);
+      });
+  },
     handleStart(title) {
   console.log(`${title} Start button pressed`);
 
@@ -354,6 +398,7 @@ downloadVm(lab) {
       console.error('Fetch error:', error.message);
     });
 },
+
 async shutdown(lab) {
   const profileStore = useProfileStore();
   const profileUsername = profileStore.user.username;
@@ -463,6 +508,19 @@ async shutdown(lab) {
             createdDate: createdDateIST, // Replace with IST formatted date
           };
         });
+        const session = useSessionStore();
+const profileStore = useProfileStore();
+const currentUserName = profileStore.user.username || '';
+this.isTechSandboxSucceeded = this.labsData.some(
+        vm =>
+          vm.userName === currentUserName &&
+          vm.provisioningState === 'Succeeded'
+      );
+      this.isTechSandboxCreating = this.labsData.some(
+      vm =>
+        vm.userName === currentUserName &&
+        vm.provisioningState === 'Creating'
+    );
       }).catch(error => {
         this.loading = false;
         this.showMsg(error.response?.data.message || error.message, 'negative');
@@ -526,6 +584,9 @@ async shutdown(lab) {
     this.isCreatingVm = false; // Hide loading after response
 
     this.showMsg(response.data.message, 'positive');
+    setTimeout(() => {
+  window.location.reload();
+}, 3000);
   } catch (error) {
     this.isCreatingVm = false; // Hide loading if there's an error
     console.error('Error sending VM request:', error);
@@ -555,13 +616,31 @@ async shutdown(lab) {
     }
   },
   mounted() {
-    window.addEventListener("resize", this.handleResize);
-    this.getAzureVmsData();
-    this.loadLockedStates();
-  },
-  beforeDestroy() {
-    window.removeEventListener("resize", this.handleResize);
+  // Add resize event listener
+  window.addEventListener("resize", this.handleResize);
+
+  // Initial data load
+  this.getAzureVmsData();
+  this.loadLockedStates();
+  this.fetchRequestVms();
+
+  // Periodically call getAzureVmsData every 2 minutes (120,000 ms) if route is '/labs'
+  if (this.$route.path === '/labs') {
+    this.intervalId = setInterval(() => {
+      this.getAzureVmsData();
+      this.fetchRequestVms();
+    }, 120000); // 2 minutes
   }
+},
+
+beforeDestroy() {
+  // Clear interval and remove resize event listener
+  if (this.intervalId) {
+    clearInterval(this.intervalId);
+  }
+  window.removeEventListener("resize", this.handleResize);
+}
+
 };
 </script>
 
@@ -719,6 +798,29 @@ async shutdown(lab) {
   background: #5479F7;
   top: 30%;
   box-shadow: 0px 0px 30px 20px #5479F7;
+}
+.grayscale {
+  filter: grayscale(100%);
+  pointer-events: none;
+  opacity: 0.6;
+}
+.vm-creating-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.65);
+  color: white;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+}
+
+.overlay-content {
+  text-align: center;
 }
 
 .outer1 {
