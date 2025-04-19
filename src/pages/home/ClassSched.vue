@@ -155,68 +155,73 @@ export default {
     },
 
     getEventsData() {
-      const request = {
-        categoryId: this.selectedCategory?.id,
-        subCategoryId: this.selectedSubCategory?.id
-      };
-      this.loading = true;
+  const request = {
+    categoryId: this.selectedCategory?.id,
+    subCategoryId: this.selectedSubCategory?.id
+  };
+  this.loading = true;
 
-      this.$api.get(urls.getEvents, { params: request })
-        .then(response => {
-          this.loading = false;
-          if (response.data.success) {
-            let events = response.data.data.map(event => {
-              const eventDate = new Date(event.date);
-              return {
-                title: event.title,
-                topic: event.topic,
-                start: eventDate,
-                end: event.endDate ? new Date(event.endDate) : eventDate,
-                link: event.link,
-                batch: event.batch,
-                isUpcoming: eventDate >= new Date()
-              };
-            });
-
-            this.events = events;
-
-            const userBatches = this.batchOptions2.map(option => option.value);
-            const filteredByBatch = events.filter(e => userBatches.includes(e.batch));
-
-            console.log("🧾 Filtered Events by User Batch:", filteredByBatch);
-
-            const upcoming = filteredByBatch.filter(e => e.isUpcoming);
-            this.displayedEvents = upcoming.length
-              ? upcoming
-              : filteredByBatch.length
-              ? [filteredByBatch[filteredByBatch.length - 1]]
-              : [];
-
-          } else {
-            this.showMsg(response.data?.message, 'negative');
-          }
-        })
-        .catch(error => {
-          this.loading = false;
-          this.showMsg(error.response?.data.message || error.message, 'negative');
+  this.$api.get(urls.getEvents, { params: request })
+    .then(response => {
+      this.loading = false;
+      if (response.data.success) {
+        let events = response.data.data.map(event => {
+          // Combine date and time without timezone offset
+          const startDateTime = new Date(`${event.date}T${event.start}:00`);
+          const endDateTime = new Date(`${event.endDate || event.date}T${event.end}:00`);
+          return {
+            title: event.title,
+            topic: event.topic,
+            start: startDateTime,
+            end: endDateTime,
+            link: event.link,
+            batch: event.batch,
+            isUpcoming: startDateTime >= new Date()
+          };
         });
-    },
 
-    formatDate(date) {
-      return new Date(date).toLocaleDateString(undefined, {
-        weekday: "short",
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-      });
-    },
+        this.events = events;
 
-    formatTime(date) {
-      return new Date(date).toLocaleTimeString(undefined, {
-        hour: "2-digit",
-        minute: "2-digit"
-      });
-    },
+        const userBatches = this.batchOptions2.map(option => option.value);
+        const filteredByBatch = events.filter(e => userBatches.includes(e.batch));
+
+        console.log("🧾 Filtered Events by User Batch:", filteredByBatch);
+
+        const upcoming = filteredByBatch.filter(e => e.isUpcoming);
+        this.displayedEvents = upcoming.length
+          ? upcoming
+          : filteredByBatch.length
+          ? [filteredByBatch[filteredByBatch.length - 1]]
+          : [];
+
+      } else {
+        this.showMsg(response.data?.message, 'negative');
+      }
+    })
+    .catch(error => {
+      this.loading = false;
+      this.showMsg(error.response?.data.message || error.message, 'negative');
+    });
+},
+
+formatDate(date) {
+  return new Date(date).toLocaleDateString('en-IN', {
+    weekday: "short",
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    timeZone: 'Asia/Kolkata'
+  });
+},
+
+formatTime(date) {
+  return new Date(date).toLocaleTimeString('en-IN', {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+    timeZone: 'Asia/Kolkata'
+  });
+},
   },
 
   computed: {
