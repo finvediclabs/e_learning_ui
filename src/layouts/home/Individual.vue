@@ -170,7 +170,7 @@
 <freeCourses />
 
 <Certification />
-<certificateVerqification />
+<certificateVerqification style="margin-bottom: 3%;margin-top: 3%;" />
 <Reviews />
 <Footer />
 <q-dialog v-model="showOtpDialog" persistent full-width>

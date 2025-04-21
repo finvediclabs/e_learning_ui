@@ -10,61 +10,43 @@
             flat
             noCaps
             :label="item.label"
-            @click="activeTab = item.key"
+            :to="item.to"
             class="text-white nav-item"
-            :class="{ 'active-link': activeTab === item.key }"
+            :class="{ 'active-link': isActiveRoute(item.to) }"
           />
         </div>
       </q-toolbar>
     </q-header>
 
     <q-page-container>
-      <q-page class="flex flex-center">
-        <component :is="currentComponent" />
+      <q-page class="flex">
+        <router-view />
       </q-page>
     </q-page-container>
   </q-layout>
 </template>
 
 <script>
-import Individual from "src/layouts/home/Individual.vue";
-import Corporates from "src/layouts/home/Corporates.vue";
-import Coe from "src/layouts/home/Coe.vue";
-
 export default {
   name: "HomePage",
-  components: {
-    Individual,
-    Corporates,
-    Coe
-  },
   data() {
     return {
-      activeTab: "individuals", // Default tab
       navItems: [
-        { label: "Individuals", key: "individuals" },
-        { label: "Corporates", key: "corporates" },
-        { label: "Colleges", key: "coe" }
+        { label: "Individuals", to: "/" },
+        { label: "Corporates", to: "/corporates" },
+        { label: "Colleges", to: "/colleges" }
       ]
     };
   },
-  computed: {
-    currentComponent() {
-      switch (this.activeTab) {
-        case "corporates":
-          return "Corporates";
-        case "coe":
-          return "Coe";
-        default:
-          return "Individual";
-      }
+  methods: {
+    isActiveRoute(path) {
+      return this.$route.path === path;
     }
   }
 };
 </script>
 
 <style scoped>
-/* Navigation Container */
 .nav-container {
   display: flex;
   justify-content: start;
@@ -72,33 +54,20 @@ export default {
   width: 100%;
 }
 
-/* Navigation Item */
 .nav-item {
-  /* font-size: 16px; */
-  /* padding: 12px 15px; */
   position: relative;
   transition: color 0.3s ease-in-out;
 }
 
-/* Underline Effect (Default Hidden) */
-
-
-.active-link{
+.active-link {
   text-decoration: underline;
   text-underline-offset: 6px;
 }
 
-/* Underline on Active Tab (Always Visible) */
-.active-link::after {
-  width: 100%;
-  left: 0;
-}
-.bg-Customblue{
+.bg-Customblue {
   background-color: #4E5BF8;
-  /* background-color: #7C89FA; */
-  /* background-color: gray; */
 }
-/* Responsive Font Adjustments */
+
 @media (max-width: 768px) {
   .nav-item {
     font-size: 14px;

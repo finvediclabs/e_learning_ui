@@ -40,11 +40,7 @@ const routes = [
     meta: { title: 'landing', module: 'login' },
     component: () => import('layouts/LandingLayout.vue'),
   },
-  {
-    path: '/home',
-    meta: { title: 'landing', module: 'home' },
-    component: () => import('layouts/home/HomePage.vue'),
-  },
+
 
 
   {
@@ -164,12 +160,51 @@ const routes = [
       }
     ]
   },
-
   {
-    path: '/certificateValidation',
-    meta: { title: 'certificateValidation', module: 'certificateValidation' },
-    component: () => import('layouts/home/CertificateOtpForm.vue'),
+    path: '/',
+    component: () => import('layouts/home/HomePage.vue'),
+    children: [
+      {
+        path: '',
+        name: 'home-default',
+        component: () => import('layouts/home/Individual.vue'),
+        meta: { title: 'Individuals', module: 'home' }
+      },
+      {
+        path: 'corporates',
+        name: 'corporates',
+        component: () => import('layouts/home/Corporates.vue'),
+        meta: { title: 'Corporates', module: 'home' }
+      },
+      {
+        path: 'colleges',
+        name: 'coe',
+        component: () => import('layouts/home/Coe.vue'),
+        meta: { title: 'Colleges', module: 'home' }
+      },
+      {
+        path: 'certificateValidation',
+        name: 'certificate-validation',
+        component: () => import('layouts/home/CertificateOtpForm.vue'),
+        meta: { title: 'Certificate Validation', module: 'certificateValidation' }
+      }
+    ]
   },
+
+  // Route at `/home` to always show `Individual.vue`
+  {
+    path: '/home',
+    component: () => import('layouts/home/HomePage.vue'),
+    children: [
+      {
+        path: '',
+        name: 'home-landing',
+        component: () => import('layouts/home/Individual.vue'),
+        meta: { title: 'Home', module: 'home' }
+      }
+    ]
+  },
+
 
   // {
   //   path: 'assignment',
