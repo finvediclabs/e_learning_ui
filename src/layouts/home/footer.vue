@@ -162,7 +162,7 @@
         <a href="https://www.facebook.com/ScaleGrad" target="_blank"><q-img :src="fb_logo" class="logo_foot_img"></q-img></a>
         <a href="https://www.linkedin.com/company/95730566/admin/page-posts/published/" target="_blank"><q-img :src="ln_logo" class="logo_foot_img"></q-img></a>
         <a href="https://x.com/ScaleGrad" target="_blank"><q-img :src="x_logo" class="logo_foot_img"></q-img></a>
-        <a href="#" target="_blank"><q-img :src="yt_logo" class="logo_foot_img"></q-img></a>
+        <a href="https://www.youtube.com/@scalegrad" target="_blank"><q-img :src="yt_logo" class="logo_foot_img"></q-img></a>
         <a href="https://www.instagram.com/scalegrad/" target="_blank"><q-img :src="insta_logo" class="logo_foot_img"></q-img></a>
       </div>
     </div>
@@ -171,7 +171,7 @@
         <a href="https://www.facebook.com/ScaleGrad" target="_blank"><q-img :src="fb_logo" class="logo_foot_img"></q-img></a>
         <a href="https://www.linkedin.com/company/95730566/admin/page-posts/published/" target="_blank"><q-img :src="ln_logo" class="logo_foot_img"></q-img></a>
         <a href="https://x.com/ScaleGrad" target="_blank"><q-img :src="x_logo" class="logo_foot_img"></q-img></a>
-        <a href="#" target="_blank"><q-img :src="yt_logo" class="logo_foot_img"></q-img></a>
+        <a href="https://www.youtube.com/@scalegrad" target="_blank"><q-img :src="yt_logo" class="logo_foot_img"></q-img></a>
         <a href="https://www.instagram.com/scalegrad/" target="_blank"><q-img :src="insta_logo" class="logo_foot_img"></q-img></a>
       </div>
       <div class="row text-center"  style="display: flex;align-items: center;justify-content: center;width: 100%;">
