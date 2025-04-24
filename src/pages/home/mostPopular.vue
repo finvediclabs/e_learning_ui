@@ -1,8 +1,19 @@
 <template>
   <div class="most-popular" style="width: 100%;">
-    <div class="row w-100 text-left">
-    <span class="text-black" style="width: 100%; font-size: x-large;color: #141414; font-weight: 600;margin-left: 1%;">Popular Courses</span>
-  </div>
+    <!-- Desktop View (medium and up) -->
+<!-- Desktop Heading (only visible on larger screens) -->
+<div class="desktop-header">
+  <span class="text-black" style="font-size: x-large; color: #141414; font-weight: 600;">Popular Courses</span>
+</div>
+
+<!-- Mobile Heading + View More (only visible on mobile) -->
+<div class="mobile-header">
+  <span class="mobile-title">Popular Courses</span>
+  <span class="mobile-view-more" @click="viewAll">View More Courses →</span>
+</div>
+
+
+
 
   <div v-if="isLoading" class="loading-container">
       <q-spinner color="primary" size="40px" />
@@ -34,9 +45,11 @@
 </q-card>
 
       </div>
-      <div class="col-12 q-mt-none text-right q-pt-sm" style="width: 98%;margin-left: auto;margin-right: auto;">
-        <span style="color: #4E5BF8; cursor: pointer;" @click="viewAll">View More Courses →</span>
-        </div>
+      <!-- Desktop View (hidden on xs) -->
+      <div class="desktop-view-more">
+  <span @click="viewAll">View More Courses →</span>
+</div>
+
     </div>
   </div>
 
@@ -212,5 +225,142 @@ async fetchCategories() {
   transform: scale(1.05); /* Enlarges by 5% */
   transition: transform 0.3s ease;
 }
+
+.mobie{
+    display: none;
+  }
+
+/* ================== Mobile View ================================ */
+/* Default styles for desktop */
+.most-popular .row.d-flex {
+  flex-wrap: wrap;
+}
+
+/* Mobile view as a horizontal scrollable carousel */
+@media (max-width: 768px) {
+
+  .mobie{
+    display: visible !important;
+  }
+  .most-popular .container .row.d-flex {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 1rem;
+  }
+
+  .most-popular .container .row.d-flex::-webkit-scrollbar {
+    display: none;
+  }
+
+  .most-popular .container .col-lg-3 {
+    flex: 0 0 auto;
+    width: 80%;
+    scroll-snap-align: start;
+    margin-right: 1rem;
+  }
+
+  .most-popular .col-12.q-mt-none.text-right {
+    text-align: center;
+    margin-top: 1rem;
+  }
+}
+
+
+/* Default: Desktop View */
+.mobile-header {
+  display: none;
+}
+
+.desktop-view-more {
+  display: block;
+  text-align: right;
+  width: 98%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 0.5rem;
+}
+
+.desktop-view-more span {
+  color: #4E5BF8;
+  cursor: pointer;
+}
+
+/* Mobile View Only */
+@media screen and (max-width: 600px) {
+  .mobile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .mobile-title {
+    font-size: large;
+    font-weight: 600;
+    color: #141414;
+  }
+
+  .mobile-view-more {
+    font-size: small;
+    color: #4E5BF8;
+    cursor: pointer;
+  }
+
+  .desktop-view-more {
+    display: none;
+  }
+}
+
+
+/* Default (Desktop) */
+.desktop-header {
+  display: block;
+  width: 100%;
+  padding-left: 1rem;
+  margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.mobile-header {
+  display: none;
+}
+
+/* Mobile Only */
+@media screen and (max-width: 600px) {
+  .desktop-header {
+    display: none;
+  }
+
+  .mobile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .mobile-title {
+    font-size: large;
+    font-weight: 600;
+    color: #141414;
+  }
+
+  .mobile-view-more {
+    font-size: small;
+    color: #4E5BF8;
+    cursor: pointer;
+  }
+}
+
+
+
+
 
 </style>

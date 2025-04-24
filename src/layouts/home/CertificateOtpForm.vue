@@ -138,7 +138,7 @@
         <img :src="certificateImageUrl" alt="Certificate" style="width: 100%" />
       </q-card-section>
       <q-card-actions align="right">
-        <q-btn flat label="Close" color="primary" v-close-popup />
+        <q-btn flat label="Close" color="primary" v-close-popup  clickable @click="$router.push('/homeProfile')"/>
       </q-card-actions>
     </q-card>
   </q-dialog>

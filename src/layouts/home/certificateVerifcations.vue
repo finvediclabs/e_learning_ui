@@ -6,32 +6,40 @@
       Online authentication of certification to the legitimacy of digital identities
     </p>
 
-    <div class="row justify-center q-col-gutter-md" style="width: 80%; margin: auto;">
-      <div class="row justify-center q-col-gutter-md" style="width: 80%; margin: auto;padding: 0%;">
-  <div class="col-8" style="padding: 0% !important;">
-    <q-input
-  v-model="uniqueId"
-  placeholder="Enter FinVedic Certificate ID for authentication"
-  outlined
-  dense
-  rounded
-  class="full-width"
-  bg-color="white"
-  style="position: relative;"
->
-  <template v-slot:append>
-    <q-btn
-      label="Check Here"
-      color="primary"
-      unelevated
-      rounded
-      dense
-      class="q-px-none"
-      style="position: absolute; right: 1px; min-width: 120px; height: calc(100% - 4px); border: 2px solid #fff;"
-      @click="submitUniqueId"
-    />
-  </template>
-</q-input>
+    <div class="row justify-center q-col-gutter-md mob-place" style="width: 80%; margin: auto;">
+      <div class="row justify-center q-col-gutter-md mob-place" style="width: 80%; margin: auto;padding: 0%;">
+  <div class="col-8" style="padding: 0% !important;"> 
+    <div class="cert-input-container">
+  <q-input
+    v-model="uniqueId"
+    placeholder="Enter FinVedic Certificate ID for authentication"
+    outlined
+    dense
+    rounded
+    class="cert-input"
+    bg-color="white"
+  >
+    <template v-slot:append>
+      <q-btn
+        label="Check Here"
+        color="primary"
+        unelevated
+        rounded
+        dense
+        class="check-btn hide-on-mobile"
+        @click="submitUniqueId"
+      />
+      <q-icon
+        name="arrow_forward"
+        class="arrow-btn show-on-mobile"
+        size="md"
+        @click="submitUniqueId"
+      />
+    </template>
+  </q-input>
+</div>
+
+
 
   </div>
 </div>
@@ -76,5 +84,97 @@ export default {
  color: white;
   margin: auto;
 }
+
+.check-btn {
+  position: absolute;
+  right: 1px;
+  min-width: 120px;
+  height: calc(100% - 4px);
+  border: 2px solid #fff;
+  z-index: 2;
+}
+
+.arrow-btn {
+  cursor: pointer;
+  color: #4E5BF8;
+  font-size:large !important;
+  margin-left: 0px !important;
+}
+
+/* Mobile-specific visibility handling */
+@media screen and (max-width: 600px) {
+  .hide-on-mobile {
+    display: none !important;
+  }
+
+  .show-on-mobile {
+    display: inline-block !important;
+  }
+
+  .check-btn {
+    display: none;
+  }
+
+  .mob-place {
+    width: 100% !important;
+  }
+
+  .cert-input{
+    font-size: x-small;
+  }
+}
+
+/* @media screen and (min-width: 601px) {
+  .show-on-mobile {
+    display: none !important;
+  }
+} */
+
+/* .cert-input-container {
+  width: 100% !important;
+  display: flex;
+  justify-content: center;
+}
+
+.cert-input {
+  width: 100% !important;
+  max-width: 600px; 
+}
+
+.check-btn {
+  position: absolute;
+  right: 1px;
+  min-width: 120px;
+  height: calc(100% - 4px);
+  border: 2px solid #fff;
+  z-index: 2;
+}
+
+.arrow-btn {
+  cursor: pointer;
+  color: #4E5BF8;
+  padding-right: 8px;
+} */
+
+/* Mobile-specific visibility */
+/* @media screen and (max-width: 600px) {
+  .hide-on-mobile {
+    display: none !important;
+  }
+  .show-on-mobile {
+    display: inline-block !important;
+  }
+  .check-btn {
+    display: none;
+  }
+} */
+
+/* @media screen and (min-width: 601px) {
+  .show-on-mobile {
+    display: none !important;
+  }
+} */
+
+
 
 </style>
