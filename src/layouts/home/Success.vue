@@ -1,7 +1,9 @@
 <template>
     <div class="q-pa-md">
       <div class="text-center text-h4 q-mb-lg">
-      <span class="text-black text-h4 text-bold"> Our <span style=" color: #4e5bf8 ">Successful </span>Students </span>
+        <span class="text-black text-h4 text-bold">
+          Our <span style="color: #4e5bf8">Successful </span>Students
+        </span>
       </div>
   
       <div class="slider-container">
@@ -11,21 +13,21 @@
             :key="index"
             class="slider-item"
           >
-            <q-card class="q-hoverable">
+            <q-card class="q-hoverable rounded-card">
               <q-card-section class="q-pa-none">
                 <video
-                  :src="video.url"
+                  :src="video"
                   autoplay
                   muted
                   loop
                   playsinline
-                  class="video-player"
+                  class="video-player rounded-video"
                   @contextmenu.prevent
                 ></video>
               </q-card-section>
               <q-card-section class="q-pa-sm">
-                <div class="text-subtitle1">{{ video.name }}</div>
-                <div class="text-caption text-grey-7">{{ video.description }}</div>
+                <div class="text-subtitle1">{{ names[index % names.length] }}</div>
+                <div class="text-caption text-grey-7">{{ descriptions[index % descriptions.length] }}</div>
               </q-card-section>
             </q-card>
           </div>
@@ -34,29 +36,32 @@
     </div>
   </template>
   
-  
   <script setup>
   import { ref, computed, onMounted, onUnmounted } from 'vue'
   
-  const videos = ref([
-    {
-      name: 'Harsha M',
-      description: 'Qualified for Soulpage of Code 2025',
-      url: 'src/assets/Harsha.mp4'
-    },
-    {
-      name: 'ScaleGrad Expo',
-      description: 'Our Latest Event',
-      url: 'src/assets/ScaleGradExpo.mp4'
-    },
-    {
-      name: 'Yash',
-      description: 'Qualified for Soulpage of Code 2025',
-      url: 'src/assets/Yash.mp4'
-    }
+  import HarshaVideo from 'src/assets/Harsha.mp4'
+  import ScaleGradExpoVideo from 'src/assets/ScaleGradExpo.mp4'
+  import YashVideo from 'src/assets/Yash.mp4'
+  
+  const videoSources = ref([
+    HarshaVideo,
+    ScaleGradExpoVideo,
+    YashVideo
   ])
   
-  const doubleVideos = computed(() => [...videos.value, ...videos.value])
+  const names = [
+    'Harsha M',
+    'ScaleGrad Expo',
+    'Yash'
+  ]
+  
+  const descriptions = [
+    'Qualified for Soulpage of Code 2025',
+    'Our Latest Event',
+    'Qualified for Soulpage of Code 2025'
+  ]
+  
+  const doubleVideos = computed(() => [...videoSources.value, ...videoSources.value])
   
   let animationFrameId
   
@@ -67,9 +72,8 @@
     let isDown = false
     let startX
     let scrollLeft
-    let speed = window.innerWidth <= 600 ? 1.5 : 0.5 // Faster on mobile
+    let speed = window.innerWidth <= 600 ? 1.5 : 0.5
   
-    // Manual dragging
     container.addEventListener('mousedown', (e) => {
       isDown = true
       startX = e.pageX - container.offsetLeft
@@ -95,7 +99,6 @@
       container.scrollLeft = scrollLeft - walk
     })
   
-    // Touch support
     container.addEventListener('touchstart', (e) => {
       isDown = true
       startX = e.touches[0].pageX - container.offsetLeft
@@ -113,7 +116,6 @@
       container.scrollLeft = scrollLeft - walk
     })
   
-    // Infinite scroll animation
     const animate = () => {
       if (!isDown) {
         container.scrollLeft += speed
@@ -153,9 +155,21 @@
   
   .video-player {
     width: 100%;
-    height: 250px; 
+    height: 250px;
     background: black;
     object-fit: contain;
+  }
+  
+  /* Rounded card */
+  .rounded-card {
+    border-radius: 16px;
+    overflow: hidden; /* Ensures child video is clipped */
+  }
+  
+  /* Rounded video inside card */
+  .rounded-video {
+    border-top-left-radius: 14px;
+    border-top-right-radius: 14px;
   }
   
   @media (max-width: 1024px) {
@@ -174,4 +188,4 @@
     text-align: center;
   }
   </style>
-   
+  
