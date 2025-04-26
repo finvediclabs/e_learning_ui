@@ -205,6 +205,19 @@ const routes = [
     ]
   },
 
+  {
+    path: '/register',
+    component: () => import('layouts/home/HomePage.vue'),
+    children: [
+      {
+        path: '',
+        name: 'register',
+        component: () => import('layouts/home/RegistrationForm.vue'),
+        meta: { title: 'Register', module: 'register' }
+      }
+    ]
+  },
+
 
   // {
   //   path: 'assignment',

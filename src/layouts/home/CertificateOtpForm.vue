@@ -168,6 +168,7 @@ export default {
         purpose: "",
       },
       otpRequested: false,
+      leftDrawerOpen: false,
       showDialog: false,
       certificateImageUrl: "",
       otp: "", // Single OTP input for now
