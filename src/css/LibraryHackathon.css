@@ -122,7 +122,8 @@
     margin-left: auto;
     margin-right: auto;
     /* gap: 20px; */
-    /* border: 2px solid red; */
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
   }
 
   .search-container1 {
@@ -250,7 +251,7 @@
     font-size: small;
     color: #555;
     font-family: Arial, sans-serif;
-    text-align: left;
+    text-align: left !important;
     line-height: 1.5;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -348,7 +349,7 @@
   .styled-course-table th {
     text-align: left;
     padding: 12px;
-    background-color: #f0f0f0;
+    background-color: #e7f0ff;
   }
 
   .styled-course-table td {
@@ -356,6 +357,7 @@
     background-color: white;
     border: 1px solid #e0e0e0;
     vertical-align: middle;
+    text-align: center; 
     transition: background-color 0.3s ease;
   }
 
@@ -462,7 +464,6 @@
       color: #aaa;
       font-style: italic;
     }
-
 
 
 

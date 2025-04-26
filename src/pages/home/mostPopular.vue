@@ -8,8 +8,8 @@
 
 <!-- Mobile Heading + View More (only visible on mobile) -->
 <div class="mobile-header">
-  <span class="mobile-title">Popular Courses</span>
-  <span class="mobile-view-more" @click="viewAll">View More Courses →</span>
+  <span class="mobile-title" style="font-size: x-large">Popular Courses</span>
+  <span class="mobile-view-more" @click="viewAll">View More</span>
 </div>
 
 
@@ -289,15 +289,6 @@ async fetchCategories() {
 
 /* Mobile View Only */
 @media screen and (max-width: 600px) {
-  .mobile-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    padding: 0.75rem 1rem;
-    margin-bottom: 0.5rem;
-    margin-top: 0.5rem;
-  }
 
   .mobile-title {
     font-size: large;
@@ -307,8 +298,11 @@ async fetchCategories() {
 
   .mobile-view-more {
     font-size: small;
-    color: #4E5BF8;
+    color: #fff !important;
     cursor: pointer;
+    background-color: #4E5BF8;
+    padding: 4px 10px;
+    border-radius: 9px;
   }
 
   .desktop-view-more {
@@ -341,7 +335,7 @@ async fetchCategories() {
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    padding: 0.75rem 1rem;
+    /* padding: 0.75rem 1rem; */
     margin-bottom: 0.5rem;
     margin-top: 0.5rem;
   }

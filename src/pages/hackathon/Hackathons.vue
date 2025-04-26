@@ -48,10 +48,10 @@
             class="course-button"
             :style="{
               backgroundImage: `url(${course.cover})`,
-              backgroundSize: 'cover',
-              width: '100px',
+              backgroundSize: 'cover',             
               height: '60px',
-              borderRadius: '8px'
+              borderRadius: '8px',
+              
             }"
             flat
           ></q-btn>
@@ -381,8 +381,9 @@ export default {
     return this.featuredCourses.filter(course =>
       course.title.toLowerCase().includes(this.searchQuery.toLowerCase())
     );
-  }
+  },
 },
+
 
   methods: {
     async fetchAndHandleZip() {
@@ -1041,7 +1042,7 @@ async fetchAllStudentAssignmentsForUser() {
 .search-bar {
   width: 100%;
   max-width: 400px;
-  margin: 1rem 0;
+  margin: 1rem ;
 }
 
 .styled-course-table {
@@ -1085,6 +1086,19 @@ async fetchAllStudentAssignmentsForUser() {
     word-break: break-word;
   }
 }
+
+/* Default (for mobile screens and below) */
+.course-button {
+  background-position: center;
+}
+
+/* For laptop screens and above */
+@media (min-width: 768px) {
+  .course-button {
+    background-position: bottom;
+  }
+}
+
 
 
 </style>
