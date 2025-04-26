@@ -232,18 +232,21 @@ export default {
   },
   methods: {
     async handleSubmit() {
-      const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
-      const apiUrl = baseUrl + 'api/web-enrolls';
+  const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
+  const apiUrl = baseUrl + 'api/web-enrolls';
+
   try {
-    const response = await axios.post(apiUrl,
-      this.form
-    );
+    const response = await axios.post(apiUrl, this.form);
     this.$q.notify({
       type: 'positive',
       message: 'Registration successful!',
     });
     this.resetForm();
-    this.$router.push('/home');  // 👈 Redirect to home
+
+    // Wait for 3 seconds before redirecting
+    setTimeout(() => {
+      this.$router.push('/home');  // 👈 Redirect to home
+    }, 3000);  // 3000ms = 3 seconds
   } catch (error) {
     console.error('Error:', error);
     this.$q.notify({
