@@ -171,6 +171,7 @@
 
 <Certification />
 <certificateVerqification style="margin-bottom: 3%;margin-top: 3%;" />
+<Success style="width: 100%"/>
 <Reviews />
 <Footer />
 <q-dialog v-model="showOtpDialog" persistent full-width>
@@ -194,9 +195,9 @@ import certificateVerqification from "./certificateVerifcations.vue";
 import CertificateOtpForm from "src/layouts/home/CertificateOtpForm.vue";
 
 
-
 import Associated from "./Associated.vue";
 import Footer from "./footer.vue";
+import Success from "./Success.vue";
 
 export default {
   components: {
@@ -205,6 +206,7 @@ export default {
     OurTools,
     Reviews,
     Certification,
+    Success,
     Associated,
     certificateVerqification,
     Footer,
