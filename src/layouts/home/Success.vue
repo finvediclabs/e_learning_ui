@@ -22,6 +22,7 @@
                   loop
                   playsinline
                   class="video-player rounded-video"
+                  @click="openVideoDialog(video)"
                   @contextmenu.prevent
                 ></video>
               </q-card-section>
@@ -33,8 +34,28 @@
           </div>
         </div>
       </div>
+  
+      <!-- Video Dialog -->
+      <q-dialog v-model="showDialog" persistent>
+        <q-card class="bg-black text-white" style="width: 90vw; max-width: 800px;">
+          <q-card-section class="q-pa-none">
+            <video
+              v-if="selectedVideo"
+              :src="selectedVideo"
+              controls
+              autoplay
+              class="full-video-player"
+            ></video>
+          </q-card-section>
+          <q-card-actions align="center" class="q-pa-md">
+            <q-btn flat label="Close" color="white" @click="closeDialog" />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
+  
     </div>
   </template>
+  
   
   <script setup>
   import { ref, computed, onMounted, onUnmounted } from 'vue'
@@ -64,6 +85,20 @@
   const doubleVideos = computed(() => [...videoSources.value, ...videoSources.value])
   
   let animationFrameId
+  
+  // Dialog controls
+  const showDialog = ref(false)
+  const selectedVideo = ref(null)
+  
+  function openVideoDialog(videoUrl) {
+    selectedVideo.value = videoUrl
+    showDialog.value = true
+  }
+  
+  function closeDialog() {
+    selectedVideo.value = null
+    showDialog.value = false
+  }
   
   onMounted(() => {
     const container = document.querySelector('.slider-container')
@@ -135,6 +170,7 @@
   })
   </script>
   
+  
   <style scoped>
   .slider-container {
     overflow: hidden;
@@ -160,13 +196,20 @@
     object-fit: contain;
   }
   
+  /* Full video inside dialog */
+  .full-video-player {
+    width: 100%;
+    height: 60vh;
+    object-fit: contain;
+    background: black;
+  }
+  
   /* Rounded card */
   .rounded-card {
     border-radius: 16px;
-    overflow: hidden; /* Ensures child video is clipped */
+    overflow: hidden;
   }
   
-  /* Rounded video inside card */
   .rounded-video {
     border-top-left-radius: 14px;
     border-top-right-radius: 14px;
