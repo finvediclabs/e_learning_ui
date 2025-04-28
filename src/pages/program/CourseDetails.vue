@@ -1,7 +1,10 @@
 <template>
   <div class="course-details">
     <!-- Loading State -->
-    <div v-if="loading">Loading course details...</div>
+    <div v-if="loading" class="loading-container">
+  <q-spinner-hourglass size="50px" color="primary" />
+  <p class="loading-text">Loading course details...</p>
+</div>
 
     <!-- Error State -->
     <div v-else-if="error">
@@ -191,3 +194,34 @@ onCategoryClick(categoryId) {
   },
 };
 </script>
+<style>
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px; /* or 100vh if you want full screen */
+  text-align: center;
+  gap: 16px;
+}
+
+.loading-text {
+  font-size: 20px;
+  font-weight: 500;
+  color: #4E5BF8;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
+
+</style>

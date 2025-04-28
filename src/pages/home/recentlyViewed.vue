@@ -6,9 +6,11 @@
       </span>
     </div>
 
-    <!-- Show loading spinner -->
-    <q-spinner v-if="loading" color="primary" size="2em" />
-
+  <!-- Loading State -->
+ <div v-if="loading" class="loading-container">
+  <q-spinner-hourglass size="40px" color="primary" />
+  <p class="loading-text">Recently Viewed...</p>
+</div>
     <!-- Show recently viewed programs -->
     <q-list class="row col-12" v-else-if="recentlyViewed.length" style="width: 100%; ">
       <div class="row" style="display: flex; flex-wrap: wrap; width: 100%;">
@@ -319,6 +321,34 @@ async fetchDefaultPrograms() {
   font-size: 1.2em;
   font-weight: bold;
   color: gray;
+}
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100px; /* or 100vh if you want full screen */
+  text-align: center;
+  gap: 16px;
+}
+
+.loading-text {
+  font-size: 20px;
+  font-weight: 500;
+  color: #4E5BF8;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.5;
+  }
 }
 
 @media (max-width: 768px) {

@@ -92,7 +92,10 @@
     <div class="right-container">
   <div class="category-details">
     <!-- Loading State -->
-    <div v-if="loading">Loading category details...</div>
+    <div v-if="loading" class="loading-container">
+  <q-spinner-hourglass size="50px" color="primary" />
+  <p class="loading-text">Loading category details...</p>
+</div>
 
     <!-- Error State -->
     <div v-else-if="error">
@@ -775,6 +778,35 @@ getPresentationFlatIndex(groupId, localIndex) {
   margin-bottom: 10px;
   border-radius: 8px;
 }
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px; /* or 100vh if you want full screen */
+  text-align: center;
+  gap: 16px;
+}
+@keyframes pulse {
+  0% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
+
+.loading-text {
+  font-size: 20px;
+  font-weight: 500;
+  color: #4E5BF8;
+  animation: pulse 1.5s infinite;
+}
+
+
 @media (max-width: 768px) {
   .category-image {
     width: 90%;
