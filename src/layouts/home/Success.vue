@@ -13,45 +13,76 @@
             :key="index"
             class="slider-item"
           >
-            <q-card class="q-hoverable rounded-card">
-              <q-card-section class="q-pa-none">
-                <video
-                  :src="video"
-                  autoplay
-                  muted
-                  loop
-                  playsinline
-                  class="video-player rounded-video"
-                  @click="openVideoDialog(video)"
-                  @contextmenu.prevent
-                ></video>
-              </q-card-section>
-              <q-card-section class="q-pa-sm">
-                <div class="text-subtitle1">{{ names[index % names.length] }}</div>
-                <div class="text-caption text-grey-7">{{ descriptions[index % descriptions.length] }}</div>
-              </q-card-section>
-            </q-card>
+            
+
+          <q-card class="q-hoverable rounded-card">
+  <q-card-section class="q-pa-none video-wrapper">
+    <video
+      :src="video"
+      autoplay
+      muted
+      loop
+      playsinline
+      class="video-player rounded-video"
+      @click="openVideoDialog(video)"
+      @contextmenu.prevent
+    ></video>
+
+      <!-- PLAY ICON (moved inside wrapper) -->
+      <q-icon
+      name="play_circle"
+      size="lg"
+      class="video-play-icon"
+    />
+    <!-- TEXT OVERLAY -->
+    <div class="video-overlay">
+      <div class="text-subtitle1 text-white">{{ names[index % names.length] }}</div>
+      <div class="text-caption text-grey-4">{{ descriptions[index % descriptions.length] }}</div>
+    </div>
+  </q-card-section>
+</q-card>
+
           </div>
         </div>
       </div>
   
       <!-- Video Dialog -->
       <q-dialog v-model="showDialog" persistent>
-        <q-card class="bg-black text-white" style="width: 90vw; max-width: 800px;">
-          <q-card-section class="q-pa-none">
-            <video
-              v-if="selectedVideo"
-              :src="selectedVideo"
-              controls
-              autoplay
-              class="full-video-player"
-            ></video>
-          </q-card-section>
-          <q-card-actions align="center" class="q-pa-md">
-            <q-btn flat label="Close" color="white" @click="closeDialog" />
-          </q-card-actions>
-        </q-card>
-      </q-dialog>
+  <q-card class="bg-black text-white" style="width: 90vw; max-width: 800px;">
+    <!-- Logo & Close Button -->
+    <div class="dialog-header">
+      <!-- Logo (Top-Left on Mobile) -->
+      <q-img
+        src="src/assets/new_logo1.svg"
+        class="video-logo-overlay"
+        fit="contain"
+      />
+      <!-- Close Button (Top-Right) -->
+      <q-btn
+        flat
+        dense
+        icon="close"
+        color="white"
+        @click="closeDialog"
+        class="dialog-close-button"
+      />
+    </div>
+
+    <!-- Video Player -->
+    <q-card-section class="q-pa-none">
+      <video
+        v-if="selectedVideo"
+        :src="selectedVideo"
+        controls
+        autoplay
+        class="full-video-player"
+      ></video>
+    </q-card-section>
+  </q-card>
+</q-dialog>
+
+
+
   
     </div>
   </template>
@@ -77,9 +108,9 @@
   ]
   
   const descriptions = [
-    'Qualified for Soulpage of Code 2025',
+    'Qualified for reputed Company',
     'Our Latest Event',
-    'Qualified for Soulpage of Code 2025'
+    'Qualified for well-known Company'
   ]
   
   const doubleVideos = computed(() => [...videoSources.value, ...videoSources.value])
@@ -230,5 +261,83 @@
   .text-center {
     text-align: center;
   }
+
+  .video-wrapper {
+  position: relative;
+}
+
+.video-player {
+  width: 100%;
+  height: 300px;
+  background: black;
+  object-fit: cover;
+  display: block;
+}
+
+.video-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 12px;
+  /* background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), transparent 60%); */
+  z-index: 1;
+  color: white;
+  font-weight: bold;
+}
+
+.video-play-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 50px !important;
+  pointer-events: none;
+}
+
+
+.video-dialog-wrapper {
+  position: relative;
+}
+
+.video-logo-overlay {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  width: 200px;
+  height: auto;
+  z-index: 2;
+  opacity: 0.9;
+}
+
+
+.dialog-header {
+  position: relative;
+  height: 0;
+}
+
+/* Logo in top-left corner for all screens */
+.video-logo-overlay {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  width: 150px;
+  height: auto;
+  z-index: 2;
+  opacity: 0.9;
+}
+
+/* Close button in top-right corner */
+.dialog-close-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 3;
+}
+
+
+
+
   </style>
   
