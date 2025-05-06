@@ -117,49 +117,54 @@
 </div>
 </div>
 <div class="combined_heading container row">
-<div class="row">
-  <div class="col-1 q-none q-md-block web_view"></div>
-  <div v-for="page in marketingPages" :key="page.id">
-  <span class="header_blue"><span class="scaleGrad_head">ScaleGrad</span> {{ page.heading }}</span>
-</div>
-</div>
-<div  class="text-left row">
-  <div class="col-1 q-none q-md-block web_view"></div>
-  <div v-for="page in marketingPages" :key="page.id">
-  <span class="header_purple">{{ page.subHeading }}</span>
-</div>
-</div>
-<div class="text-left row">
-  <div class="col-1 d-none d-md-block"></div>
 
-  <span v-for="page in marketingPages" :key="page.id" class="header_black col-12 col-md-5 pt-2 me-xl">
-   {{ page.description }}
-  </span>
-
-</div>
-
-<div class="text-left row col-12 q-mt-md">
-  <div class="col-1 q-none q-md-block"></div>
-  <div class="col-12 col-md-5 row btns">
-    <div class="col-12 col-md-auto q-mb-sm">
-    <q-btn class="Join_Free_btn q-px-xl q-py-md full-width" no-caps to="/login">Join For Free</q-btn>
-  </div>
-    <div class="col-12 col-md-6 q-mb-sm q-md-ml-md margin_left">
-      <q-btn class="Explore_btn q-py-md full-width" no-caps :to="firstProgramLink">  Explore Our Certifications</q-btn>
+  <!-- Heading -->
+  <div class="row">
+    <div class="col-1 q-none q-md-block web_view"></div>
+    <div v-for="page in marketingPages" :key="page.id">
+      <span class="header_blue"><span class="scaleGrad_head">ScaleGrad</span> {{ page.heading }}</span>
     </div>
   </div>
-</div>
 
-
-
-    <div class="image_div row">
-      <div class="col-11" v-for="page in marketingPages" :key="page.id">
-  <q-img :src="page.imagePath"></q-img>
-</div>
-
-       <div class="col-1"></div>
+  <!-- Subheading -->
+  <div class="text-left row">
+    <div class="col-1 q-none q-md-block web_view"></div>
+    <div v-for="page in marketingPages" :key="page.id">
+      <span class="header_purple">{{ page.subHeading }}</span>
     </div>
+  </div>
+
+  <!-- Description -->
+  <div class="text-left row">
+    <div class="col-1 d-none d-md-block"></div>
+    <span v-for="page in marketingPages" :key="page.id" class="header_black col-12 col-md-5 pt-2 me-xl">
+      {{ page.description }}
+    </span>
+  </div>
+
+  <!-- Image comes first on mobile, later on desktop -->
+  <div class="image_div row order-1 order-md-2">
+    <div class="col-11" v-for="page in marketingPages" :key="page.id">
+      <q-img :src="page.imagePath"></q-img>
+    </div>
+    <div class="col-1"></div>
+  </div>
+
+  <!-- Buttons come after image on mobile, but before on desktop -->
+  <div class="text-left row col-12 q-mt-md order-2 order-md-1">
+    <div class="col-1 q-none q-md-block"></div>
+    <div class="col-12 col-md-5 row btns">
+      <div class="col-12 col-md-auto q-mb-sm">
+        <q-btn class="Join_Free_btn q-px-xl q-py-md full-width" no-caps to="/login">Join For Free</q-btn>
+      </div>
+      <div class="col-12 col-md-6 q-mb-sm q-md-ml-md margin_left">
+        <q-btn class="Explore_btn q-py-md full-width" no-caps :to="firstProgramLink">Explore Our Certifications</q-btn>
+      </div>
+    </div>
+  </div>
+
 </div>
+
 </q-page>
 
     </q-page-container>
@@ -771,6 +776,25 @@ padding-left: 10%;
   }
 
 }
+
+@media (max-width: 599px) {
+  .Join_Free_btn,
+  .Explore_btn {
+    border-radius: 8px; 
+    font-weight: 400;
+  }
+  .Join_Free_btn::before,
+  .Explore_btn::before {
+     box-shadow: none;
+  }
+  .Explore_btn {
+    border: 1px solid grey;
+    margin-top: 1%;
+
+  }
+ 
+}
+
 
 </style>
 

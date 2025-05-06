@@ -80,7 +80,8 @@ export default {
   text-align: center;
  width: 80%;
  border-radius: 20px;
- background-color: #4E5BF8;
+ background-color: #898f9b;
+ /* background-color: #4E5BF8; */
  color: white;
   margin: auto;
 }

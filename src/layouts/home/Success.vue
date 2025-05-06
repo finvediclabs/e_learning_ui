@@ -9,7 +9,7 @@
       <div class="slider-container">
         <div class="slider-track">
           <div
-            v-for="(video, index) in doubleVideos"
+          v-for="(video, index) in loopedVideos"
             :key="index"
             class="slider-item"
           >
@@ -113,7 +113,11 @@
     'Qualified for well-known Company'
   ]
   
-  const doubleVideos = computed(() => [...videoSources.value, ...videoSources.value])
+  const loopedVideos = computed(() => {
+  const repeats = 5
+  return Array.from({ length: repeats }).flatMap(() => videoSources.value)
+})
+
   
   let animationFrameId
   
@@ -220,13 +224,6 @@
     scroll-snap-align: start;
   }
   
-  .video-player {
-    width: 100%;
-    height: 250px;
-    background: black;
-    object-fit: contain;
-  }
-  
   /* Full video inside dialog */
   .full-video-player {
     width: 100%;
@@ -266,13 +263,27 @@
   position: relative;
 }
 
-.video-player {
+/* .video-player {
   width: 100%;
   height: 300px;
   background: black;
   object-fit: cover;
   display: block;
+} */
+
+.video-player {
+  width: 100%;
+  aspect-ratio: 9 / 16 !important;
+  object-fit: cover;
+  background: black;
+  display: block;
 }
+
+.slider-item {
+  flex: 0 0 300px; 
+  scroll-snap-align: start;
+}
+
 
 .video-overlay {
   position: absolute;
@@ -336,6 +347,137 @@
   z-index: 3;
 }
 
+
+.slider-container {
+  overflow: hidden;
+  position: relative;
+  cursor: grab;
+}
+
+.slider-track {
+  display: flex;
+  gap: 16px;
+  padding-bottom: 10px;
+  animation: scrollLoop 20s linear infinite;
+}
+
+@keyframes scrollLoop {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.slider-item {
+  flex: 0 0 300px;
+  scroll-snap-align: start;
+}
+
+@media (max-width: 1024px) {
+  .slider-item {
+    flex: 0 0 calc(50% - 10px);
+  }
+}
+
+@media (max-width: 600px) {
+  .slider-item {
+    flex: 0 0 100%;
+  }
+}
+
+.video-wrapper {
+  position: relative;
+}
+
+.video-player {
+  width: 100%;
+  aspect-ratio: 9 / 16 !important;
+  object-fit: cover;
+  background: black;
+  display: block;
+}
+
+.rounded-card {
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.rounded-video {
+  border-top-left-radius: 14px;
+  border-top-right-radius: 14px;
+}
+
+.video-play-icon {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 64px !important;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.video-overlay {
+  position: absolute;
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  text-align: center;
+  color: white;
+  z-index: 2;
+}
+
+.video-overlay .text-subtitle1 {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.video-overlay .text-caption {
+  font-size: 0.85rem;
+  color: #ccc;
+}
+
+/* Dialog styles */
+.full-video-player {
+  width: 100%;
+  height: 60vh;
+  object-fit: contain;
+  background: black;
+}
+
+.dialog-header {
+  position: relative;
+  height: 0;
+}
+
+.video-logo-overlay {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  width: 150px;
+  height: auto;
+  z-index: 2;
+  opacity: 0.9;
+}
+
+.dialog-close-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 3;
+}
+
+@keyframes scrollLoop {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-80%);
+  }
+}
 
 
 

@@ -111,11 +111,15 @@ export default {
   text-align: center;
   width: 100%;
   padding: 6%;
-  box-shadow: 0 10px 10px rgba(255, 255, 255, 0.7); /* White shadow */
-  border-bottom: 40px solid #FFFFFF; /* White border line */
+  margin: 5% 3% 7% 3%;
+  border-radius: 20px 20px 20px 20px !important;
+  box-shadow: 0 10px 10px rgba(255, 255, 255, 0.7); 
+  border-bottom: none; 
+  border-top: none; 
+
 }
 .custom_img{
-  width: 60%;
+  width: 80%;
 }
 .web_view{
   display: none;
@@ -125,8 +129,9 @@ export default {
   margin-top: 0%!important;
 }
 .custom_img{
-  margin-bottom: 5%;
-  margin-top: 5%;
+  margin-bottom: 7%;
+  margin-top: 7%;
 }
+
 }
 </style>
