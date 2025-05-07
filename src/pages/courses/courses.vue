@@ -25,8 +25,10 @@
     <div class="right-container">
   <div class="category-details">
     <!-- Loading State -->
-    <div v-if="loading">Loading category details...</div>
-
+ <div v-if="categoryLoading" class="loading-container">
+  <q-spinner-hourglass size="40px" color="primary" />
+  <p class="loading-text">Loading Popular Courses...</p>
+</div>
     <!-- Error State -->
     <div v-else-if="error">
       <p>{{ error }}</p>
@@ -59,7 +61,10 @@
       <!-- Content Tabs -->
      <!-- Books Tab -->
      <div v-if="activeTab === 'books'" class="tab-content row">
-      <div v-if="loadingBooks" class="loading-text">Loading books...</div>
+      <div v-if="BooksLoading" class="loading-container">
+        <q-spinner-hourglass size="40px" color="primary" />
+        <p class="loading-text">Loading Books...</p>
+      </div>
   <div v-else class="row col-12 col-md-10 main-content">
     <div
   v-for="(book, index) in books"
@@ -83,6 +88,10 @@
 </div>
 <!-- Video -->
 <div v-if="activeTab === 'videos'" class="tab-content row">
+  <div v-if="VideosLoading" class="loading-container">
+        <q-spinner-hourglass size="40px" color="primary" />
+        <p class="loading-text">Loading Videos...</p>
+      </div>
   <div class="row col-12 col-md-10 main-content">
     <div v-for="group in videos" :key="group.videoId" class="col-12">
   <div class="row breakable-border">
@@ -110,6 +119,10 @@
 
 <!-- Presentations Tab -->
 <div v-if="activeTab === 'presentations'" class="tab-content row">
+  <div v-if="PresentationsLoading" class="loading-container">
+        <q-spinner-hourglass size="40px" color="primary" />
+        <p class="loading-text">Loading Presentations...</p>
+      </div>
   <div class="row col-12 col-md-10 main-content">
     <div v-for="group in presentations" :key="group.presentationId" class="col-12">
   <div class="row breakable-border">
@@ -173,7 +186,6 @@ export default {
   },
   data() {
     return {
-      loading: true,
       books: [],
       showDemoPopup: false,
       activeTab: 'books', // Default active tab
@@ -184,6 +196,9 @@ export default {
       presentations: [],
       expandedIndexes: [],
       categoryLoading: false,
+      BooksLoading:false,
+      VideosLoading:false,
+      PresentationsLoading:false,
       category: {
         bookChapters: [],
         videoChapters: [],
@@ -198,7 +213,10 @@ export default {
         abstractt: '',
         imagePath: '',
       },
-      loading: true,
+      categoryLoading: true,
+      BooksLoading: true,
+      VideosLoading:true,
+      PresentationsLoading:true,
       error: null,
       activeTab: 'books', // Default active tab
       DummyBook: 'path/to/default-book-image.jpg', // Fallback for books
@@ -234,7 +252,7 @@ created() {
     }
   },
   async fetchProfiles() {
-    this.loading = true;
+    this.categoryLoading = true;
   try {
     const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
     const response = await this.$api.get(`${baseUrl}api/userprofiles`);
@@ -263,12 +281,12 @@ created() {
     console.error("Error fetching profiles:", error);
     this.error = error;
   } finally {
-        this.loading = false;
+        this.categoryLoading = false;
       }
 },
 
 async fetchCourseDetails() {
-  this.loading = true;
+  this.categoryLoading = true;
   try {
   const courseId = this.$route.params.id; // ✅ Extract the ID properly
   console.log("Course ID:", courseId); // Debugging
@@ -303,7 +321,7 @@ async fetchCourseDetails() {
     this.error = 'Error loading course details. Please try again later.';
     console.error(error);
   } finally {
-    this.loading = false;
+    this.categoryLoading = false;
   }
 },
 async fetchCategoryDetails() {
@@ -351,6 +369,9 @@ async fetchCategoryDetails() {
     console.error(error);
   } finally {
     this.categoryLoading = false;
+    this.BooksLoading = false;
+    this.VideosLoading=false;
+    this.PresentationsLoading=false;
   }
 },
     handleCategoryClick(selectedCategoryId) {
@@ -388,7 +409,6 @@ async fetchCategoryDetails() {
             const response = await this.$api.post(downloadUrl, formData, { responseType: 'blob' });
             const blob = new Blob([response.data]);
             const url = window.URL.createObjectURL(blob);
-
             return {
               ...book,
               imagePath: url, // Dynamic book cover path
@@ -625,3 +645,36 @@ getPresentationFlatIndex(groupId, localIndex) {
   },
 };
 </script>
+<style>
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100px; /* or 100vh if you want full screen */
+  text-align: center;
+  gap: 16px;
+}
+
+.loading-text {
+  font-size: 20px;
+  font-weight: 500;
+  color: #4E5BF8;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
+
+
+</style>

@@ -90,7 +90,7 @@
 
 <div class="col-12 col-md-8 mb-3">
     <div class="right-container">
-  <div class="category-details">
+  <div class="category-details" >
     <!-- Loading State -->
     <div v-if="loading" class="loading-container">
   <q-spinner-hourglass size="50px" color="primary" />
