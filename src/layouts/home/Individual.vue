@@ -4,7 +4,7 @@
 
     <q-toolbar>
         <!-- Left Side: Logo, q-select, q-search -->
-        <q-toolbar-title class="row items-center q-py-sm q-mt-lg">
+        <q-toolbar-title class="row items-center q-py-sm q-mt-lg top-scale">
           <!-- Menu for small screens -->
           <q-btn
             flat
@@ -650,6 +650,9 @@ border-radius: 20px;
   }
 
 @media (max-width: 600px) {
+  .top-scale{
+    margin-top: 3% !important;
+  }
   .mobile_view {
     /* padding: 1% !important; */
     margin: 0 !important;
