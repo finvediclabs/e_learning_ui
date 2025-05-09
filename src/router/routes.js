@@ -217,6 +217,21 @@ const routes = [
       }
     ]
   },
+  {
+    path: "/finassociate",
+     component: () => import('layouts/home/HomePage.vue'),
+    children: [
+      {
+        path: '',
+        name: 'finassociate',
+        component: () => import("src/layouts/home/FinAssociate.vue") ,// Adjust path if necessary
+        meta: { title: 'Fin Associate', module: 'finassociate' }
+      }
+
+    ]
+
+
+  },
 
 
   // {
@@ -364,11 +379,7 @@ const routes = [
       { path: '', component: () => import('pages/IndexPage.vue') }
     ]
   },
-  {
-    path: "/finassociate",
-    component: () => import("src/layouts/home/FinAssociate.vue") // Adjust path if necessary
 
-  },
 
   // Always leave this as last one,
   // but you can also remove it

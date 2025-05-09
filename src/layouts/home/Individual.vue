@@ -60,9 +60,9 @@
   style="min-width: 140px;"
 />
           <!-- <q-btn noCaps flat label="Courses" class="nav-link" /> -->
-          <q-btn noCaps flat label="Certifications" class="nav-link" />
+         <q-btn noCaps flat label="Certifications" class="nav-link" @click="scrollToCert" />
           <q-btn noCaps flat label="Login" class="nav-link" :to="'/login'" style="color: #4E5BF8" />
-          <q-btn noCaps label="Join for Free" unelevated class="join-btn" style="background-color: #4E5BF8; color: white;" />
+          <q-btn noCaps :to="'/login'" label="Join for Free" unelevated class="join-btn" style="background-color: #4E5BF8; color: white;" />
 
         </div>
       </q-toolbar>
@@ -85,7 +85,7 @@
     </q-item>
     <q-item clickable v-ripple>
       <q-item-section>
-        <q-btn noCaps label="Join for Free" unelevated class="full-width" style="background-color: #4E5BF8; color: white;" />
+        <q-btn noCaps label="Join for Free" unelevated class="full-width" :to="'/login'" style="background-color: #4E5BF8; color: white;" />
       </q-item-section>
     </q-item>
 
@@ -174,7 +174,9 @@
 <OurTools />
 <freeCourses />
 
-<Certification />
+<div ref="certSection">
+  <Certification />
+</div>
 <certificateVerqification style="margin-bottom: 3%;margin-top: 3%;" />
 <Success style="width: 100%"/>
 <Reviews />
@@ -359,6 +361,9 @@ const response = await axios.get(`${getProgramCourse}/${programId}`);
     console.error("Error fetching courses:", error);
   }
 },
+  scrollToCert() {
+    this.$refs.certSection.scrollIntoView({ behavior: 'smooth' });
+  },
 async fetchMarketingPages() {
   this.marketingPages = []; // Clear previous data before fetching new ones
   const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';

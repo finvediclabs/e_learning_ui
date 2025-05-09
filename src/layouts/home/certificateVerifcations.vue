@@ -8,7 +8,7 @@
 
     <div class="row justify-center q-col-gutter-md mob-place" style="width: 80%; margin: auto;">
       <div class="row justify-center q-col-gutter-md mob-place" style="width: 80%; margin: auto;padding: 0%;">
-  <div class="col-8" style="padding: 0% !important;"> 
+  <div class="col-8" style="padding: 0% !important;">
     <div class="cert-input-container">
   <q-input
     v-model="uniqueId"
@@ -26,12 +26,12 @@
         unelevated
         rounded
         dense
-        class="check-btn hide-on-mobile"
+        class="check-btn hide-on-mobile color_btn"
         @click="submitUniqueId"
       />
       <q-icon
         name="arrow_forward"
-        class="arrow-btn show-on-mobile"
+        class="arrow-btn show-on-mobile color_btn"
         size="md"
         @click="submitUniqueId"
       />
@@ -84,6 +84,9 @@ export default {
  /* background-color: #4E5BF8; */
  color: white;
   margin: auto;
+}
+.color_btn{
+  background-color: #898f9b !important;
 }
 
 .check-btn {
@@ -139,7 +142,7 @@ export default {
 
 .cert-input {
   width: 100% !important;
-  max-width: 600px; 
+  max-width: 600px;
 }
 
 .check-btn {

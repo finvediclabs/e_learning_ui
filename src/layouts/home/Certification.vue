@@ -5,7 +5,7 @@
     </div>
 <div class="row col-12 mob_column">
   <div class="col-6 girl-img">
-    <q-img :src="Hero_section" style="width: 60%;"></q-img>
+    <q-img :src="Hero_Girl" style="width: 60%;"></q-img>
   </div>
     <div class="row q-col-gutter-md col-6 mob_column" >
       <div class="col-6" v-for="program in programs" :key="program.programId">
@@ -32,6 +32,7 @@
 <script>
 import axios from 'axios';
 import Hero_section from 'src/assets/Hero_section.png'
+import Hero_Girl from 'src/assets/Hero_Girl.png'
 
 export default {
   name: 'Certification',
@@ -39,6 +40,7 @@ export default {
     return {
       programs: [],
       Hero_section:Hero_section,
+      Hero_Girl:Hero_Girl,
       baseUrl: 'https://fnbackendprod.finvedic.in/', // Base URL
       DummyBook: 'https://via.placeholder.com/150', // Fallback image
     };
@@ -130,12 +132,12 @@ export default {
   .mob_column {
     display: flex !important;
     flex-direction: column !important;
-    align-items: center; 
-    width: 100%; 
+    align-items: center;
+    width: 100%;
   }
-  
+
   .col-6 {
-    width: 100% !important; 
+    width: 100% !important;
   }
 
   .girl-img {
