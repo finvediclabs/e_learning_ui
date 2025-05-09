@@ -22,7 +22,6 @@
     <template v-slot:append>
       <q-btn
         label="Check Here"
-        color="primary"
         unelevated
         rounded
         dense
@@ -92,6 +91,8 @@ export default {
   min-width: 120px;
   height: calc(100% - 4px);
   border: 2px solid #fff;
+  background-color: #898f9b;
+  color: #fff;
   z-index: 2;
 }
 
