@@ -186,6 +186,7 @@
     </q-card-section>
   </q-card>
 </q-dialog>
+<VedChatBot />
 </template>
 <script>
 import axios from "axios";
@@ -198,6 +199,7 @@ import OurTools from "./OurTools.vue";
 import Certification from "./Certification.vue";
 import certificateVerqification from "./certificateVerifcations.vue";
 import CertificateOtpForm from "src/layouts/home/CertificateOtpForm.vue";
+import VedChatBot from "./VedChatBot.vue";
 
 
 import Associated from "./Associated.vue";
@@ -210,6 +212,7 @@ export default {
     freeCourses,
     OurTools,
     Reviews,
+    VedChatBot,
     Certification,
     Success,
     Associated,
@@ -783,7 +786,7 @@ padding-left: 10%;
 @media (max-width: 599px) {
   .Join_Free_btn,
   .Explore_btn {
-    border-radius: 8px; 
+    border-radius: 8px;
     font-weight: 400;
   }
   .Join_Free_btn::before,
@@ -795,7 +798,7 @@ padding-left: 10%;
     margin-top: 1%;
 
   }
- 
+
 }
 
 
