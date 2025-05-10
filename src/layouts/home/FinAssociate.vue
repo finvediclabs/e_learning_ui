@@ -121,40 +121,52 @@
       </div>
       <!-- Fintech Associate -->
 
-      <div class="container">
-        <div class="row q-py-xl" style="background-color: #f1f4ff">
-          <div class="col-5 q-pl-xl">
-            <q-img
-              :src="course_img"
-              :ratio="16 / 8"
-              style="border-radius: 15px"
-            />
-          </div>
-          <div class="col-1"></div>
-          <div class="col-5 q-px-xl q-mt-md" >
-            <div class="text-bold q-mb-lg text-h4" style="margin-bottom: 2%;">{{ heading }} Program</div>
+   <div class="container">
+  <div class="row q-py-xl" style="background-color: #f1f4ff">
 
-            <p class="text-grey">{{ description }}</p>
+    <!-- Image Column -->
+   <div
+  class="col-12 col-md-5"
+  :class="$q.screen.lt.md ? 'q-px-sm' : 'q-pl-xl q-px-sm'"
+>
 
-            <q-btn
-              class="q-px-xl q-py-md text-weight-regular shadow-5"
-              noCaps
-              unelevated
-              label="Enroll Now"
-              :to="'/register'"
-              color="#fff"
-              style="background-color: #443ede;border-radius: 10px;"
-            />
-          </div>
+      <q-img
+        :src="course_img"
+        :ratio="16 / 8"
+        style="border-radius: 15px"
+      />
+    </div>
 
+    <!-- Spacer for medium and up, hidden on small -->
+    <div class="col-12 col-md-1"></div>
 
-        </div>
+    <!-- Text Content Column -->
+    <div class="col-12 col-md-5 q-px-md-xl q-mt-md">
+      <div class="text-bold q-mb-lg text-h4" style="margin-bottom: 2%;">
+        {{ heading }} Program
       </div>
+
+      <p class="text-grey">{{ description }}</p>
+
+      <q-btn
+        class="q-px-xl q-py-md text-weight-regular shadow-5"
+        noCaps
+        unelevated
+        label="Enroll Now"
+        :to="'/register'"
+        color="#fff"
+        style="background-color: #443ede; border-radius: 10px;"
+      />
+    </div>
+
+  </div>
+</div>
+
 
       <!-- What lear -->
 <div class="container row col-12 q-my-xl q-mx-xl">
-  <div class="col-8 row">
-  <div class="col-6">
+  <div class="col-12 col-md-8 row">
+  <div class="col-12 col-md-6 q-mb-md">
 <div class="q-mr-md learning_journey">
     <!-- Image and heading row -->
     <div class="row items-center q-mt-md q-pl-lg q-py-md">
@@ -183,7 +195,7 @@
   </div>
   <!-- ================== -->
 
-  <div class="col-6">
+ <div class="col-12 col-md-6 q-mb-md">
 <div class="q-mx-md learning_journey">
     <!-- Image and heading row -->
     <div class="row items-center q-mt-md q-pl-lg q-py-md">
@@ -224,7 +236,8 @@
   </div>
 
   <!--  -->
-  <div class="row q-mt-xl q-pr-md" style="width: 100%;">
+  <div class="row q-mt-xl q-pr-md q-px-sm" style="width: 100%;">
+
     <q-img :src="image_curriculum" style="width: 100%;"></q-img>
   </div>
 </div>
