@@ -23,7 +23,7 @@
       </q-item-section>
 
       <!-- Placeholder for logo -->
-      <div class="q-ml-md logo">
+      <div class="q-ml-sm logo">
             <!-- Logo will be added here later -->
             <q-item class="logo_in" clickable @click="$router.push('/homeProfile')">
                   <q-img :src="new_logo" style="width: 220px;"></q-img>
@@ -57,7 +57,7 @@
   outlined
   v-model="text"
   label="Search"
-  style="width: 40%;">
+  style="width: 40%;height: 40% !important;">
   <template v-slot:append>
     <q-icon name="search" />
   </template>
@@ -108,7 +108,7 @@
       </q-menu>
     </q-btn>
 
-    <q-avatar class="shadow-4" :size="isMobile ? '40px' : '50px'">
+    <q-avatar class="shadow-4 profile_pic" :size="isMobile ? '40px' : '50px'">
           <q-img :src="imageUrl || profileImg" class="profileImg cursor-pointer rounded full-width full-height" />
           <q-menu :offset="[-5, 5]" max-width="300px" style="width:230px;background: transparent!important;"
             class="fin-br-8 q-py-md shadow-0" transition-show="flip-right" transition-hide="rotate">
@@ -141,8 +141,8 @@
   </q-toolbar>
 
   <!-- second nav -->
-  <q-toolbar v-if="!isMobile" class="second_navbar q-pr-lg scrollable-toolbar">
-</q-toolbar>
+  <!-- <q-toolbar v-if="!isMobile" class="second_navbar q-pr-lg scrollable-toolbar">
+</q-toolbar> -->
 
 
  <!-- <q-toolbar v-if="!isMobile" class="second_navbar q-pr-lg">
@@ -988,7 +988,7 @@ background-attachment: fixed;
   font-family: 'Poppins', sans-serif;
   font-size: small;
   font-weight: 500; /* Adjust weight as needed (300, 400, 600, etc.) */
-  color: var(--q-color-primary); 
+  color: var(--q-color-primary);
   /* color: #7D7D7D; */
   text-transform: capitalize !important;
 }
@@ -1005,7 +1005,7 @@ background-attachment: fixed;
   background-color: #F6F6F6 !important;
   width: 100%;
   height: 15px;
-  border-top: 2px solid blue;
+  border-top: 2px solid white;
   min-height: 15px !important;
   max-height: 15px !important;
   line-height: 15px;
@@ -1020,6 +1020,7 @@ background-attachment: fixed;
   /* background: #5479F7; */
   background: #4e5bf8;
   backdrop-filter: blur(19px);
+  max-height: 72px;
 }
 
 .guest .chapters_show > div:nth-child(1),
@@ -1061,6 +1062,9 @@ background-attachment: fixed;
 .ham{
     padding: 0px;
     margin-right: 5px;
+   }
+   .profile_pic{
+    margin-right: 1vw;
    }
 
 @media only screen and (max-width:576px){

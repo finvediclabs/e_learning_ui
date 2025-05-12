@@ -213,6 +213,7 @@ h4::after {
 }
 .course-name {
   font-size: 18px;
+   height: 3em;
   font-weight: 500;
   font-family: 'Popins', sans-serif;
   font-weight: 600;
@@ -300,6 +301,7 @@ ul{
 
   .course-name {
     font-size: 16px;
+    height: fit-content !important;
   }
 
   .course-description {
@@ -328,6 +330,7 @@ ul{
 
 .course-name {
   font-size: 16px;
+     height: fit-content !important;
 }
 
 .course-description {

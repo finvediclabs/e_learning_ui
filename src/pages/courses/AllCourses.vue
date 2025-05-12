@@ -1,12 +1,12 @@
 <template>
-    <div class="all-courses container q-pa-md">
+    <div class="all-courses1 container q-pa-md">
       <!-- Header with Back Button -->
       <div class="row items-center q-mb-md justify-between">
         <!-- <div class="col-auto">
           <q-btn flat round icon="arrow_back" @click="$router.back()"  class="all" />
         </div> -->
         <div class="col">
-          <h4 class="all-courses-heading1 text-weight-medium q-mt-none q-mb-none">All Courses</h4>
+          <span class="all-courses1-heading1 text-weight-medium q-mt-none q-mb-none text-h4">All Courses</span>
         </div>
       </div>
 
@@ -146,7 +146,7 @@
   </script>
 
   <style scoped>
-  .all-courses-heading1{
+  .all-courses1-heading1{
     color: #4e5bf8;
     text-align: left !important;
   }
