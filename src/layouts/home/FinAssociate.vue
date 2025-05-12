@@ -19,7 +19,7 @@
         <div class="q-ml-md logo">
           <!-- Logo will be added here later -->
           <q-item class="logo_in">
-            <q-img :src="new_logo" style="width: 220px"></q-img>
+            <q-img :src="new_logo" style="width: 220px;" ></q-img>
           </q-item>
         </div>
 
@@ -121,15 +121,14 @@
       </div>
       <!-- Fintech Associate -->
 
-   <div class="container">
-  <div class="row q-py-xl" style="background-color: #f1f4ff">
+      <div class="container">
+  <div class="row q-py-xl justify-around items-center" style="background-color: #f1f4ff">
 
     <!-- Image Column -->
-   <div
-  class="col-12 col-md-5"
-  :class="$q.screen.lt.md ? 'q-px-sm' : 'q-pl-xl q-px-sm'"
->
-
+    <div
+      class="col-12 col-md-5"
+      :class="$q.screen.lt.md ? 'q-px-sm' : 'q-pl-xl q-px-sm'"
+    >
       <q-img
         :src="course_img"
         :ratio="16 / 8"
@@ -137,11 +136,8 @@
       />
     </div>
 
-    <!-- Spacer for medium and up, hidden on small -->
-    <div class="col-12 col-md-1"></div>
-
     <!-- Text Content Column -->
-    <div class="col-12 col-md-5 q-px-md-xl q-mt-md">
+    <div class="col-12 col-md-5 q-px-md-xl q-mt-md right-program">
       <div class="text-bold q-mb-lg text-h4" style="margin-bottom: 2%;">
         {{ heading }} Program
       </div>
@@ -163,14 +159,15 @@
 </div>
 
 
+
       <!-- What lear -->
-<div class="container row col-12 q-my-xl q-mx-xl">
+<div class="container row col-12 q-my-xl q-mx-xl mobile-mar">
   <div class="col-12 col-md-8 row">
-  <div class="col-12 col-md-6 q-mb-md">
+  <div class="col-12 col-md-6 q-mb-md curr-mar">
 <div class="q-mr-md learning_journey">
     <!-- Image and heading row -->
     <div class="row items-center q-mt-md q-pl-lg q-py-md">
-      <q-img :src="learning_journey" class="Vector_class q-mr-sm"></q-img>
+      <q-img :src="learning_journey" class="Vector_class "></q-img>
       <span class="text-bold text-h5 q-pl-md">Our Curriculam</span>
     </div>
 
@@ -178,16 +175,52 @@
     <div class="row">
       <div class="col-12">
         <ul>
-        <div class="text-bold text-h6">V1. Fintech & Financial Landscape</div>
-<div class="text-bold text-h6">V2. Disruptive Technologies</div>
-<div class="text-bold text-h6">V3. Equity Electronic Trading</div>
-          <ul class="custom-list q-pb-md">
-  <li class="text-body1">Introduction to Equity Trading</li>
+        <li class="text-bold text-h6 vol-cur" @click="toggleCurriculum(1)"> V1. Fintech & Financial Landscape
+          <q-img
+          :src="activeCurriculum === 1 ? neg_sign : plus_sign"
+          width="16px"
+          height="16px"
+          class="q-ml-sm"
+        />
+          <ul class="custom-list q-pb-md" v-show="activeCurriculum === 1">
+  <li class="text-body1">M1. Unlocking Finance: A Beginner’s Guide</li>
+  <li class="text-body1">M2. Banking Unveiled: A Primer</li>
+  <li class="text-body1">M3. Navigating Digital Banking: An Intro</li>
+  <li class="text-body1">M4. Discovering Fintech: The Essentials</li>
+  <li class="text-body1">M5. Agile-Powered Software Delivery Journey</li>
+</ul>
+        </li>
+<li class="text-bold text-h6 vol-cur" @click="toggleCurriculum(2)">V2. Disruptive Technologies
+  <q-img
+          :src="activeCurriculum === 2 ? neg_sign : plus_sign"
+          width="16px"
+          height="16px"
+          class="q-ml-sm"
+        />
+  <ul class="custom-list q-pb-md" v-show="activeCurriculum === 2">
+  <li class="text-body1">M1. Distributed Systems</li>
+  <li class="text-body1">M2. The Power of Open API & Microservices</li>
+  <li class="text-body1">M3. Cloud Computing and Azure Cloud Provider</li>
+  <li class="text-body1">M4. Leveraging AI & Machine Learning</li>
+  <li class="text-body1">M5. Blockchain and the Revolution of Smart Contracts in FinTech.</li>
+</ul>
+</li>
+<li class="text-bold text-h6 vol-cur" @click="toggleCurriculum(3)">V3. Equity Electronic Trading 
+  <q-img
+          :src="activeCurriculum === 3 ? neg_sign : plus_sign"
+          width="16px"
+          height="16px"
+          class="q-ml-sm"
+        />
+  <ul class="custom-list q-pb-md" v-show="activeCurriculum === 3">
+    <li class="text-body1" >Introduction to Equity Trading</li>
   <li class="text-body1">Fundamentals of Equity Markets</li>
   <li class="text-body1">Equity Orders and Execution</li>
   <li class="text-body1">Electronic Trading Strategies</li>
   <li class="text-body1">FIX Protocol for Exchange Connectivity</li>
 </ul>
+</li>
+
         </ul>
       </div>
     </div>
@@ -223,6 +256,7 @@
             />
           </div>
           <div
+            @click="toggle(index)"
             v-if="openedIndex === index"
             class="q-ml-md q-mr-sm q-mb-md text-body1 text-grey-8"
           >
@@ -235,13 +269,18 @@
 </div>
   </div>
 
-  <!--  -->
-  <div class="row q-mt-xl q-pr-md q-px-sm" style="width: 100%;">
-
-    <q-img :src="image_curriculum" style="width: 100%;"></q-img>
+  <!-- Your Learning Journey -->
+  <div class="row q-mt-xl q-pr-md q-px-sm no-padding-mobile" style="width: 100%;">
+  <div class="col-12">
+    <q-img
+      :src="image_curriculum"
+      class="q-mb-sm dot-img"
+      style="width: 100%; max-width: 100%;"
+    />
   </div>
 </div>
-<div class="col-4">
+</div>
+<div class="col-12 col-md-4">
   <div class="col-12 blue_bckg q-mt-md q-ml-md">
 <div class="col-12 q-mr-md q-pl-lg q-py-md q-pt-lg">
   <span class="text-bold text-h5 ">Course Features</span>
@@ -271,7 +310,7 @@
 
 
 <div class="container row col-12 q-my-xl q-mx-xl">
-<div class="col-8 row">
+<div class="col-12 col-md-8 row">
   <div class="col-6">
 <div class="q-mr-md learning_journey1">
     <!-- Image and heading row -->
@@ -355,7 +394,7 @@
 
   <!--  -->
 </div>
-<div class="col-4">
+<div class="col-12 col-md-4">
   <div class="col-12 row">
 <div class="q-ml-md q-mt-md learning_journey" style="width: 100%;">
     <!-- Image and heading row -->
@@ -493,6 +532,9 @@ plus_sign: plus_sign,
         { image: "https://randomuser.me/api/portraits/women/3.jpg" },
         { image: "https://randomuser.me/api/portraits/men/4.jpg" },
       ],
+      active: null,
+      activeCurriculum: null,
+
        openedIndex: null,
        openedIndex1: null,
        openedIndex2: null,
@@ -632,6 +674,9 @@ plus_sign: plus_sign,
         console.error("Error fetching program details:", error);
       }
     },
+    toggleCurriculum(index) {
+    this.activeCurriculum = this.activeCurriculum === index ? null : index;
+  },
       toggle(index) {
       this.openedIndex = this.openedIndex === index ? null : index;
     },
@@ -750,5 +795,29 @@ plus_sign: plus_sign,
 }
 .logo_in {
   min-height: 0px !important;
+}
+.vol-cur{
+  list-style-type: none;
+  cursor: pointer
+  ;
+}
+
+
+@media (max-width: 600px) {
+.right-program{
+  padding: 10px 15px 0px;
+}
+.no-padding-mobile {
+    /* padding-left: 0 !important; */
+    /* padding-right: 0 !important; */
+    padding-right: 2%;
+  }
+
+  .mobile-mar{
+    margin: 0px !important;
+  }
+  .curr-mar{
+    margin-left: 8px !important;
+  }
 }
 </style>
