@@ -21,26 +21,38 @@
              >
 
           <q-card class="program-card"
-                  style="width: 100%; height: 300px; display: flex; flex-direction: column; padding: 8px;"
+                  style="width: 100%; height: 220px; display: flex; flex-direction: column; padding: 8px;"
                   >
 
-            <div class="row" style="width: 100%; height: 100%; cursor: pointer;" @click="navigateToCourse(item.programId)">
+            <div class="row" style="width: 100%; height: 100%; cursor: pointer;" >
 
               <!-- Left Side: Image (Full Height) -->
               <div class="col-6" style="display: flex; padding: 8px;">
                 <q-img :src="item.imagePath" fit="fill"
-                       style="width: 100%; height: 100%; border-radius: 8px;" />
+                       style="width: 100%; height: 100%; border-radius: 8px;" @click="navigateToCourse(item.programId)" />
               </div>
 
               <!-- Right Side: Text (Centered) -->
-              <div class="col-6 rgt"
-                   style="display: flex; align-items: center; justify-content: center; height: 100%; ">
+              <div class="col-6 rgt q-pt-md"
+                   style="display: flex;  height: 100%; ">
                 <q-card-section style="width: 100%; text-align: center;">
                   <q-item-label style="font-size: 1.2em; font-weight: bold; text-align: left;">{{ item.name }}</q-item-label>
-                  <q-item-label caption
-                                style="font-size: 0.9em; color: gray; word-wrap: break-word; text-align: left;">
-                    {{ item.description }}
-                  </q-item-label>
+               <div class="row" style="overflow-y: auto; height: 120px;"> <!-- Set a height to enable scrolling -->
+  <q-item-label caption class="description-text" :class="{ expanded: item.expanded }">
+    {{ item.description }}
+  </q-item-label>
+  <span
+    flat
+    dense
+    class="read-more-btn "
+    v-if="shouldShowReadMore(item.description)"
+    @click="item.expanded = !item.expanded"
+  >
+    {{ item.expanded ? 'Read less' : 'Read more' }}
+  </span>
+</div>
+
+
                 </q-card-section>
               </div>
 
@@ -226,6 +238,9 @@ async navigateToCourse(courseId) {
 
   this.$router.push({ name: 'ProgramDetails', params: { id: courseId } });
 },
+ shouldShowReadMore(text) {
+    return text && text.length > 100; // Adjust based on your text length
+  },
 
 async fetchDefaultPrograms() {
   console.log("fetchDefaultPrograms: Fetching default programs...");
@@ -331,7 +346,27 @@ async fetchDefaultPrograms() {
   text-align: center;
   gap: 16px;
 }
+.description-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-align: left;
+  font-size: 0.9em;
+  color: gray;
+  word-wrap: break-word;
+  transition: all 0.3s ease;
+}
 
+.read-more-btn {
+  color: blue;
+  cursor: pointer;
+  font-size: 0.9em;
+}
+.description-text.expanded {
+  -webkit-line-clamp: unset;
+  overflow: visible;
+}
 .loading-text {
   font-size: 20px;
   font-weight: 500;

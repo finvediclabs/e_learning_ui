@@ -3,12 +3,12 @@
     <!-- Desktop View (medium and up) -->
 <!-- Desktop Heading (only visible on larger screens) -->
 <div class="desktop-header">
-  <span class="text-black" style="font-size: x-large; color: #141414; font-weight: 600;">Popular Courses</span>
+  <span class="text-black" style="font-size: x-large; color: #141414; font-weight: 600;">Courses Offered</span>
 </div>
 
 <!-- Mobile Heading + View More (only visible on mobile) -->
 <div class="mobile-header">
-  <span class="mobile-title" style="font-size: x-large">Popular Courses</span>
+  <span class="mobile-title" style="font-size: x-large">Courses Offered</span>
   <span class="mobile-view-more" @click="viewAll">View More</span>
 </div>
 
@@ -16,12 +16,12 @@
  <!-- Loading State -->
  <div v-if="isLoading" class="loading-container">
   <q-spinner-hourglass size="40px" color="primary" />
-  <p class="loading-text">Loading Popular Courses...</p>
+  <p class="loading-text">Loading Courses Offered...</p>
 </div>
 
   <!-- <div v-if="isLoading" class="loading-container">
       <q-spinner color="primary" size="40px" />
-      <p class="loading-text">Loading Popular Courses...</p>
+      <p class="loading-text">Loading Courses Offered...</p>
     </div> -->
 
   <div v-else class="container mt-4" style="width: 100%;padding-left: 1%;padding-right: 1%;" >
@@ -34,16 +34,19 @@
       >
 
      <q-card
- class="course-card cursor-pointer"
+ class="course-card1 cursor-pointer"
   @click="handleCategoryClick(category, index)"
 >
-  <q-img
+<div style="height: 240px;" >
+  <img
     v-if="category.imagePath"
     :src="category.imagePath"
     alt="Category Image"
     class="course-image q-pa-lg"
+     fit="contain"
   />
-  <q-card-section>
+  </div>
+  <q-card-section style="padding-bottom: 0%;">
     <p class="text-bold text-left">{{ category.categoryName }}</p>
     <!-- <span class="text-caption">{{ category.description }}</span> -->
   </q-card-section>
@@ -206,11 +209,12 @@ async fetchCategories() {
   font-family: sans-serif;
 }
 
-.course-card {
+.course-card1 {
   border: 1px solid #ddd;
   border-radius: 8px;
   width: 98%;
   height:100%;
+  max-height: 340px;
   overflow: hidden;
 }
 
@@ -219,14 +223,19 @@ async fetchCategories() {
   margin-left: 3%;
   margin-right: 3%;
   margin-top: 3%;
-  aspect-ratio: 16 / 9;
-  background-size: cover;
-  background-position: center;
+  padding: 0%;
+  height: 100%;
+  border-radius: 5px;
+  object-fit: fill; /* ensures full image is visible */
+  object-position: center;
+  /* aspect-ratio: 16 / 9; */
+  /* background-size: cover;
+  background-position: center; */
   /* border-radius: 10px; */
   /* margin-bottom: 10px; */
   cursor: pointer;
 }
-.course-card:hover {
+.course-card1:hover {
   transform: scale(1.05); /* Enlarges by 5% */
   transition: transform 0.3s ease;
 }

@@ -5,16 +5,16 @@
         <!-- <div class="col-auto">
           <q-btn flat round icon="arrow_back" @click="$router.back()"  class="all" />
         </div> -->
-        <div class="col all-courses-header">
-          <h4 class="all-courses-heading text-weight-medium q-mt-none q-mb-none">All Courses</h4>
+        <div class="col">
+          <h4 class="all-courses-heading1 text-weight-medium q-mt-none q-mb-none">All Courses</h4>
         </div>
       </div>
-  
+
       <!-- Loader -->
       <div v-if="isLoading" class="loading-container text-center q-mt-md">
         <q-spinner color="primary" size="40px" />
       </div>
-  
+
       <!-- Course Cards -->
       <div v-else class="row cor">
         <div
@@ -35,17 +35,17 @@
           </q-card>
         </div>
       </div>
-  
+
           <!-- Popup for Guest Users -->
       <DemoUserPopUp v-if="showDemoPopup" @close="showDemoPopup = false" />
     </div>
   </template>
-  
+
   <script>
   import { useSessionStore } from "src/stores/session";
   import { storeToRefs } from "pinia";
   import DemoUserPopUp from "src/layouts/DemoUserPopUp.vue";
-  
+
   export default {
     name: 'AllCourses',
     components: {
@@ -85,33 +85,33 @@
           const getCourse = baseUrl + 'api/chapterCategoriess/all';
           const response = await fetch(getCourse);
           const data = await response.json();
-  
+
           const categoryNameMap = {
             "Specialization": "Equities & Electronic Trading",
             "Introduction to Banking": "Fintech & Financial Services"
           };
-  
+
           this.categories = await Promise.all(
             data.map(async (category) => {
               let imageUrl = category.imagePath || require('@/assets/dummy_book.png');
-  
+
               if (imageUrl.startsWith(`${baseUrl}fs/download/`)) {
                 const downloadUrl = `${baseUrl}fs/download`;
                 const filename = imageUrl.replace(`${baseUrl}fs/download/`, '');
-  
+
                 try {
                   const formData = new FormData();
                   formData.append('filename', filename);
-  
+
                   const downloadResponse = await fetch(downloadUrl, {
                     method: 'POST',
                     body: formData,
                   });
-  
+
                   if (!downloadResponse.ok) {
                     throw new Error(`HTTP error! status: ${downloadResponse.status}`);
                   }
-  
+
                   const blob = await downloadResponse.blob();
                   imageUrl = await this.preloadImage(window.URL.createObjectURL(blob));
                 } catch (error) {
@@ -119,7 +119,7 @@
                   imageUrl = require('@/assets/dummy_book.png');
                 }
               }
-  
+
               return {
                 ...category,
                 categoryName: categoryNameMap[category.categoryName] || category.categoryName,
@@ -127,7 +127,7 @@
               };
             })
           );
-  
+
         } catch (error) {
           console.error("Error fetching categories:", error);
         } finally {
@@ -144,9 +144,9 @@
     },
   };
   </script>
-  
+
   <style scoped>
-  .all-courses-heading{
+  .all-courses-heading1{
     color: #4e5bf8;
     text-align: left !important;
   }
@@ -205,6 +205,5 @@
 }
 
 
-  
+
   </style>
-  
