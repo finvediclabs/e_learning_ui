@@ -1,42 +1,76 @@
 <template>
   <div class="free-courses q-pb-lg q-mb-lg">
     <div class="row w-100 text-left q-mt-lg q-mx-lg">
-    <span class="text-black header_freeCourses" style="width: 100%;">Begin your learning journey with our <span class="blue_color">FREE COURSES</span></span>
-    <span class="text-black desc_mostPopular" style="width: 100%;">"Unlock endless learning opportunities with our free courses,designed to expand your knowledge at no cost!"</span>
+      <span class="text-black header_freeCourses" style="width: 100%;">
+        Begin your learning journey with our <span class="blue_color">FREE COURSES</span>
+      </span>
+      <span class="text-black desc_mostPopular" style="width: 100%;">
+        "Unlock endless learning opportunities with our free courses, designed to expand your knowledge at no cost!"
+      </span>
+    </div>
+
+    <div class="container freeCourseCont mt-4 q-mx-lg ">
+<!-- Mobile view with scroll snapping -->
+<div
+  v-if="$q.screen.lt.md"
+  class="scroll-wrapper row no-wrap items-start"
+  ref="scrollContainer"
+  v-touch-pan.prevent.mouse="onPan"
+>
+  <div
+    v-for="category in filteredCategories"
+    :key="category.id"
+    class="snap-card q-pt-xl"
+  >
+    <q-card class="course-card h-100">
+      <q-img
+        v-if="category.imagePath"
+        :src="category.imagePath"
+        alt="Category Image"
+        class="course-image q-pa-lg"
+      />
+      <q-card-section>
+        <p class="text-bold text-left blue_color">{{ category.categoryName }}</p>
+        <span class="text-caption text-grey">{{ category.description }}</span>
+      </q-card-section>
+    </q-card>
   </div>
-  <div class="container mt-4 q-mx-lg">
-    <div class="row d-flex justify-content-center align-items-center w-100">
+</div>
+
+
+      <!-- Desktop view: grid -->
       <div
-        v-for="category in filteredCategories"
-        :key="category.id"
-        class="col-md-3 mb-4 q-pt-xl"
-        style="margin-left: auto;margin-right: auto;"
+        v-else
+        class="row d-flex justify-content-center align-items-center w-100"
       >
-      <q-card class="course-card h-100">
-  <q-img
-    v-if="category.imagePath"
-    :src="category.imagePath"
-    alt="Category Image"
-    class="course-image q-pa-lg"
-  />
-  <q-card-section>
-    <p class="text-bold text-left blue_color">{{ category.categoryName }}</p>
-    <span class="text-caption text-grey">{{ category.description }}</span>
-  </q-card-section>
-</q-card>
-
-
-
-
-      </div>
-      <div class="col-12 q-mt-md text-right my-5" style="width: 92%;margin-left: auto;margin-right: auto;">
-          <span style="color: #4E5BF8;">View More Courses →</span>
+        <div
+          v-for="category in filteredCategories"
+          :key="category.id"
+          class="col-md-3 mb-4 q-pt-xl"
+          style="margin-left: auto;margin-right: auto;"
+        >
+          <q-card class="course-card h-100">
+            <q-img
+              v-if="category.imagePath"
+              :src="category.imagePath"
+              alt="Category Image"
+              class="course-image q-pa-lg"
+            />
+            <q-card-section>
+              <p class="text-bold text-left blue_color">{{ category.categoryName }}</p>
+              <span class="text-caption text-grey">{{ category.description }}</span>
+            </q-card-section>
+          </q-card>
         </div>
+      </div>
+
+      <div class="col-12 q-mt-md text-right my-5" style="width: 92%;margin-left: auto;margin-right: auto;">
+        <span style="color: #4E5BF8;">View More Courses →</span>
+      </div>
     </div>
   </div>
-
-  </div>
 </template>
+
 
 <script>
 export default {
@@ -229,6 +263,47 @@ export default {
   font-size: 18px;
   font-weight: 700;
 }
+
+.freeCourseCont{
+  margin: 0px;
+}
+
+.free-courses{
+  padding: 0px;
+}
+
+.scroll-wrapper {
+  -ms-overflow-style: none;  
+  scrollbar-width: none;     
+}
+
+.scroll-wrapper {
+  overflow-x: auto ;
+  /* overflow-y: hidden; */
+  -webkit-overflow-scrolling: touch;
+  /* scroll-snap-type: x mandatory; */
+  /* scroll-behavior: smooth; */
+  padding: 0 1rem 1rem 2rem;
+  /* gap: 1rem; */
+  /* -ms-overflow-style: none; */
+  /* scrollbar-width: none; */
+}
+.snap-card {
+  scroll-snap-align: start;
+  flex: 0 0 auto;
+  width: 85vw;
+  max-width: 280px;
+  height: 100%;
+  margin-right: 1rem;
+}
+.course-card {
+  width: 100%;
+  height: 280px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 
 }
 </style>
