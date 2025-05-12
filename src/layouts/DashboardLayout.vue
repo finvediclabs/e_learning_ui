@@ -45,7 +45,7 @@
   dense
   outlined
   emit-value
-  color="white"
+  color="#4E5BF8"
   map-options
   class="q-ml-md explore"
   style="min-width: 140px;"
@@ -256,7 +256,7 @@
 
 <script>
 import { storeToRefs } from "pinia";
-import new_logo from "src/assets/ScaleGrad_logo.png";
+import new_logo from "src/assets/new_logo1.svg";
 import { useSessionStore } from "src/stores/session";
 import { useProfileStore } from "src/stores/profile";
 import { toRaw } from 'vue';
@@ -988,8 +988,8 @@ background-attachment: fixed;
   font-family: 'Poppins', sans-serif;
   font-size: small;
   font-weight: 500; /* Adjust weight as needed (300, 400, 600, etc.) */
-  color: var(--q-color-primary); 
-  /* color: #7D7D7D; */
+  /* color: var(--q-color-primary);  */
+  color: #7D7D7D;
   text-transform: capitalize !important;
 }
 .nav-bar{
@@ -1016,9 +1016,8 @@ background-attachment: fixed;
 
 
 .mainHeader {
-  /* background: #fff; */
+  background: #fff;
   /* background: #5479F7; */
-  background: #4e5bf8;
   backdrop-filter: blur(19px);
 }
 
@@ -1056,12 +1055,8 @@ background-attachment: fixed;
 
 .logo_in{
   min-height: 0px !important;
-  padding: 8px 10px 8px 0px;
 }
-.ham{
-    padding: 0px;
-    margin-right: 5px;
-   }
+
 
 @media only screen and (max-width:576px){
 
@@ -1113,8 +1108,8 @@ background-attachment: fixed;
 }
 /* ======================= */
 .menu-button {
-  color: white;
-  /* color: #7D7D7D; */
+  /* color: white; */
+  color: #7D7D7D;
   margin-left: auto;
 
 }
@@ -1135,15 +1130,15 @@ background-attachment: fixed;
 }
 
 .help_button{
-  /* color: #7D7D7D; */
+  color: #7D7D7D;
 }
 
 .notifs{
-  /* color: #7D7D7D !important; */
+  color: #7D7D7D !important;
 }
 
 .cursor-pointer {
-/* color: #7D7D7D !important; */
+color: #7D7D7D !important;
 }
 
 @media (max-width: 600px) {
@@ -1235,26 +1230,6 @@ background-attachment: fixed;
   margin: 0px 10px;
   font-size:medium;
 } */
-
-.q-select.explore .q-field__control {
-  background-color: white !important;
-  color: #ccc !important;
-}
-
-.q-select.explore .q-field__native,
-.q-select.explore .q-field__label,
-.q-select.explore .q-icon,
-.q-select.explore .q-field__marginal {
-  color: black !important;
-}
-
-@media screen and (max-width: 360px) and (min-height: 800px) {
-  .ham{
-    padding: 0px;
-    margin: 0px;
-   }
-}
-
 
 
 
