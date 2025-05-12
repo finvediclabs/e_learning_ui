@@ -11,7 +11,12 @@ export const useProfileStore = defineStore('profile', {
   }),
   getters: {},
   actions: {
+
     fetchProfile() {
+    if (window.location.hash === '#/home') {
+  console.warn('Profile fetch prevented on /home path.');
+  return;
+}
       const sessionStore = useSessionStore(); // Get the session store
       const token = sessionStore.token; // Retrieve the token
 

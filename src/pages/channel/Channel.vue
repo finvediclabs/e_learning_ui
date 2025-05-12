@@ -184,14 +184,18 @@ export default {
       }
     },
   },
-  mounted() {
-    this.getgroupdata()
+mounted() {
+  if (this.$route.path === '/channel') {
+    this.getgroupdata();
     this.getUserData();
     this.getallmembers();
+    this.getbatchmembers();
+
     this.batchMembersInterval = setInterval(() => {
       this.getbatchmembers();
     }, 60000);
-  },
+  }
+},
   methods: {
     async getallmembers() {
       await this.$api.get(`api/channelMembers/allmembers`).then((response) => {

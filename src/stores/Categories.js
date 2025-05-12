@@ -13,6 +13,10 @@ export const useCategoryStore = defineStore('categories', {
   }),
   actions: {
     fetchCategories() {
+  if (window.location.hash === '#/home') {
+  console.warn('Profile fetch prevented on /home path.');
+  return;
+}
       const sessionStore = useSessionStore(); // Get the session store
       const token = sessionStore.token; // Retrieve the token
 
@@ -20,7 +24,7 @@ export const useCategoryStore = defineStore('categories', {
         Authorization: `Bearer ${token}`, // Attach the token in the request headers
       };
 
-      axios.get(baseUrl + 'api/chapterCategoriess', { headers }).then(response => {
+      axios.get(baseUrl + 'api/chapterCategoriess').then(response => {
         const categories = response.data.map(category => {
           if (category.categoryCode === "INTR_TO_BANK") {
             category.categoryName = "Fintech And Financial Services Landscape";
@@ -32,6 +36,10 @@ export const useCategoryStore = defineStore('categories', {
       });
     },
     fetchSubCategories() {
+        if (window.location.hash === '#/home') {
+  console.warn('Profile fetch prevented on /home path.');
+  return;
+}
       const sessionStore = useSessionStore(); // Get the session store
       const token = sessionStore.token; // Retrieve the token
 
@@ -39,7 +47,7 @@ export const useCategoryStore = defineStore('categories', {
         Authorization: `Bearer ${token}`, // Attach the token in the request headers
       };
 
-      axios.get(baseUrl + 'api/chapterSubCategoriess', { headers }).then(response => {
+      axios.get(baseUrl + 'api/chapterSubCategoriess').then(response => {
         this.subCategories = Object.groupBy(response.data, product => {
           return product.categoryCode;
         });

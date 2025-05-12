@@ -663,6 +663,9 @@ setAccessPaths() {
       else if  (this.$route.path === '/program') {
         this.backgroundStyle = 'Program_BackgroundStyle'; // Apply the background style class
       }
+      else if  (this.$route.path === '/home') {
+        this.backgroundStyle = 'Home_BackgroundStyle'; // Apply the background style class
+      }
       else if  (this.$route.path === '/homeProfile') {
         this.backgroundStyle = 'Program_BackgroundStyle'; // Apply the background style class
       }
@@ -871,6 +874,12 @@ setAccessPaths() {
   margin-top:3%;
 }
 
+.Home_BackgroundStyle {
+  background-color: #FFFFFF;
+  background-size: 100% 100%;
+  margin-top:3%;
+}
+
 .Program_BackgroundStyle2 {
   background-color: #ffff;
   background-size: 100% 100%;
@@ -893,8 +902,8 @@ setAccessPaths() {
 
 
 body{
-  /* background-color: #fff; */
-  background-color: #F6F6F6;
+  background-color: #ffff;
+  /* background-color: #F6F6F6; */
   background-size: 100% 100%;
 background-size: cover;
 background-position: center;

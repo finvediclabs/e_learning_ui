@@ -1,33 +1,30 @@
 <template>
   <div class="row q-px-md q-my-sm">
     <!-- Left Column -->
+
     <div class="col-12 col-md-8">
-      <div class="row w-100">
-        <!-- Attendance Card -->
-        <div class="col-12 col-sm-3 col-lg-3 margin-bottom">
-          <div class="box">
-            <attendance-card @click="handleDemoUserAccess()"/>
-          </div>
-        </div>
-        <!-- Assignment Card -->
-        <div class="col-12 col-sm-3 col-lg-3 margin-bottom">
-          <div class="box">
-            <assignment-card />
-          </div>
-        </div>
-        <!-- Hackathon Card -->
-        <div class="col-12 col-sm-3 col-lg-3 margin-bottom">
-          <div class="box" @click="handleDemoUserAccess()">
-            <hackathon-card />
-          </div>
-        </div>
-        <!-- Lab Report Card -->
-        <div class="col-12 col-sm-3 col-lg-3 margin-bottom">
-          <div class="box">
-            <labReport />
-          </div>
-        </div>
+       <div class="d-none d-sm-flex row w-100 web_view">
+    <div class="col-12 col-sm-3 col-lg-3 margin-bottom" v-for="(card, index) in cards" :key="index">
+      <div class="box" @click="card.onClick">
+        <component :is="card.component" />
       </div>
+    </div>
+  </div>
+
+  <!-- Mobile Carousel -->
+  <swiper
+  class="d-block d-sm-none mobile_view"
+  :slides-per-view="1.2"
+  :space-between="10"
+  :loop="true"
+  :centered-slides="true"
+>
+    <swiper-slide v-for="(card, index) in cards" :key="index">
+      <div class="box" @click="card.onClick">
+        <component :is="card.component" />
+      </div>
+    </swiper-slide>
+  </swiper>
 
       <!-- MostPopular & RecentlyViewed in One Row -->
       <div class="row w-100">
@@ -53,7 +50,8 @@
 import { mapState } from "pinia";
 import { useSessionStore } from "src/stores/session";
 import { useProfileStore } from "src/stores/profile";
-
+import { Swiper, SwiperSlide } from 'swiper/vue'
+import 'swiper/css'
 // Components
 import AttendanceCard from "src/pages/home/attendance.vue";
 import MostPopular from "src/pages/home/mostPopular.vue";
@@ -71,6 +69,8 @@ export default {
   name: "Home",
   components: {
     AttendanceCard,
+      Swiper,
+    SwiperSlide,
     AssignmentCard,
     HackathonCard,
     MostPopular,
@@ -85,7 +85,17 @@ export default {
   data() {
     return {
       showPopup: false,
+       cards: []
     };
+  },
+  created() {
+    // Initialize cards in `created()` so `this` is available
+    this.cards = [
+      { component: 'AttendanceCard', onClick: this.handleDemoUserAccess },
+      { component: 'AssignmentCard', onClick: null },
+      { component: 'HackathonCard', onClick: this.handleDemoUserAccess },
+      { component: 'LabReport', onClick: null }
+    ]
   },
   computed: {
     ...mapState(useProfileStore, ["user"]),
@@ -111,6 +121,20 @@ export default {
   font-style: normal;
 }
 
+.mobile_view{
+  display: none;
+}
+
+.box {
+  padding: 10px;
+  background: #fff;
+  border-radius: 10px;
+  width: 94%;
+  margin-left: 3%;
+  margin-right: 3%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
 .home {
   font-family: "Poppins";
   text-align: left;
@@ -127,14 +151,7 @@ h3 {
   margin-bottom: 1rem;
 }
 
-.box {
-  width: 90% !important;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),
-    0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  border-radius: 10px;
-  margin-left: auto;
-  margin-right: auto;
-}
+
 
 @media (max-width: 768px) {
   .row {
@@ -142,6 +159,23 @@ h3 {
     align-items: center;
     gap: 1rem;
   }
+  .box {
+  padding: 10px;
+  background: #fff;
+  border: 1px solid #f6f6f6;
+   width: 92%;
+  margin-left: 4%;
+  margin-right: 4%;
+  margin-bottom: 2%;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+  .mobile_view{
+  display: block;
+}
+ .web_view{
+  display: none;
+ }
 
   .profile-column {
     margin-left: 0 !important;

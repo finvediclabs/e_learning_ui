@@ -1,5 +1,5 @@
 <template>
-  <div class="row parent-container">
+  <div class="row parent-container body">
     <div class="col-12 col-md-4 left-container mb-3">
       <div class="chapter-categories">
   <div class="course-details" >
@@ -786,6 +786,15 @@ getPresentationFlatIndex(groupId, localIndex) {
   min-height: 400px; /* or 100vh if you want full screen */
   text-align: center;
   gap: 16px;
+}
+.body{
+    /* background-color: #ffff; */
+  background-color: #F6F6F6;
+  background-size: 100% 100%;
+background-size: cover;
+background-position: center;
+background-repeat: no-repeat;
+background-attachment: fixed;
 }
 @keyframes pulse {
   0% {

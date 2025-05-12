@@ -15,6 +15,10 @@ export const useCouseStore = defineStore('coursesnew', {
   }),
   actions: {
     fetchCourses() {
+      if (window.location.pathname === '/home' || window.location.pathname === '//home') {
+    console.warn('Profile fetch prevented on /home path.');
+    return;
+  }
       const sessionStore = useSessionStore(); // Get the session store
       const token = sessionStore.token; // Retrieve the token
 
@@ -30,6 +34,10 @@ export const useCouseStore = defineStore('coursesnew', {
       });
     },
     fetchTopics() {
+      if (window.location.pathname === '/home' || window.location.pathname === '//home') {
+    console.warn('Profile fetch prevented on /home path.');
+    return;
+  }
       const sessionStore = useSessionStore(); // Get the session store
       const token = sessionStore.token; // Retrieve the token
 
@@ -44,6 +52,10 @@ export const useCouseStore = defineStore('coursesnew', {
       });
     },
     fetchBatches(courseid) {
+      if (window.location.pathname === '/home' || window.location.pathname === '//home') {
+    console.warn('Profile fetch prevented on /home path.');
+    return;
+  }
       const sessionStore = useSessionStore(); // Get the session store
       const token = sessionStore.token; // Retrieve the token
 

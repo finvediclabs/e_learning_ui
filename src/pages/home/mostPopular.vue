@@ -26,33 +26,58 @@
 
   <div v-else class="container mt-4" style="width: 100%;padding-left: 1%;padding-right: 1%;" >
     <div class="row d-flex justify-content-center align-items-center w-100" style="width: 100%;">
-      <div
-      v-for="(category, index) in filteredCategories"
-        :key="category.id"
-         class="col-lg-3 col-md-3 col-sm-6 col-12 mb-4 d-flex justify-content-center q-pt-sm"
-        style="margin-left: auto;margin-right: auto;"
-      >
-
-     <q-card
- class="course-card1 cursor-pointer"
-  @click="handleCategoryClick(category, index)"
+     <!-- Desktop & Tablet View -->
+<div
+  v-for="(category, index) in filteredCategories"
+  :key="category.id"
+  class="col-lg-3 col-md-3 col-sm-6 col-12 mb-4 d-flex justify-content-center q-pt-sm d-none d-sm-flex web_view"
+  style="margin-left: auto; margin-right: auto;"
 >
-<div style="height: 240px;" >
-  <img
-    v-if="category.imagePath"
-    :src="category.imagePath"
-    alt="Category Image"
-    class="course-image q-pa-lg"
-     fit="contain"
-  />
-  </div>
-  <q-card-section style="padding-bottom: 0%;">
-    <p class="text-bold text-left">{{ category.categoryName }}</p>
-    <!-- <span class="text-caption">{{ category.description }}</span> -->
-  </q-card-section>
-</q-card>
+  <q-card class="course-card1 cursor-pointer" @click="handleCategoryClick(category, index)">
+    <div style="height: 240px;">
+      <img
+        v-if="category.imagePath"
+        :src="category.imagePath"
+        alt="Category Image"
+        class="course-image q-pa-lg"
+        fit="contain"
+      />
+    </div>
+    <q-card-section style="padding-bottom: 0%;">
+      <p class="text-bold text-left">{{ category.categoryName }}</p>
+    </q-card-section>
+  </q-card>
+</div>
 
+<!-- Mobile View as Carousel -->
+<swiper
+  class="d-block d-sm-none mobile_view "
+  :slides-per-view="1.1"
+  :space-between="12"
+  :loop="true"
+  :centered-slides="true"
+>
+  <swiper-slide
+    v-for="(category, index) in filteredCategories"
+    :key="'mobile-' + category.id"
+    class="d-flex justify-content-center q-mb-md q-pb-md"
+  >
+    <q-card class="course-card1 cursor-pointer" @click="handleCategoryClick(category, index)">
+      <div style="height: 240px;">
+        <img
+          v-if="category.imagePath"
+          :src="category.imagePath"
+          alt="Category Image"
+          class="course-image q-pa-lg"
+          fit="contain"
+        />
       </div>
+      <q-card-section style="padding-bottom: 0%;">
+        <p class="text-bold text-left">{{ category.categoryName }}</p>
+      </q-card-section>
+    </q-card>
+  </swiper-slide>
+</swiper>
       <!-- Desktop View (hidden on xs) -->
       <div class="desktop-view-more">
   <span @click="viewAll">View More Courses →</span>
@@ -69,6 +94,8 @@
 import mostPopularBg from '../../assets/most_popularBG.png';
 import { useSessionStore } from "src/stores/session";
 import { storeToRefs } from "pinia";
+import { Swiper, SwiperSlide } from 'swiper/vue';
+import 'swiper/css';
 import { useProfileStore } from "src/stores/profile";
 import DemoUserPopUp from "src/layouts/DemoUserPopUp.vue";
 export default {
@@ -95,6 +122,8 @@ export default {
   },
   components: {
     DemoUserPopUp,
+     Swiper,
+    SwiperSlide,
   },
   computed: {
     filteredCategories() {
@@ -291,6 +320,9 @@ async fetchCategories() {
     scroll-snap-type: x mandatory;
     padding-bottom: 1rem;
   }
+  .course-card1{
+    border: 2px solid #f6f6f6;
+  }
 
   .most-popular .container .row.d-flex::-webkit-scrollbar {
     display: none;
@@ -324,6 +356,10 @@ async fetchCategories() {
   padding-top: 0.5rem;
 }
 
+.mobile_view{
+  display: none;
+}
+
 .desktop-view-more span {
   color: #4E5BF8;
   cursor: pointer;
@@ -337,6 +373,15 @@ async fetchCategories() {
     font-weight: 600;
     color: #141414;
   }
+
+  .web_view{
+    display: none;
+  }
+  .mobile_view{
+  display: block !important;
+
+}
+
 
   .mobile-view-more {
     font-size: small;

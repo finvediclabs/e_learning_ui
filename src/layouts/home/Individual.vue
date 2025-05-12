@@ -1,4 +1,4 @@
-<template>
+<template class="bg-white">
   <q-layout view="lHh Lpr lFf " style="min-height: unset">
     <!-- Navigation Bar -->
 
@@ -474,6 +474,9 @@ const response = await axios.get(`${getCourse}/${programId}`);
 <style scoped>
 .logo_in{
   min-height: 0px !important;
+}
+.bg-white{
+  background-color: white !important;
 }
 .logo {
   /* height: 40px; */

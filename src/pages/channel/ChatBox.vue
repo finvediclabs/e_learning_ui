@@ -575,14 +575,14 @@ export default {
       return colors[index];
     },
     showMsg(message, type) {
-      this.$q.notify({
-        message: message || "Something Went Wrong!",
-        type: type,
-        position: 'top-right',
-        actions: [
-          { icon: 'close', color: 'white', handler: () => { } }
-        ]
-      });
+      // this.$q.notify({
+      //   message: message || "Something Went Wrong!",
+      //   type: type,
+      //   position: 'top-right',
+      //   actions: [
+      //     { icon: 'close', color: 'white', handler: () => { } }
+      //   ]
+      // });
     },
   }
 };

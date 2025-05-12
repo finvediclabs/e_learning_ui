@@ -5,9 +5,9 @@
         <!-- <div class="col-auto">
           <q-btn flat round icon="arrow_back" @click="$router.back()"  class="all" />
         </div> -->
-        <div class="col">
+        <!-- <div class="col">
           <span class="all-courses1-heading1 text-weight-medium q-mt-none q-mb-none text-h4">All Courses</span>
-        </div>
+        </div> -->
       </div>
 
       <!-- Loader -->
@@ -16,21 +16,24 @@
       </div>
 
       <!-- Course Cards -->
-      <div v-else class="row cor">
+      <div v-else class="row cor" style="justify-content: center;height: 100%;">
         <div
           v-for="(category, index) in categories"
           :key="category.id"
-          class="course-col col-lg-3 col-md-4 col-sm-6 col-12 d-flex justify-center"
+          style="max-height: 340px;"
+          class="course-col col-lg-2 col-md-2 col-sm-6 col-12 d-flex justify-center"
         >
-        <q-card class="course-card-top cursor-pointer" @click="handleCategoryClick(category, index)">
-          <q-img
+        <q-card class="course-card-top cursor-pointer" @click="handleCategoryClick(category, index)" >
+          <div style="height: 240px;" >
+          <img
             v-if="category.imagePath"
             :src="category.imagePath"
             alt="Category Image"
             class="course-image"
           />
+          </div>
             <q-card-section>
-              <p class="text-bold text-left">{{ category.categoryName }}</p>
+              <span class="text-bold text-left">{{ category.categoryName }}</span>
             </q-card-section>
           </q-card>
         </div>
@@ -157,6 +160,7 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   overflow: hidden;
   height: 100%;
+  /* height: 100%; */
 }
 
 .course-card-top:hover {
@@ -165,11 +169,21 @@
 }
 
 .course-image {
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  background-size: cover;
-  background-position: center;
-  border-bottom: 1px solid #eee;
+  width: 94%;
+  margin-left: 3%;
+  margin-right: 3%;
+  margin-top: 3%;
+  padding: 0%;
+  height: 100%;
+  border-radius: 5px;
+  object-fit: fill; /* ensures full image is visible */
+  object-position: center;
+  /* aspect-ratio: 16 / 9; */
+  /* background-size: cover;
+  background-position: center; */
+  /* border-radius: 10px; */
+  /* margin-bottom: 10px; */
+  cursor: pointer;
 }
 
 .cor {
@@ -178,10 +192,10 @@
   gap: 16px; /* Adjust spacing as needed */
 }
 
-.course-col {
-  max-width: 24%;
-  flex: 0 0 24%;
-}
+/* .course-col {
+  max-width: 20%;
+  flex: 0 0 20%;
+} */
 
 @media (max-width: 1023px) {
   .course-col {
