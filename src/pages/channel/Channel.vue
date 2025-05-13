@@ -1,7 +1,7 @@
 
 
 <template>
-  <fin-portlet v-if="userType === 'Admin'" style="background-color: transparent;">
+  <!-- <fin-portlet v-if="userType === 'Admin'" style="background-color: transparent;">
     <fin-portlet-header>
       <fin-portlet-heading>
         <span class="User_heading">Channels</span>
@@ -19,56 +19,20 @@
         </div>
       </fin-portlet-item>
     </fin-portlet-header>
-  </fin-portlet>
-  <!-- <div class="header">
-  </div> -->
-  <!-- Image container (hidden by default) -->
+  </fin-portlet> -->
+
+
   <div id="imageView" class="hidden">
     <img id="viewImage" src="" alt="Full Size Image">
     <div id="closeButton" class="close-btn" @click="hideImageView">&times;</div>
   </div>
 
-  <div class="channel">
-    <div class="container">
-      <div v-if="!selectedGroup" class="group-list">
-        <!-- Loop through the groups array and display each group -->
-        <div v-for="(group, index) in displayedGroups" :key="index" @click="selectGroup(group)">
-          <div class="group-item">
-            <p style="font-weight: bold;">{{ group.groupName }}</p>
-            <div class="recentmesssage">
-              <span class="messagesender">
-                <!-- Only show username if it exists -->
-                {{ group.recentMessage[0]?.username ? group.recentMessage[0].username + " : " : '' }}
-              </span>
-
-              <span class="message">
-                <!-- If there's no username, show "No Messages", otherwise show the message -->
-                {{ group.recentMessage[0]?.message?.includes("fs/download") ||
-                  group.recentMessage[0]?.message?.includes("ms/download") ? "Media" : group.recentMessage[0]?.message ||
-                "No Messages" }}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div v-else>
-        <div>
-          <q-icon name="arrow_back" @click="goBackToGroupList()" class="back-icon" />
-          <span class="grpname">{{ selectedGroup }}</span>
-        </div>
-        <hr>
-
-        <div class="vedichivebox active">
-          <Chatbox :groupId="groupId" />
-        </div>
-
-      </div>
-    </div>
-
-    <!-- Group Members Container -->
-    <div class="grpcontainer">
-      <h4 class="grpheader">{{ header }}</h4>
-      <div class="members" style="overflow-y: auto;max-height: 450px;">
+  <div class="row col-12">
+    <div class="col-4 row left_group">
+<div class="new_grp_container q-pl-xl q-pr-md">
+  <div class="background_container q-mt-xl q-px-sm q-pt-lg">
+      <span class="grpheader text-h5 ">{{ header }}</span>
+      <div class="members members2 q-pt-lg" style="overflow-y: auto;  flex-grow: 1;">
         <ul class="member-list">
           <li v-for="member in grpmembers" :key="member.id" class="member-item">
             <i class="avatar"
@@ -80,8 +44,53 @@
           </li>
         </ul>
       </div>
+      </div>
     </div>
+    </div>
+    <div class="col-8 row right_group">
+      <div class="new_chatcontainer q-pr-xl q-pl-md">
+        <div class="background_container q-mt-xl q-px-sm q-pt-lg">
+        <div v-if="!selectedGroup"  style="overflow-y: auto;  flex-grow: 1;" class="members2">
+           <span class="grpheader text-h5 ">Channels</span>
+           <div v-for="(group, index) in displayedGroups" :key="index" @click="selectGroup(group)" >
+          <div class="group-item">
+            <p style="font-weight: bold;">{{ group.groupName }}</p>
+            <div class="recentmesssage">
+              <span class="messagesender">
+
+                {{ group.recentMessage[0]?.username ? group.recentMessage[0].username + " : " : '' }}
+              </span>
+
+              <span class="message">
+
+                {{ group.recentMessage[0]?.message?.includes("fs/download") ||
+                  group.recentMessage[0]?.message?.includes("ms/download") ? "Media" : group.recentMessage[0]?.message ||
+                "No Messages" }}
+              </span>
+            </div>
+          </div>
+        </div>
+        </div>
+         <div v-else style="overflow-y: auto;  flex-grow: 1;" class="members2">
+        <div>
+          <q-icon name="arrow_back" @click="goBackToGroupList()" class="back-icon" />
+          <span class="grpname">{{ selectedGroup }}</span>
+        </div>
+        <hr>
+
+       <div class="vedichivebox active" ref="chatboxContainer">
+  <Chatbox :groupId="groupId" @chatboxReady="scrollToChatbox" />
+</div>
+
+      </div>
+    </div>
+    </div>
+      <!--  -->
+    </div>
+
   </div>
+
+
 </template>
 
 <script>
@@ -202,14 +211,23 @@ mounted() {
         this.allmembers = response.data.data;
       })
     },
+     scrollToChatbox() {
+    this.$refs.chatboxContainer?.scrollIntoView({ behavior: 'smooth' });
+  },
     goBackToGroupList() {
-      this.selectedGroup = null;
-      this.grpmembers = null;
-      this.getgroupdata();
-      this.getbatchmembers;
-      this.groupId = null
-      this.header = "Channel Members"
-    },
+  const currentGroupId = this.groupId; // store before clearing
+
+  this.selectedGroup = null;
+  this.grpmembers = null;
+  this.getgroupdata();
+
+  this.groupId = null; // now clear it
+  // console.log("Cleared groupId:", this.groupId);
+
+  this.getbatchmembers(this.groupId); // pass the stored groupId
+
+  this.header = "Channel Members";
+},
     async getrecentmessages(id) {
       try {
         const response = await this.$api.get(`/api/recent-message/${id}`);
@@ -368,6 +386,58 @@ mounted() {
 .messagesender {
   color: rgb(0, 175, 245);
 }
+.left_group{
+  /* border-right: 2px solid #4E5BF8; */
+  height: 90vh !important;
+  width: 100%;
+}
+.right_group{
+  height: 90vh !important;
+  width: 100%;
+}
+.new_chatcontainer{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.new_grp_container{
+  width: 100%;
+  height: 100%;
+  /* padding: 1%; */
+  /* border: 2px solid black; */
+  display: flex;
+  flex-direction: column;
+}
+.background_container {
+  background-color: #F7F7FC;
+  display: flex;
+  flex-direction: column;
+  border-radius: 20px;
+  overflow-y: auto;
+  height: calc(90vh - 60px);
+  flex-grow: 1;
+}
+
+.members2::-webkit-scrollbar {
+  width: 12px;
+}
+
+.members2::-webkit-scrollbar-track {
+  background: #F7F7FC; /* Track color */
+  border-radius: 20px;
+}
+
+.members2::-webkit-scrollbar-thumb {
+  background-color: #4E5BF8; /* Scrollbar color */
+  border-radius: 20px;
+  border: 2px solid transparent; /* Optional for padding effect */
+  background-clip: content-box;
+}
+
+.members2::-webkit-scrollbar-thumb:hover {
+  background-color: #4E5BF8;
+}
 
 .message {
   color: #737373;
@@ -388,15 +458,18 @@ mounted() {
 
 .group-list {
   display: flex;
+  height: 100%;
+  border: 2px solid blue;
   flex-direction: column;
   gap: 10px;
   overflow-y: auto;
 }
 
+
 .group-item {
   padding: 20px;
   cursor: pointer;
-  background: #f0f0f0;
+  /* background: #f0f0f0; */
   border-radius: 5px;
   font-size: 1.2rem;
   position: relative;
@@ -405,8 +478,9 @@ mounted() {
 }
 
 .group-item:hover {
-  transform: scale(1.02); /* Adds the zoom effect */
-  z-index: 1;
+  background: #F7F7FC;
+  color: #333;
+
 }
 
 .group-item:hover::before {
@@ -414,7 +488,7 @@ mounted() {
   position: absolute;
   top: 0;
   left: 0;
-  width: 15px;
+  width: 8px;
   height: 100%;
   background: linear-gradient(180deg, #647dd7, #3b4ca7); /* Gradient effect */
 }
@@ -471,9 +545,11 @@ mounted() {
 }
 
 .grpheader {
-  text-align: center;
+  text-align: left;
   color: #647dd7;
   font-weight: bolder;
+  padding-left: 10px;
+  padding-top: 1% !important;
 }
 
 /* Flexbox for horizontal display */
@@ -653,8 +729,9 @@ mounted() {
   display: flex;
   justify-content: space-between;
   background-color: white;
-  padding-top: 40px;
+  /* padding-top: 40px; */
   padding-left: 40px;
+  padding-bottom: 2Px;
   color: #7289da;
   width: 110vh;
   flex-direction: row;
@@ -688,11 +765,15 @@ mounted() {
 
 
 .mybatchbox,
-.vedichivebox,
 .mediabox {
   flex-grow: 1;
 }
-
+.vedichivebox{
+  height: 92% !important;
+  flex-grow: 1;
+  overflow-y: auto;
+  /* border: 2px solid black; */
+}
 .mybatchbox.active,
 .vedichivebox.active,
 .mediabox.active {

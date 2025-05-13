@@ -1,5 +1,5 @@
 <template>
-  <div id="chat-page">
+  <div id="chat-page" style="height: 96%;">
     <!-- Image Viewer Modal -->
     <div id="imageView" class="hidden">
       <img id="viewImage" src="" alt="Full Size Image">
@@ -9,12 +9,12 @@
     <!-- Chat Container -->
     <div class="chat-container-wrapper">
       <div ref="chatscrollContainer" class="chat-container" v-scroll-bottom>
-        <div>
+
           <div ref="connectingElement" style="color: green; text-align: center;">
             Connecting...
           </div>
-          <ul id="vedichivemessageArea" style="background: transparent;">
-            <li v-for="(message, index) in messages" :key="index"
+          <ul id="vedichivemessageArea" style="background: transparent;height: 100%;overflow-y: auto;border-radius: 20px;" class="members2">
+            <li v-for="(message, index) in messages" :key="index" class="q-mt-md" style="margin-top: 2%;"
               :class="['chat-message', message.username === username ? 'self' : '']">
               <i :style="{ backgroundColor: getAvatarColor(message.username) }">
                 {{ message.username[0] }}
@@ -51,8 +51,8 @@
               </div>
             </li>
           </ul>
-        </div>
       </div>
+      <!-- llll -->
     </div>
 
     <!-- Input Field and Upload Buttons -->
@@ -150,12 +150,27 @@ export default {
     },
   },
   mounted() {
+
     this.getUserData();
+
     this.getAllMessages();
+    this.scrollToBottom();
+  },
+  updated() {
+    // Also scroll on update (e.g., after messages are loaded or added)
+    this.scrollToBottom();
   },
   methods: {
     triggerFileInput() {
       this.$refs.file.click();
+    },
+    scrollToBottom() {
+      this.$nextTick(() => {
+        const container = this.$refs.messageArea;
+        if (container) {
+          container.scrollTop = container.scrollHeight;
+        }
+      });
     },
     triggerMediaInput() {
       this.$refs.media.click();
@@ -945,7 +960,7 @@ img {
   /* border:2px solid black; */
   border-radius: 20px;
   visibility: visible;
-  height: 53vh;
+  height: 100%;
   overflow-y: auto;
   /* Enable vertical scrolling */
   width: 100%;
@@ -1085,7 +1100,11 @@ img {
   /* height:100vh; */
   /* border:2px solid gray; */
   /* Space for scrollbar */
-  overflow: hidden;
+  /* overflow: hidden; */
+  /* height:70vh; */
+  height: 90%;
+
+  /* border: 2px solid blue; */
   /* Hide overflow */
 }
 
