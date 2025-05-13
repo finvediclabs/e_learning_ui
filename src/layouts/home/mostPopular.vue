@@ -388,6 +388,12 @@ export default {
   display: none; 
 }
 
+.View{
+  text-align: center;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.1rem;
+}
 
 
 

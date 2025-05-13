@@ -1,7 +1,8 @@
 <template>
-  <div class="background_grey q-py-xl">
+  <div   class="background_grey q-py-xl" 
+  :style="isMobile ? { backgroundImage: `url(${mobileBackground})` } : {}" >
     <span class="text-black header_toolsd">
-      Master <span style=" color: #4e5bf8 ">Latest and Essential Tools  & Technologies </span> <br>
+      Master <span style=" color: #4e5bf8 ">Latest and Essential Tools & Technologies</span><br>
       with ScaleGrad for Your Career Success
     </span>
 
@@ -22,10 +23,21 @@
         </div>
       </div>
     </div>
+
+    <!-- Third Row (Only on Mobile, Left Sliding Again) -->
+    <div class="scroll-container q-py-lg third-row" v-if="isMobile">
+      <div class="scroll-wrapper">
+        <div class="scroll-content scroll-left">
+          <img v-for="(tool, index) in infiniteTools" :key="'row3-' + index" class="custom_img" :src="tool" alt="Tool Logo" />
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
+
 <script>
+import ourToolsBg from 'src/assets/ourToolsBg.svg';
 import tools1 from 'src/assets/Logos_all/1.png';
 import tools2 from 'src/assets/Logos_all/2.png';
 import tools3 from 'src/assets/Logos_all/3.png';
@@ -44,23 +56,36 @@ import tools15 from 'src/assets/Logos_all/15.png';
 import tools16 from 'src/assets/Logos_all/16.png';
 
 export default {
-  name: 'OurTools',
   data() {
     return {
+      mobileBackground: ourToolsBg,
       tools: [tools1, tools2, tools3, tools4, tools5, tools6, tools9, tools15],
-      tools_2: [tools7, tools10, tools11, tools12, tools8, tools13, tools14, tools16]
+      tools_2: [tools7, tools10, tools11, tools12, tools8, tools13, tools14, tools16],
+      isMobile: false
     };
   },
   computed: {
-    // Duplicate tools multiple times for infinite scrolling
     infiniteTools() {
-      return [...this.tools, ...this.tools, ...this.tools]; // Tripled for smooth looping
+      return [...this.tools, ...this.tools, ...this.tools];
     },
     infiniteTools_2() {
-      return [...this.tools_2, ...this.tools_2, ...this.tools_2]; // Tripled for smooth looping
+      return [...this.tools_2, ...this.tools_2, ...this.tools_2];
+    }
+  },
+  mounted() {
+    this.checkScreenSize();
+    window.addEventListener('resize', this.checkScreenSize);
+  },
+  beforeUnmount() {
+    window.removeEventListener('resize', this.checkScreenSize);
+  },
+  methods: {
+    checkScreenSize() {
+      this.isMobile = window.innerWidth <= 600;
     }
   }
 };
+
 </script>
 
 <style scoped>
@@ -140,6 +165,10 @@ export default {
 
 /* Responsive Adjustments */
 @media (max-width: 600px) {
+  .background_grey {
+    background: url('src/assets/ourToolsBg.svg') repeat;
+    background-size: contain;
+  }
   .header_toolsd {
     font-size: 18px;
   }

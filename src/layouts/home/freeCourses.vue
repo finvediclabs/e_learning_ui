@@ -64,8 +64,8 @@
         </div>
       </div>
 
-      <div class="col-12 q-mt-md text-right my-5" style="width: 92%;margin-left: auto;margin-right: auto;">
-        <span style="color: #4E5BF8;">View More Courses →</span>
+      <div class="col-12 q-mt-md text-right my-5 viw" style="width: 92%;margin-left: auto;margin-right: auto;">
+        <span style="color: #4E5BF8;" class="viw-mo">View More Courses →</span>
       </div>
     </div>
   </div>
@@ -295,6 +295,7 @@ export default {
   max-width: 280px;
   height: 100%;
   margin-right: 1rem;
+  padding-top: 25px;
 }
 .course-card {
   width: 100%;
@@ -302,6 +303,12 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+.viw{
+  text-align: center;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.1rem;
 }
 
 

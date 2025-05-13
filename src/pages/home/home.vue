@@ -164,7 +164,7 @@ h3 {
   background: #fff;
   border: 1px solid #f6f6f6;
    width: 92%;
-  margin-left: 4%;
+  margin-left: 1%;
   margin-right: 4%;
   margin-bottom: 2%;
   border-radius: 10px;
