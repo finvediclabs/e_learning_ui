@@ -179,7 +179,7 @@
   </div>
 </div>
 <div class="col-12">
-        <div class="text-h4 text-weight-bold q-mb-sm q-mt-xl">
+        <div class="text-h4 text-weight-bold q-mb-lg q-mt-xl">
           Our Program Highlights
         </div>
       </div>
@@ -441,8 +441,8 @@
 <div class="row">
   <div class="col-12">
     <div class="row q-py-sm">
-      <div class="col-12">
-        <div class="text-h4 text-weight-bold q-mb-sm q-mt-xl">
+      <div class="col-12 q-mb-md">
+        <div class="text-h4 text-weight-bold q-mb-sm q-mt-sm ">
           Course Curriculum Breakdown
         </div>
       </div>

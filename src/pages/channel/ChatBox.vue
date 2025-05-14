@@ -7,53 +7,65 @@
     </div>
 
     <!-- Chat Container -->
-    <div class="chat-container-wrapper">
-      <div ref="chatscrollContainer" class="chat-container" v-scroll-bottom>
 
-          <div ref="connectingElement" style="color: green; text-align: center;">
-            Connecting...
-          </div>
-          <ul id="vedichivemessageArea" style="background: transparent;height: 100%;overflow-y: auto;border-radius: 20px;" class="members2">
-            <li v-for="(message, index) in messages" :key="index" class="q-mt-md" style="margin-top: 2%;"
-              :class="['chat-message', message.username === username ? 'self' : '']">
-              <i :style="{ backgroundColor: getAvatarColor(message.username) }">
-                {{ message.username[0] }}
-              </i>
-              <div>
-                <div class="message-header">
-                  <span class="username" style=" font-weight: bold;color: #6787f9;font-size: 1.2rem;">{{
-                    message.username }}</span>
-                  <span class="timestamp" style="font-weight: bold;color: rgb(158, 158, 158);">{{ " " +
-                    formatTimestamp(message.time) }}</span>
-                </div>
-                <div class="message-body">
-                  <template v-if="isImage(message)">
-                    <div class="image-container"></div>
-                  </template>
-                  <template v-else-if="isFile(message.message)">
-                    <div class="file-container" @click="viewFile(message.username, message.message)">
-                      <i class="fa fa-file-pdf-o"></i>
-                      <span>{{ extractFileName(message.message) }}</span>
-                      <button class="download-button" @click="downloadFile(message.username, message.message)">
-                        Download
-                      </button>
-                    </div>
-                  </template>
-                  <template v-else>
-                    <p>{{ message.message }}</p>
-                  </template>
-                </div>
-              </div>
-              <div v-if="canDeleteMessage(message)" class="emoji-container">
-                <span class="emoji-btn" @click="deleteMessage(message.id, $event)" title="Delete Message">
-                  <span class="material-icons" style="color: red">delete</span>
-                </span>
-              </div>
-            </li>
-          </ul>
-      </div>
-      <!-- llll -->
+      <div ref="chatscrollContainer" class="chat-container" >
+    <div ref="connectingElement" style="color: green; text-align: center;">
+      Connecting...
     </div>
+    <ul
+      id="vedichivemessageArea"
+      ref="vedichivemessageArea"
+      style="background: transparent;height: 100%;overflow-y: auto;"
+      class="members2"
+    >
+      <li
+        v-for="(message, index) in messages"
+        :key="index"
+        class="q-mt-md"
+        style="margin-top: 2%;"
+        :class="['chat-message', message.username === username ? 'self' : '']"
+      >
+        <i :style="{ backgroundColor: getAvatarColor(message.username) }">
+          {{ message.username[0] }}
+        </i>
+        <div>
+          <div class="message-header">
+            <span
+              class="username"
+              style="font-weight: bold;color: #6787f9;font-size: 1.2rem;"
+              >{{ message.username }}</span
+            >
+            <span class="timestamp" style="font-weight: bold;color: rgb(158, 158, 158);">
+              {{ " " + formatTimestamp(message.time) }}
+            </span>
+          </div>
+          <div class="message-body">
+            <template v-if="isImage(message)">
+              <div class="image-container"></div>
+            </template>
+            <template v-else-if="isFile(message.message)">
+              <div class="file-container" @click="viewFile(message.username, message.message)">
+                <i class="fa fa-file-pdf-o"></i>
+                <span>{{ extractFileName(message.message) }}</span>
+                <button class="download-button" @click="downloadFile(message.username, message.message)">
+                  Download
+                </button>
+              </div>
+            </template>
+            <template v-else>
+              <p class="message-text">{{ message.message }}</p>
+            </template>
+          </div>
+        </div>
+        <div v-if="canDeleteMessage(message)" class="emoji-container">
+          <span class="emoji-btn" @click="deleteMessage(message.id, $event)" title="Delete Message">
+            <span class="material-icons" style="color: red">delete</span>
+          </span>
+        </div>
+      </li>
+    </ul>
+  </div>
+      <!-- llll -->
 
     <!-- Input Field and Upload Buttons -->
     <div class="input-container">
@@ -152,25 +164,33 @@ export default {
   mounted() {
 
     this.getUserData();
-
+    this.scrollToBottomWhenVisible();
     this.getAllMessages();
-    this.scrollToBottom();
+    // this.scrollToBottom();
   },
   updated() {
     // Also scroll on update (e.g., after messages are loaded or added)
-    this.scrollToBottom();
+    // this.scrollToBottom();
+     this.scrollToBottomWhenVisible();
   },
   methods: {
     triggerFileInput() {
       this.$refs.file.click();
     },
-    scrollToBottom() {
-      this.$nextTick(() => {
-        const container = this.$refs.messageArea;
-        if (container) {
-          container.scrollTop = container.scrollHeight;
-        }
-      });
+    scrollToBottomWhenVisible() {
+      const container = this.$refs.chatscrollContainer;
+      const messageArea = this.$refs.vedichivemessageArea; // New constant for vedichivemessageArea
+
+      if (container && messageArea && this.isElementInView(container)) {
+        container.scrollTop = container.scrollHeight;
+        // Scroll vedichivemessageArea to bottom if needed (if it's scrollable)
+        messageArea.scrollTop = messageArea.scrollHeight;
+      }
+    },
+
+    isElementInView(element) {
+      const rect = element.getBoundingClientRect();
+      return rect.top >= 0 && rect.bottom <= window.innerHeight;
     },
     triggerMediaInput() {
       this.$refs.media.click();
@@ -193,14 +213,7 @@ export default {
         }
       });
     },
-    scrollToBottom() {
-      this.$nextTick(() => {
-        const chatcontainer = this.$refs.chatscrollContainer;
-        chatcontainer.scrollTop = chatcontainer.scrollHeight;
-        const mediacontainer = this.$refs.mediascrollContainer;
-        mediacontainer.scrollTop = mediacontainer.scrollHeight;
-      });
-    },
+
     async getAllMessages() {
       try {
         this.messages = []
@@ -765,13 +778,31 @@ export default {
   flex-direction: column;
   padding: 10px;
   margin: 10px 0;
-  border-radius: 5px;
-  width: 100%;
-  background-color: #fdfcfc;
+  border-radius: 20px;
+  width: 70%;
+  background-color: #F7F7FC;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
+  align-self: flex-start; /* default: others align to left */
 }
 
+/* Align self messages to the right */
+.chat-message.self {
+  align-self: flex-end;
+  background-color: #7289da;
+  color: #ffff !important; /* Optional: different bg for own message */
+}
+.chat-message.self .username,
+.chat-message.self .timestamp {
+  color: white !important;
+}
+.chat-message.self .message-text {
+  color: #F7F7FC !important;
+}
+#vedichivemessageArea {
+  display: flex;
+  flex-direction: column;
+}
 .chat-message i {
   display: inline-block;
   width: 40px;
@@ -958,9 +989,9 @@ img {
 .chat-container {
   background-color: transparent;
   /* border:2px solid black; */
-  border-radius: 20px;
+  /* border-radius: 20px; */
   visibility: visible;
-  height: 100%;
+  height: 90%;
   overflow-y: auto;
   /* Enable vertical scrolling */
   width: 100%;
@@ -1096,17 +1127,7 @@ img {
   align-items: flex-start;
 }
 
-.chat-container-wrapper {
-  /* height:100vh; */
-  /* border:2px solid gray; */
-  /* Space for scrollbar */
-  /* overflow: hidden; */
-  /* height:70vh; */
-  height: 90%;
 
-  /* border: 2px solid blue; */
-  /* Hide overflow */
-}
 
 .chat-container::-webkit-scrollbar {
   width: 8px;

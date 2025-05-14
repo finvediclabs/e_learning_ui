@@ -1,25 +1,7 @@
 
 
-<template>
-  <!-- <fin-portlet v-if="userType === 'Admin'" style="background-color: transparent;">
-    <fin-portlet-header>
-      <fin-portlet-heading>
-        <span class="User_heading">Channels</span>
-      </fin-portlet-heading>
-      <fin-portlet-item>
-        <div class="row q-col-gutter-md">
-
-          <div class="q-gutter-md flex justify-between">
-            <q-btn label="Clear Chat" dense color="negative" class="q-px-md text-subtitle1 text-weight-bolder" no-caps
-              :disabled="!cleargroup" @click="clearbatchchat()" />
-          </div>
-
-          <q-select v-model="selectedGroupChat" label="Select Batch Number" :options="batchOptions" outlined dense
-            clearable map-options option-value="grpid" option-label="label" />
-        </div>
-      </fin-portlet-item>
-    </fin-portlet-header>
-  </fin-portlet> -->
+<template >
+<div >
 
 
   <div id="imageView" class="hidden">
@@ -27,69 +9,100 @@
     <div id="closeButton" class="close-btn" @click="hideImageView">&times;</div>
   </div>
 
-  <div class="row col-12">
-    <div class="col-4 row left_group">
-<div class="new_grp_container q-pl-xl q-pr-md">
-  <div class="background_container q-mt-xl q-px-sm q-pt-lg">
-      <span class="grpheader text-h5 ">{{ header }}</span>
-      <div class="members members2 q-pt-lg" style="overflow-y: auto;  flex-grow: 1;">
+<div class="row col-12" style="background-color:#F7F7FC !important;">
+  <!-- Left Panel: Channels -->
+  <div class="col-4 left_group">
+    <div class="new_grp_container q-pl-xl q-pr-md">
+      <div class="background_container q-mt-xl q-px-sm q-pt-lg members2" style="overflow-y: auto; flex-grow: 1;">
+        <span class="grpheader text-h5">Channels</span>
+        <div
+          v-for="(group, index) in displayedGroups"
+          :key="index"
+          @click="selectGroup(group)"
+        >
+          <div class="group-item">
+            <p style="font-weight: bold;">{{ group.groupName }}</p>
+            <div class="recentmesssage">
+              <span class="messagesender">
+                {{ group.recentMessage[0]?.username ? group.recentMessage[0].username + ' : ' : '' }}
+              </span>
+              <span class="message">
+                {{
+                  group.recentMessage[0]?.message?.includes("fs/download") ||
+                  group.recentMessage[0]?.message?.includes("ms/download")
+                    ? "Media"
+                    : group.recentMessage[0]?.message || "No Messages"
+                }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Panel: Chatbox -->
+  <div class="col-8 right_group">
+    <div class="new_chatcontainer q-pr-xl q-pl-md">
+      <div class="background_container q-mt-xl q-px-sm q-pt-lg " >
+        <div v-if="groupId" style="overflow-y: auto; flex-grow: 1;" class="members2">
+          <div class="row items-center justify-between" style="width: 100%;">
+  <div class="col-2">
+    <q-icon name="arrow_back" @click="goBackToGroupList()" class="back-icon" />
+  </div>
+
+  <div class="col-8 text-center">
+    <span class="grpname">{{ selectedGroup }}</span>
+  </div>
+
+ <div class="col-2 text-right">
+  <span style="cursor: pointer;" @click="showGroupInfo = true">Group Info</span>
+</div>
+
+<q-dialog v-model="showGroupInfo" persistent>
+  <q-card style="min-width: 400px; max-height: 80vh; overflow-y: auto;">
+    <q-card-section class="row items-center justify-between">
+      <div class="text-h6">Group Members</div>
+      <q-btn flat icon="close" round dense @click="showGroupInfo = false" />
+    </q-card-section>
+
+    <q-separator />
+
+    <q-card-section>
+      <div class="members members2 q-pt-lg" style="overflow-y: auto; flex-grow: 1;">
         <ul class="member-list">
-          <li v-for="member in grpmembers" :key="member.id" class="member-item">
+          <li v-for="member in grpmembers" :key="member.id" class="member-item q-py-sm">
             <i class="avatar"
               :style="{ backgroundColor: getAvatarColor(member.username[0]) }">{{ member.username[0] }}</i>
-            <div class="member-info">
+            <div class="member-info q-ml-sm">
               <div class="member-name">{{ member.username }}</div>
               <span class="status" :style="{ backgroundColor: member.status ? 'green' : 'red' }"></span>
             </div>
           </li>
         </ul>
       </div>
-      </div>
-    </div>
-    </div>
-    <div class="col-8 row right_group">
-      <div class="new_chatcontainer q-pr-xl q-pl-md">
-        <div class="background_container q-mt-xl q-px-sm q-pt-lg">
-        <div v-if="!selectedGroup"  style="overflow-y: auto;  flex-grow: 1;" class="members2">
-           <span class="grpheader text-h5 ">Channels</span>
-           <div v-for="(group, index) in displayedGroups" :key="index" @click="selectGroup(group)" >
-          <div class="group-item">
-            <p style="font-weight: bold;">{{ group.groupName }}</p>
-            <div class="recentmesssage">
-              <span class="messagesender">
-
-                {{ group.recentMessage[0]?.username ? group.recentMessage[0].username + " : " : '' }}
-              </span>
-
-              <span class="message">
-
-                {{ group.recentMessage[0]?.message?.includes("fs/download") ||
-                  group.recentMessage[0]?.message?.includes("ms/download") ? "Media" : group.recentMessage[0]?.message ||
-                "No Messages" }}
-              </span>
-            </div>
-          </div>
-        </div>
-        </div>
-         <div v-else style="overflow-y: auto;  flex-grow: 1;" class="members2">
-        <div>
-          <q-icon name="arrow_back" @click="goBackToGroupList()" class="back-icon" />
-          <span class="grpname">{{ selectedGroup }}</span>
-        </div>
-        <hr>
-
-       <div class="vedichivebox active" ref="chatboxContainer">
-  <Chatbox :groupId="groupId" @chatboxReady="scrollToChatbox" />
+    </q-card-section>
+  </q-card>
+</q-dialog>
 </div>
 
+          <hr />
+          <div class="vedichivebox active" ref="chatboxContainer">
+            <Chatbox :groupId="groupId" @chatboxReady="scrollToChatbox" />
+          </div>
+        </div>
+        <div v-else class="q-pa-md text-grey text-center">
+          <q-icon name="chat_bubble_outline" size="48px" />
+          <div class="text-subtitle1 q-mt-md">Select a group to start chatting</div>
+        </div>
       </div>
     </div>
-    </div>
-      <!--  -->
-    </div>
-
   </div>
+</div>
 
+
+
+</div>
 
 </template>
 
@@ -131,6 +144,7 @@ export default {
   data() {
     return {
       header: null,
+       showGroupInfo: false,
       selectedGroup: null,
       showFolderContents: false,
       folderFiles: [],
@@ -143,7 +157,8 @@ export default {
       grpmembers: null,
       allmembers: [],
       isDragging: false,
-      xOffset: 0,
+      mobileView: 'groupList',
+            xOffset: 0,
       yOffset: 0,
       originalWelcomeMessage: "FinChat",
       name: "",
@@ -171,6 +186,7 @@ export default {
       );
       return this.groups.filter(group => userGroupsSet.has(group.groupId));
     },
+
     displayedGroups() {
       return this.userType === 'Admin' ? this.groups : this.filteredGroups;
     },
@@ -199,11 +215,16 @@ mounted() {
     this.getUserData();
     this.getallmembers();
     this.getbatchmembers();
+this.updateViewForMobile();
 
+  window.addEventListener('resize', this.updateViewForMobile);
     this.batchMembersInterval = setInterval(() => {
       this.getbatchmembers();
     }, 60000);
   }
+},
+beforeUnmount() {
+  window.removeEventListener('resize', this.updateViewForMobile);
 },
   methods: {
     async getallmembers() {
@@ -211,6 +232,13 @@ mounted() {
         this.allmembers = response.data.data;
       })
     },
+     updateViewForMobile() {
+    if (this.$q.screen.lt.md && this.groupId) {
+      this.mobileView = 'chat';
+    } else {
+      this.mobileView = 'groupList';
+    }
+  },
      scrollToChatbox() {
     this.$refs.chatboxContainer?.scrollIntoView({ behavior: 'smooth' });
   },
@@ -243,11 +271,22 @@ mounted() {
       }
     },
     selectGroup(group) {
-      this.selectedGroup = group.groupName;
-      this.groupId = group.groupId;
-      this.getbatchmembers();
-      this.header = "Group Members"
-    },
+  // First, reset everything
+  this.selectedGroup = null;
+  this.grpmembers = null;
+  this.groupId = null;
+
+  // Wait until DOM/state is fully updated
+  this.$nextTick(() => {
+    // Now assign the new group
+    this.selectedGroup = group.groupName;
+    this.groupId = group.groupId;
+    this.header = "Group Members";
+
+    // Load the new group's members
+    this.getbatchmembers();
+  });
+},
     async getgroupdata() {
       await this.$api.get(`api/channel-batches/groups`).then(async (response) => {
 
@@ -398,6 +437,7 @@ mounted() {
 .new_chatcontainer{
   width: 100%;
   height: 100%;
+  /* border: 2px solid red; */
   display: flex;
   flex-direction: column;
 }
@@ -410,7 +450,9 @@ mounted() {
   flex-direction: column;
 }
 .background_container {
-  background-color: #F7F7FC;
+  background-color: #FFFF;
+   border: 1px solid #C9D4FC;
+ box-shadow: 0 5px 14px 2px rgba(201, 212, 252, 0.8);
   display: flex;
   flex-direction: column;
   border-radius: 20px;
@@ -470,7 +512,8 @@ mounted() {
   padding: 20px;
   cursor: pointer;
   /* background: #f0f0f0; */
-  border-radius: 5px;
+
+  border-bottom: 2px solid #C9D4FC;
   font-size: 1.2rem;
   position: relative;
   overflow: hidden;
@@ -479,6 +522,7 @@ mounted() {
 
 .group-item:hover {
   background: #F7F7FC;
+  border-radius: 5px;
   color: #333;
 
 }
