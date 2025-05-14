@@ -31,10 +31,10 @@
   v-for="(category, index) in filteredCategories"
   :key="category.id"
   class="col-lg-3 col-md-3 col-sm-6 col-12 mb-4 d-flex justify-content-center q-pt-sm d-none d-sm-flex web_view"
-  style="margin-left: auto; margin-right: auto;"
+  style="margin-left: auto; margin-right: auto;gap: 16px;"
 >
   <q-card class="course-card1 cursor-pointer" @click="handleCategoryClick(category, index)">
-    <div style="height: 240px;">
+    <div style="height: 280px;">
       <img
         v-if="category.imagePath"
         :src="category.imagePath"

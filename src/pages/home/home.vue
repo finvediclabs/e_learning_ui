@@ -132,7 +132,7 @@ export default {
   width: 94%;
   margin-left: 3%;
   margin-right: 3%;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
 }
 
 .home {

@@ -4,19 +4,19 @@
       <div class="col-4">
         <q-img :src="attendance_vector" class="attendance-vector" />
       </div>
-      <div class="col-8">
-        <h3 class="attendance-title text-left">Attendance</h3>
+      <div class="col-8 text-left">
+        <span class="attendance-title text-h3">Attendance</span>
       </div>
     </div>
     <div class="row attendance-content">
-      <div class="col-9 attendance-bar">
+      <div class="col-10 attendance-bar">
         <div
           class="attendance-fill"
           :class="attendanceColor"
           :style="{ width: attendancePercentage + '%' }"
         ></div>
       </div>
-      <div class="col-3">
+      <div class="col-2">
         <span>{{ attendancePercentage }}%</span>
       </div>
     </div>
@@ -49,13 +49,14 @@ export default {
 
 <style scoped>
 .attendance-box {
-  width: 95%;
+  width: 100%;
   margin: auto;
-  padding: 10px;
+  /* padding: 10px; */
   border-radius: 20px;
   background-color: #fff;
   text-align: center;
   cursor: pointer;
+
 }
 
 .attendance-header {
@@ -63,6 +64,7 @@ export default {
   align-items: center;
   justify-content: center;
   margin-bottom: 10px;
+  /* border: 2px solid red; */
 }
 
 .attendance-vector {
@@ -84,7 +86,7 @@ export default {
 }
 
 .attendance-bar {
-  width: 60%;
+  width: 70%;
   height: 16px;
   background-color: #D9D9D9;
   border-radius: 10px;

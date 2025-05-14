@@ -8,7 +8,7 @@
     <q-img :src="Hero_Girl" style="width: 60%;"></q-img>
   </div>
     <div class="row q-col-gutter-md col-6 mob_column" >
-      <div class="col-6" v-for="program in programs" :key="program.programId">
+      <div class="col-6" v-for="program in programs" :key="program.programId" @click="goToProgram(program.programId)">
         <q-card class="course-card">
           <q-img
             v-if="program.localImageUrl"
@@ -87,7 +87,16 @@ export default {
       } catch (error) {
         console.error('Error fetching programs:', error);
       }
+    },
+    goToProgram(programId) {
+    if (programId) {
+      this.$router.push(`/finassociate/?programId=${programId}`);
+    } else if (this.programs.length > 0) {
+      this.$router.push(`/finassociate/?programId=${this.programs[0].programId}`);
+    } else {
+      this.$router.push('/finassociate/');
     }
+  }
   }
 };
 </script>

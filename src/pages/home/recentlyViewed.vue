@@ -37,7 +37,7 @@
                    style="display: flex;  height: 100%; ">
                 <q-card-section style="width: 100%; text-align: center;">
                   <q-item-label style="font-size: 1.2em; font-weight: bold; text-align: left;" @click="navigateToCourse(item.programId)">{{ item.name }}</q-item-label>
-               <div class="row" style="overflow-y: auto; height: 120px;"> <!-- Set a height to enable scrolling -->
+               <div class="row" style="overflow-y: auto; height: 114px;"> <!-- Set a height to enable scrolling -->
   <q-item-label caption class="description-text" :class="{ expanded: item.expanded }" @click="navigateToCourse(item.programId)">
     {{ item.description }}
   </q-item-label>

@@ -4,19 +4,19 @@
       <div class="col-4">
         <q-img :src="hackathon_vector" class="attendance-vector" alt="Hackathon Icon" />
       </div>
-      <div class="col-8">
-        <h3 class="attendance-title text-left">Hackathon</h3>
+      <div class="col-8 text-left">
+        <span class="attendance-title text-left text-h3">Hackathon</span>
       </div>
     </div>
     <div class="row attendance-content">
-      <div class="col-9 attendance-bar">
+      <div class="col-10 attendance-bar">
         <div
           class="attendance-fill"
           :class="attendanceColor"
           :style="{ width: attendancePercentage + '%' }"
         ></div>
       </div>
-      <div class="col-3">
+      <div class="col-2 text-center">
         <span>{{ attendancePercentage }}%</span>
       </div>
     </div>
@@ -56,7 +56,7 @@ export default {
 .attendance-box {
   width: 95%;
   margin: auto;
-  padding: 10px;
+  /* padding: 10px; */
   border-radius: 20px;
   background-color: #fff;
   text-align: center;
@@ -67,6 +67,8 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
+  /* border: 2px solid red; */
   margin-bottom: 10px;
 }
 
@@ -74,6 +76,8 @@ export default {
   width: 60%;
   height: auto;
   margin-right: 8px;
+  margin-left: 0% !important;
+  padding-left: 0% !important;
 }
 
 .attendance-title {
@@ -85,11 +89,12 @@ export default {
 .attendance-content {
   display: flex;
   align-items: center;
+  /* border: 2px solid red; */
   justify-content: center;
 }
 
 .attendance-bar {
-  width: 60%;
+  width: 70%;
   height: 16px;
   background-color: #D9D9D9;
   border-radius: 10px;

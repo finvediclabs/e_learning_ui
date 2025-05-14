@@ -18,7 +18,7 @@
         <!-- Placeholder for logo -->
         <div class="q-ml-md logo">
           <!-- Logo will be added here later -->
-          <q-item class="logo_in">
+          <q-item class="logo_in" :to="'/home'">
             <q-img :src="new_logo" style="width: 220px;" ></q-img>
           </q-item>
         </div>
@@ -121,13 +121,13 @@
       </div>
       <!-- Fintech Associate -->
 
-      <div class="container">
-  <div class="row q-py-xl justify-around items-center" style="background-color: #f1f4ff">
+      <div class="container row q-mx-xl" >
+  <div class="row q-py-xl justify-around items-center" style="background-color: #f1f4ff;border-radius: 20px;">
 
     <!-- Image Column -->
     <div
       class="col-12 col-md-5"
-      :class="$q.screen.lt.md ? 'q-px-sm' : 'q-pl-xl q-px-sm'"
+      :class="$q.screen.lt.md ? 'q-px-sm' : 'q-pl-sm q-px-sm'"
     >
       <q-img
         :src="course_img"
@@ -162,8 +162,28 @@
 
       <!-- What lear -->
 <div class="container row col-12 q-my-xl q-mx-xl mobile-mar">
+
   <div class="col-12 col-md-8 row">
-  <div class="col-12 col-md-6 q-mb-md curr-mar">
+     <div class="col-12">
+        <div class="text-h4 text-weight-bold  q-mt-sm">
+          Course Journey
+        </div>
+      </div>
+    <div class="row q-mt-sm q-pr-md no-padding-mobile" style="width: 100%;">
+  <div class="col-12">
+    <q-img
+      :src="image_curriculum"
+      class="q-mb-sm dot-img"
+      style="width: 100%; max-width: 100%;"
+    />
+  </div>
+</div>
+<div class="col-12">
+        <div class="text-h4 text-weight-bold q-mb-sm q-mt-xl">
+          Our Program Highlights
+        </div>
+      </div>
+  <div class="col-12 col-md-6 q-mb-xl curr-mar">
 <div class="q-mr-md learning_journey">
     <!-- Image and heading row -->
     <div class="row items-center q-mt-md q-pl-lg q-py-md">
@@ -205,7 +225,7 @@
   <li class="text-body1">M5. Blockchain and the Revolution of Smart Contracts in FinTech.</li>
 </ul>
 </li>
-<li class="text-bold text-h6 vol-cur" @click="toggleCurriculum(3)">V3. Equity Electronic Trading 
+<li class="text-bold text-h6 vol-cur" @click="toggleCurriculum(3)">V3. Equity Electronic Trading
   <q-img
           :src="activeCurriculum === 3 ? neg_sign : plus_sign"
           width="16px"
@@ -228,7 +248,7 @@
   </div>
   <!-- ================== -->
 
- <div class="col-12 col-md-6 q-mb-md">
+ <div class="col-12 col-md-6 q-mb-xl">
 <div class="q-mx-md learning_journey">
     <!-- Image and heading row -->
     <div class="row items-center q-mt-md q-pl-lg q-py-md">
@@ -268,51 +288,10 @@
   </div>
 </div>
   </div>
-
-  <!-- Your Learning Journey -->
-  <div class="row q-mt-xl q-pr-md q-px-sm no-padding-mobile" style="width: 100%;">
-  <div class="col-12">
-    <q-img
-      :src="image_curriculum"
-      class="q-mb-sm dot-img"
-      style="width: 100%; max-width: 100%;"
-    />
-  </div>
-</div>
-</div>
-<div class="col-12 col-md-4">
-  <div class="col-12 blue_bckg q-mt-md q-ml-md">
-<div class="col-12 q-mr-md q-pl-lg q-py-md q-pt-lg">
-  <span class="text-bold text-h5 ">Course Features</span>
-</div>
-
-<div class="col-12 q-mt-md">
- <ul class="custom-list2">
-  <li v-for="(item, index) in courseFeatures" :key="index" class="row items-start q-mb-sm">
-    <q-img
-      :src="pin"
-      width="24px"
-      height="24px"
-      class="q-mr-sm"
-      style="margin-top: 4px"
-    />
-    <div class="text-body1">{{ item }}</div>
-  </li>
-</ul>
-</div>
-<div class="col-12 q-pt-xl q-mx-lg q-mt-xl text-center">
-  <q-btn class="text-bold text-body1 q-py-md" rounded  :to="'/register'" style="background-color: #41C0FD;width: 100%;">Enroll Now</q-btn>
-</div>
-</div>
-</div>
-
-</div>
-
-
-<div class="container row col-12 q-my-xl q-mx-xl">
-<div class="col-12 col-md-8 row">
-  <div class="col-6">
-<div class="q-mr-md learning_journey1">
+  <!-- ================== =============================================-->
+  <div class="col-12 row">
+<div class="col-12 col-md-6 q-mb-xl curr-mar">
+<div class="q-mr-md learning_journey1 ">
     <!-- Image and heading row -->
     <div class="row items-center q-mt-md q-pl-lg q-py-md">
       <q-img :src="Prerequisotes" class="Vector_class q-mr-sm"></q-img>
@@ -352,7 +331,7 @@
   </div>
   <!-- ================== -->
 
-  <div class="col-6">
+  <div class="col-12 col-md-6 q-mb-xl curr-mar">
 <div class="q-mx-md learning_journey1">
     <!-- Image and heading row -->
     <div class="row items-center q-mt-md q-pl-lg q-py-md">
@@ -392,11 +371,11 @@
 </div>
   </div>
 
-  <!--  -->
-</div>
-<div class="col-12 col-md-4">
-  <div class="col-12 row">
-<div class="q-ml-md q-mt-md learning_journey" style="width: 100%;">
+  </div>
+<!--MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM  -->
+  <div class="col-12 row q-mt-md">
+<div class="col-12 col-md-6 q-mb-xl curr-mar">
+<div class="q-mr-md learning_journey1">
     <!-- Image and heading row -->
     <div class="row items-center q-mt-md q-pl-lg q-py-md">
       <q-img :src="Certification" class="Vector_class q-mr-sm"></q-img>
@@ -412,16 +391,18 @@
       </ul>
     </div>
   </div>
-</div>
   </div>
+  </div>
+  <!-- ================== -->
 
-  <div class="col-12 row">
-<div class="q-ml-md q-mt-md learning_journey" style="width: 100%;">
+  <div class="col-12 col-md-6 q-mb-xl curr-mar">
+<div class="q-mx-md learning_journey1">
     <!-- Image and heading row -->
-    <div class="row items-center q-mt-md q-pl-lg q-py-md">
+     <div class="row items-center q-mt-md q-pl-lg q-py-md">
       <q-img :src="Oppertunities" class="Vector_class q-mr-sm"></q-img>
       <span class="text-bold text-h5 q-pl-md">Career Opportunities</span>
     </div>
+
 
     <!-- List in a new row -->
     <div class="row">
@@ -455,28 +436,27 @@
 </div>
   </div>
 
-</div>
-</div>
-
+  </div>
+  <!-- jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj -->
 <div class="row">
   <div class="col-12">
-    <div class="row q-px-xl q-py-sm">
+    <div class="row q-py-sm">
       <div class="col-12">
-        <div class="text-h4 text-weight-bold q-mb-md">
+        <div class="text-h4 text-weight-bold q-mb-sm q-mt-xl">
           Course Curriculum Breakdown
         </div>
       </div>
 
       <!-- Single row with 3 columns -->
-      <div class="row col-12">
+      <div class="row col-12 ">
         <div
           v-for="(category, index) in chapterCategoryNames"
           :key="index"
-          class="col-12 col-md-4 q-mb-md q-px-sm"
+          class="col-12 col-md-12 q-mb-lg"
         >
-          <div class="content grey-bg q-pa-sm">
-            <div class="text-h6 text-weight-bold q-mb-xs">{{ category }}</div>
-            <div class="text-body1" style="color: #6d6d6d">
+          <div class="content learning_journey " style="padding-top: 2%;padding-bottom: 2%;">
+            <div class="text-h6 text-weight-bold q-mb-xs" style="padding-left: 1%;">{{ category }}</div>
+            <div class="text-body1" style="color: #6d6d6d;padding-left: 1%;">
               {{ chapterCategoryDescriptions[index] }}
             </div>
           </div>
@@ -486,6 +466,44 @@
     </div>
   </div>
 </div>
+  <!-- Your Learning Journey -->
+<!-- llllllllllllllllllllllllllllllllll -->
+
+</div>
+<div class="col-12 col-md-4">
+  <div class="sticky-section">
+    <div class="col-12 blue_bckg q-mt-md q-ml-md">
+      <div class="col-12 q-mr-md q-pl-lg q-py-md q-pt-lg">
+        <span class="text-bold text-h5">Course Features</span>
+      </div>
+
+      <div class="col-12 q-mt-md">
+        <ul class="custom-list2">
+          <li v-for="(item, index) in courseFeatures" :key="index" class="row items-start q-mb-sm">
+            <q-img
+              :src="pin"
+              width="24px"
+              height="24px"
+              class="q-mr-sm q-mb-sm"
+              style="margin-top: 4px"
+            />
+            <div class="text-body1">{{ item }}</div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="col-12 q-pb-md q-mx-lg  text-center">
+        <q-btn class="text-bold text-body1 q-py-md" :to="'/register'" style="background-color: #41C0FD; width:90%;border-radius: 20px;">Enroll Now</q-btn>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+
+
+
 
     </q-page-container>
   </q-layout>
@@ -715,15 +733,21 @@ plus_sign: plus_sign,
   color: #6D6D6D !important
 }
 .learning_journey{
-  background-color: #F4F4F4;
+  background-color: #ffff;
   border-radius: 20px;
   height: 100%;
+  border: 1px solid #C9D4FC;
+ box-shadow: 0 5px 14px 2px rgba(201, 212, 252, 0.8);
+
 
 }
 .learning_journey1{
-  background-color: #F4F4F4;
+  background-color: #ffff;
   border-radius: 20px;
     height: 100%;
+  border: 1px solid #C9D4FC;
+  box-shadow: 0 5px 14px 2px rgba(201, 212, 252, 0.8);
+
 
 }
 .q-avatar.overlap:first-child {
@@ -801,7 +825,11 @@ plus_sign: plus_sign,
   cursor: pointer
   ;
 }
-
+.sticky-section {
+  position: sticky;
+  top: 100px; /* Adjust based on your header height or desired offset */
+  z-index: 10;
+}
 
 @media (max-width: 600px) {
 .right-program{
