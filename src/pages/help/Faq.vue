@@ -24,13 +24,13 @@
           <div v-if="faq.id === 1">
             <q-card>
               <q-card-section>
-                <span class="bold">✅</span> Digital books can be accessed through the "Library" section of the Gurukul portal. Once there, you can browse and read the available digital books directly within the platform.
+                <span class="bold">✅</span> Digital books can be accessed through the "Courses Offered" section of the ScaleGrad portal. Once there, you can browse and read the available digital books directly within the platform.
                   <br />
                    <div class="images">
                      <q-img :src="FAQ101" alt="Image 1" width="500px" style="margin-bottom: 15px"></q-img>
                      <q-img :src="FAQ102" alt="Image 2" width="500px" style="margin-bottom: 15px"></q-img>
                      <q-img :src="FAQ103" alt="Image 3" width="500px" style="margin-bottom: 15px"></q-img>
-                     <q-img :src="FAQ104" alt="Image 4" width="500px" style="margin-bottom: 15px"></q-img>
+                     <!-- <q-img :src="FAQ104" alt="Image 4" width="500px" style="margin-bottom: 15px"></q-img> -->
                    </div>
               </q-card-section>
            </q-card>
@@ -65,7 +65,7 @@
           <div v-if="faq.id === 4">
             <q-card>
               <q-card-section>
-                <span class="bold">✅</span> Classroom presentations are available in the "Library" section. Navigate to the appropriate module and click on the presentation files to view them.
+                <span class="bold">✅</span> Classroom presentations are available in the "Courses Offered" section. Navigate to the appropriate module and click on the presentation files to view them.
                 <br />
                <div class="images">
                 <q-img :src="FAQ401" alt="image 2" width="500px" style="margin-bottom: 15px"></q-img>
@@ -200,19 +200,19 @@
 
 
 <script>
-import FAQ101 from "../../assets/FAQ1.01.png";
-import FAQ102 from "../../assets/FAQ1.02.png";
-import FAQ103 from "../../assets/FAQ1.03.png";
+import FAQ101 from "../../assets/Help_Books1.1.png";
+import FAQ102 from "../../assets/Help_Books1.2.png";
+import FAQ103 from "../../assets/Help_Books1.3.png";
 import FAQ104 from "../../assets/FAQ1.04.png";
-import FAQ201 from "../../assets/FAQ2.01.png";
-import FAQ202 from "../../assets/FAQ2.02.png";
-import FAQ23 from "../../assets/FAQ2.3.png";
-import FAQ401 from "../../assets/FAQ4.01.png";
-import FAQ402 from "../../assets/FAQ4.02.png";
-import FAQ403 from "../../assets/FAQ4.03.png";
-import FAQ503 from "../../assets/FAQ5.03.png";
-import FAQ502 from "../../assets/FAQ5.02.png";
-import FAQ501 from "../../assets/FAQ5.01.png";
+import FAQ201 from "../../assets/Help_Books1.1.png";
+import FAQ202 from "../../assets/Help_Vid2.2.png";
+import FAQ23 from "../../assets/Help_Vid2.3.png";
+import FAQ401 from "../../assets/Help_Books1.1.png";
+import FAQ402 from "../../assets/Help_Pres3.2.png";
+import FAQ403 from "../../assets/Help_Pres3.3.png";
+import FAQ503 from "../../assets/Help_Drona5.3.png";
+import FAQ502 from "../../assets/Help_Drona5.2.png";
+import FAQ501 from "../../assets/Help_Drona5.1.png";
 import FAQ1101 from "../../assets/FAQ11.01.png";
 import FAQ1102 from "../../assets/FAQ11.02.png";
 import FAQ1103 from "../../assets/FAQ11.03.png";
@@ -244,7 +244,7 @@ export default {
           id: 1,
           title: "1. How can I access the digital Books?",
           category: "Books",
-          content: `Digital books can be accessed through the "Library" section of the Gurukul portal. Once there, you can browse and read the available digital books directly within the platform.` ,
+          content: `Digital books can be accessed through the "Courses Offered" section of the ScaleGrad portal. Once there, you can browse and read the available digital books directly within the platform.` ,
           images: [
             "src/assets/FAQ1.01.png",
             "src/assets/FAQ1.02.png",
@@ -273,7 +273,7 @@ export default {
           id: 4,
           title: "4. How can I access classroom presentations?",
           category: "Classroom",
-          content: `Classroom presentations are available in the "Library" section. Navigate to the appropriate module and click on the presentation files to view them.` ,
+          content: `Classroom presentations are available in the "Courses Offered" section. Navigate to the appropriate module and click on the presentation files to view them.` ,
           images: [
             "src/assets/FAQ4.01.png",
             "src/assets/FAQ4.02.png",
@@ -296,7 +296,7 @@ export default {
           title: "6. Starting with Virtual Labs, a guide",
           category: "Labs",
           subFAQs: [
-            { id: 6.1, title: "a. What are Finvedic Labs?", content: `✅ Finvedic Labs are virtual lab environments that allow you to perform practical exercises and experiments related to your course.` },
+            { id: 6.1, title: "a. What are ScaleGrad Labs?", content: `✅ ScaleGrad Labs are virtual lab environments that allow you to perform practical exercises and experiments related to your course.` },
             { id: 6.2, title: "b. How to access a Virtual Machine (VM)?", content: `✅ To access a VM, go to the "Labs" section of your course. If a lab download is not available, request the VM option. Select the required lab activity, and a VM will be allocated to you. Follow the on-screen instructions to start the VM.` },
             { id: 6.3, title: "c. How many lab hours are provided in this course?", content: `✅ The number of lab hours provided is 200 hours in total.` },
             { id: 6.4, title: "d. After exhausting the lab hours, can I get additional hours for practice?", content: `✅ No, additional hours for practice are not available after the initial 200 hours are exhausted.` },
