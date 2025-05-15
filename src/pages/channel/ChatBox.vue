@@ -15,8 +15,8 @@
     <ul
       id="vedichivemessageArea"
       ref="vedichivemessageArea"
-      style="background: transparent;height: 100%;overflow-y: auto;"
-      class="members2"
+      style="background: transparent;height: 100%;overflow-y: hidden;"
+
     >
       <li
         v-for="(message, index) in messages"
@@ -64,10 +64,6 @@
         </div>
       </li>
     </ul>
-  </div>
-      <!-- llll -->
-
-    <!-- Input Field and Upload Buttons -->
     <div class="input-container">
       <input type="text" v-model="newMessage" @keyup.enter="sendMessage" placeholder="Message" class="input-field"
         id="message" required />
@@ -93,6 +89,11 @@
         <q-icon name="upload_file" />
       </button>
     </div>
+  </div>
+      <!-- llll -->
+
+    <!-- Input Field and Upload Buttons -->
+
   </div>
 </template>
 
@@ -991,7 +992,7 @@ img {
   /* border:2px solid black; */
   /* border-radius: 20px; */
   visibility: visible;
-  height: 90%;
+  height: 100%;
   overflow-y: auto;
   /* Enable vertical scrolling */
   width: 100%;

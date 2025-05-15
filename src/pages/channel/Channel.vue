@@ -1,7 +1,7 @@
 
 
 <template >
-<div >
+<div  >
 
 
   <div id="imageView" class="hidden">
@@ -45,7 +45,7 @@
   <div class="col-8 right_group">
     <div class="new_chatcontainer q-pr-xl q-pl-md">
       <div class="background_container q-mt-xl q-px-sm q-pt-lg " >
-        <div v-if="groupId" style="overflow-y: auto; flex-grow: 1;" class="members2">
+        <div v-if="groupId" style="overflow-y: hidden; flex-grow: 1;" class="members2">
           <div class="row items-center justify-between" style="width: 100%;">
   <div class="col-2">
     <q-icon name="arrow_back" @click="goBackToGroupList()" class="back-icon" />
@@ -815,7 +815,7 @@ beforeUnmount() {
 .vedichivebox{
   height: 92% !important;
   flex-grow: 1;
-  overflow-y: auto;
+  overflow-y: hidden;
   /* border: 2px solid black; */
 }
 .mybatchbox.active,
@@ -901,7 +901,7 @@ beforeUnmount() {
   visibility: visible;
   height: 1000px;
   /* Limit height to enable scrolling */
-  overflow-y: auto;
+  overflow-y: hidden;
   /* Enable vertical scrolling */
   width: 100%;
   /* Fixed width */
