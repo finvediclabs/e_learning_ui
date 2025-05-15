@@ -1,5 +1,5 @@
 <template>
-  <div id="chat-page" style="height: 87%;">
+  <div id="chat-page" style="height: 96%;">
     <!-- Image Viewer Modal -->
     <div id="imageView" class="hidden">
       <img id="viewImage" src="" alt="Full Size Image">
@@ -8,8 +8,8 @@
 
     <!-- Chat Container -->
 
-      <div ref="chatscrollContainer" class="chat-container">
-    <div ref="connectingElement" style="color: green; text-align: center; ">
+      <div ref="chatscrollContainer" class="chat-container" >
+    <div ref="connectingElement" style="color: green; text-align: center;">
       Connecting...
     </div>
     <ul
@@ -992,7 +992,7 @@ img {
   /* border-radius: 20px; */
   visibility: visible;
   height: 90%;
-  overflow-y: hidden;
+  overflow-y: auto;
   /* Enable vertical scrolling */
   width: 100%;
   /* Fixed width */

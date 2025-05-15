@@ -1,5 +1,6 @@
 
-<template>
+
+<template >
 <div >
 
 
@@ -9,48 +10,42 @@
   </div>
 
 <div class="row col-12" style="background-color:#F7F7FC !important;">
-<!-- Left Panel: Channels -->
-<div class="col-4 left_group" style="height: 100vh; display: flex; flex-direction: column; ">
-  <div class="new_grp_container q-pl-lg q-pr-md" style="flex: 1; display: flex; flex-direction: column; overflow: hidden;">
-    <div
-      class="background_container left-bg q-mt-lg q-px-sm q-pt-lg members2"
-      style="flex: 1; overflow-y: auto;"
-    >
-      <span class="grpheader text-h5" >Channels</span>
-      <div
-        v-for="(group, index) in displayedGroups"
-        :key="index"
-        @click="selectGroup(group)"
-        style="padding: 5px;"
-      >
-        <div class="group-item" >
-          <p style="font-weight: bold;">{{ group.groupName }}</p>
-          <div class="recentmesssage">
-            <span class="messagesender">
-              {{ group.recentMessage[0]?.username ? group.recentMessage[0].username + ' : ' : '' }}
-            </span>
-            <span class="message">
-              {{
-                group.recentMessage[0]?.message?.includes("fs/download") ||
-                group.recentMessage[0]?.message?.includes("ms/download")
-                  ? "Media"
-                  : group.recentMessage[0]?.message || "No Messages"
-              }}
-            </span>
+  <!-- Left Panel: Channels -->
+  <div class="col-4 left_group">
+    <div class="new_grp_container q-pl-xl q-pr-md">
+      <div class="background_container q-mt-xl q-px-sm q-pt-lg members2" style="overflow-y: auto; flex-grow: 1;">
+        <span class="grpheader text-h5">Channels</span>
+        <div
+          v-for="(group, index) in displayedGroups"
+          :key="index"
+          @click="selectGroup(group)"
+        >
+          <div class="group-item">
+            <p style="font-weight: bold;">{{ group.groupName }}</p>
+            <div class="recentmesssage">
+              <span class="messagesender">
+                {{ group.recentMessage[0]?.username ? group.recentMessage[0].username + ' : ' : '' }}
+              </span>
+              <span class="message">
+                {{
+                  group.recentMessage[0]?.message?.includes("fs/download") ||
+                  group.recentMessage[0]?.message?.includes("ms/download")
+                    ? "Media"
+                    : group.recentMessage[0]?.message || "No Messages"
+                }}
+              </span>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
-
-
 
   <!-- Right Panel: Chatbox -->
   <div class="col-8 right_group">
-    <div class="new_chatcontainer q-pr-lg q-pl-md">
-      <div class="background_container q-mt-lg q-px-sm q-pt-lg " >
-        <div v-if="groupId" style="overflow-y: hidden; flex-grow: 1;" class="members2">
+    <div class="new_chatcontainer q-pr-xl q-pl-md">
+      <div class="background_container q-mt-xl q-px-sm q-pt-lg " >
+        <div v-if="groupId" style="overflow-y: auto; flex-grow: 1;" class="members2">
           <div class="row items-center justify-between" style="width: 100%;">
   <div class="col-2">
     <q-icon name="arrow_back" @click="goBackToGroupList()" class="back-icon" />
@@ -453,7 +448,6 @@ beforeUnmount() {
   /* border: 2px solid black; */
   display: flex;
   flex-direction: column;
-  
 }
 .background_container {
   background-color: #FFFF;
@@ -472,15 +466,14 @@ beforeUnmount() {
 }
 
 .members2::-webkit-scrollbar-track {
-  background: #F7F7FC; 
+  background: #F7F7FC; /* Track color */
   border-radius: 20px;
-  
 }
 
 .members2::-webkit-scrollbar-thumb {
   background-color: #4E5BF8; /* Scrollbar color */
   border-radius: 20px;
-  border: 1px solid transparent; 
+  border: 2px solid transparent; /* Optional for padding effect */
   background-clip: content-box;
 }
 
@@ -822,7 +815,7 @@ beforeUnmount() {
 .vedichivebox{
   height: 92% !important;
   flex-grow: 1;
-  overflow-y: hidden;
+  overflow-y: auto;
   /* border: 2px solid black; */
 }
 .mybatchbox.active,
@@ -1092,33 +1085,4 @@ beforeUnmount() {
 }
 
 /* Other styles remain unchanged */
-.left-bg::-webkit-scrollbar-track {
-margin: 20px;
-margin-left: 0px !important;
-}
-
-.members2 {
-  overflow-y: auto;
-  max-height: calc(100vh - 120px);
-}
-
-.left_group {
-  display: flex;
-  flex-direction: column;
-  height: 100vh; /* Ensure full height of screen */
-}
-
-.new_grp_container {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.background_container.members2 {
-  flex: 1;
-  overflow-y: auto;
-}
-
-
 </style>
