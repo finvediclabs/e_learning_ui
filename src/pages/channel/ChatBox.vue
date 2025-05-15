@@ -1,5 +1,5 @@
 <template>
-  <div id="chat-page" style="height: 96%;">
+  <div id="chat-page" style="height: 96%;" class="chat-page">
     <!-- Image Viewer Modal -->
     <div id="imageView" class="hidden">
       <img id="viewImage" src="" alt="Full Size Image">
@@ -15,7 +15,7 @@
     <ul
       id="vedichivemessageArea"
       ref="vedichivemessageArea"
-      style="background: transparent;height: 100%;overflow-y: hidden;"
+      style="background: transparent;height: 100%;overflow-y: auto;" class="vedichivemessageArea"
 
     >
       <li
@@ -64,7 +64,12 @@
         </div>
       </li>
     </ul>
-    <div class="input-container">
+
+  </div>
+      <!-- llll -->
+
+    <!-- Input Field and Upload Buttons -->
+<div class="input-container">
       <input type="text" v-model="newMessage" @keyup.enter="sendMessage" placeholder="Message" class="input-field"
         id="message" required />
       <button @click="sendMessage" class="send-button" title="Send Message">
@@ -89,11 +94,6 @@
         <q-icon name="upload_file" />
       </button>
     </div>
-  </div>
-      <!-- llll -->
-
-    <!-- Input Field and Upload Buttons -->
-
   </div>
 </template>
 
@@ -619,6 +619,7 @@ export default {
 <style>
 .username {
   color: #0056b3;
+  font-size: 14px !important;
 }
 
 .emoji-container {
@@ -796,13 +797,41 @@ export default {
 .chat-message.self .username,
 .chat-message.self .timestamp {
   color: white !important;
+  font-size: 12px !important;
 }
 .chat-message.self .message-text {
   color: #F7F7FC !important;
+  font-size: 12px !important;
+}
+.message-text{
+  font-size: 12px !important;
 }
 #vedichivemessageArea {
   display: flex;
   flex-direction: column;
+}
+
+
+
+
+.vedichivemessageArea::-webkit-scrollbar {
+  width: 12px;
+}
+
+.vedichivemessageArea::-webkit-scrollbar-track {
+  background: #F7F7FC; /* Track color */
+  border-radius: 20px;
+}
+
+.vedichivemessageArea::-webkit-scrollbar-thumb {
+  background-color: #4E5BF8; /* Scrollbar color */
+  border-radius: 20px;
+  border: 2px solid transparent; /* Optional for padding effect */
+  background-clip: content-box;
+}
+
+.vedichivemessageArea::-webkit-scrollbar-thumb:hover {
+  background-color: #4E5BF8;
 }
 .chat-message i {
   display: inline-block;
@@ -992,10 +1021,11 @@ img {
   /* border:2px solid black; */
   /* border-radius: 20px; */
   visibility: visible;
-  height: 100%;
+  height: 90%;
   overflow-y: auto;
   /* Enable vertical scrolling */
   width: 100%;
+  padding-bottom: 8% !important;
   /* Fixed width */
   position: relative;
   /* Establish positioning context */
@@ -1030,14 +1060,28 @@ img {
   flex: 1;
   /* Adjust as needed */
 }
-
+.chat-page{
+  position: relative;
+}
 
 .input-container {
   display: flex;
+  position: fixed;
   align-items: center;
-  margin-top: 10px;
-  width: 100%;
+  /* margin-top: 10px; */
+  margin-top: 0%;
+  margin-right: auto;
+  margin-left: auto;
+  margin-bottom: 0%;
+  width: 60%;
   bottom: 0;
+}
+@media (max-width: 768px){
+  .input-container {
+    width: 90%;
+    bottom: 2%;
+    /* Full width on smaller screens */
+  }
 }
 
 .input-field {
