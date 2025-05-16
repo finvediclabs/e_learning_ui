@@ -165,7 +165,7 @@
 
   <div class="col-12 col-md-8 row">
      <div class="col-12">
-        <div class="text-h4 text-weight-bold  q-mt-sm">
+        <div class="text-h4 text-weight-bold  q-mt-sm cou-jou">
           Course Journey
         </div>
       </div>
@@ -179,7 +179,7 @@
   </div>
 </div>
 <div class="col-12">
-        <div class="text-h4 text-weight-bold q-mb-lg q-mt-xl">
+        <div class="text-h4 text-weight-bold q-mb-lg q-mt-xl cou-jou">
           Our Program Highlights
         </div>
       </div>
@@ -439,10 +439,10 @@
   </div>
   <!-- jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj -->
 <div class="row">
-  <div class="col-12">
+  <div class="col-12 cur-bre">
     <div class="row q-py-sm">
-      <div class="col-12 q-mb-md">
-        <div class="text-h4 text-weight-bold q-mb-sm q-mt-sm ">
+      <div class="col-12 q-mb-md ">
+        <div class="text-h4 text-weight-bold q-mb-sm q-mt-sm  ">
           Course Curriculum Breakdown
         </div>
       </div>
@@ -839,6 +839,7 @@ plus_sign: plus_sign,
     /* padding-left: 0 !important; */
     /* padding-right: 0 !important; */
     padding-right: 2%;
+    padding-left: 2%;
   }
 
   .mobile-mar{
@@ -846,6 +847,22 @@ plus_sign: plus_sign,
   }
   .curr-mar{
     margin-left: 8px !important;
+  }
+  .container{
+    margin: 17px;
+  }
+  .cou-jou{
+    margin-left: 10px !important;
+    font-size: xx-large;
+  }
+  .cur-bre{
+    padding: 12px !important;
+  }
+  .blue_bckg{
+    margin-right: 12px;
+  }
+  .custom-list2{
+    padding-left: 19px;
   }
 }
 </style>
