@@ -218,6 +218,18 @@ const routes = [
     ]
   },
   {
+    path: '/allCourses',
+    component: () => import('layouts/home/HomePage.vue'),
+    children: [
+      {
+        path: '',
+        name: 'register',
+        component: () => import('layouts/home/ViewAllCourse.vue'),
+        meta: { title: 'All Courses', module: 'allCourses' }
+      }
+    ]
+  },
+  {
     path: "/finassociate",
      component: () => import('layouts/home/HomePage.vue'),
     children: [

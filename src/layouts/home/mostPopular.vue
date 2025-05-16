@@ -76,7 +76,9 @@
     class="col-12 q-mt-none text-right q-my-lg View"
     style="width: 92%;margin-left: auto;margin-right: auto;"
   >
-    <span style="color: #4E5BF8;">View More Courses →</span>
+    <router-link to="/allCourses" class="viw-mo" style="color: #4E5BF8; cursor: pointer;">
+  View More Courses →
+</router-link>
   </div>
 </div>
 
@@ -89,7 +91,7 @@
 import mostPopularBg from '../../assets/most_popularBG.png';
 import poplb from '../../assets/poplb.svg';
 import poplc from '../../assets/poplc.svg';
-import poptr from '../../assets/poptr.svg'; 
+import poptr from '../../assets/poptr.svg';
 export default {
   name: 'MostPopular',
   data() {
@@ -229,12 +231,12 @@ export default {
   cursor: pointer;
 }
 .course-card:hover {
-  transform: scale(1.05); 
+  transform: scale(1.05);
   transition: transform 0.3s ease;
 }
 @media (max-width: 600px) {
   .most-popular {
-  position: relative; 
+  position: relative;
   height: 100%;
   width: 100vw;
   padding-top: 0%;
@@ -305,7 +307,7 @@ export default {
 }
 
   .header_mostPopular {
-    font-size: 22px; 
+    font-size: 22px;
   }
 
   .desc_mostPopular {
@@ -347,10 +349,10 @@ export default {
   position: absolute;
   top: -40px;
   left: 45%;
-  transform: translate(-50%, 0); 
+  transform: translate(-50%, 0);
   background-size: cover;
   background-position: center;
-  display: block; 
+  display: block;
   box-shadow: 0px 2px 8px rgba(5, 0, 0, 0.5);
 }
 
@@ -372,20 +374,20 @@ export default {
 
 .scroll-item {
   flex: 0 0 auto;
-  width: 320px; 
-  height: 290px; 
+  width: 320px;
+  height: 290px;
 }
 
 
 .scroll-wrapper {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  scrollbar-width: none; 
-  -ms-overflow-style: none;  
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 .scroll-wrapper::-webkit-scrollbar {
-  display: none; 
+  display: none;
 }
 
 .View{
@@ -406,10 +408,10 @@ export default {
   position: absolute;
   top: -40px;
   left: 45%;
-  transform: translate(-50%, 0); 
+  transform: translate(-50%, 0);
   background-size: cover;
   background-position: center;
-  display: block; 
+  display: block;
   box-shadow: 0px 2px 8px rgba(5, 0, 0, 0.5);
 }
 

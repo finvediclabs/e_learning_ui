@@ -65,7 +65,10 @@
       </div>
 
       <div class="col-12 q-mt-md text-right my-5 viw" style="width: 92%;margin-left: auto;margin-right: auto;">
-        <span style="color: #4E5BF8;" class="viw-mo">View More Courses →</span>
+        <router-link to="/allCourses" class="viw-mo" style="color: #4E5BF8; cursor: pointer;">
+  View More Courses →
+</router-link>
+
       </div>
     </div>
   </div>
@@ -273,8 +276,8 @@ export default {
 }
 
 .scroll-wrapper {
-  -ms-overflow-style: none;  
-  scrollbar-width: none;     
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .scroll-wrapper {
