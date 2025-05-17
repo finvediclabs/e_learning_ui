@@ -22,12 +22,12 @@
     :key="category.id"
     class="snap-card q-pt-xl"
   >
-    <q-card class="course-card h-100">
+    <q-card class="course-card9 h-100">
       <q-img
         v-if="category.imagePath"
         :src="category.imagePath"
         alt="Category Image"
-        class="course-image q-pa-lg"
+        class="course-image9 q-pa-lg"
       />
       <q-card-section>
         <p class="text-bold text-left blue_color">{{ category.categoryName }}</p>
@@ -43,29 +43,32 @@
         v-else
         class="row d-flex justify-content-center align-items-center w-100"
       >
+
         <div
           v-for="category in filteredCategories"
           :key="category.id"
           class="col-md-3 mb-4 q-pt-xl"
           style="margin-left: auto;margin-right: auto;"
         >
-          <q-card class="course-card h-100">
+        <router-link :to="{ name: 'CourseDetail', params: { id: category.id } }" style="text-decoration: none;">
+          <q-card class="course-card9 h-100">
             <q-img
               v-if="category.imagePath"
               :src="category.imagePath"
               alt="Category Image"
-              class="course-image q-pa-lg"
+              class="course-image9 q-pa-lg"
             />
             <q-card-section>
               <p class="text-bold text-left blue_color">{{ category.categoryName }}</p>
               <span class="text-caption text-grey">{{ category.description }}</span>
             </q-card-section>
           </q-card>
+          </router-link>
         </div>
       </div>
 
       <div class="col-12 q-mt-md text-right my-5 viw" style="width: 92%;margin-left: auto;margin-right: auto;">
-        <router-link to="/allCourses" class="viw-mo" style="color: #4E5BF8; cursor: pointer;">
+        <router-link to="/allCourses" class="viw-mo" style="color: #2528CB; cursor: pointer;text-decoration: none;">
   View More Courses →
 </router-link>
 
@@ -205,7 +208,7 @@ export default {
   font-family: sans-serif;
 }
 
-.course-card {
+.course-card9 {
   border: 1px solid #ddd;
   border-radius: 8px;
   width: 90%;
@@ -215,7 +218,7 @@ export default {
   overflow: hidden;
 }
 
-.course-image {
+.course-image9 {
   width: 94%;
   margin-left: 3%;
   margin-right: 3%;
@@ -228,11 +231,11 @@ export default {
   cursor: pointer;
 }
 .blue_color{
-  color: #4e5bf8 !important;
+  color: #2528CB !important;
   /* font-size: 18px; */
 }
 
-.course-card:hover {
+.course-card9:hover {
   transform: scale(1.05); /* Enlarges by 5% */
   transition: transform 0.3s ease;
 }
@@ -300,7 +303,7 @@ export default {
   margin-right: 1rem;
   padding-top: 25px;
 }
-.course-card {
+.course-card9 {
   width: 100%;
   height: 280px;
   display: flex;

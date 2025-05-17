@@ -208,7 +208,7 @@ export default {
         { title: "Extra Lab 1", img: extra_lab3 }
       ],
       tools: [
-    { title: "ScaleGrad Dojo", img: dojo, link: "https://gurukul.finvedic.com/dojo/" },
+    { title: "ScaleGrad Dojo", img: dojo, link: "https://gurukul.finvedic.in/dojo/" },
     { title: "ScaleGrad Whiteboard", img: white_board, link: "https://excalidraw.com/"},
     { title: "ScaleGrad Notebook", img: jupyter, link: "https://jupyter.finvedic.in/" }
 ]

@@ -93,7 +93,7 @@
           color="primary"
           glossy
           class="q-px-sm q-py-xs rounded-borders shadow-2 hover-scale text-caption"
-          href="https://finvedic.com/enroll.html"
+          :to="'/register'"
           target="_blank"
           label="Enroll"
           style="flex: 0 0 auto;"

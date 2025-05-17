@@ -2,10 +2,10 @@
     <div class="q-pa-md">
       <div class="text-center text-h4 q-mb-lg">
         <span class="text-black text-h4 text-bold">
-          Our <span style="color: #4e5bf8">Successful </span>Students
+          Our <span style="color: #2528CB">Successful </span>Students
         </span>
       </div>
-  
+
       <div class="slider-container">
         <div class="slider-track">
           <div
@@ -13,7 +13,7 @@
             :key="index"
             class="slider-item"
           >
-            
+
 
           <q-card class="q-hoverable rounded-card">
   <q-card-section class="q-pa-none video-wrapper">
@@ -45,7 +45,7 @@
           </div>
         </div>
       </div>
-  
+
       <!-- Video Dialog -->
       <q-dialog v-model="showDialog" persistent>
   <q-card class="bg-black text-white" style="width: 90vw; max-width: 800px;">
@@ -83,84 +83,84 @@
 
 
 
-  
+
     </div>
   </template>
-  
-  
+
+
   <script setup>
   import { ref, computed, onMounted, onUnmounted } from 'vue'
-  
+
   import HarshaVideo from 'src/assets/Harsha.mp4'
   import ScaleGradExpoVideo from 'src/assets/ScaleGradExpo.mp4'
   import YashVideo from 'src/assets/Yash.mp4'
-  
+
   const videoSources = ref([
     HarshaVideo,
     ScaleGradExpoVideo,
     YashVideo
   ])
-  
+
   const names = [
     'Harsha M',
     'ScaleGrad Expo',
     'Yash'
   ]
-  
+
   const descriptions = [
     'Qualified for reputed Company',
     'Our Latest Event',
     'Qualified for well-known Company'
   ]
-  
+
   const loopedVideos = computed(() => {
   const repeats = 5
   return Array.from({ length: repeats }).flatMap(() => videoSources.value)
 })
 
-  
+
   let animationFrameId
-  
+
   // Dialog controls
   const showDialog = ref(false)
   const selectedVideo = ref(null)
-  
+
   function openVideoDialog(videoUrl) {
     selectedVideo.value = videoUrl
     showDialog.value = true
   }
-  
+
   function closeDialog() {
     selectedVideo.value = null
     showDialog.value = false
   }
-  
+
   onMounted(() => {
     const container = document.querySelector('.slider-container')
     const track = container.querySelector('.slider-track')
-  
+
     let isDown = false
     let startX
     let scrollLeft
     let speed = window.innerWidth <= 600 ? 1.5 : 0.5
-  
+
     container.addEventListener('mousedown', (e) => {
       isDown = true
       startX = e.pageX - container.offsetLeft
       scrollLeft = container.scrollLeft
       container.style.cursor = 'grabbing'
     })
-  
+
     container.addEventListener('mouseleave', () => {
       isDown = false
       container.style.cursor = 'grab'
     })
-  
+
     container.addEventListener('mouseup', () => {
       isDown = false
       container.style.cursor = 'grab'
     })
-  
+
     container.addEventListener('mousemove', (e) => {
       if (!isDown) return
       e.preventDefault()
@@ -168,24 +168,24 @@
       const walk = (x - startX) * 2
       container.scrollLeft = scrollLeft - walk
     })
-  
+
     container.addEventListener('touchstart', (e) => {
       isDown = true
       startX = e.touches[0].pageX - container.offsetLeft
       scrollLeft = container.scrollLeft
     })
-  
+
     container.addEventListener('touchend', () => {
       isDown = false
     })
-  
+
     container.addEventListener('touchmove', (e) => {
       if (!isDown) return
       const x = e.touches[0].pageX - container.offsetLeft
       const walk = (x - startX) * 2
       container.scrollLeft = scrollLeft - walk
     })
-  
+
     const animate = () => {
       if (!isDown) {
         container.scrollLeft += speed
@@ -196,34 +196,34 @@
       }
       animationFrameId = requestAnimationFrame(animate)
     }
-  
+
     animate()
   })
-  
+
   onUnmounted(() => {
     cancelAnimationFrame(animationFrameId)
   })
   </script>
-  
-  
+
+
   <style scoped>
   .slider-container {
     overflow: hidden;
     position: relative;
     cursor: grab;
   }
-  
+
   .slider-track {
     display: flex;
     gap: 16px;
     padding-bottom: 10px;
   }
-  
+
   .slider-item {
     flex: 0 0 calc(33.333% - 10px);
     scroll-snap-align: start;
   }
-  
+
   /* Full video inside dialog */
   .full-video-player {
     width: 100%;
@@ -231,30 +231,30 @@
     object-fit: contain;
     background: black;
   }
-  
+
   /* Rounded card */
   .rounded-card {
     border-radius: 16px;
     overflow: hidden;
   }
-  
+
   .rounded-video {
     border-top-left-radius: 14px;
     border-top-right-radius: 14px;
   }
-  
+
   @media (max-width: 1024px) {
     .slider-item {
       flex: 0 0 calc(50% - 10px);
     }
   }
-  
+
   @media (max-width: 600px) {
     .slider-item {
       flex: 0 0 100%;
     }
   }
-  
+
   .text-center {
     text-align: center;
   }
@@ -280,7 +280,7 @@
 }
 
 .slider-item {
-  flex: 0 0 300px; 
+  flex: 0 0 300px;
   scroll-snap-align: start;
 }
 
@@ -482,4 +482,3 @@
 
 
   </style>
-  

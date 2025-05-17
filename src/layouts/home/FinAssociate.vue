@@ -19,11 +19,11 @@
         <div class="q-ml-md logo">
           <!-- Logo will be added here later -->
           <q-item class="logo_in" :to="'/home'">
-            <q-img :src="new_logo" style="width: 220px;" ></q-img>
+            <q-img :src="new_logo1" style="width: 280px;" ></q-img>
           </q-item>
         </div>
 
-        <q-input
+        <!-- <q-input
           v-if="!$q.screen.lt.md"
           dense
           outlined
@@ -37,7 +37,7 @@
           <template v-slot:append>
             <q-icon name="search" />
           </template>
-        </q-input>
+        </q-input> -->
       </q-toolbar-title>
 
       <!-- Right Side: Navigation Links (Hidden on Mobile) -->
@@ -513,6 +513,9 @@
 import axios from "axios";
 import course_img from "../../assets/cours_1.jpg";
 import new_logo from "src/assets/new_logo1.svg";
+
+import new_logo1 from "src/assets/ScaleGrad_blue.svg";
+
 import learning_journey from "src/assets/Learning_Journey.png";
 import Our_labs from "src/assets/Our_labs.png";
 import plus_sign from "src/assets/plus_sign.png";
@@ -533,6 +536,7 @@ export default {
       Certification: Certification,
       Prerequisotes: Prerequisotes,
       Our_labs: Our_labs,
+      new_logo1:new_logo1,
       pin: pin,
       heading: "",
       description: "",

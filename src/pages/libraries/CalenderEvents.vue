@@ -1,5 +1,5 @@
 <template>
-  <fin-portlet>
+  <fin-portlet class="background_image2">
     <div class="row">
 
       <div class="col-8">
@@ -198,7 +198,7 @@ export default {
         time(event) {
           const { title, topic } = event;
           return `<div class="event-container "><span style="color: white;">${title}</span></div>
-         
+
           `;
         },
         allday: (event) => {
@@ -526,11 +526,17 @@ export default {
 }
 
 .categoryClass {
-  background-color: #FFFFFF;
+  background-color: #f6f6f6;
   color: #93BAFF;
   /* border: 2px solid black */
 }
-
+.background_image2{
+    background-color: #FFFF;
+  background-image: url('src/assets/Labs_tools.png');
+  background-size: 100% 100%;
+  background-position: cover;
+  background-repeat: no-repeat;
+}
 .active-categoryClass {
   background: linear-gradient(to right, rgba(84, 121, 247, 0.8) 4%, rgba(147, 186, 255, 0.8) 1px);
   color: #FFFFFF;

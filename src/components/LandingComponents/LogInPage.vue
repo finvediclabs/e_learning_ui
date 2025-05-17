@@ -27,7 +27,7 @@
             <q-checkbox v-model="rememberMe" label="Remember me" />
             <a @click="changePage('resetPasswordPage')" class="cursor-pointer fin-text-blue">Forget password</a>
           </div>
-          <q-btn no-caps class="full-width sub-btn text-body1 text-weight-medium sign-up" padding="md" label="Login" type="submit" style="background-color: #4E5BF8 !important; color: #ffffff;"
+          <q-btn no-caps class="full-width sub-btn text-body1 text-weight-medium sign-up" padding="md" label="Login" type="submit" style="background-color: #2528CB !important; color: #ffffff;"
             :disable="loading">
             <q-spinner-ios color="white" class="q-pl-sm" v-if="loading" />
           </q-btn>

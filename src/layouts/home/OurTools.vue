@@ -1,8 +1,8 @@
 <template>
-  <div   class="background_grey q-py-xl" 
+  <div   class="background_grey q-py-xl"
   :style="isMobile ? { backgroundImage: `url(${mobileBackground})` } : {}" >
     <span class="text-black header_toolsd">
-      Master <span style=" color: #4e5bf8 ">Latest and Essential Tools & Technologies</span><br>
+      Master <span style=" color: #2528CB ">Latest and Essential Tools & Technologies</span><br>
       with ScaleGrad for Your Career Success
     </span>
 

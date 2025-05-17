@@ -3,18 +3,18 @@
     <div class="q-pb-xl">
       <span class="text-black header_Program">Our Certifications</span>
     </div>
-<div class="row col-12 mob_column">
+<div class="row col-12 mob_column" style="display: flex;align-items: center;">
   <div class="col-6 girl-img">
     <q-img :src="Hero_Girl" style="width: 60%;"></q-img>
   </div>
     <div class="row q-col-gutter-md col-6 mob_column" >
       <div class="col-6" v-for="program in programs" :key="program.programId" @click="goToProgram(program.programId)">
-        <q-card class="course-card">
+        <q-card class="course-card8">
           <q-img
             v-if="program.localImageUrl"
             :src="program.localImageUrl"
             alt="Program Image"
-            class="course-image q-pa-lg"
+            class="course-image8 q-pa-lg"
           />
           <q-card-section>
             <p class="text-bold text-left blue_color">{{ program.heading }}</p>
@@ -112,7 +112,7 @@ export default {
   font-weight: 700;
 }
 
-.course-card {
+.course-card8 {
   border: 1px solid #ddd;
   border-radius: 8px;
   width: 100%;
@@ -121,7 +121,7 @@ export default {
   overflow: hidden;
 }
 
-.course-image {
+.course-image8 {
   width: 94%;
   margin-left: 3%;
   margin-right: 3%;
@@ -132,7 +132,7 @@ export default {
   cursor: pointer;
 }
 
-.course-card:hover {
+.course-card8:hover {
   transform: scale(1.05);
   transition: transform 0.3s ease;
 }
@@ -153,7 +153,7 @@ export default {
     display: none;
   }
 
-  .course-card {
+  .course-card8 {
     width: 100% !important;
   }
 }

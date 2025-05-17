@@ -34,7 +34,7 @@
   style="margin-left: auto; margin-right: auto;gap: 16px;"
 >
   <q-card class="course-card1 cursor-pointer" @click="handleCategoryClick(category, index)">
-    <div style="height: 280px;">
+    <div style="height: 270px;">
       <img
         v-if="category.imagePath"
         :src="category.imagePath"
@@ -43,7 +43,7 @@
         fit="contain"
       />
     </div>
-    <q-card-section style="padding-bottom: 0%;">
+    <q-card-section style="margin-bottom: 10px;">
       <p class="text-bold text-left">{{ category.categoryName }}</p>
     </q-card-section>
   </q-card>
@@ -402,7 +402,8 @@ async fetchCategories() {
 .desktop-header {
   display: block;
   width: 100%;
-  padding-left: 1rem;
+  margin-left: 1%;
+  /* padding-left: 1rem; */
   margin-bottom: 0.5rem;
   margin-top: 0.5rem;
 }
@@ -428,7 +429,7 @@ async fetchCategories() {
   }
 
   .mobile-title {
-    font-size: large;
+    font-size: medium !important;
     font-weight: 600;
     color: #141414;
   }

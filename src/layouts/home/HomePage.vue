@@ -65,7 +65,7 @@ export default {
 }
 
 .bg-Customblue {
-  background-color: #4E5BF8;
+  background-color: #2528CB;
 }
 
 @media (max-width: 768px) {

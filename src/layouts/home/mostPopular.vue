@@ -7,7 +7,7 @@
       <img :src="poptr" class="bg-img top-right" />
     </div>
     <div class="row w-100 text-center content-layer">
-    <span class="text-black header_mostPopular q-mt-lg" style="width: 100%;">Most <span style=" color: #4e5bf8 ">Popular</span> Courses</span>
+    <span class="text-black header_mostPopular q-mt-lg" style="width: 100%;">Most <span style=" color: #2528CB ">Popular</span> Courses</span>
     <span class="text-black desc_mostPopular" style="width: 100%;">"Explore our most popular course, designed to boost your skills and <span class="web_view">
       <br></span>accelerate your learning journey!"</span>
   </div>
@@ -45,7 +45,9 @@
   style="width: 100%; margin: 0 auto; font-size: larger;"
   v-if="$q.screen.lt.md"
 >
-  <span style="color: #4E5BF8;">View More Courses →</span>
+    <router-link to="/allCourses" class="viw-mo" style="color: #2528CB; cursor: pointer;text-decoration: none;">
+  View More Courses →
+</router-link>
 </div>
 
 <!-- Only show grid on md and above -->
@@ -76,7 +78,7 @@
     class="col-12 q-mt-none text-right q-my-lg View"
     style="width: 92%;margin-left: auto;margin-right: auto;"
   >
-    <router-link to="/allCourses" class="viw-mo" style="color: #4E5BF8; cursor: pointer;">
+    <router-link to="/allCourses" class="viw-mo" style="color: #2528CB; cursor: pointer;text-decoration: none;">
   View More Courses →
 </router-link>
   </div>
@@ -213,7 +215,7 @@ export default {
   overflow: hidden;
 }
 .blue_color{
-  color: #4e5bf8 !important;
+  color: #2528CB !important;
   font-size: 18px;
   text-align: center;
 }

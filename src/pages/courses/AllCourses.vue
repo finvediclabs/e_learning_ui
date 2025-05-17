@@ -1,14 +1,14 @@
 <template>
-    <div class="all-courses1 container q-pa-md">
+    <div class="all-courses1 container q-pa-md free-courses2">
       <!-- Header with Back Button -->
-      <div class="row items-center q-mb-md justify-between">
-        <!-- <div class="col-auto">
-          <q-btn flat round icon="arrow_back" @click="$router.back()"  class="all" />
-        </div> -->
-        <!-- <div class="col">
-          <span class="all-courses1-heading1 text-weight-medium q-mt-none q-mb-none text-h4">All Courses</span>
-        </div> -->
-      </div>
+      <div class="row w-100 text-left q-my-md q-mx-lg">
+      <span class="text-black header_freeCourses" style="width: 100%;">
+        Our <span class="blue_color">Exclusive COURSES</span>
+      </span>
+      <span class="text-black desc_mostPopular" style="width: 100%;">
+        "Unlock endless learning opportunities with our courses, designed to expand your knowledge"
+      </span>
+    </div>
 
       <!-- Loader -->
       <div v-if="isLoading" class="loading-container text-center q-mt-md">
@@ -16,15 +16,15 @@
       </div>
 
       <!-- Course Cards -->
-      <div v-else class="row cor" style="justify-content: center;height: 100%;">
+      <div v-else class="row cor " style="justify-content: center;height: 100%;">
         <div
           v-for="(category, index) in categories"
           :key="category.id"
-          style="max-height: 340px;"
+          style="max-height: 360px;"
           class="course-col col-lg-2 col-md-2 col-sm-6 col-12 d-flex justify-center"
         >
         <q-card class="course-card-top cursor-pointer" @click="handleCategoryClick(category, index)" >
-          <div style="height: 240px;" >
+          <div style="height: 280px;" >
           <img
             v-if="category.imagePath"
             :src="category.imagePath"
@@ -162,10 +162,22 @@
   height: 100%;
   /* height: 100%; */
 }
+.header_freeCourses{
+  font-family: sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+}
 
 .course-card-top:hover {
   transform: scale(1.03);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+.free-courses2{
+   background-color: #FFFF;
+  background-image: url('src/assets/Labs_tools.png');
+  background-size: 100% 100%;
+  background-position: cover;
+  background-repeat: no-repeat;
 }
 
 .course-image {
@@ -190,6 +202,15 @@
   display: flex;
   flex-wrap: wrap;
   gap: 16px; /* Adjust spacing as needed */
+}
+.blue_color{
+  color: #4e5bf8 !important;
+  /* font-size: 18px; */
+}
+.desc_mostPopular{
+  font-size: 1rem;
+  font-weight: 500;
+  font-family: sans-serif;
 }
 
 /* .course-col {

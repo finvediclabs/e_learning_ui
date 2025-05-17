@@ -1,5 +1,13 @@
-<template>
+<template  style="padding-top: 0%;">
   <div class="elearning-page">
+    <div class="row w-100  text-left q-mx-lg">
+      <span class="text-black header_freeCourses" style="width: 100%;">
+        Our <span class="blue_color">Certifications</span>
+      </span>
+      <span class="text-black desc_mostPopular" style="width: 100%;">
+        "Unlock endless learning opportunities with our certification, designed to expand your knowledge"
+      </span>
+    </div>
     <!-- Featured Courses Section -->
     <div class="featured-section">
       <div class="featured-courses">
@@ -161,3 +169,20 @@ export default {
   },
 };
 </script>
+<style>
+.header_freeCourses{
+  font-family: sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+}
+.desc_mostPopular{
+  font-size: 1rem;
+  font-weight: 500;
+  font-family: sans-serif;
+}
+
+.blue_color{
+  color: #4e5bf8 !important;
+  /* font-size: 18px; */
+}
+</style>

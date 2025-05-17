@@ -1,4 +1,5 @@
 <template>
+
   <div class="attendance-box" @click="viewAll">
     <div class="attendance-header row">
       <div class="col-4">

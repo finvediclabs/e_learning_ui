@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="lHh Lpr lFf " style="min-height: unset">
+  <q-layout view="lHh Lpr lFf " style="min-height: unset;">
     <q-toolbar>
         <!-- Left Side: Logo, q-select, q-search -->
         <q-toolbar-title class="row items-center q-py-sm q-mt-lg">
@@ -17,13 +17,13 @@
           <div class="q-ml-md logo">
             <!-- Logo will be added here later -->
             <q-item class="logo_in" to="/">
-              <q-img :src="new_logo" style="width: 220px;"></q-img>
+              <q-img :src="new_logo1" style="width: 280px;"></q-img>
         </q-item>
           </div>
 
 
 
-<q-input
+<!-- <q-input
   v-if="!$q.screen.lt.md"
   dense
   outlined
@@ -37,7 +37,7 @@
   <template v-slot:append>
     <q-icon name="search" />
   </template>
-</q-input>
+</q-input> -->
 
         </q-toolbar-title>
 
@@ -209,6 +209,7 @@
 import axios from 'axios';
 import bg_img from "src/assets/scalefradepng1.png";
 import new_logo from "src/assets/new_logo1.svg";
+import new_logo1 from "src/assets/ScaleGrad_blue.svg";
 export default {
   data() {
     return {
@@ -228,6 +229,7 @@ export default {
       bg_img,
       leftDrawerOpen: false,
       new_logo,
+      new_logo1:new_logo1
     };
   },
   methods: {

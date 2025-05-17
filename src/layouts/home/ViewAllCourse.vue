@@ -117,19 +117,31 @@
     class="snap-card q-pt-xl"
   >
     <q-card class="course-card4 h-100">
-       <div style="height: 320px;">
-      <q-img
-        v-if="category.imagePath"
-        :src="category.imagePath"
-        alt="Category Image"
-        class="course-image4 q-pa-lg"
-      />
-      <q-card-section>
-        <p class="text-bold text-left blue_color">{{ category.categoryName }}</p>
-        <span class="text-caption text-grey">{{ category.description }}</span>
-      </q-card-section>
-      </div>
-    </q-card>
+  <div style="height: 340px;">
+    <q-img
+      v-if="category.imagePath"
+      :src="category.imagePath"
+      alt="Category Image"
+      class="course-image4 q-pa-lg"
+    />
+
+    <q-card-section>
+      <p class="text-bold text-left blue_color">{{ category.categoryName }}</p>
+      <span class="text-caption text-grey">{{ category.description }}</span>
+
+      <!-- Enroll Button -->
+      <!-- <div class="q-mt-md text-left">
+        <q-btn
+          label="Enroll Now"
+          color="primary"
+          unelevated
+          :to="'/register'"
+        />
+      </div> -->
+    </q-card-section>
+  </div>
+</q-card>
+
   </div>
 </div>
 
@@ -158,7 +170,16 @@
               <p class="text-bold text-left blue_color">{{ category.categoryName }}</p>
               <span class="text-caption text-grey">{{ category.description }}</span>
             </q-card-section>
+            <!-- <div class="q-mt-md text-right enroll_btn" style="position: absolute;bottom: 0%;right: 0%;">
+        <q-btn
+          label="Enroll Now"
+          color="primary"
+          unelevated
+          :to="'/register'"
+        />
+      </div> -->
           </q-card>
+
         </div>
       </div>
 
@@ -349,7 +370,12 @@ export default {
   transform: scale(1.05); /* Enlarges by 5% */
   transition: transform 0.3s ease;
 }
-
+.course-card4:hover .enroll_btn {
+ display: block;
+}
+.enroll_btn{
+  display: none;
+}
 .category-description {
   overflow: hidden;
   font-size: 12px;

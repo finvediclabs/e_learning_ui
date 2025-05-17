@@ -50,7 +50,7 @@
   class="q-ml-md explore"
   style="min-width: 140px;"
 />
-      <q-input
+      <!-- <q-input
   v-if="!isMobile"
   color="bg-finvedic"
   rounded
@@ -62,7 +62,7 @@
     <q-icon name="search" />
   </template>
 
-</q-input>
+</q-input> -->
 
 
 
@@ -79,34 +79,72 @@
   <q-btn
   v-if="!module.menu && !isMobile"
     flat
-    class="text-body1 secondary-nav-btn help_button"
+    round
+    class="text-body1 secondary-nav-btn help_button q-mr-sm"
     @click="changeLocation(module)"
     v-ripple
   >
-    <q-icon :name="module.icon" class="q-mr-sm" size="32px" />
+    <q-icon :name="module.icon" size="32px" />
   </q-btn>
 </template>
 <!-- ================================== -->
 
-    <q-btn
-      icon="notifications_active"
-      round
-      class=" text-white notifs"
-    >
-      <div v-if="notificationList.length" class="notification-badge">
-        {{ notificationList.length }}
+ <q-btn
+  icon="notifications_active"
+  round
+  class="text-white notifs"
+>
+  <div v-if="notificationList.length" class="notification-badge">
+    {{ notificationList.length }}
+  </div>
+
+  <q-menu :offset="[-5, 5]" max-width="300px"
+          style="width:230px; background: transparent!important;"
+          class="fin-br-8 q-py-md shadow-0"
+          transition-show="flip-right"
+          transition-hide="rotate">
+
+    <div style="background-color: #EAEAEA; opacity: 0.99" class="q-py-md shadow-2 fin-br-8">
+      <div class="q-pa-sm absolute-top-right arrow" style="margin-top: -19px">
+        <q-icon name="arrow_drop_up" size="xl" style="color: #EAEAEA"></q-icon>
       </div>
-      <q-menu
-        class="fin-br-8 q-py-md shadow-0"
-        min-width="120px"
-        style="width:230px;background: transparent!important;"
-        :offset="[-0, 10]"
-        transition-show="flip-right"
-        transition-hide="rotate"
-      >
-        <!-- Notifications menu content -->
-      </q-menu>
-    </q-btn>
+
+      <q-list>
+
+        <q-item clickable tag="a" href="https://www.facebook.com/ScaleGrad" target="_blank">
+          <q-item-section avatar>
+            <q-img :src="fb_logo" style="width: 24px; height: 24px;" />
+          </q-item-section>
+          <q-item-section>Facebook</q-item-section>
+        </q-item>
+
+        <q-item clickable tag="a" href="https://www.linkedin.com/company/95730566/admin/page-posts/published/" target="_blank">
+          <q-item-section avatar>
+            <q-img :src="ln_logo" style="width: 24px; height: 24px;" />
+          </q-item-section>
+          <q-item-section>LinkedIn</q-item-section>
+        </q-item>
+
+        <q-item clickable tag="a" href="https://x.com/ScaleGrad" target="_blank">
+          <q-item-section avatar>
+            <q-img :src="x_logo" style="width: 24px; height: 24px;" />
+          </q-item-section>
+          <q-item-section>X</q-item-section>
+        </q-item>
+
+        <q-item clickable tag="a" href="https://www.youtube.com/@scalegrad" target="_blank">
+          <q-item-section avatar>
+            <q-img :src="yt_logo" style="width: 24px; height: 24px;" />
+          </q-item-section>
+          <q-item-section>YouTube</q-item-section>
+        </q-item>
+
+      </q-list>
+    </div>
+  </q-menu>
+</q-btn>
+
+
 
     <q-avatar class="shadow-4 profile_pic" :size="isMobile ? '40px' : '50px'">
           <q-img :src="imageUrl || profileImg" class="profileImg cursor-pointer rounded full-width full-height" />
@@ -260,6 +298,10 @@ import new_logo from "src/assets/ScaleGrad_logo.png";
 import { useSessionStore } from "src/stores/session";
 import { useProfileStore } from "src/stores/profile";
 import { toRaw } from 'vue';
+import fb_logo from "src/assets/fb_logo.svg";
+import ln_logo from "src/assets/ln_logo.svg";
+import x_logo from "src/assets/x_logo.png";
+import yt_logo from "src/assets/yt_logo.svg";
 import { setToken } from "src/boot/axios";
 import axios from "axios";
 
@@ -284,7 +326,11 @@ export default {
       userType,
       setUserType,
       setSessionToken,
-      user
+      user,
+      fb_logo: fb_logo,
+      ln_logo: ln_logo,
+      x_logo: x_logo,
+      yt_logo: yt_logo,
     }
   },
   data() {
@@ -1027,7 +1073,7 @@ background-attachment: fixed;
 .mainHeader {
   /* background: #fff; */
   /* background: #5479F7; */
-  background: #4e5bf8;
+  background: #2528CB;
   backdrop-filter: blur(19px);
   max-height: 72px;
 }

@@ -2,7 +2,7 @@
   <div class="profile-container">
     <div class="header">
       <div class="profile-title">Your Profile</div>
-      <q-icon name="more_vert" class="more-icon cursor-pointer" />
+      <!-- <q-icon name="more_vert" class="more-icon cursor-pointer" /> -->
     </div>
     <q-img :src="imageUrl || defaultProfileImg" class="profileImg cursor-pointer rounded" />
     <div class="greeting">{{ greeting }} {{ profile.name || "Guest" }}</div>
@@ -66,9 +66,9 @@ export default {
       greeting: "",
       defaultProfileImg: defaultProfileImg,
       topProfilesStatic: [
-  { name: "Alice", pic: topProfiles, points: 1500 },
-  { name: "Bob", pic: topProfiles, points: 1200 },
-  { name: "Charlie", pic: topProfiles, points: 1000 },
+  { name: "Harshitha", pic: topProfiles, points: 591 },
+  { name: "R Shruthi", pic: topProfiles, points: 558 },
+  { name: "Harhsa", pic: topProfiles, points: 460 },
 ],
 topProfilesFetched: [],
 

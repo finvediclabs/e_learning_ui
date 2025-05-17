@@ -7,7 +7,7 @@
 .training-row {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start; 
+    align-items: flex-start;
 }
 
 /* Individual training box */
@@ -15,7 +15,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center; 
+    align-items: center;
     height: 60vh;
     padding: 10px;
     box-sizing: border-box;
@@ -28,8 +28,8 @@
 .character-container {
     display: flex;
     justify-content: center;
-    align-items: center; 
-    height: 100%; 
+    align-items: center;
+    height: 100%;
     width: 420px;
     height: 380px;
     /* max-width: 100%;  */
@@ -40,7 +40,7 @@
 .User_heading {
     color: #5479F7;
     margin-left: 4%;
-    
+
 }
 
 /* Responsive layout for smaller screens */
@@ -69,12 +69,12 @@
 
 
     .training-box:first-child {
-        order: 1; 
+        order: 1;
     }
 
     .training-box:last-child {
         order: 2;
-        
+
     }
 
     .container {

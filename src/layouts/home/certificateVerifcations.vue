@@ -1,10 +1,11 @@
 <template>
   <div class="certificate-verification q-py-xl" id="CertificateValidation">
-    <h4 class="text-h4 q-mb-sm q-pb-sm" style="
-    margin-top: 0px;"><b>Certificate of Authentication</b></h4>
-    <p class="text-h5 q-mb-lg">
+   <div class="q-mb-md"><span class="text-h4 q-mb-sm q-pb-sm" style="
+    margin-top: 0px;"><b>Certificate of Authentication</b></span></div>
+    <div class="q-mb-md"><span class="text-body1 q-mb-lg">
       Online authentication of certification to the legitimacy of digital identities
-    </p>
+    </span>
+    </div>
 
     <div class="row justify-center q-col-gutter-md mob-place" style="width: 80%; margin: auto;">
       <div class="row justify-center q-col-gutter-md mob-place" style="width: 80%; margin: auto;padding: 0%;">

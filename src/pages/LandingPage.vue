@@ -5,7 +5,7 @@
     <!-- Left Section: Gurukul Text + Image -->
     <div class="col-12 col-sm-6 col-lg-7 flex q-pb-md">
         <div class="gurukul-text flex column q-mr-md" style="padding-right: 3%;" >
-            <h5 class="text-h5 text-weight-bolder" style="margin-bottom: 1%; font-size:3rem;">Welcome to <br> <span class="gur" style="font-size: 3.2rem;line-height: 2;"><q-img :src="new_logo" width="25vw" class="wel_logo" ></q-img></span></h5>
+            <h5 class="text-h5 text-weight-bolder" style="margin-bottom: 1%; font-size:3rem;">Welcome to <br> <span class="gur" style="font-size: 3.2rem;line-height: 2;"><q-img :src="new_logo1" width="25vw" class="wel_logo" ></q-img></span></h5>
             <p class="descr">ScaleGrad is an interactive learning platform offering financial education through curated resources, courses, and collaborative tools for students, faculty, and professionals.</p>
         </div>
         <q-img :src="LandingImg" class="responsive-img" fit="contain" />
@@ -25,6 +25,7 @@
 
 <script>
 import new_logo from "src/assets/new_logo1.svg";
+import new_logo1 from "src/assets/ScaleGrad_blue.svg";
 import { defineComponent, ref } from 'vue';
 import CreateAccountPage from "../components/LandingComponents/CreateAccountPage.vue";
 import LogInPage from "../components/LandingComponents/LogInPage.vue";
@@ -43,6 +44,7 @@ export default defineComponent({
       currentPage: ref('loginPage'),
       LandingImg: LandingImg,
       new_logo: new_logo,
+      new_logo1: new_logo1
     }
   },
   methods: {

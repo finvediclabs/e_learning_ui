@@ -19,27 +19,27 @@
           <div class="q-ml-md logo">
             <!-- Logo will be added here later -->
             <q-item class="logo_in">
-              <q-img :src="new_logo" style="width: 220px;"></q-img>
+              <q-img :src="new_logo1" style="width: 280px;"></q-img>
         </q-item>
           </div>
 
 
 
-<q-input
+<!-- <q-input
   v-if="!$q.screen.lt.md"
   dense
   outlined
   placeholder="Explore, Fuel Your Curiosity..."
   class="q-ml-md search-box"
   bg-color="transparent"
-  color="#4E5BF8"
+  color="#2528CB"
   rounded
   style="width: 300px;"
 >
   <template v-slot:append>
     <q-icon name="search" />
   </template>
-</q-input>
+</q-input> -->
 
         </q-toolbar-title>
 
@@ -54,15 +54,15 @@
   dense
   outlined
   emit-value
-  color="#4E5BF8"
+  color="#2528CB"
   map-options
   class="q-ml-md explore"
   style="min-width: 140px;"
 />
           <!-- <q-btn noCaps flat label="Courses" class="nav-link" /> -->
          <q-btn noCaps flat label="Certifications" class="nav-link" @click="scrollToCert" />
-          <q-btn noCaps flat label="Login" class="nav-link" :to="'/login'" style="color: #4E5BF8" />
-          <q-btn noCaps :to="'/login'" label="Join for Free" unelevated class="join-btn" style="background-color: #4E5BF8; color: white;" />
+          <q-btn noCaps flat label="Login" class="nav-link" :to="'/login'" style="color: #2528CB" />
+          <q-btn noCaps :to="'/login'" label="Join for Free" unelevated class="join-btn" style="background-color: #2528CB; color: white;" />
 
         </div>
       </q-toolbar>
@@ -85,7 +85,7 @@
     </q-item>
     <q-item clickable v-ripple>
       <q-item-section>
-        <q-btn noCaps label="Join for Free" unelevated class="full-width" :to="'/login'" style="background-color: #4E5BF8; color: white;" />
+        <q-btn noCaps label="Join for Free" unelevated class="full-width" :to="'/login'" style="background-color: #2528CB; color: white;" />
       </q-item-section>
     </q-item>
 
@@ -100,7 +100,7 @@
 
           Launch your career as a Python developer with job-ready skills from Gurukul.
 
-       <span style="color: #4E5BF8;">
+       <span style="color: #2528CB;">
            <a href="" style="all: unset; text-decoration: none; color: inherit;cursor: pointer;">Enroll today</a>
        </span>!</span>
 </q-banner> -->
@@ -194,6 +194,8 @@
 import axios from "axios";
 import mostPopular from "./mostPopular.vue";
 import new_logo from "src/assets/new_logo1.svg";
+import new_logo1 from "src/assets/ScaleGrad_blue.svg";
+
 import freeCourses from "./freeCourses.vue";
 import Reviews from "./Reviews.vue";
 import bg_img from "src/assets/scalefradepng1.png"
@@ -234,6 +236,7 @@ export default {
       subHeading: "",
       description:"",
       new_logo: new_logo,
+      new_logo1: new_logo1,
       leftDrawerOpen: false,
       selectedExplore: null,
       programs: [], // List of programs
@@ -484,7 +487,7 @@ const response = await axios.get(`${getCourse}/${programId}`);
 }
 .banner{
   background-color: #f3f3f4;
-  color: #4E5BF8 !important;
+  color: #2528CB !important;
   width: 60%;
   font-size: 1.5vw !important;
   margin-right: auto;
@@ -546,9 +549,9 @@ border: 1px solid gray;
 border-radius: 20px;
 }
 .blue_border{
-  border: 2px solid #4E5BF8;
+  border: 2px solid #2528CB;
   border-radius: 22px;
-  color: #4e5bf8;
+  color: #2528CB;
   margin-top: 3%;
   letter-spacing: 1px;
   /* width: 80% !important;
@@ -587,16 +590,16 @@ border-radius: 20px;
 }
 .Join_Free_btn{
   /* width: 100%; */
-  background-color: #4E5BF8;
-  border: 2px solid #4E5BF8;
+  background-color: #2528CB;
+  border: 2px solid #2528CB;
   font-size: large;
   color: white;
 }
 .Explore_btn{
   width: 100%;
-  border: 2px solid #4E5BF8;
+  border: 2px solid #2528CB;
   font-size: large;
-  color: #4E5BF8;
+  color: #2528CB;
 }
 .margin_left{
   margin-left: 2%;
@@ -608,13 +611,13 @@ border-radius: 20px;
   text-align: left !important;
 }
 .header_purple{
-  color: #4E5BF8;
+  color: #2528CB;
   font-weight: bold;
   font-size: 2.6vw;
   text-align: left !important;
 }
 .blue_box{
-  background-color: #4E5BF8;
+  background-color: #2528CB;
   color: white;
 }
 
@@ -673,7 +676,7 @@ border-radius: 20px;
   }
   .banner{
     background: #E3EEFD;
-  color: #4E5BF8 !important;
+  color: #2528CB !important;
   width: 100%;
   font-size: 0.7rem !important;
   margin-right: auto;
@@ -731,7 +734,7 @@ border-radius: 20px;
   text-align: left !important;
 }
 .header_purple{
-  color: #4E5BF8;
+  color: #2528CB;
   font-weight: bold;
   font-size: 18px;
   text-align: left !important;
@@ -745,7 +748,7 @@ border-radius: 20px;
   }
 
   .SG_Bar{
-    color: #4E5BF8;
+    color: #2528CB;
     font-weight: bold;
   }
 

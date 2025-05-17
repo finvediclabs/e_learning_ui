@@ -1,7 +1,7 @@
 <template>
     <div class="reviews q-py-xl">
         <div class="row w-100 text-center head ">
-            <span class="text-black text-h4 text-bold" style="width: 100%;"><span style=" color: #4e5bf8 ">ScaleGrad</span> Hub Insight</span>
+            <span class="text-black text-h4 text-bold" style="width: 100%;"><span style=" color: #2528CB ">ScaleGrad</span> Hub Insight</span>
             <span class="text-subtitle1" style="width: 100%;">Explore our student reviews, how our course boosted their skills and <br> helped to accelerate their learning journey!</span>
         </div>
         <div class="row q-col-gutter-md q-mx-xl q-my-md q-px-xl reviewContainer">
@@ -29,8 +29,8 @@
 
         <!-- View More Button -->
         <div class="text-center q-mt-lg">
-            <q-btn v-if="visibleReviews.length < reviews.length" noCaps label="View More Reviews" class="view-more-btn" @click="loadMoreReviews" color="primary" icon-right="arrow_forward" />
-            <q-btn v-else noCaps label="View Less Reviews" class="view-more-btn" @click="resetReviews" color="primary" icon-right="arrow_upward" />
+            <q-btn v-if="visibleReviews.length < reviews.length" noCaps label="View More Reviews" class="view-more-btn" @click="loadMoreReviews"  icon-right="arrow_forward" style="background-color: #2528cb;color: #ffff;" />
+            <q-btn v-else noCaps label="View Less Reviews" class="view-more-btn" @click="resetReviews"  icon-right="arrow_upward" style="background-color: #2528cb;color: #ffff;" />
         </div>
     </div>
 </template>
