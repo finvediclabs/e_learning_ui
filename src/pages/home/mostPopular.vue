@@ -428,7 +428,7 @@ async fetchCategories() {
   }
 
   .mobile-title {
-    font-size: medium !important;
+    font-size: large;
     font-weight: 600;
     color: #141414;
   }

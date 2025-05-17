@@ -1,5 +1,5 @@
 <template>
-  <div class="row q-px-md q-my-sm home">
+  <div class="row q-px-md q-my-sm">
     <!-- Left Column -->
 
     <div class="col-12 col-md-8">
@@ -27,7 +27,7 @@
   </swiper>
 
       <!-- MostPopular & RecentlyViewed in One Row -->
-      <div class="row w-100 Most-Recent">
+      <div class="row w-100">
         <MostPopular />
         <RecentlyViewed class="q-mt-md" />
       </div>
@@ -180,12 +180,5 @@ h3 {
   .profile-column {
     margin-left: 0 !important;
   }
-  .home{
-    padding: 0px 8px !important;
-  }
-  .Most-Recent{
-    margin-top: 16px;
-  }
- 
 }
 </style>
