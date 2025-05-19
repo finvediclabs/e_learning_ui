@@ -121,8 +121,8 @@
       </div>
       <!-- Fintech Associate -->
 
-      <div class="container row q-mx-xl" >
-  <div class="row q-py-xl justify-around items-center" style="background-color: #f1f4ff;border-radius: 20px;">
+      <div class="container fintech-container row q-mx-xl" >
+  <div class="row q-py-xl justify-around items-center in-fintech-container" style="background-color: #f1f4ff;border-radius: 20px;">
 
     <!-- Image Column -->
     <div
@@ -138,7 +138,7 @@
 
     <!-- Text Content Column -->
     <div class="col-12 col-md-5 q-px-md-xl q-mt-md right-program">
-      <div class="text-bold q-mb-lg text-h4" style="margin-bottom: 2%;">
+      <div class="text-bold q-mb-lg text-h4 fin-heading" style="margin-bottom: 2%;">
         {{ heading }} Program
       </div>
 
@@ -184,7 +184,7 @@
         </div>
       </div>
   <div class="col-12 col-md-6 q-mb-xl curr-mar">
-<div class="q-mr-md learning_journey">
+<div class="q-mr-md learning_journey cur_learning_journey">
     <!-- Image and heading row -->
     <div class="row items-center q-mt-md q-pl-lg q-py-md">
       <q-img :src="learning_journey" class="Vector_class "></q-img>
@@ -248,8 +248,8 @@
   </div>
   <!-- ================== -->
 
- <div class="col-12 col-md-6 q-mb-xl">
-<div class="q-mx-md learning_journey">
+ <div class="col-12 col-md-6 q-mb-xl labs_container">
+<div class="q-mx-md learning_journey labs_learning_journey">
     <!-- Image and heading row -->
     <div class="row items-center q-mt-md q-pl-lg q-py-md">
       <q-img :src="Our_labs" class="Vector_class q-mr-sm"></q-img>
@@ -373,7 +373,7 @@
 
   </div>
 <!--MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM  -->
-  <div class="col-12 row q-mt-md">
+  <div class="col-12 row q-mt-md cert-opp">
 <div class="col-12 col-md-6 q-mb-xl curr-mar">
 <div class="q-mr-md learning_journey1">
     <!-- Image and heading row -->
@@ -454,7 +454,7 @@
           :key="index"
           class="col-12 col-md-12 q-mb-lg"
         >
-          <div class="content learning_journey " style="padding-top: 2%;padding-bottom: 2%;">
+          <div class="content breakdown learning_journey " style="padding-top: 2%;padding-bottom: 2%;">
             <div class="text-h6 text-weight-bold q-mb-xs" style="padding-left: 1%;">{{ category }}</div>
             <div class="text-body1" style="color: #6d6d6d;padding-left: 1%;">
               {{ chapterCategoryDescriptions[index] }}
@@ -848,6 +848,7 @@ plus_sign: plus_sign,
 
   .mobile-mar{
     margin: 0px !important;
+    overflow-x: hidden !important;
   }
   .curr-mar{
     margin-left: 8px !important;
@@ -857,16 +858,48 @@ plus_sign: plus_sign,
   }
   .cou-jou{
     margin-left: 10px !important;
-    font-size: xx-large;
+    font-size: x-large;
+    margin: 24px 0px;
   }
   .cur-bre{
     padding: 12px !important;
   }
   .blue_bckg{
     margin-right: 12px;
+    margin-bottom: 16px;
+    margin-top: 0px;
   }
   .custom-list2{
     padding-left: 19px;
   }
+  .learning_journey1{
+    margin-left: 0px !important;
+  }
+  .labs_learning_journey{
+    margin: 0px 10px !important;
+  }
+  .fintech-container{
+    margin: 10px !important;
+  }
+  .in-fintech-container{
+    padding: 20px 10px !important;
+  }
+  .fin-heading{
+    font-size: 1.8rem;
+  }
+  .cert-opp{
+    margin-top: 0px !important;
+  }
+  .curr-mar{
+    margin-bottom: 35px;
+  }
+  .labs_container{
+    margin-bottom: 35px;
+  }
+  .breakdown{
+    padding: 20px 10px !important;
+  }
+
+
 }
 </style>

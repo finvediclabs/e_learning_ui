@@ -319,4 +319,7 @@ export default {
 
 
 }
+.viw-mo{
+  text-decoration: none;
+}
 </style>
