@@ -1,82 +1,46 @@
 <template>
   <div class="free-courses q-pb-lg q-mb-lg">
     <div class="row w-100 text-left q-mt-lg q-mx-lg">
-      <span class="text-black header_freeCourses" style="width: 100%;">
-        Begin your learning journey with our <span class="blue_color">FREE COURSES</span>
-      </span>
-      <span class="text-black desc_mostPopular" style="width: 100%;">
-        "Unlock endless learning opportunities with our free courses, designed to expand your knowledge at no cost!"
-      </span>
-    </div>
-
-    <div class="container freeCourseCont mt-4 q-mx-lg ">
-<!-- Mobile view with scroll snapping -->
-<div
-  v-if="$q.screen.lt.md"
-  class="scroll-wrapper row no-wrap items-start"
-  ref="scrollContainer"
-  v-touch-pan.prevent.mouse="onPan"
->
-  <div
-    v-for="category in filteredCategories"
-    :key="category.id"
-    class="snap-card q-pt-xl"
-  >
-    <q-card class="course-card9 h-100">
-      <q-img
-        v-if="category.imagePath"
-        :src="category.imagePath"
-        alt="Category Image"
-        class="course-image9 q-pa-lg"
-      />
-      <q-card-section>
-        <p class="text-bold text-left blue_color">{{ category.categoryName }}</p>
-        <span class="text-caption text-grey">{{ category.description }}</span>
-      </q-card-section>
-    </q-card>
+    <span class="text-black header_freeCourses" style="width: 100%;">Begin your learning journey with our <span class="blue_color">FREE COURSES</span></span>
+    <span class="text-black desc_mostPopular" style="width: 100%;">"Unlock endless learning opportunities with our free courses,designed to expand your knowledge at no cost!"</span>
   </div>
-</div>
-
-
-      <!-- Desktop view: grid -->
+  <div class="container mt-4 q-mx-lg">
+    <div class="row d-flex justify-content-center align-items-center w-100">
       <div
-        v-else
-        class="row d-flex justify-content-center align-items-center w-100"
+        v-for="category in filteredCategories"
+        :key="category.id"
+        class="col-md-3 mb-4 q-pt-xl"
+        style="margin-left: auto;margin-right: auto;"
       >
-
-        <div
-          v-for="category in filteredCategories"
-          :key="category.id"
-          class="col-md-3 mb-4 q-pt-xl"
-          style="margin-left: auto;margin-right: auto;"
-        >
-        <router-link :to="{ name: 'CourseDetail', params: { id: category.id } }" style="text-decoration: none;">
-          <q-card class="course-card9 h-100">
-            <q-img
-              v-if="category.imagePath"
-              :src="category.imagePath"
-              alt="Category Image"
-              class="course-image9 q-pa-lg"
-            />
-            <q-card-section>
-              <p class="text-bold text-left blue_color">{{ category.categoryName }}</p>
-              <span class="text-caption text-grey">{{ category.description }}</span>
-            </q-card-section>
-          </q-card>
-          </router-link>
-        </div>
-      </div>
-
-      <div class="col-12 q-mt-md text-right my-5 viw" style="width: 92%;margin-left: auto;margin-right: auto;">
-        <router-link to="/allCourses" class="viw-mo" style="color: #2528CB; cursor: pointer;text-decoration: none;">
-  View More Courses →
+     <router-link
+  :to="{ name: 'CourseDetail', params: { id: category.id } }"
+  style="text-decoration: none;"
+>
+  <q-card class="course-card h-100">
+    <q-img
+      v-if="category.imagePath"
+      :src="category.imagePath"
+      alt="Category Image"
+      class="course-image q-pa-lg"
+    />
+    <q-card-section>
+      <p class="text-bold text-left blue_color">{{ category.categoryName }}</p>
+      <span class="text-caption text-grey">{{ category.description }}</span>
+    </q-card-section>
+  </q-card>
 </router-link>
 
+
+
       </div>
+      <!-- <div class="col-12 q-mt-md text-right my-5" style="width: 92%;margin-left: auto;margin-right: auto;">
+          <span style="color: #4E5BF8;">View More Courses →</span>
+        </div> -->
     </div>
   </div>
-</template>
 
+  </div>
+</template>
 
 <script>
 export default {
@@ -208,7 +172,7 @@ export default {
   font-family: sans-serif;
 }
 
-.course-card9 {
+.course-card {
   border: 1px solid #ddd;
   border-radius: 8px;
   width: 90%;
@@ -218,7 +182,7 @@ export default {
   overflow: hidden;
 }
 
-.course-image9 {
+.course-image {
   width: 94%;
   margin-left: 3%;
   margin-right: 3%;
@@ -231,11 +195,11 @@ export default {
   cursor: pointer;
 }
 .blue_color{
-  color: #2528CB !important;
+  color: #4e5bf8 !important;
   /* font-size: 18px; */
 }
 
-.course-card9:hover {
+.course-card:hover {
   transform: scale(1.05); /* Enlarges by 5% */
   transition: transform 0.3s ease;
 }
@@ -269,54 +233,6 @@ export default {
   font-size: 18px;
   font-weight: 700;
 }
-
-.freeCourseCont{
-  margin: 0px;
-}
-
-.free-courses{
-  padding: 0px;
-}
-
-.scroll-wrapper {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-.scroll-wrapper {
-  overflow-x: auto ;
-  /* overflow-y: hidden; */
-  -webkit-overflow-scrolling: touch;
-  /* scroll-snap-type: x mandatory; */
-  /* scroll-behavior: smooth; */
-  padding: 0 1rem 1rem 2rem;
-  /* gap: 1rem; */
-  /* -ms-overflow-style: none; */
-  /* scrollbar-width: none; */
-}
-.snap-card {
-  scroll-snap-align: start;
-  flex: 0 0 auto;
-  width: 85vw;
-  max-width: 280px;
-  height: 100%;
-  margin-right: 1rem;
-  padding-top: 25px;
-}
-.course-card9 {
-  width: 100%;
-  height: 280px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-.viw{
-  text-align: center;
-  font-style: italic;
-  font-weight: 400;
-  font-size: 1.1rem;
-}
-
 
 }
 </style>

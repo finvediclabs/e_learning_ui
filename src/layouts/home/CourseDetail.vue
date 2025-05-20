@@ -109,15 +109,15 @@
   <div class="course-detail q-pa-md">
 
     <!-- image plus text -->
-    <q-card v-if="course" class="q-pa-lg shadow-2 rounded-borders">
-      <div class="row q-col-gutter-lg items-start common">
+    <div v-if="course" class="q-pa-lg">
+      <div class="row q-col-gutter-lg items-start left_text_content">
         <!-- Left Column: Text Content -->
-        <div class="col-12 col-md-6 ">
+        <div class="col-12 col-md-6" >
 
           <div>
-            <h4 class="text-h4 text-bold q-mb-none">The Best Course FinTech<br>Innovation & Entrepreneurship</h4>
+            <p class="text-h4 text-bold q-mb-none">{{ course.categoryName }}</p>
             <p class="text-body2 text-grey-8 inn q-mb-none">
-              {{ course.description }} {{ course.description }} {{ course.description }}
+              {{ course.description }}
             </p>
         <div class="row q-gutter-sm items-center">
   <div class="row items-center q-pa-sm bg-blue-1 text-black rounded button" style="padding: 8px 12px;">
@@ -145,11 +145,11 @@
 
 
         <!-- Right Column: Image & Email Input -->
-        <div class="col-12 col-md-6 q-mt-md imagee">
+        <q-card class="col-12 col-md-6 q-mt-md imagee shadow-1 rounded-borders  common">
           <q-img
             :src="course.imagePath"
             alt="Course Image"
-            style="max-height: 350px; object-fit: cover;"
+            style="max-height: 300px; object-fit: cover;"
             class="rounded-borders "
           />
 
@@ -168,9 +168,9 @@
               rounded
             /> -->
           </div>
-        </div>
+        </q-card>
       </div>
-    </q-card>
+    </div>
 
     <q-card v-else class="q-pa-md">
       <q-card-section class="text-center">
@@ -180,7 +180,7 @@
     </q-card>
     <!-- Add this after the main course card ends -->
 
-<q-card v-if="course" class="q-pa-lg q-mt-lg">
+<div v-if="course" class="about us">
   <!-- About Course Section -->
   <div class="common">
     <h5 class="text-h6 text-bold q-mb-sm">About Course</h5>
@@ -204,13 +204,13 @@
       </li>
     </ul>
   </div>
-</q-card>
+</div>
 <!-- What will I learn in this accelerator? -->
-<q-card class="q-mt-lg q-mb-lg">
+<q-card class="q-mt-lg q-mb-lg shadow-2 rounded-borders">
   <q-card-section class="common">
-    <h4 class="text-h6 text-weight-bold q-mb-md common">
+    <p class="text-h6 text-weight-bold q-mb-md common">
       What will I learn in this accelerator?
-    </h4>
+    </p>
 
 <q-expansion-item
   v-for="(faq, index) in faqs"
@@ -413,6 +413,12 @@ ul.list-disc {
 .common
 {
   padding-left: 1.3% !important;
+  align-items: center; justify-content: center;
+}
+.left_text_content
+{
+   align-items: center; justify-content: center !important;
+  
 }
 
 </style>
