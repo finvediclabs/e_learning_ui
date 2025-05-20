@@ -217,7 +217,7 @@ h4::after {
   font-weight: 500;
   font-family: 'Popins', sans-serif;
   font-weight: 600;
-  color: #4E5BF8;
+  color: #2528CB;
   margin-bottom: 5px;
   margin-left: 5px;
 }
@@ -259,7 +259,7 @@ ul{
 }
 .category-button {
   margin-left: auto;
-  background-color: #4E5BF8;
+  background-color: #2528CB;
   color: #ffffff;
   border-radius: 10px;
   font-weight: 400;

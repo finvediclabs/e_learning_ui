@@ -110,14 +110,14 @@
 
     <!-- image plus text -->
     <q-card v-if="course" class="q-pa-lg shadow-2 rounded-borders">
-      <div class="row q-col-gutter-lg items-start common">
+      <div class="row q-col-gutter-lg items-start common" style="display: flex;align-items: center;">
         <!-- Left Column: Text Content -->
         <div class="col-12 col-md-6 ">
 
           <div>
-            <h4 class="text-h4 text-bold q-mb-none">The Best Course FinTech<br>Innovation & Entrepreneurship</h4>
+            <h4 class="text-h4 text-bold q-mb-none">{{ course.categoryName }}</h4>
             <p class="text-body2 text-grey-8 inn q-mb-none">
-              {{ course.description }} {{ course.description }} {{ course.description }}
+              {{ course.description }}
             </p>
         <div class="row q-gutter-sm items-center">
   <div class="row items-center q-pa-sm bg-blue-1 text-black rounded button" style="padding: 8px 12px;">
