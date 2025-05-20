@@ -1,6 +1,6 @@
 <template>
   <div class="recently-viewed">
-<!-- Heading with "View More" button beside it on mobile only -->
+    <!-- Heading with "View More" button beside it on mobile only -->
 <div class="row items-center justify-between w-100 q-px-sm q-mb-sm Recently" style="width: 100%;">
   <span class="text-black rec-view" style="font-size: x-large; font-weight: 600;">
     Recently Viewed Programs
@@ -8,8 +8,6 @@
   <!-- Mobile-only View More -->
   <span class="mobile-view-more mobile-only" @click="viewAll">View More</span>
 </div>
-
-
 
   <!-- Loading State -->
  <div v-if="loading" class="loading-container">
@@ -115,17 +113,10 @@
     <div v-else class="no-programs" style="display: flex; align-items: center; justify-content: center; height: 200px; text-align: center;">
       <p style="font-size: 1.2em; font-weight: bold; color: gray;">No programs available.</p>
     </div>
-
-    <div class="col-12 q-mt-none text-right q-pt-sm" style="width: 98%;margin-left: auto;margin-right: auto;">
-          <span style="color: #4E5BF8;cursor: pointer;" @click="viewAll">View All Programs →</span>
-        </div>
-
     <!-- Move outside conditional blocks if needed -->
-
-
-
-
-
+    <div v-show="$q.screen.gt.sm" class="col-12 q-mt-none text-right q-pt-sm" style="width: 98%; margin: 0 auto;">
+  <span style="color: #4E5BF8; cursor: pointer;" @click="viewAll">View More Courses →</span>
+</div>
   </div>
 </template>
 
@@ -432,8 +423,6 @@ async fetchDefaultPrograms() {
     align-items: start !important;
     justify-content: start !important;
   }
-
-
 }
 
 /* Default: hide mobile-only, show desktop-only */
@@ -475,8 +464,5 @@ async fetchDefaultPrograms() {
     display: block !important;
   }
 }
-
-
-
 
 </style>
