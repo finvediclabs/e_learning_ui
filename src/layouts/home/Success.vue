@@ -1,5 +1,5 @@
 <template>
-    <div class="q-pa-md">
+    <div class="q-pa-md Success-Stud">
       <div class="text-center text-h4 q-mb-lg">
         <span class="text-black text-h4 text-bold">
           Our <span style="color: #2528CB">Successful </span>Students
@@ -385,6 +385,11 @@
   .slider-item {
     flex: 0 0 100%;
   }
+  .Success-Stud{
+    padding: 16px 0px;
+    background: linear-gradient(45deg, #9999995e, #ffffff);
+  }
+  
 }
 
 .video-wrapper {

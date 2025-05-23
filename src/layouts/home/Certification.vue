@@ -1,11 +1,11 @@
 <template>
-  <div class="certification">
-    <div class="q-pb-xl">
+  <div class="certification" :style="`background-image: url(${Hero_Girl_bg}); background-repeat: no-repeat; background-size: cover; background-position: left center;`">
+    <div class="q-pb-xl cert-pad">
       <span class="text-black header_Program">Our Certifications</span>
     </div>
 <div class="row col-12 mob_column" style="display: flex;align-items: center;">
   <div class="col-6 girl-img">
-    <q-img :src="Hero_Girl" style="width: 60%;"></q-img>
+    <q-img :src="Hero_Girl" class="girl-img-inner"></q-img>
   </div>
     <div class="row q-col-gutter-md col-6 mob_column" >
       <div class="col-6" v-for="program in programs" :key="program.programId" @click="goToProgram(program.programId)">
@@ -32,7 +32,8 @@
 <script>
 import axios from 'axios';
 import Hero_section from 'src/assets/Hero_section.png'
-import Hero_Girl from 'src/assets/Hero_Girl.png'
+import Hero_Girl from 'src/assets/Hero_Girl1.jpeg'
+import Hero_Girl_bg from 'src/assets/Hero_Girl_bg.jpeg'
 
 export default {
   name: 'Certification',
@@ -41,6 +42,7 @@ export default {
       programs: [],
       Hero_section:Hero_section,
       Hero_Girl:Hero_Girl,
+      Hero_Girl_bg:Hero_Girl_bg,
       baseUrl: 'https://fnbackendprod.finvedic.in/', // Base URL
       DummyBook: 'https://via.placeholder.com/150', // Fallback image
     };
@@ -137,6 +139,21 @@ export default {
   transition: transform 0.3s ease;
 }
 
+.girl-img-inner {
+  width: 70%;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.girl-img {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+
 @media (max-width: 768px) {
   .mob_column {
     display: flex !important;
@@ -149,13 +166,21 @@ export default {
     width: 100% !important;
   }
 
-  .girl-img {
-    display: none;
+
+
+  .girl-img-inner {
+    display: none !important;
+    width: 90% !important; 
   }
 
   .course-card8 {
     width: 100% !important;
   }
+  .cert-pad{
+    padding-bottom: 0px;
+  }
 }
+
+
 
 </style>
