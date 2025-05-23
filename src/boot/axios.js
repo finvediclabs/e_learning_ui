@@ -1,19 +1,19 @@
 import { boot } from 'quasar/wrappers';
 import axios from 'axios';
-import qs from 'qs';
-import { Dialog, Notify } from 'quasar';
+import qs from "qs";
 
-let routerInstance = null; // Will be initialized later
-
+// Create API base URL
 const coreUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
 
 const api = axios.create({
   baseURL: coreUrl,
   paramsSerializer: function (params) {
-    return qs.stringify(params, { arrayFormat: 'brackets' });
+    const a = qs.stringify(params, { arrayFormat: 'brackets' });
+    return a;
   },
 });
 
+// Token management function
 export function setToken(token) {
   if (token) {
     api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
@@ -22,45 +22,16 @@ export function setToken(token) {
   }
 }
 
-const token = sessionStorage.getItem('authToken');
+// Check if token exists in sessionStorage on boot and set it
+const token = sessionStorage.getItem('authToken'); // Retrieve token from sessionStorage
 if (token) {
-  setToken(token);
+  setToken(token); // Set the token in Axios default headers
 }
 
-api.interceptors.response.use(
-  response => response,
-  error => {
-    const status = error.response?.status;
-    const errorMessage = error.response?.data?.error || error.message;
-
-  if (status === 401) {
-  Dialog.create({
-    title: 'Session Expired',
-    message: errorMessage || 'You have been logged out. Please login again.',
-    persistent: true,
-    ok: {
-      label: 'Login',
-      color: 'primary'
-    }
-  }).onOk(() => {
-    sessionStorage.clear();
-    window.location.href = '/login#/login'; // Direct browser redirect
-  });
-
-  return Promise.reject(new Error(errorMessage));
-}
-
-
-    return Promise.reject(error);
-  }
-);
-
-// Boot file export
-export default boot(({ app, router }) => {
+export default boot(({ app }) => {
+  // Make Axios globally available in Vue components as this.$axios and this.$api
   app.config.globalProperties.$axios = axios;
   app.config.globalProperties.$api = api;
-
-  routerInstance = router; // Store router instance for later use
 });
 
 export { api };
