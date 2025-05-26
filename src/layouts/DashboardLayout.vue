@@ -1323,7 +1323,9 @@ background-attachment: fixed;
   outline: none !important;
 }
 .logo_in:hover * {
-  color: inherit !important;
+  color: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
 }
 
 
