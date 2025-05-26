@@ -254,7 +254,7 @@ const routes = [
     children: [
       {
         path: '',
-        name: 'all-courses',
+        name: 'all-certifications',
         component: () => import('layouts/home/allCertifications.vue'),
         meta: { title: 'All Courses', module: 'allCourses' }
       }
