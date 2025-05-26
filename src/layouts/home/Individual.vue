@@ -112,7 +112,7 @@
     class="text-black dev_css"
 
   >
-  <i>{{ page.topBar }} <span class="SG_Bar"> SCALEGRAD</span></i>
+  <span>{{ page.topBar }} <span class="SG_Bar"> SCALEGRAD</span></span>
   </span>
 </div>
 </div>

@@ -1,9 +1,10 @@
 <template>
  <q-layout view="lHh Lpr lFf " style="min-height: unset">
 
- <q-toolbar>
+
+  <q-toolbar>
         <!-- Left Side: Logo, q-select, q-search -->
-        <q-toolbar-title class="row items-center q-py-sm q-mt-lg">
+        <q-toolbar-title class="row items-center q-py-sm q-mt-lg top-scale">
           <!-- Menu for small screens -->
           <q-btn
             flat
@@ -17,28 +18,28 @@
           <!-- Placeholder for logo -->
           <div class="q-ml-md logo">
             <!-- Logo will be added here later -->
-            <q-item class="logo_in" to="/">
-              <q-img :src="new_logo" style="width: 220px;"></q-img>
+            <q-item class="logo_in" :to="'/home'">
+              <q-img :src="new_logo1" style="width: 280px;"></q-img>
         </q-item>
           </div>
 
 
 
-<q-input
+<!-- <q-input
   v-if="!$q.screen.lt.md"
   dense
   outlined
   placeholder="Explore, Fuel Your Curiosity..."
   class="q-ml-md search-box"
   bg-color="transparent"
-  color="#4E5BF8"
+  color="#2528CB"
   rounded
   style="width: 300px;"
 >
   <template v-slot:append>
     <q-icon name="search" />
   </template>
-</q-input>
+</q-input> -->
 
         </q-toolbar-title>
 
@@ -53,15 +54,15 @@
   dense
   outlined
   emit-value
-  color="#4E5BF8"
+  color="#2528CB"
   map-options
   class="q-ml-md explore"
   style="min-width: 140px;"
 />
           <!-- <q-btn noCaps flat label="Courses" class="nav-link" /> -->
-          <q-btn noCaps flat label="Certifications" class="nav-link" />
-          <q-btn noCaps flat label="Login" class="nav-link" :to="'/login'" style="color: #4E5BF8" />
-          <q-btn noCaps label="Join for Free" unelevated class="join-btn" style="background-color: #4E5BF8; color: white;" />
+         <q-btn noCaps flat label="Certifications" class="nav-link" @click="scrollToCert" />
+          <q-btn noCaps flat label="Login" class="nav-link" :to="'/login'" style="color: #2528CB" />
+          <q-btn noCaps :to="'/login'" label="Join for Free" unelevated class="join-btn" style="background-color: #2528CB; color: white;" />
 
         </div>
       </q-toolbar>
@@ -84,14 +85,12 @@
     </q-item>
     <q-item clickable v-ripple>
       <q-item-section>
-        <q-btn noCaps label="Join for Free" unelevated class="full-width" style="background-color: #4E5BF8; color: white;" />
+        <q-btn noCaps label="Join for Free" unelevated class="full-width" :to="'/login'" style="background-color: #2528CB; color: white;" />
       </q-item-section>
     </q-item>
 
   </q-list>
 </q-drawer>
-
-
 
   <div class="free-courses1 q-pb-lg q-mb-lg">
     <div class="row w-100 text-left q-mt-md q-mx-lg">
@@ -193,6 +192,9 @@
 <script>
 import bg_img from "src/assets/scalefradepng1.png";
 import new_logo from "src/assets/new_logo1.svg";
+
+import new_logo1 from "src/assets/ScaleGrad_blue.svg";
+
 export default {
   name: 'FreeCourses',
   data() {
@@ -202,6 +204,7 @@ export default {
        bg_img,
       leftDrawerOpen: false,
       new_logo,
+      new_logo1
     };
   },
   computed: {

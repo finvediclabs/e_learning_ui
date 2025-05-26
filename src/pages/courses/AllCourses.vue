@@ -142,7 +142,7 @@
           this.showDemoPopup = true;
           return;
         }
-        this.$router.push({ path: `/course/${category.id}` });
+        this.$router.push({ path: `/courses/${category.id}` });
       },
     },
   };

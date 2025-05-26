@@ -338,7 +338,7 @@ const routes = [
     ],
   },
   {
-    path: '/course',
+    path: '/courses',
     meta: { title: 'Course', module: 'course' },
 
     component: () => import('layouts/DashboardLayout.vue'),

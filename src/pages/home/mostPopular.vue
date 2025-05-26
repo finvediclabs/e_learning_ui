@@ -138,7 +138,7 @@ export default {
   },
   methods: {
     viewAll() {
-    this.$router.push("/course");
+    this.$router.push("/courses");
     console.log("View All Clicked from MostPopular");
   },
     async preloadImage(url) {
@@ -159,7 +159,7 @@ handleCategoryClick(category, index) {
     return;
   }
 
-  this.$router.push({ path: `/course/${category.id}` });
+  this.$router.push({ path: `/courses/${category.id}` });
 },
 async fetchCategories() {
   this.isLoading = true;
