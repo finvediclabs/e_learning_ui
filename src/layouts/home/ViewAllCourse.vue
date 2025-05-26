@@ -7,7 +7,7 @@
   <div class="free-courses1 q-pb-lg q-mb-lg">
     <div class="row w-100 text-left q-mt-md q-mx-lg">
       <span class="text-black header_freeCourses" style="width: 100%;">
-        Start learning journey with our <span class="blue_color">Exclusive COURSES</span>
+        Start learning journey with our <span class="blue_color">Popular COURSES</span>
       </span>
       <span class="text-black desc_mostPopular" style="width: 100%;">
         "Unlock endless learning opportunities with our courses, designed to expand your knowledge"

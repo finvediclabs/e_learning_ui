@@ -26,6 +26,12 @@
       </div>
     </div>
   </div>
+ <div class="col-12 q-mt-md text-right my-5 viw" style="width: 92%;margin-left: auto;margin-right: auto;">
+        <router-link to="/allCertifications" class="viw-mo" style="color: #2528CB; cursor: pointer;text-decoration: none;">
+  View More Certifications →
+</router-link>
+
+      </div>
   </div>
 </template>
 
@@ -170,7 +176,7 @@ export default {
 
   .girl-img-inner {
     display: none !important;
-    width: 90% !important; 
+    width: 90% !important;
   }
 
   .course-card8 {

@@ -247,6 +247,19 @@ const routes = [
       }
     ]
   },
+
+  {
+    path: '/allCertifications',
+    component: () => import('layouts/home/HomePage.vue'),
+    children: [
+      {
+        path: '',
+        name: 'all-courses',
+        component: () => import('layouts/home/allCertifications.vue'),
+        meta: { title: 'All Courses', module: 'allCourses' }
+      }
+    ]
+  },
   {
     path: '/allFreeCourses',
     component: () => import('layouts/home/HomePage.vue'),
