@@ -1,7 +1,7 @@
 <template>
   <q-layout view="lHh Lpr lFf">
     <!-- Navigation Bar -->
- <q-header class="bg-Customblue text-white" elevated >
+ <q-header class="bg-Customblue text-white" elevated>
       <q-toolbar>
 
         <!-- Hamburger button for mobile -->
@@ -10,24 +10,20 @@
           dense
           round
           icon="menu"
-          class="lt-md inn-blue"
+          class="lt-md"
           @click="drawer = !drawer"
         />
 
-<!-- Logo -->
-<div
-  class="nav-container"
-  :class="{
-    'q-ml-md': $q.screen.gt.sm,
-    'q-toolbar-title justify-center': $q.screen.lt.md
-  }"
-  style="flex: 1"
->
-  <q-item class="logo_in no-hover-effect" clickable @click="$router.push('/home')">
-    <q-img :src="new_logo2" class="logo-img" />
-  </q-item>
-</div>
-
+        <!-- Logo -->
+        <div
+          class="nav-container"
+          :class="{'q-ml-md': $q.screen.gt.sm, 'q-toolbar-title text-center': $q.screen.lt.md}"
+          style="flex: 1"
+        >
+          <q-item class="logo_in">
+            <q-img :src="new_logo2" style="width: 220px;" />
+          </q-item>
+        </div>
 
         <!-- Spacer -->
         <q-space />
@@ -157,9 +153,6 @@ drawer: false,
 }
 
 @media (max-width: 768px) {
-  .nav-container{
-    margin:  0 7%;
-  }
   .nav-item {
     font-size: 14px;
     padding: 8px 12px;
@@ -169,7 +162,6 @@ drawer: false,
 @media (max-width: 480px) {
   .nav-container {
     flex-direction: row;
-    
   }
   .nav-item {
     font-size: 11px;
@@ -178,27 +170,4 @@ drawer: false,
     flex-grow: 1;
   }
 }
-
-.nav-container {
-  display: flex;
-  align-items: center;
-  width: 100%;
-}
-
-/* Ensures logo doesn't have any hover effects */
-.logo_in:hover {
-  background-color: transparent !important;
-  box-shadow: none !important;
-  outline: none !important;
-}
-
-.no-hover-effect::before {
-  background: none !important;
-}
-
-.logo-img {
-  width: 220px;
-  margin: 0 auto;
-}
-
 </style>
