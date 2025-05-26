@@ -2,95 +2,8 @@
   <q-layout view="lHh Lpr lFf " style="min-height: unset">
     <!-- Navigation Bar -->
 
-    <q-toolbar>
-        <!-- Left Side: Logo, q-select, q-search -->
-        <q-toolbar-title class="row items-center q-py-sm q-mt-lg top-scale">
-          <!-- Menu for small screens -->
-          <q-btn
-            flat
-            dense
-            round
-            icon="menu"
-            class="lt-md"
-            @click="leftDrawerOpen = !leftDrawerOpen"
-          />
-
-          <!-- Placeholder for logo -->
-          <div class="q-ml-md logo">
-            <!-- Logo will be added here later -->
-            <q-item class="logo_in">
-              <q-img :src="new_logo1" style="width: 280px;"></q-img>
-        </q-item>
-          </div>
 
 
-
-<!-- <q-input
-  v-if="!$q.screen.lt.md"
-  dense
-  outlined
-  placeholder="Explore, Fuel Your Curiosity..."
-  class="q-ml-md search-box"
-  bg-color="transparent"
-  color="#2528CB"
-  rounded
-  style="width: 300px;"
->
-  <template v-slot:append>
-    <q-icon name="search" />
-  </template>
-</q-input> -->
-
-        </q-toolbar-title>
-
-        <!-- Right Side: Navigation Links (Hidden on Mobile) -->
-        <div class="row items-center q-gutter-md gt-sm q-mt-sm">
-          <q-select
-  v-if="!$q.screen.lt.sm"
-  v-model="selectedExplore"
-  :options="exploreOptions"
-  clearable
-  label="Courses"
-  dense
-  outlined
-  emit-value
-  color="#2528CB"
-  map-options
-  class="q-ml-md explore"
-  style="min-width: 140px;"
-/>
-          <!-- <q-btn noCaps flat label="Courses" class="nav-link" /> -->
-         <q-btn noCaps flat label="Certifications" class="nav-link" @click="scrollToCert" />
-          <q-btn noCaps flat label="Login" class="nav-link" :to="'/login'" style="color: #2528CB" />
-          <q-btn noCaps :to="'/login'" label="Join for Free" unelevated class="join-btn" style="background-color: #2528CB; color: white;" />
-
-        </div>
-      </q-toolbar>
-
-      <q-drawer v-model="leftDrawerOpen" side="left" overlay class="bg-white">
-  <!-- Close Button -->
-  <div class="row justify-end q-pa-md">
-    <q-btn flat dense round icon="close" @click="leftDrawerOpen = false" />
-  </div>
-
-  <q-list>
-    <q-item clickable v-ripple>
-      <q-item-section>Courses</q-item-section>
-    </q-item>
-    <q-item clickable v-ripple>
-      <q-item-section>Career</q-item-section>
-    </q-item>
-    <q-item clickable v-ripple :to="'/login'">
-      <q-item-section>Login</q-item-section>
-    </q-item>
-    <q-item clickable v-ripple>
-      <q-item-section>
-        <q-btn noCaps label="Join for Free" unelevated class="full-width" :to="'/login'" style="background-color: #2528CB; color: white;" />
-      </q-item-section>
-    </q-item>
-
-  </q-list>
-</q-drawer>
 
     <q-page-container>
       <!-- 	Alice blue Bar -->
@@ -237,7 +150,6 @@ export default {
       description:"",
       new_logo: new_logo,
       new_logo1: new_logo1,
-      leftDrawerOpen: false,
       selectedExplore: null,
       programs: [], // List of programs
       courses: [], // List of courses (chapter categories)
@@ -270,12 +182,20 @@ export default {
       this.routeUniqueId = to.query.uniqueId;
       this.showOtpDialog = true;
     }
+  },
+  '$route.hash'(newHash) {
+    if (newHash === '#certSection') {
+      this.scrollToCertSection();
+    }
   }
 },
 mounted() {
   if (this.$route.path === '/certificateValidation' && this.$route.query.uniqueId) {
     this.routeUniqueId = this.$route.query.uniqueId;
     this.showOtpDialog = true;
+  }
+   if (this.$route.hash === '#certSection') {
+    this.scrollToCertSection()
   }
 },
   methods: {
@@ -307,6 +227,14 @@ mounted() {
     console.warn("No program selected");
   }
 },
+scrollToCertSection() {
+      this.$nextTick(() => {
+        const el = this.$refs.certSection
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' })
+        }
+      })
+    },
     async fetchCourses(programId, programName, programDescription) {
   this.selectedProgramId = programId;
   this.selectedDescription = programDescription;

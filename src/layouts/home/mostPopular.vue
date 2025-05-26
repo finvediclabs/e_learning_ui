@@ -126,8 +126,12 @@ export default {
 
 
     // Process categories and fetch images
-    this.categories = await Promise.all(
-      data.map(async (category) => {
+   this.categories = await Promise.all(
+  data.map(async (category) => {
+    // Change categoryName if it equals 'specialization'
+     if (category.categoryName === 'Specialization') {
+      category.categoryName = 'Equities & Electronic Trading';
+    }
         let imageUrl = category.imagePath || null;
 
         if (imageUrl && imageUrl.startsWith(`${baseUrl}fs/download/`)) {
