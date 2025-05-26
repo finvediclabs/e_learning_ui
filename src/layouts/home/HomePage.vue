@@ -39,17 +39,23 @@
           v-show="$q.screen.gt.sm"
         >
           <!-- Courses Dropdown -->
-          <q-select
-            dense
-            filled
-            options-dense
-            class="bg-white text-black"
-            style="min-width: 160px; border-radius: 20px;"
-            v-model="selectedCourse"
-            :options="courseOptions"
-            label="Courses"
-            @update:model-value="onCourseSelect"
-          />
+  <q-select
+  v-if="!$q.screen.lt.sm"
+  v-model="selectedExplore"
+  :options="exploreOptions"
+  label="Courses"
+  dense
+  filled
+  options-dense
+  emit-value
+  map-options
+  color="primary"
+  dropdown-icon="keyboard_arrow_down"
+  class="q-ml-md bg-white text-black"
+  style="min-width: 160px; border-radius: 20px;"
+  @update:model-value="onCourseSelect"
+/>
+
 
           <!-- Our Certifications -->
           <q-btn
@@ -99,7 +105,7 @@
 
     <q-page-container>
       <q-page class="flex">
-        <router-view />
+        <router-view :key="$route.fullPath" />
       </q-page>
     </q-page-container>
   </q-layout>
@@ -112,6 +118,9 @@ export default {
   name: "HomePage",
   data() {
     return {
+       routeUniqueId: "",
+     selectedExplore: null,
+      exploreOptions: [],
       navItems: [
         { label: "Individuals", to: "/" },
         { label: "Corporates", to: "/corporates" },
@@ -122,6 +131,10 @@ export default {
 drawer: false,
     };
   },
+  mounted()
+  {
+    this.fetchExploreOptions();
+  },
   methods: {
     isActiveRoute(path) {
       return this.$route.path === path;
@@ -129,7 +142,31 @@ drawer: false,
       goToLogin() {
       this.drawer = false  // close drawer if open
       this.$router.push('/login')  // navigate to /login route
+    },
+    async fetchExploreOptions() {
+  try {
+    const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
+    const response = await fetch(baseUrl + 'api/chapterCategoriess/all');
+    const data = await response.json();
+
+    this.exploreOptions = data.map(item => ({
+      label: item.categoryName,
+      value: item.id  // Use id here to match /course/:id
+    }));
+  } catch (error) {
+    console.error('Failed to fetch categories:', error);
+  }
+
+
+},
+onCourseSelect(courseId) {
+    if (courseId) {
+      this.$router.push({ path: `/course/${courseId}` });
     }
+  }
+
+
+
   }
 };
 </script>
