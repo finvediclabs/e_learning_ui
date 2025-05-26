@@ -1313,8 +1313,18 @@ background-attachment: fixed;
     margin: 0px;
    }
 }
+.logo {
+  background-color: transparent !important;
+}
 
-
+.logo:hover {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+.logo_in:hover * {
+  color: inherit !important;
+}
 
 
 </style>

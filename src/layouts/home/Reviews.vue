@@ -50,25 +50,35 @@
     v-for="(review, index) in reviews"
     :key="index"
     :name="index"
-    class="q-pa-md"
+    class="q-pa-md inner-carousel-slide d-flex flex-column justify-center align-items-center " 
   >
     <q-card class="review-card">
-      <!-- Reviewer Info -->
-      <q-card-section class="flex items-center">
-        <img class="review-img" :src="review.imagePath" alt="Reviewer Image" />
-        <div class="reviewer-details q-ml-md">
-          <p class="review-name text-bold q-mb-none">{{ review.studentName }}</p>
-          <p class="review-role text-grey q-mb-none">{{ review.studentProf }}</p>
-        </div>
-      </q-card-section>
+<!-- Reviewer Info + Ratings side by side -->
+<q-card-section class="reviewer-row" >
+  <img class="review-img" :src="review.imagePath" alt="Reviewer Image" />
+  
+  <div class="reviewer-details-wrapper q-ml-md">
+    <div class="reviewer-details">
+      <p class="review-name text-bold q-mb-none">{{ review.studentName }}</p>
+      <p class="review-role text-grey q-mb-none">{{ review.studentProf }}</p>
+    </div>
+  </div>
 
-      <!-- Star Ratings -->
-      <q-card-section class="ratings">
-        <q-icon v-for="n in 5" :key="n" name="star" size="16px" :color="n <= review.rating ? 'yellow' : 'grey'" />
-      </q-card-section>
+  <div class="ratings-mobile q-ml-md">
+    <q-icon
+      v-for="n in 5"
+      :key="n"
+      name="star"
+      size="16px"
+      :color="n <= review.rating ? 'yellow' : 'grey'"
+    />
+  </div>
+</q-card-section>
+
+
 
       <!-- Review Text -->
-      <q-card-section class="review-text">{{ review.description }}</q-card-section>
+      <q-card-section class="review-text" >{{ review.description }}</q-card-section>
     </q-card>
   </q-carousel-slide>
 </q-carousel>
@@ -242,7 +252,7 @@ export default {
     margin: 0 auto;
   }
   .reviews{
-    padding: 30px 0px !important;
+    padding: 30px 0px 0px 0px !important;
     background: #ffffff;
   }
    .carousel-cont {
@@ -260,6 +270,21 @@ export default {
 .hub-insight{
     font-size: 2rem;
 }
+.reviewer-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  padding-bottom: 0;
+  padding-top: 0;
+}
+
+.ratings-mobile {
+  display: flex;
+  gap: 2px;
+  margin-top: 4px;
+}
+
 }
 
 .custom-carousel {
@@ -291,8 +316,78 @@ export default {
   padding-bottom: 50px; /* reserve space for radio buttons */
 }
 
+@media (max-width: 768px) {
+    
+    .review-card {
+  width: 90%;
+  border-radius: 12px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  height: auto; /* let content determine height */
+  min-height: 160px; /* reduced minimum height */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
 
+  .review-img {
+    width: 45px;
+    height: 45px;
+  }
+  .review-name {
+    font-size: 15px;
+  }
+  .review-role {
+    font-size: 13px;
+  }
+  .reviewer-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  flex-wrap: nowrap;
+  padding-bottom: 0;
+  padding-top: 0;
+}
 
+.review-img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
 
+.reviewer-details-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.review-name {
+  font-size: 13px;
+}
+
+.review-role {
+  font-size: 10px;
+  color: grey;
+}
+
+.ratings-mobile {
+  display: flex;
+  gap: 1px;
+}
+
+.inner-carousel-slide{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: auto; 
+}
+.custom-carousel{
+height: auto;
+}
+
+}
 
 </style>
