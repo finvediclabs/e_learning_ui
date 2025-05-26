@@ -45,10 +45,10 @@ api.interceptors.response.use(
   }).onOk(() => {
     sessionStorage.clear();
    if (routerInstance) {
-  routerInstance.replace({ path: '/home' });
-  window.location.href = '/home';
+  routerInstance.replace({ path: '/' });
+  window.location.href = '/';
 } else {
-  window.location.href = '/home';
+  window.location.href = '/';
 } // Direct browser redirect
   });
 
