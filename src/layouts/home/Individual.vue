@@ -68,11 +68,11 @@
     <div class="col-1 q-none q-md-block"></div>
     <div class="col-12 col-md-5 row btns">
       <div class="col-12 col-md-auto q-mb-sm">
-        <q-btn class="Join_Free_btn q-px-xl q-py-md full-width" no-caps to="/login">Join For Free</q-btn>
+        <q-btn class="Join_Free_btn q-px-xl q-py-md full-width" no-caps to="/signup">Free Trail - Sign Up</q-btn>
       </div>
-      <div class="col-12 col-md-6 q-mb-sm q-md-ml-md margin_left">
+      <!-- <div class="col-12 col-md-6 q-mb-sm q-md-ml-md margin_left">
         <q-btn class="Explore_btn q-py-md full-width" no-caps :to="firstProgramLink">Explore Our Certifications</q-btn>
-      </div>
+      </div> -->
     </div>
   </div>
 
