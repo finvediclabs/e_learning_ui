@@ -67,8 +67,8 @@
       >
         <td style="font-size: 12px;">{{ module.moduleName }}</td>
 
-        <td v-if="activeTab !== 'books'" class="arrow">→</td>
-        <td v-else style="visibility: hidden;"> .</td>
+        <!-- <td v-if="activeTab !== 'books'" class="arrow">→</td> -->
+        <td style="visibility: hidden;"> .</td>
 
       </tr>
     </tbody>
