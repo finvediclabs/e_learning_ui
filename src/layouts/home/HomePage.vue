@@ -23,7 +23,7 @@
   }"
   style="flex: 1"
 >
-  <q-item class="logo_in no-hover-effect" clickable @click="$router.push('/home')">
+  <q-item class="logo_in no-hover-effect" clickable @click="goToHome">
     <q-img :src="new_logo2" class="logo-img" />
   </q-item>
 </div>
@@ -159,10 +159,14 @@ drawer: false,
 
 
 },
+goToHome() {
+    this.selectedExplore = null;
+    this.$router.push('/home');
+  },
 onCourseSelect(courseId) {
     if (courseId) {
       this.$router.push({ path: `/course/${courseId}` });
-      this.selectedExplore = null;
+
     }
   }
 
@@ -207,7 +211,7 @@ onCourseSelect(courseId) {
 @media (max-width: 480px) {
   .nav-container {
     flex-direction: row;
-    
+
   }
   .nav-item {
     font-size: 11px;
