@@ -113,82 +113,81 @@
 
 <script>
 import axios from "axios";
-export default {
-    data() {
-        return {
-            reviews: [],
-            visibleReviews: [],
-            reviewsPerPage: 3,
-            activeSlide: 0,
-            isMobile: false,
-        };
-    },
-    created() {
-        this.updateScreenSize();
-        this.loadMoreReviews();
-        this.fetchReviews();
-    },
-    mounted() {
-        window.addEventListener('resize', this.updateScreenSize);
-    },
-    beforeDestroy() {
-        window.removeEventListener('resize', this.updateScreenSize);
-    },
-    async created() {
-        await this.fetchReviews();
-        this.loadMoreReviews();
-    },
-    methods: {
-        updateScreenSize() {
-            this.isMobile = window.innerWidth < 768;
-        },
-        async fetchReviews() {
-            this.reviews = [];
-            const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
-            try {
-                const getCourse = baseUrl + 'api/programFeedback';
-                const response = await axios.get(`${getCourse}`); // Replace 1 with dynamic programId
 
-                if (response.data.success) {
-                    this.reviews = await Promise.all(
-                        response.data.data.map(async (review) => {
-                            let imageUrl = review.imagePath || null;
-                            if (imageUrl && imageUrl.startsWith(`${baseUrl}fs/download/`)) {
-                                const downloadUrl = `${baseUrl}fs/download`;
-                                const filename = imageUrl.replace(`${baseUrl}fs/download/`, '');
-                                try {
-                                    const formData = new FormData();
-                                    formData.append('filename', filename);
-                                    const downloadResponse = await axios.post(downloadUrl, formData, { responseType: 'blob' });
-                                    const blob = new Blob([downloadResponse.data]);
-                                    imageUrl = window.URL.createObjectURL(blob);
-                                } catch (error) {
-                                    console.error(`Error fetching image for: ${review.studentName}`, error);
-                                }
-                            }
-                            return {
-                                ...review,
-                                imagePath: imageUrl,
-                            };
-                        })
-                    );
-                } else {
-                    console.error("Failed to fetch reviews");
-                }
-            } catch (error) {
-                console.error("Error fetching reviews:", error);
-            }
-        },
-        loadMoreReviews() {
-            const nextReviews = this.reviews.slice(this.visibleReviews.length, this.visibleReviews.length + this.reviewsPerPage);
-            this.visibleReviews = [...this.visibleReviews, ...nextReviews];
-        },
-        resetReviews() {
-            this.visibleReviews = this.reviews.slice(0, this.reviewsPerPage);
-        },
+export default {
+  data() {
+    return {
+      reviews: [],
+      visibleReviews: [],
+      reviewsPerPage: 3,
+      activeSlide: 0,
+      isMobile: false,
+    };
+  },
+  async created() {
+    this.updateScreenSize();
+    window.addEventListener("resize", this.updateScreenSize);
+    await this.initReviews(); // Only one entry point to fetch and set
+  },
+  beforeDestroy() {
+    window.removeEventListener("resize", this.updateScreenSize);
+  },
+  methods: {
+    async initReviews() {
+      await this.fetchReviews(); // Fetch reviews
+      this.resetReviews();       // Load only the first 3
     },
+    updateScreenSize() {
+      this.isMobile = window.innerWidth < 768;
+    },
+    async fetchReviews() {
+      this.reviews = [];
+      const baseUrl = (process.env.VUE_APP_CORE_URL || "").replace(/\/$/g, "") + "/";
+      try {
+        const getCourse = baseUrl + "api/programFeedback";
+        const response = await axios.get(`${getCourse}`);
+
+        if (response.data.success) {
+          this.reviews = await Promise.all(
+            response.data.data.map(async (review) => {
+              let imageUrl = review.imagePath || null;
+              if (imageUrl && imageUrl.startsWith(`${baseUrl}fs/download/`)) {
+                const downloadUrl = `${baseUrl}fs/download`;
+                const filename = imageUrl.replace(`${baseUrl}fs/download/`, "");
+                try {
+                  const formData = new FormData();
+                  formData.append("filename", filename);
+                  const downloadResponse = await axios.post(downloadUrl, formData, { responseType: "blob" });
+                  const blob = new Blob([downloadResponse.data]);
+                  imageUrl = window.URL.createObjectURL(blob);
+                } catch (error) {
+                  console.error(`Error fetching image for: ${review.studentName}`, error);
+                }
+              }
+              return {
+                ...review,
+                imagePath: imageUrl,
+              };
+            })
+          );
+        } else {
+          console.error("Failed to fetch reviews");
+        }
+      } catch (error) {
+        console.error("Error fetching reviews:", error);
+      }
+    },
+    loadMoreReviews() {
+      const nextReviews = this.reviews.slice(this.visibleReviews.length, this.visibleReviews.length + this.reviewsPerPage);
+      this.visibleReviews = [...this.visibleReviews, ...nextReviews];
+    },
+    resetReviews() {
+      this.visibleReviews = this.reviews.slice(0, this.reviewsPerPage);
+    },
+  },
 };
 </script>
+
 
 <style scoped>
 .reviews {
