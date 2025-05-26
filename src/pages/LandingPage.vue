@@ -26,7 +26,8 @@
 <script>
 import new_logo from "src/assets/new_logo1.svg";
 import new_logo1 from "src/assets/ScaleGrad_blue.svg";
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
 import CreateAccountPage from "../components/LandingComponents/CreateAccountPage.vue";
 import LogInPage from "../components/LandingComponents/LogInPage.vue";
 import ResetPasswordPage from "../components/LandingComponents/ResetPasswordPage.vue";
@@ -39,21 +40,39 @@ export default defineComponent({
     LogInPage,
     ResetPasswordPage
   },
-  data() {
+  setup() {
+    const route = useRoute();
+    const currentPage = ref('loginPage'); // default
+
+    // Function to map routes to page identifiers
+    const setPageFromRoute = () => {
+      if (route.path === '/signup') {
+        currentPage.value = 'createPage';
+      } else if (route.path === '/reset-password') {
+        currentPage.value = 'resetPasswordPage';
+      } else {
+        currentPage.value = 'loginPage';
+      }
+    };
+
+    // Watch route changes
+    watch(route, setPageFromRoute, { immediate: true });
+
+    const changePage = (page) => {
+      currentPage.value = page;
+    };
+
     return {
-      currentPage: ref('loginPage'),
-      LandingImg: LandingImg,
-      new_logo: new_logo,
-      new_logo1: new_logo1
-    }
-  },
-  methods: {
-    changePage(page) {
-      this.currentPage = page;
-    }
+      currentPage,
+      LandingImg,
+      new_logo,
+      new_logo1,
+      changePage
+    };
   }
 });
 </script>
+
 
 <style>
 .responsive-img {
