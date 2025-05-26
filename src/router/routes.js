@@ -40,11 +40,6 @@ const routes = [
     meta: { title: 'landing', module: 'login' },
     component: () => import('layouts/LandingLayout.vue'),
   },
-    {
-    path: '/signup',
-    meta: { title: 'landing', module: 'login' },
-    component: () => import('layouts/LandingLayout.vue'),
-  },
 {
   path: '/course/:id',
   component: () => import('layouts/home/HomePage.vue'),
