@@ -94,7 +94,7 @@
           <q-item-section>Courses</q-item-section>
         </q-item>
 
-        <q-item clickable @click="onCertifications; drawer = false">
+        <q-item clickable @click="onCertifications;">
           <q-item-section>Our Certifications</q-item-section>
         </q-item>
 
@@ -143,6 +143,10 @@ drawer: false,
       goToLogin() {
       this.drawer = false  // close drawer if open
       this.$router.push('/login')  // navigate to /login route
+    },
+    onCertifications(){
+      this.drawer = false; // close drawer if open
+      this.$router.push('/allCertifications'); // navigate to all certifications page
     },
    async fetchExploreOptions() {
   try {
