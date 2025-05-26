@@ -162,6 +162,7 @@ drawer: false,
 onCourseSelect(courseId) {
     if (courseId) {
       this.$router.push({ path: `/course/${courseId}` });
+      this.selectedExplore = null;
     }
   }
 
