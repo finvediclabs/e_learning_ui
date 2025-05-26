@@ -44,7 +44,7 @@ api.interceptors.response.use(
     }
   }).onOk(() => {
     sessionStorage.clear();
-    window.location.href = '/login#/login'; // Direct browser redirect
+    window.location.href = '/#/login'; // Direct browser redirect
   });
 
   return Promise.reject(new Error(errorMessage));
