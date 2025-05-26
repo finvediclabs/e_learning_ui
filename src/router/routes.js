@@ -248,6 +248,19 @@ const routes = [
     ]
   },
   {
+    path: '/allFreeCourses',
+    component: () => import('layouts/home/HomePage.vue'),
+    children: [
+      {
+        path: '',
+        name: 'all-FreeCourses',
+        component: () => import('layouts/home/viewAllFreeCourse.vue'),
+        meta: { title: 'All Free Courses', module: 'allFreeCourses' }
+      }
+    ]
+  },
+
+  {
     path: "/finassociate",
      component: () => import('layouts/home/HomePage.vue'),
     children: [
@@ -350,6 +363,7 @@ const routes = [
     children: [
       {
         path: ':id',
+        name: 'CoursesDetail',
         component: () => import('pages/courses/courses.vue'),
         meta: { item: '' },
       },

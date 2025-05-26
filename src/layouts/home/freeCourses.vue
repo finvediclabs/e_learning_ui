@@ -68,7 +68,7 @@
       </div>
 
       <div class="col-12 q-mt-md text-right my-5 viw" style="width: 92%;margin-left: auto;margin-right: auto;">
-        <router-link to="/allCourses" class="viw-mo" style="color: #2528CB; cursor: pointer;text-decoration: none;">
+        <router-link to="/allFreeCourses" class="viw-mo" style="color: #2528CB; cursor: pointer;text-decoration: none;">
   View More Courses →
 </router-link>
 

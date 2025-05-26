@@ -165,7 +165,7 @@ async fetchCategories() {
   this.isLoading = true;
   try {
     const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
-    const getCourse = baseUrl + 'api/chapterCategoriess/all';
+    const getCourse = baseUrl + 'api/chapterCategoriess';
     const response = await fetch(getCourse);
     const data = await response.json();
 

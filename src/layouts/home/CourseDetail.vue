@@ -38,14 +38,15 @@
             />
 
         </div>
+        <div class="col-3"></div>
 
 
         <!-- Right Column: Image & Email Input -->
-        <div class="col-12 col-md-6 q-mt-md imagee">
+        <div class="col-12 col-md-3 q-mt-md imagee">
           <q-img
             :src="course.imagePath"
             alt="Course Image"
-            style="max-height: 350px; object-fit: cover;"
+            style="height: 100%; object-fit: cover;"
             class="rounded-borders "
           />
 
@@ -197,53 +198,58 @@ export default {
     this.fetchCourse();
   },
   methods: {
-    async fetchCourse() {
-      try {
-        const id = this.$route.params.id;
-        const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
-        const response = await fetch(`${baseUrl}api/chapterCategoriess/free`);
+ async fetchCourse() {
+  try {
+    const id = this.$route.params.id;
+    const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
+    const response = await fetch(`${baseUrl}api/chapterCategoriess/all`);
 
-        if (!response.ok) {
-          throw new Error('Failed to fetch course data');
-        }
+    if (!response.ok) {
+      throw new Error('Failed to fetch course data');
+    }
 
-        const data = await response.json();
-        const found = data.find(course => course.id.toString() === id);
+    const data = await response.json();
+    const found = data.find(course => course.id.toString() === id);
 
-        if (!found) {
-          console.warn('Course not found with id:', id);
-          return;
-        }
+    if (!found) {
+      console.warn('Course not found with id:', id);
+      return;
+    }
 
-        let imageUrl = found.imagePath;
+    // Fix: Use `found`, not `course` here:
+    if (found.categoryName === 'Specialization') {
+      found.categoryName = 'Equities & Electronic Trading';
+    }
 
-        if (imageUrl && imageUrl.startsWith(`${baseUrl}fs/download/`)) {
-          const filename = imageUrl.replace(`${baseUrl}fs/download/`, '');
-          const formData = new FormData();
-          formData.append('filename', filename);
+    let imageUrl = found.imagePath;
 
-          const imageRes = await fetch(`${baseUrl}fs/download`, {
-            method: 'POST',
-            body: formData
-          });
+    if (imageUrl && imageUrl.startsWith(`${baseUrl}fs/download/`)) {
+      const filename = imageUrl.replace(`${baseUrl}fs/download/`, '');
+      const formData = new FormData();
+      formData.append('filename', filename);
 
-          if (imageRes.ok) {
-            const blob = await imageRes.blob();
-            imageUrl = window.URL.createObjectURL(blob);
-          } else {
-            imageUrl = require('@/assets/dummy_book.png'); // fallback
-          }
-        }
+      const imageRes = await fetch(`${baseUrl}fs/download`, {
+        method: 'POST',
+        body: formData,
+      });
 
-        this.course = {
-          ...found,
-          imagePath: imageUrl
-        };
-
-      } catch (error) {
-        console.error('Error fetching course:', error);
+      if (imageRes.ok) {
+        const blob = await imageRes.blob();
+        imageUrl = window.URL.createObjectURL(blob);
+      } else {
+        imageUrl = require('@/assets/dummy_book.png'); // fallback image
       }
-    },
+    }
+
+    this.course = {
+      ...found,
+      imagePath: imageUrl,
+    };
+
+  } catch (error) {
+    console.error('Error fetching course:', error);
+  }
+},
   },
 };
 </script>

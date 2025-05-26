@@ -69,7 +69,8 @@
           <!-- Platform Login -->
           <q-btn
             flat
-            class="text-white"
+            class="text-white light_blue_BG"
+
             :label="'Platform Login'"
             style="white-space: nowrap; min-width: 140px;"
              @click="goToLogin"
@@ -143,21 +144,30 @@ drawer: false,
       this.drawer = false  // close drawer if open
       this.$router.push('/login')  // navigate to /login route
     },
-    async fetchExploreOptions() {
+   async fetchExploreOptions() {
   try {
     const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
-    const response = await fetch(baseUrl + 'api/chapterCategoriess/all');
+    const response = await fetch(baseUrl + 'api/chapterCategoriess');
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
     const data = await response.json();
 
-    this.exploreOptions = data.map(item => ({
-      label: item.categoryName,
-      value: item.id  // Use id here to match /course/:id
-    }));
+    this.exploreOptions = data.map(item => {
+      const label = item.categoryName === 'Specialization'
+        ? 'Equities & Electronic Trading'
+        : item.categoryName;
+
+      return {
+        label: label,
+        value: item.id
+      };
+    });
   } catch (error) {
     console.error('Failed to fetch categories:', error);
   }
-
-
 },
 goToHome() {
     this.selectedExplore = null;
@@ -183,7 +193,10 @@ onCourseSelect(courseId) {
   align-items: center;
   width: 100%;
 }
-
+.light_blue_BG{
+  background-color: #41C0FD !important;
+  border-radius: 12px;
+}
 .nav-item {
   position: relative;
   transition: color 0.3s ease-in-out;
