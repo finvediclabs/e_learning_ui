@@ -44,7 +44,12 @@ api.interceptors.response.use(
     }
   }).onOk(() => {
     sessionStorage.clear();
-    window.location.href = '/#/login'; // Direct browser redirect
+   if (routerInstance) {
+  routerInstance.replace({ path: '/home' });
+  window.location.href = '/home';
+} else {
+  window.location.href = '/home';
+} // Direct browser redirect
   });
 
   return Promise.reject(new Error(errorMessage));
