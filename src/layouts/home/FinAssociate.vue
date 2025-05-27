@@ -389,7 +389,7 @@
   style="margin-top: -60px; z-index: 2; position: relative; overflow: hidden;"
 >
   <img
-    :src="`src/assets/teacher${index + 1}.png`"
+   :src="getTeacherImage(index)"
     alt="Teacher"
     style="width: 100%; height: 100%; object-fit: cover;"
   />
@@ -435,6 +435,9 @@ import new_logo from "src/assets/new_logo1.svg";
 import finAssociate_hero from "src/assets/FinAssociate_hero.png";
 import new_logo1 from "src/assets/ScaleGrad_blue.svg";
 import teacher1 from "src/assets/teacher1.png";
+import teacher2 from "src/assets/teacher2.png";
+import teacher3 from "src/assets/teacher3.png";
+import teacher4 from "src/assets/teacher4.png";
 import hero_footer from "src/assets/Hero_Footer.png";
 import learning_journey from "src/assets/Learning_Journey.png";
 import Our_labs from "src/assets/Our_labs.png";
@@ -458,6 +461,7 @@ export default {
         "Professional Certification on Completion",
         "Lifetime Access to Learning Resources"
     ],
+
     teacherCards: [
       {
         subtitle: '4+ Teachers',
@@ -480,6 +484,7 @@ export default {
                 lacinia odio vitae vestibulum vestibulum.`
       }
     ],
+
       course_img: course_img,
       Equities: Equities,
       Oppertunities: Oppertunities,
@@ -490,10 +495,14 @@ export default {
       Our_labs: Our_labs,
       new_logo1:new_logo1,
       teacher1: teacher1,
+      teacher2: teacher2,
+      teacher3: teacher3,
+      teacher4: teacher4,
       hero_footer: hero_footer,
       finAssociate_hero: finAssociate_hero,
       pin: pin,
       heading: "",
+
       description: "",
       eligibility: "",
       courseFee: "",
@@ -670,6 +679,9 @@ plus_sign: plus_sign,
       }
     },
 
+ getTeacherImage(index) {
+    return this['teacher' + (index + 1)];
+  },
     toggleCurriculum(index) {
       if (index === 2 && this.programId !== '1') return;
       this.activeCurriculum = this.activeCurriculum === index ? null : index;
