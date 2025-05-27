@@ -173,7 +173,7 @@ verifyOtp() {
   }).then(res => {
     this.showMsg("OTP verified. You can now login.", 'positive');
     this.otpDialog = false;
-    this.$router.push('/');
+    this.$router.push('/login');
   }).catch(err => {
     this.showMsg(err.response?.data || 'OTP verification failed', 'negative');
   });
