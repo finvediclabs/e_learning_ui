@@ -61,6 +61,10 @@
     class="col-md-3 mb-5 q-py-lg outerCard"
     style="margin-left: auto;margin-right: auto;"
   >
+  <router-link
+      :to="{ name: 'CourseDetail', params: { id: category.id } }"
+      style="text-decoration: none;"
+    >
     <q-card class="course-card ">
       <q-img
         v-if="category.imagePath"
@@ -70,9 +74,10 @@
       />
       <q-card-section>
         <p class="text-bold text-left blue_color">{{ category.categoryName }}</p>
-        <span class="text-caption">{{ category.description }}</span>
+        <span class="text-caption four-line-clamp">{{ category.description }}</span>
       </q-card-section>
     </q-card>
+    </router-link>
   </div>
   <div
     class="col-12 q-mt-none text-right q-my-lg View"
@@ -239,6 +244,14 @@ export default {
 .course-card:hover {
   transform: scale(1.05);
   transition: transform 0.3s ease;
+}
+.four-line-clamp{
+   display: -webkit-box;
+  -webkit-line-clamp: 5;  /* number of lines to show */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
 }
 @media (max-width: 600px) {
   .most-popular {

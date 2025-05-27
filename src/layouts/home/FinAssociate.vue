@@ -5,18 +5,26 @@
     <!-- =================================== -->
     <q-page-container>
       <div class="q-my-md q-px-xl">
-        <span class="routing_class">
-          <span @click="$router.go(-1)" style="cursor: pointer; color: blue">
-            {{ heading }}
-          </span>
+  <span class="routing_class">
+    <q-icon
+      name="home"
+      @click="$router.push('/')"
+      style="cursor: pointer; color: blue"
+      class="q-mr-xs"
+    />
+    <span
+      @click="$router.push('/')"
+      style="cursor: pointer; color: blue; vertical-align: middle;"
+    >
+    </span>
+    &nbsp; > &nbsp;  {{ heading }}
+  </span>
+</div>
 
-          &nbsp; > &nbsp; View Program</span
-        >
-      </div>
       <!-- Fintech Associate -->
 
-      <div class="container fintech-container row q-mx-xl" >
-  <div class="row q-py-xl justify-around items-center in-fintech-container" style="background-color: #ffff;border-radius: 20px;">
+      <div class="container fintech-container row q-mx-xl w-100" >
+  <div class="row q-py-xl justify-around items-center in-fintech-container " style="background-color: #ffff;border-radius: 20px;">
 
     <!-- Image Column -->
     <div
@@ -86,7 +94,7 @@
   <li class="text-h6 q-mt-sm">M5. Agile-Powered Software Delivery Journey</li>
 </ul>
         </li>
-<li class="text-bold text-h5 vol-cur  blue-circle q-mb-md" @click="toggleCurriculum(2)"> V2. Disruptive Technologies
+<li v-if="$route.query.programId === '1'" class="text-bold text-h5 vol-cur  blue-circle q-mb-md" @click="toggleCurriculum(2)"> V2. Disruptive Technologies
 
   <ul class="custom-list q-pb-md q-ml-xl q-mt-sm " v-show="activeCurriculum === 2">
   <li class="text-h6 q-mt-sm">M1. Distributed Systems</li>
@@ -250,59 +258,7 @@
   </div>
 
   <!-- Equities -->
-<div class="container equities-container q-mx-xl q-mt-xl">
-  <span class="text-h4 text-bold q-mb-lg">What are Equities</span>
 
-  <!-- Wrapper for horizontal layout -->
-  <div
-    class="q-pa-xl q-mt-md q-mb-md q-mx-auto"
-    style="background-color: #fff; border-radius: 20px;"
-  >
-    <div
-      class="row q-col-gutter-md q-gutter-y-md items-center"
-      :class="$q.screen.lt.md ? 'column' : 'row'"
-    >
-<!-- Image Column -->
-<div
-  class="col-12"
-  :style="$q.screen.lt.md ? '' : 'flex-basis: 20%; max-width: 20%; text-align: center;'"
->
-  <div style="aspect-ratio: 10 / 16; max-width: 200px; margin: auto;">
-    <img
-      :src="Equities"
-      style="width: 100%; height: 100%; object-fit: fill; border-radius: 15px;"
-      alt="Equities"
-    />
-  </div>
-</div>
-
-
-
-      <!-- Text Column -->
-      <div
-        class="col-12 q-pl-xl"
-        :style="$q.screen.lt.md ? '' : 'flex-basis: 80%; max-width: 80%;'"
-      >
-        <div class="text-bold q-mb-lg text-h4 fin-heading">
-          What are Equities
-        </div>
-
-        <p class="text-grey">{{ description }}</p>
-        <p class="text-grey">{{ description }}</p>
-
-        <q-btn
-          class="q-px-xl q-py-md text-weight-regular shadow-5"
-          noCaps
-          unelevated
-          label="Get Started"
-          :to="'/register'"
-          color="#fff"
-          style="background-color: #443ede; border-radius: 10px;"
-        />
-      </div>
-    </div>
-  </div>
-</div>
 <!-- Course Curriculum -->
 <div class="container Course-Curr-container q-mx-xl q-mt-xl">
   <span class="text-h4 text-bold q-mb-lg">Course Curriculum Container</span>
@@ -318,23 +274,21 @@
     >
       <!-- Text Column -->
       <div
-        class="col-12 q-pl-xl"
+        class="col-12"
         :style="$q.screen.lt.md ? '' : 'flex-basis: 75%; max-width: 75%;'"
       >
-        <div class="text-bold q-mb-lg text-h5 fin-heading">
-          Fintech and Financial Services Landscape
+<div
+          v-for="(category, index) in chapterCategoryNames"
+          :key="index"
+          class="col-12 col-md-12 q-mb-lg"
+        >
+          <div class="content breakdown " style="padding-top: 2%;padding-bottom: 2%;">
+            <div class="text-h6 text-weight-bold q-mb-xs" style="padding-left: 1%;">{{ category }}</div>
+            <div class="text-body1" style="color: #6d6d6d;padding-left: 1%;">
+              {{ chapterCategoryDescriptions[index] }}
+            </div>
+          </div>
         </div>
-        <p class="text-grey">{{ description }}</p>
-
-        <div class="text-bold q-mb-lg text-h5 fin-heading">
-          Disruptive Technologies
-        </div>
-        <p class="text-grey">{{ description }}</p>
-
-        <div class="text-bold q-mb-lg text-h5 fin-heading">
-          Equities and Electronic Trading
-        </div>
-        <p class="text-grey">{{ description }}</p>
       </div>
 
       <!-- Card Column -->
@@ -348,12 +302,26 @@
         >
           <div class="text-h5 text-bold q-mb-lg">Course Features</div>
 
-          <div class="column items-start q-gutter-md" style="align-items: start; margin: auto;">
-            <div v-for="(featuresCur, index) in featuresCur" :key="index" class="row items-center">
-              <q-icon name="push_pin" size="20px" style="color: #42b3fd;" class="q-mr-sm" />
-              <span class="text-subtitle2">{{ featuresCur }}</span>
-            </div>
-          </div>
+        <div class="column q-gutter-md" style="margin: auto; align-items: flex-start;">
+  <div
+    v-for="(feature, index) in featuresCur"
+    :key="index"
+    class="row items-start"
+    style="align-items: flex-start;"
+  >
+    <q-icon name="push_pin" size="2vh" style="color: #42b3fd; margin-right: 8px; margin-top: 2px;" />
+    <div style="flex: 1;">
+      <span
+        class="text-subtitleNew"
+        style="display: block; text-align: left; word-break: break-word; white-space: normal;"
+      >
+        {{ feature }}
+      </span>
+    </div>
+  </div>
+</div>
+
+
 
           <q-btn
             label="Enroll Now"
@@ -394,7 +362,7 @@
   <!-- Left Image Column -->
   <div class="col-12 col-md-7 q-px-sm grow-img">
     <q-img
-      :src="course_img"
+      :src="hero_footer"
       :ratio="5 / 3"
       style="border-radius: 15px; width: 100%; height: auto;"
     />
@@ -416,16 +384,17 @@
         <div class="column items-center">
           <!-- Avatar Above Card -->
           <q-avatar
-            size="50px"
-            class="bg-white shadow-4"
-            style="margin-top: -60px; z-index: 2; position: relative;"
-          >
-            <img
-              :src="`/path/to/teacher${index + 1}.jpg`"
-              alt="Teacher"
-              style="border-radius: 50%; object-fit: cover;"
-            />
-          </q-avatar>
+  size="50px"
+  class="bg-white shadow-4"
+  style="margin-top: -60px; z-index: 2; position: relative; overflow: hidden;"
+>
+  <img
+    :src="`src/assets/teacher${index + 1}.png`"
+    alt="Teacher"
+    style="width: 100%; height: 100%; object-fit: cover;"
+  />
+</q-avatar>
+
 
           <!-- Card with Details -->
           <q-card
@@ -465,7 +434,8 @@ import Equities from "../../assets/Equities.png";
 import new_logo from "src/assets/new_logo1.svg";
 import finAssociate_hero from "src/assets/FinAssociate_hero.png";
 import new_logo1 from "src/assets/ScaleGrad_blue.svg";
-
+import teacher1 from "src/assets/teacher1.png";
+import hero_footer from "src/assets/Hero_Footer.png";
 import learning_journey from "src/assets/Learning_Journey.png";
 import Our_labs from "src/assets/Our_labs.png";
 import plus_sign from "src/assets/plus_sign.png";
@@ -481,12 +451,12 @@ export default {
     return {
       description: 'This is sample course description.',
       featuresCur: [
-      'Duration 3 weeks',
-      'Enrolled 22 students',
-      'Language English',
-      'Lessons 10',
-      'Certificate Yes',
-      'Beginner to Advanced'
+     "Beginner to Advanced Learning Path",
+        "Hands-on Real-world Scenarios",
+        "Industry-Expert Mentorship",
+        "Interactive Labs and Simulations",
+        "Professional Certification on Completion",
+        "Lifetime Access to Learning Resources"
     ],
     teacherCards: [
       {
@@ -519,6 +489,8 @@ export default {
       Prerequisotes: Prerequisotes,
       Our_labs: Our_labs,
       new_logo1:new_logo1,
+      teacher1: teacher1,
+      hero_footer: hero_footer,
       finAssociate_hero: finAssociate_hero,
       pin: pin,
       heading: "",
@@ -548,12 +520,12 @@ plus_sign: plus_sign,
       ],
       active: null,
       activeCurriculum: 1,
-
+   leftDrawerOpen: false,
        openedIndex: 0,
        openedIndex1: 0,
        openedIndex2: 0,
       openedIndex3: 0,
-      leftDrawerOpen: false,
+
       features: [
         {
           title: 'Real-Time Fintech Environment',
@@ -621,6 +593,11 @@ plus_sign: plus_sign,
 
     };
   },
+  computed: {
+    programId() {
+      return this.$route.query.programId;
+    }
+  },
   created() {
     const selectedProgramId = this.$route.query.programId;
     console.log("Selected Program ID:", selectedProgramId);
@@ -650,6 +627,10 @@ plus_sign: plus_sign,
           this.chapterCategoryNames = program.chapterCategoryNames || [];
           this.chapterCategoryDescriptions =
             program.chapterCategoryDescriptions || [];
+
+             this.chapterCategoryNames = this.chapterCategoryNames.map(name =>
+        name === "Specialization" ? "Equities & Electronic Trading" : name
+      );
 
           // Handle course image
           const baseUrl =
@@ -688,8 +669,10 @@ plus_sign: plus_sign,
         console.error("Error fetching program details:", error);
       }
     },
+
     toggleCurriculum(index) {
-    this.activeCurriculum = this.activeCurriculum === index ? null : index;
+      if (index === 2 && this.programId !== '1') return;
+      this.activeCurriculum = this.activeCurriculum === index ? null : index;
   },
       toggle(index) {
       this.openedIndex = this.openedIndex === index ? null : index;
@@ -718,6 +701,9 @@ plus_sign: plus_sign,
   color: #676ded;
   font-family: sans-serif;
   font-weight: 500;
+}
+.text-subtitleNew{
+  font-size: 1.6vh;
 }
 
 .tab-btn {
