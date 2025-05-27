@@ -50,18 +50,15 @@
       <!-- Desktop view: grid -->
 <!-- First two categories with alternating layout -->
 <div class="row d-flex w-100 q-mb-xl align-items-center q-mt-md web_view">
-
   <div
     v-for="(category, index) in firstTwoCategories"
     :key="category.id"
-    class="col-md-6 mb-4 "
-
+    class="col-md-12 mb-4"
   >
-   <router-link :to="{ name: 'CourseDetail', params: { id: category.id } }" style="text-decoration: none;">
-    <div class="row align-items-center course-card5 q-mt-lg">
+    <div class="row align-items-center q-mt-lg q-mx-md">
       <!-- IMAGE -->
       <div
-        class="col-4"
+        class="col-2"
         :class="index === 1 ? 'order-2' : 'order-1'"
       >
         <img
@@ -75,18 +72,36 @@
 
       <!-- TEXT -->
       <div
-        class="col-6"
-        :class="index === 1 ? 'order-1' : 'order-2'"
+        class="col course-TextCard"
+        :class="[
+          index === 1 ? 'order-1 q-mr-xl q-pa-md' : 'order-2 q-ml-xl q-pa-md'
+        ]"
       >
-        <div class="q-pa-sm">
-          <p class="text-h6 text-bold blue_color">{{ category.categoryName }}</p>
-          <p class="text-body1 text-grey">{{ category.description }}</p>
+        <div class="q-pa-sm column justify-between" style="min-height: 100%;">
+          <div>
+            <p class="text-h4 text-bold text-black q-mt-xl">
+              <span v-html="highlightCategoryName(category.categoryName)"></span>
+            </p>
+            <p class="text-h5 text-grey q-mt-lg">{{ category.description }}</p>
+          </div>
+<div class="col-3">
+          <q-btn
+            label="View Details"
+            rounded
+           no-caps
+            flat
+            class="q-mt-md"
+            style="background-color: #2528CB;color: #ffffff;"
+            @click="goToCourseDetail(category.id)"
+          />
+          </div>
         </div>
       </div>
     </div>
-</router-link>
   </div>
 </div>
+
+
 
 
 
@@ -94,31 +109,46 @@
 <!-- Remaining categories in grid layout -->
  <span class="text-black header_freeCourses" style="width: 100%;"><span class="blue_color q-ml-lg q-mt-xl">Specializations</span>
       </span>
- <div class="row d-flex justify-content-center align-items-center w-100 web_view">
-
+ <div class="row d-flex justify-content-center align-items-center w-100 web_view q-mx-md">
   <div
-    v-for="category in remainingCategories"
+    v-for="(category, index) in remainingCategories"
     :key="category.id"
-    class="col-md-3 mb-4 q-pt-sm snap-card q-mt-lg"
+    class="col-md-6 mb-4 q-pt-sm snap-card q-mt-lg"
+    :style="index % 2 === 0 ? 'padding-right: 15px;' : 'padding-left: 15px;'"
   >
-   <router-link :to="{ name: 'CourseDetail', params: { id: category.id } }" style="text-decoration: none;">
-    <q-card class="course-card4 h-100">
-      <div>
-        <img
-          v-if="category.imagePath"
-          :src="category.imagePath"
-          alt="Category Image"
-          class="course-image4 q-pa-lg"
-        />
-      </div>
-      <q-card-section>
-        <p class="text-bold text-left blue_color">{{ category.categoryName }}</p>
-        <span class="text-caption text-grey two-line-clamp">{{ category.description }}</span>
-      </q-card-section>
-    </q-card>
+    <router-link
+      :to="{ name: 'CourseDetail', params: { id: category.id } }"
+      style="text-decoration: none;"
+    >
+      <q-card class="course-card4 h-100">
+        <div class="row no-wrap items-start">
+          <!-- IMAGE on the left -->
+          <div class="col-4">
+            <img
+              v-if="category.imagePath"
+              :src="category.imagePath"
+              alt="Category Image"
+              class="course-image4 q-pa-sm"
+              style="width: 100%; object-fit: cover;"
+            />
+          </div>
+
+          <!-- TEXT on the right -->
+          <div class="col q-pa-sm q-pt-lg">
+            <q-card-section>
+              <p class="text-bold text-left blue_color text-h5">{{ category.categoryName }}</p>
+              <span class="text-grey text-body1">
+                {{ category.description }}
+              </span>
+            </q-card-section>
+          </div>
+        </div>
+      </q-card>
     </router-link>
   </div>
 </div>
+
+
 
 
 
@@ -175,7 +205,20 @@ export default {
       }
       return description.length > 100 ? description.slice(0, 100) + "..." : description;
     },
+  highlightCategoryName(name) {
+    const keywords = ['Financial Services', 'Technologies']
+    let highlighted = name
 
+    keywords.forEach(keyword => {
+      const regex = new RegExp(`(${keyword})`, 'gi')
+      highlighted = highlighted.replace(regex, '<span style="color: #4e5bf8 !important;">$1</span>')
+    })
+
+    return highlighted
+  },
+  goToCourseDetail(id) {
+    this.$router.push({ name: 'CourseDetail', params: { id } })
+  },
     /**
      * Toggles the description expansion for a specific category
      */
@@ -249,7 +292,7 @@ export default {
   height: 100%; /* Set height to 80% of viewport */
   overflow-y: auto; /* Adds scroll if content overflows */
    background-color: #FFFF;
-  background-image: url('src/assets/Labs_tools.png');
+  /* background-image: url('src/assets/Labs_tools.png'); */
   background-size: 100% 100%;
   background-position: cover;
   background-repeat: no-repeat;
@@ -263,7 +306,12 @@ export default {
   text-overflow: ellipsis;
   white-space: normal; /* allow wrapping */
 }
-
+.order-1 {
+  order: 1;
+}
+.order-2 {
+  order: 2;
+}
 .custom-col {
   flex: 0 0 12.5%; /* 100% / 8 = 12.5% width */
   max-width: 12.5%;
@@ -299,19 +347,22 @@ export default {
 .course-card4 {
   border: 1px solid #ddd;
   border-radius: 8px;
-  width: 90%;
-  margin-left: auto;
-  margin-right: auto;
+  width: 100%;
+
   height:100%;
   overflow: hidden;
 }
+.course-TextCard{
+  border: 1px solid #ddd;
+    border-radius: 15px;
 
+}
 .course-card5 {
   border: 1px solid #ddd;
   border-radius: 8px;
   width: 96%;
   margin-left: auto;
-  gap: 30px;
+  /* gap: 30px; */
   margin-right: auto;
   height:100%;
   /* overflow: hidden; */
@@ -338,7 +389,7 @@ export default {
 .course-image5 {
   /* width: 90%; */
   margin: 0%;
-  padding: 2%;
+  padding: 0%;
   /* padding: 0%; */
   height: 100%;
 
