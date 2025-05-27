@@ -136,7 +136,7 @@
           <!-- TEXT on the right -->
           <div class="col q-pa-sm q-pt-lg">
             <q-card-section>
-              <p class="text-bold text-left blue_color text-h5 ">{{ category.categoryName }}</p>
+              <p class="text-bold text-left text-black text-h5 "><span v-html="highlightCategoryName(category.categoryName)"></span></p>
               <span class="text-grey text-body1  two-line-clamp">
                 {{ category.description }}
               </span>
@@ -206,7 +206,7 @@ export default {
       return description.length > 100 ? description.slice(0, 100) + "..." : description;
     },
   highlightCategoryName(name) {
-    const keywords = ['Financial Services', 'Technologies']
+    const keywords = ['Financial Services', 'Technologies' , 'Electronic Trading', 'Analytics' , 'Management', 'Commercial Banking'];
     let highlighted = name
 
     keywords.forEach(keyword => {
@@ -300,7 +300,7 @@ export default {
 
 .two-line-clamp {
   display: -webkit-box;
-  -webkit-line-clamp: 4;  /* number of lines to show */
+  -webkit-line-clamp: 5;  /* number of lines to show */
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
