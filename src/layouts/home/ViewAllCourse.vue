@@ -49,13 +49,13 @@
 
       <!-- Desktop view: grid -->
 <!-- First two categories with alternating layout -->
-<div class="row d-flex w-100 q-mb-xl align-items-center q-mt-md web_view">
+<div class="row d-flex w-100 q-mb-xl align-items-center q-mt-md web_view ">
   <div
     v-for="(category, index) in firstTwoCategories"
     :key="category.id"
     class="col-md-12 mb-4"
   >
-    <div class="row align-items-center q-mt-lg q-mx-md">
+    <div class="row align-items-center q-mt-lg q-mx-lg">
       <!-- IMAGE -->
       <div
         class="col-2"
@@ -109,7 +109,7 @@
 <!-- Remaining categories in grid layout -->
  <span class="text-black header_freeCourses" style="width: 100%;"><span class="blue_color q-ml-lg q-mt-xl">Specializations</span>
       </span>
- <div class="row d-flex justify-content-center align-items-center w-100 web_view q-mx-md">
+ <div class="row d-flex justify-content-center align-items-center w-100 web_view q-mx-lg">
   <div
     v-for="(category, index) in remainingCategories"
     :key="category.id"
@@ -296,6 +296,10 @@ export default {
   background-size: 100% 100%;
   background-position: cover;
   background-repeat: no-repeat;
+}
+.margin-x {
+  margin-left: 20% !important;
+  margin-right: 20% !important;
 }
 
 .two-line-clamp {
