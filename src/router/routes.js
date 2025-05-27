@@ -178,18 +178,7 @@ const routes = [
       }
     ]
   },
-   {
-    path: '/hackathonEvent',
-    meta: { title: 'Hackathon_Event', module: 'Hackathon_Event' },
-    component: () => import('layouts/DashboardLayout.vue'),
-    children: [
-      {
-        path: '',
-        component: () => import('src/pages/hackathon/HackathonEvent.vue'),
-        meta: { item: '' }
-      }
-    ]
-  },
+
   {
     path: '/',
     component: () => import('layouts/home/HomePage.vue'),
@@ -244,6 +233,17 @@ const routes = [
         name: 'register',
         component: () => import('layouts/home/RegistrationForm.vue'),
         meta: { title: 'Register', module: 'register' }
+      }
+    ]
+  },
+   {
+    path: '/hackathonEvent',
+   component: () => import('layouts/home/HomePage.vue'),
+    children: [
+      {
+        path: '',
+        component: () => import('src/pages/hackathon/HackathonEvent.vue'),
+        meta: { item: '' }
       }
     ]
   },
