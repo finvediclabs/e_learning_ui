@@ -69,7 +69,7 @@
     </div>
   </div>
 
-  <div class="container first-box row q-mx-xl q-mt-lg" style="background-color: #ffff;border-radius: 20px;">
+  <div class="container row q-mx-xl q-mt-lg" style="background-color: #ffff;border-radius: 20px;">
     <!-- Dynamic content -->
      <div class="col-8 row q-py-lg q-pl-lg">
     <div v-if="selectedTab === 'The Curriculum'">
@@ -249,181 +249,11 @@
     </div>
   </div>
 
-  <!-- Equities -->
-<div class="container equities-container q-mx-xl q-mt-xl">
-  <span class="text-h4 text-bold q-mb-lg">What are Equities</span>
-
-  <!-- Wrapper for horizontal layout -->
-  <div
-    class="q-pa-xl q-mt-md q-mb-md q-mx-auto"
-    style="background-color: #fff; border-radius: 20px;"
-  >
-    <div
-      class="row q-col-gutter-md q-gutter-y-md items-center"
-      :class="$q.screen.lt.md ? 'column' : 'row'"
-    >
-<!-- Image Column -->
-<div
-  class="col-12"
-  :style="$q.screen.lt.md ? '' : 'flex-basis: 20%; max-width: 20%; text-align: center;'"
->
-  <div style="aspect-ratio: 10 / 16; max-width: 200px; margin: auto;">
-    <img
-      :src="Equities"
-      style="width: 100%; height: 100%; object-fit: fill; border-radius: 15px;"
-      alt="Equities"
-    />
-  </div>
-</div>
-
-
-
-      <!-- Text Column -->
-      <div
-        class="col-12 q-pl-xl"
-        :style="$q.screen.lt.md ? '' : 'flex-basis: 80%; max-width: 80%;'"
-      >
-        <div class="text-bold q-mb-lg text-h4 fin-heading">
-          What are Equities
-        </div>
-
-        <p class="text-grey">{{ description }}</p>
-        <p class="text-grey">{{ description }}</p>
-
-        <q-btn
-          class="q-px-xl q-py-md text-weight-regular shadow-5"
-          noCaps
-          unelevated
-          label="Get Started"
-          :to="'/register'"
-          color="#fff"
-          style="background-color: #443ede; border-radius: 10px;"
-        />
-      </div>
-    </div>
-  </div>
-</div>
-  <!-- Course Curriculum-->
-<div class="container Course-Curr-container q-mx-xl q-mt-xl">
-  <span class="text-h4 text-bold q-mb-lg">Course Curriculum Container</span>
-
-  <!-- Wrapper for horizontal layout -->
-  <div
-    class="q-pa-xl q-mt-md q-mb-md q-mx-auto"
-    style="background-color: #fff; border-radius: 20px;"
-  >
-    <div
-      class="row q-col-gutter-md q-gutter-y-md items-center"
-      :class="$q.screen.lt.md ? 'column' : 'row'"
-    >
-          <!-- Text Column -->
-          <div
-        class="col-12 q-pl-xl"
-        :style="$q.screen.lt.md ? '' : 'flex-basis: 75%; max-width: 75%;'"
-      >
-        <div class="text-bold q-mb-lg text-h5 fin-heading">
-          Fintech and Financial Services Landscape
-        </div>
-
-        <p class="text-grey">{{ description }}</p>
-        <div class="text-bold q-mb-lg text-h5 fin-heading">
-          Disruptive Technologies
-        </div>
-
-        <p class="text-grey">{{ description }}</p>
-        <div class="text-bold q-mb-lg text-h5 fin-heading">
-          Equities and Electronic Trading
-        </div>
-
-        <p class="text-grey">{{ description }}</p>
-
-
-      </div>
-<!-- Image Column -->
-<div
-  class="col-12"
-  :style="$q.screen.lt.md ? '' : 'flex-basis: 25%; max-width: 25%; text-align: center;'"
->
-  <div >
-    <img
-      :src="Equities"
-      style="width: 100%; height: 100%; object-fit: fill; border-radius: 15px;"
-      alt="Equities"
-    />
-  </div>
-</div>
 
 
 
 
-    </div>
-  </div>
-</div>
-  <!-- Grow-->
 
-<!-- Grow Section -->
-<div class="container Grow-container q-mx-xl q-my-xl">
-  <!-- Top Heading & Button Row -->
-  <div class="row items-center justify-between">
-    <span class="text-h4 text-bold">Grow Your Knowledge from <br>Best Teachers in the Industry</span>
-    <q-btn
-      class="q-px-xl q-py-md text-weight-regular shadow-5"
-      noCaps
-      unelevated
-      label="Get Started"
-      :to="'/register'"
-      color="#fff"
-      style="background-color: #443ede; border-radius: 10px;"
-    />
-  </div>
-
-<!-- Image + Cards Section -->
-<div
-  class="row  q-col-gutter-md q-gutter-y-md items-center in-fintech-container q-mt-md"
-  style="border-radius: 20px;"
->
-  <!-- Left Image Column -->
-  <div class="col-12 col-md-6 q-px-sm grow-img">
-    <q-img
-      :src="course_img"
-      :ratio="5 / 3"
-      style="border-radius: 15px; width: 100%; height: auto;"
-    />
-  </div>
-
-  <!-- Right Grid Cards Column -->
-  <div class="col-12 col-md-6">
-  <div class="row justify-center q-col-gutter-xl q-gutter-y-xl">
-    <div v-for="(teacher, index) in 4" :key="index" class="col-12 col-sm-6 col-md-6 col-lg-5">
-      <div class="column items-center">
-        <!-- Avatar Above Card -->
-        <q-avatar
-          size="70px"
-          class="bg-white shadow-4"
-          style="margin-top: -70px; z-index: 2; position: relative;"
-        >
-          <img
-            :src="`/path/to/teacher${index + 1}.jpg`"
-            alt="Teacher"
-            style="border-radius: 50%; object-fit: cover;"
-          />
-        </q-avatar>
-
-        <!-- Card with Increased Height and Balanced Width -->
-        <q-card
-          class="q-pt-xl q-px-md q-pb-lg text-center shadow-3"
-          style="border-radius: 15px; margin-top: -40px; min-height: 150px; width: 100%; "
-        >
-          <div class="text-bold text-subtitle1 q-mb-sm">Teacher {{ index + 1 }}</div>
-          <div class="text-grey text-caption">Expert in Subject</div>
-        </q-card>
-      </div>
-    </div>
-  </div>
-</div>
-</div>
-
-</div>
 
     </q-page-container>
   </q-layout>
@@ -432,7 +262,6 @@
 <script>
 import axios from "axios";
 import course_img from "../../assets/cours_1.jpg";
-import Equities from "../../assets/Equities.png";
 import new_logo from "src/assets/new_logo1.svg";
 import finAssociate_hero from "src/assets/FinAssociate_hero.png";
 import new_logo1 from "src/assets/ScaleGrad_blue.svg";
@@ -451,7 +280,6 @@ export default {
   data() {
     return {
       course_img: course_img,
-      Equities: Equities,
       Oppertunities: Oppertunities,
       image_curriculum: image_curriculum,
       Features: Features,
@@ -795,10 +623,6 @@ plus_sign: plus_sign,
   top: 100px; /* Adjust based on your header height or desired offset */
   z-index: 10;
 }
-.equities-img{
-  object-fit: fill !important;
-}
-
 
 @media (max-width: 600px) {
 .right-program{
