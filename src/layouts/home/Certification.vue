@@ -17,11 +17,18 @@
             class="course-image8 q-pa-lg"
           />
           <q-card-section>
-            <p class="text-bold text-left blue_color">{{ program.heading }}</p>
-            <span class="text-caption">{{ program.description }}</span>
-            <p class="text-caption"><strong>Prerequisite:</strong> {{ program.eligibility }}</p>
-            <p class="text-caption"><strong>Duration:</strong> {{ program.duration }} days</p>
-          </q-card-section>
+  <div style="display: flex; flex-direction: column;">
+    <span class="text-bold text-left blue_color text-h6">
+      {{ program.heading }}
+    </span>
+    <span class="text-caption q-mt-sm">
+      {{ program.description }}
+    </span>
+  </div>
+  <p class="text-caption q-mt-sm"><strong>Prerequisite:</strong> {{ program.eligibility }}</p>
+  <p class="text-caption"><strong>Duration:</strong> {{ program.duration }} days</p>
+</q-card-section>
+
         </q-card>
       </div>
     </div>
