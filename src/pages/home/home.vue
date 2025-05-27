@@ -3,13 +3,19 @@
     <!-- Left Column -->
 
     <div class="col-12 col-md-8">
-       <div class="d-none d-sm-flex row w-100 web_view">
-    <div class="col-12 col-sm-3 col-lg-3 margin-bottom" v-for="(card, index) in cards" :key="index">
-      <div class="box" @click="card.onClick">
-        <component :is="card.component" />
-      </div>
+       <div class="d-none d-sm-flex row w-100 web_view justify-content-between">
+  <div
+    class="margin-bottom"
+    v-for="(card, index) in cards"
+    :key="index"
+    style="flex: 0 0 20%; max-width: 20%;"
+  >
+    <div class="box" @click="card.onClick">
+      <component :is="card.component" />
     </div>
   </div>
+</div>
+
 
   <!-- Mobile Carousel -->
   <swiper
@@ -54,9 +60,11 @@ import { Swiper, SwiperSlide } from 'swiper/vue'
 import 'swiper/css'
 // Components
 import AttendanceCard from "src/pages/home/attendance.vue";
+import AssesmentCard from "src/pages/home/assesmentCard.vue";
 import MostPopular from "src/pages/home/mostPopular.vue";
 import LabReport from "src/pages/home/labReport.vue";
 import AssignmentCard from "src/pages/home/assignmentCard.vue";
+
 import HackathonCard from "src/pages/home/hackathonCard.vue";
 import ProfileCard from "src/pages/home/profileCard.vue";
 import NotifCard from "src/pages/home/notifications.vue";
@@ -69,6 +77,7 @@ export default {
   name: "Home",
   components: {
     AttendanceCard,
+    AssesmentCard,
       Swiper,
     SwiperSlide,
     AssignmentCard,
@@ -94,7 +103,8 @@ export default {
       { component: 'AttendanceCard', onClick: this.handleDemoUserAccess },
       { component: 'AssignmentCard', onClick: null },
       { component: 'HackathonCard', onClick: this.handleDemoUserAccess },
-      { component: 'LabReport', onClick: null }
+      { component: 'LabReport', onClick: null },
+      { component: 'AssesmentCard', onClick: this.handleDemoUserAccess }
     ]
   },
   computed: {
