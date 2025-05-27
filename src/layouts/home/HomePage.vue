@@ -1,7 +1,7 @@
 <template>
   <q-layout view="lHh Lpr lFf">
     <!-- Navigation Bar -->
- <q-header class="bg-Customblue text-white" elevated >
+ <q-header class="bg-Customblue text-white q-py-sm" elevated >
       <q-toolbar>
 
         <!-- Hamburger button for mobile -->

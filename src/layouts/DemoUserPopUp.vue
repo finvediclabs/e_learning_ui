@@ -4,7 +4,7 @@
       <q-icon name="lock" size="28px" color="red-6" class="q-mr-sm" />
       <div class="toast-content">
         <div class="toast-title">Access Denied</div>
-        <div class="toast-subtext">You don’t have permission to access this feature in demo mode.</div>
+        <div class="toast-subtext">You don’t have permission to access this feature.</div>
       </div>
       <button class="toast-close" @click="close">×</button>
     </div>

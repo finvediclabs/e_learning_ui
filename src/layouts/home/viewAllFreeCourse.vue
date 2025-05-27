@@ -52,32 +52,84 @@
 
 
 <!-- Remaining categories in grid layout -->
+ <div class="row d-flex justify-content-center align-items-stretch w-100 web_view">
+    <!-- Category Cards -->
+    <div
+      v-for="(category, index) in remainingCategories"
+      :key="category.id"
+      class="col-md-3 mb-4 q-pt-sm snap-card q-mt-lg d-flex"
+    >
+      <!-- First 3 cards (clickable) -->
+      <router-link
+        v-if="index < 3"
+        :to="{ name: 'CourseDetail', params: { id: category.id } }"
+        style="text-decoration: none; width: 100%;"
+      >
+        <q-card class="course-card4 h-100 position-relative">
+          <div class="position-relative">
+            <img
+              v-if="category.imagePath"
+              :src="category.imagePath"
+              alt="Category Image"
+              class="course-image8 q-pa-lg"
+            />
+          </div>
 
- <div class="row d-flex justify-content-center align-items-center w-100 web_view">
+          <q-card-section>
+            <p class="text-bold text-left blue_color">{{ category.categoryName }}</p>
+            <span class="text-caption text-grey two-line-clamp">{{ category.description }}</span>
+          </q-card-section>
+        </q-card>
+      </router-link>
 
-  <div
-    v-for="category in remainingCategories"
-    :key="category.id"
-    class="col-md-3 mb-4 q-pt-sm snap-card q-mt-lg"
-  >
-   <router-link :to="{ name: 'CourseDetail', params: { id: category.id } }" style="text-decoration: none;">
-    <q-card class="course-card4 h-100">
-      <div>
-        <img
-          v-if="category.imagePath"
-          :src="category.imagePath"
-          alt="Category Image"
-          class="course-image8 q-pa-lg"
-        />
+      <!-- Locked cards (non-clickable) -->
+      <div v-else @click="showAccessDenied" style="width: 100%; cursor: pointer;">
+        <q-card class="course-card4 h-100 position-relative">
+          <div class="position-relative">
+            <img
+              v-if="category.imagePath"
+              :src="category.imagePath"
+              alt="Category Image"
+              class="course-image8 q-pa-lg"
+            />
+
+            <!-- Overlay lock icon -->
+            <div
+              class="overlay-icon"
+              style="position: absolute; top: 30%; left: 50%; transform: translate(-50%, -50%);"
+            >
+              <q-icon
+                name="lock"
+                size="42px"
+                color="white"
+                style="background-color: rgba(0, 0, 0, 0.5); border-radius: 50%; padding: 4px;"
+              />
+            </div>
+          </div>
+
+          <q-card-section>
+            <p class="text-bold text-left blue_color">{{ category.categoryName }}</p>
+            <span class="text-caption text-grey two-line-clamp">{{ category.description }}</span>
+          </q-card-section>
+        </q-card>
       </div>
-      <q-card-section>
-        <p class="text-bold text-left blue_color">{{ category.categoryName }}</p>
-        <span class="text-caption text-grey two-line-clamp">{{ category.description }}</span>
-      </q-card-section>
-    </q-card>
-    </router-link>
+    </div>
+
+    <!-- Explore Our Course Catalogue card -->
+    <div class="col-md-3 mb-4 q-pt-sm snap-card q-mt-lg d-flex">
+      <q-card class="course-card11 h-100 d-flex position-relative">
+        <router-link :to="'/Register'" style="text-decoration: none; width: 100%;">
+          <div class="register_link" style="position: absolute; bottom: 16px; right: 16px;">
+            <span class="text-bold blue_color q-mb-none text-body1">Explore Our Course Catalogue &#8594;</span>
+          </div>
+        </router-link>
+      </q-card>
+    </div>
+
+    <!-- DemoUserPopUp toast -->
+    <DemoUserPopUp v-if="showToast" @close="showToast = false" />
   </div>
-</div>
+
 
 
 
@@ -89,12 +141,16 @@
 
 <script>
 import bg_img from "src/assets/scalefradepng1.png";
+import DemoUserPopUp from "src/layouts/DemoUserPopUp.vue";
 import new_logo from "src/assets/new_logo1.svg";
 
 import new_logo1 from "src/assets/ScaleGrad_blue.svg";
 
 export default {
   name: 'FreeCourses',
+   components: {
+    DemoUserPopUp
+  },
   data() {
     return {
       categories: [],
@@ -102,7 +158,9 @@ export default {
        bg_img,
       leftDrawerOpen: false,
       new_logo,
-      new_logo1
+      new_logo1,
+      showToast: false,
+      toastTimeout: null
     };
   },
   computed: {
@@ -112,6 +170,17 @@ export default {
         .sort((a, b) => a.displayOrder - b.displayOrder)
         .slice(0, 10);
     },
+    showAccessDenied() {
+    this.showToast = true;
+
+    // Clear any previous timeout
+    if (this.toastTimeout) clearTimeout(this.toastTimeout);
+
+    this.toastTimeout = setTimeout(() => {
+      this.showToast = false;
+      this.toastTimeout = null;
+    }, 3000);
+  },
     firstTwoCategories() {
     return this.filteredCategories.filter(c => c.id === 1 || c.id === 2);
   },
@@ -264,6 +333,16 @@ export default {
   height:100%;
   overflow: hidden;
 }
+.course-card11 {
+  /* border: 1px solid #ddd; */
+  /* border-radius: 8px; */
+  width: 90%;
+  box-shadow: none !important;
+  margin-left: auto;
+  margin-right: auto;
+  height:100%;
+  overflow: hidden;
+}
 
 .course-card5 {
   border: 1px solid #ddd;
@@ -319,6 +398,10 @@ export default {
 }
 
 .course-card4:hover {
+  transform: scale(1.05); /* Enlarges by 5% */
+  transition: transform 0.3s ease;
+}
+.register_link:hover {
   transform: scale(1.05); /* Enlarges by 5% */
   transition: transform 0.3s ease;
 }
