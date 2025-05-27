@@ -136,8 +136,8 @@
           <!-- TEXT on the right -->
           <div class="col q-pa-sm q-pt-lg">
             <q-card-section>
-              <p class="text-bold text-left blue_color text-h5">{{ category.categoryName }}</p>
-              <span class="text-grey text-body1">
+              <p class="text-bold text-left blue_color text-h5 ">{{ category.categoryName }}</p>
+              <span class="text-grey text-body1  two-line-clamp">
                 {{ category.description }}
               </span>
             </q-card-section>
@@ -300,7 +300,7 @@ export default {
 
 .two-line-clamp {
   display: -webkit-box;
-  -webkit-line-clamp: 2;  /* number of lines to show */
+  -webkit-line-clamp: 4;  /* number of lines to show */
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
