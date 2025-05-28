@@ -2,7 +2,7 @@
     <div class="sandbox q-px-lg q-mx-md">
         <div class="row">
       <div class="col-12 q-pt-lg">
-        <span class="text-h5 text-bold">Labs</span>
+        <span class="text-h4 text-bold lab-sub">Labs</span>
         <div class="carousel-container q-mt-md" v-if="!isMobile">
           <q-btn icon="arrow_left" flat @click="prevSlide" class="arrow-btn" />
     <!-- <div class="q-mb-xl CircD1"> <q-img :src="circ_d1" style="width: 100%;" /> </div> -->
@@ -118,7 +118,7 @@
       <div class="row q-mt-xl q-pb-xl">
           <!-- <div class="q-mb-xl CircD2"> <img src="src/assets/Circ_D1.png"> </div> -->
         <div class="col-12">
-          <span class="text-h5 text-bold">Tools</span>
+          <span class="text-h4 text-bold lab-sub">Tools</span>
           <div class="row justify-center q-mt-md">
             <div v-for="(tool, index) in tools" :key="index" class="tool-card-container">
               <div class="card-title text-weight-medium text-h6">{{ tool.title }}</div>
@@ -887,6 +887,9 @@ beforeDestroy() {
   border-radius: 10px;
   transition: background-color 0.3s ease, transform 0.3s ease;
   box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+}
+.lab-sub{
+  color: #2528cb;
 }
 
 @media (max-width: 768px) {

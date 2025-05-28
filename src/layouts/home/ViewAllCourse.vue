@@ -1,9 +1,6 @@
 <template>
  <q-layout view="lHh Lpr lFf " style="min-height: unset">
 
-
-
-
   <div class="free-courses1 q-pb-lg q-mb-lg">
     <div class="row w-100 text-left q-mt-md q-mx-lg">
       <span class="text-black header_freeCourses" style="width: 100%;">
@@ -36,7 +33,7 @@
       class="course-image4 q-pa-lg"
     />
 
-    <q-card-section>
+    <q-card-section >
       <p class="text-bold text-left blue_color">{{ category.categoryName }}</p>
       <span class="text-caption text-grey">{{ category.description }}</span>
     </q-card-section>
@@ -54,12 +51,15 @@
     v-for="(category, index) in firstTwoCategories"
     :key="category.id"
     class="col-md-12 mb-4"
+    
   >
-    <div class="row align-items-center q-mt-lg q-mx-lg">
+    <div class="row align-items-center q-mt-lg q-mx-lg" >
       <!-- IMAGE -->
       <div
         class="col-2"
         :class="index === 1 ? 'order-2' : 'order-1'"
+        style="background-color: #fff; padding: 13px; border-radius: 15px; border: 1px solid #dcdcdc;"
+        
       >
         <img
           v-if="category.imagePath"
@@ -76,10 +76,11 @@
         :class="[
           index === 1 ? 'order-1 q-mr-xl q-pa-md' : 'order-2 q-ml-xl q-pa-md'
         ]"
+        style="background-color: #ffffff; "
       >
-        <div class="q-pa-sm column justify-between" style="min-height: 100%;">
+        <div class="q-pa-sm column justify-between" style="min-height: 100%; ">
           <div>
-            <p class="text-h4 text-bold text-black q-mt-xl">
+            <p class="text-h4 text-bold text-black q-mt-md">
               <span v-html="highlightCategoryName(category.categoryName)"></span>
             </p>
             <p class="text-h5 text-grey q-mt-lg">{{ category.description }}</p>
@@ -87,11 +88,10 @@
 <div class="col-3">
           <q-btn
             label="View Details"
-            rounded
            no-caps
             flat
-            class="q-mt-md"
-            style="background-color: #2528CB;color: #ffffff;"
+            class="q-mt-md q-px-lg"
+            style="background-color: #2528cb;color: #ffffff; border-radius: 10px;"
             @click="goToCourseDetail(category.id)"
           />
           </div>
@@ -107,7 +107,7 @@
 
 
 <!-- Remaining categories in grid layout -->
- <span class="text-black header_freeCourses" style="width: 100%;"><span class="blue_color q-ml-lg q-mt-xl">Specializations</span>
+ <span class="text-black header_freeCourses" style="width: 100%;"><span class="blue_color q-ml-lg q-mt-xl" style="color: #000 !important;">Specializations</span>
       </span>
  <div class="row d-flex justify-content-center align-items-center w-100 web_view q-mx-lg">
   <div
@@ -129,12 +129,12 @@
               :src="category.imagePath"
               alt="Category Image"
               class="course-image4 q-pa-sm"
-              style="width: 100%; object-fit: cover;"
+              style="width: 100%; object-fit: cover; border-radius: 10px; "
             />
           </div>
 
           <!-- TEXT on the right -->
-          <div class="col q-pa-sm q-pt-lg">
+          <div class="col q-pa-sm q-pt-lg q-pl-md">
             <q-card-section>
               <p class="text-bold text-left text-black text-h5 "><span v-html="highlightCategoryName(category.categoryName)"></span></p>
               <span class="text-grey text-body1  two-line-clamp">
@@ -211,7 +211,7 @@ export default {
 
     keywords.forEach(keyword => {
       const regex = new RegExp(`(${keyword})`, 'gi')
-      highlighted = highlighted.replace(regex, '<span style="color: #4e5bf8 !important;">$1</span>')
+      highlighted = highlighted.replace(regex, '<span style="color: #2528cb !important;">$1</span>')
     })
 
     return highlighted
@@ -291,7 +291,7 @@ export default {
   padding: 20px;
   height: 100%; /* Set height to 80% of viewport */
   overflow-y: auto; /* Adds scroll if content overflows */
-   background-color: #FFFF;
+   background-color: #f1f3ff;
   /* background-image: url('src/assets/Labs_tools.png'); */
   background-size: 100% 100%;
   background-position: cover;
@@ -374,9 +374,8 @@ export default {
 
 .course-image4 {
   width: 94%;
-  margin-left: 3%;
-  margin-right: 3%;
-  margin-top: 3%;
+  margin: 5%;
+  margin-bottom: 2%;
   padding: 0%;
   height: 60% !important;
   border-radius: 5px;
@@ -397,7 +396,7 @@ export default {
   /* padding: 0%; */
   height: 100%;
 
-  border-radius: 15px;
+  border-radius: 5px;
   object-fit: fill; /* ensures full image is visible */
   object-position: center;
   /* aspect-ratio: 16 / 9; */
@@ -408,7 +407,8 @@ export default {
   cursor: pointer;
 }
 .blue_color{
-  color: #4e5bf8 !important;
+  /* color: #4e5bf8 !important; */
+  color: #2528cb !important;
   /* font-size: 18px; */
 }
 

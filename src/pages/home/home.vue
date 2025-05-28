@@ -5,10 +5,10 @@
     <div class="col-12 col-md-8">
        <div class="d-none d-sm-flex row w-100 web_view justify-content-between">
   <div
-    class="margin-bottom"
+    class="margin-bottom top-cards"
     v-for="(card, index) in cards"
     :key="index"
-    style="flex: 0 0 20%; max-width: 20%;"
+    style="flex: 0 0 20%; max-width: 20%; "
   >
     <div class="box" @click="card.onClick">
       <component :is="card.component" />
@@ -221,4 +221,16 @@ h3 {
     margin-top: 16px;
   }
 }
+
+@media screen and (max-width: 1280px) and (min-width: 769px) {
+  ::v-deep(.attendance-title),
+  ::v-deep(.assignment-title),
+  ::v-deep(.lab-title),
+  ::v-deep(.hackathon-title),
+  ::v-deep(.assesment-title) {
+    font-size: 12px !important;
+  }
+}
+
+
 </style>
