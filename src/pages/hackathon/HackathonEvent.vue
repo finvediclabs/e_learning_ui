@@ -44,7 +44,8 @@
     text-align: center;
   "
 >
-  <router-link :to="'/register'" style="text-decoration: none; color: white;">
+ <router-link :to="{ path: '/register', query: { product: 'H003' } }" style="text-decoration: none; color: white;">
+
           <span
             class="btn rounded-pill text-white"
             style="font-size: 1.3em; background-color: #007bff; padding: 12px 25px; text-decoration: none; border-radius: 30px; width: 100%; max-width: 250px;"
