@@ -266,7 +266,7 @@ async fetchAssignments(cycleId) {
 }
 
 .podium-poll {
-  width: 100px;
+  width: 80px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;

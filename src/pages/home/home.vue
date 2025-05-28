@@ -61,6 +61,18 @@
       <NotifCard class="q-mt-md" />
       <ClassCard class="q-mt-md" />
       <ChatsCard class="q-my-md" />
+      <div class="col-12 q-mt-md" style="border-radius: 15px;">
+     <video
+  :src="Hero_vid"
+  controls
+  loop
+  autoplay
+  muted
+    controlsList="nodownload"
+  playsinline
+  style="width: 100%; height: auto; display: block; border-radius: 15px;"
+></video>
+      </div>
     </div>
 
 
@@ -73,6 +85,7 @@
 
 <script>
 import { mapState } from "pinia";
+import Hero_vid from "src/assets/Hero_vid.mp4";
 import { useSessionStore } from "src/stores/session";
 import { useProfileStore } from "src/stores/profile";
 import { Swiper, SwiperSlide } from 'swiper/vue'
@@ -118,7 +131,8 @@ export default {
   data() {
     return {
       showPopup: false,
-       cards: []
+       cards: [],
+      Hero_vid: Hero_vid,
     };
   },
   created() {

@@ -52,7 +52,7 @@
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue'
-import Hackathonevent from 'src/assets/Hackathonevent.png'
+import Hackathonevent from 'src/assets/seminarEvent.png'
 
 const isMobile = ref(window.innerWidth <= 768)
 

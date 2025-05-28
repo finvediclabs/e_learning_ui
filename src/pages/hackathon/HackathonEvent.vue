@@ -25,7 +25,7 @@
     </div>
 
     <!-- Desktop View -->
-    <div class="desk" v-else>
+    <div class="desk q-mt-xl" v-else>
     <div
    :style="{
   backgroundImage: `url(${Hackathonevent})`,

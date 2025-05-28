@@ -156,7 +156,7 @@
     <div class="row col-12 border_samp q-pt-sm  q-pb-md q-col-gutter-md web_view">
       <div class="col-1"></div>
       <div class="col-5">
-        <span class="head_foot2">© 2025 ScaleGrad Inc. All rights reserved.</span>
+        <span class="head_foot2">© 2025 FinVedic. All rights reserved.</span>
       </div>
       <div class="col-5 logo_foot">
         <a href="https://www.facebook.com/ScaleGrad" target="_blank"><q-img :src="fb_logo" class="logo_foot_img"></q-img></a>
@@ -175,7 +175,7 @@
         <a href="https://www.instagram.com/scalegrad/" target="_blank"><q-img :src="insta_logo" class="logo_foot_img"></q-img></a>
       </div>
       <div class="row text-center"  style="display: flex;align-items: center;justify-content: center;width: 100%;">
-        <span class="head_foot2">© 2025 ScaleGrad Inc. All rights reserved.</span>
+        <span class="head_foot2">© 2025 FinVedic. All rights reserved.</span>
       </div>
     </div>
 

@@ -1,5 +1,9 @@
 <template>
-  <div class="seminar-card" @click="viewAll">
+   <router-link
+      :to="'/webinarEvent'"
+      style="text-decoration: none;"
+    >
+  <div class="seminar-card">
     <img class="seminar-image" :src="seminarImage" alt="Seminar Image" />
     <div class="seminar-content">
       <h3 class="seminar-heading">Webinar</h3>
@@ -8,6 +12,7 @@
       <p class="seminar-details">Slots: {{ slots }}</p>
     </div>
   </div>
+  </router-link>
 </template>
 
 <script>
@@ -37,13 +42,7 @@ export default {
       default: '120/200'
     }
   },
-  methods: {
-    viewAll() {
-    this.$router.push("/webinarEvent");
-    console.log("webinar clicked");
-  },
-    // You can add methods here if needed
-  }
+
 };
 </script>
 

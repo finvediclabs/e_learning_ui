@@ -57,7 +57,7 @@
 </template>
 
 <script setup>
-import Hackathonevent from 'src/assets/Hackathonevent.png'
+import Hackathonevent from 'src/assets/Webinar_event.png'
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 
 const isMobile = ref(window.innerWidth <= 768)
