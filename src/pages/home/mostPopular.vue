@@ -30,7 +30,7 @@
   style="margin-left: auto; margin-right: auto;gap: 16px;"
 >
   <q-card class="course-card1 cursor-pointer" @click="handleCategoryClick(category, index)">
-    <div style="height: 38vh;">
+    <div style="height: 42vh;">
       <img
         v-if="category.imagePath"
         :src="category.imagePath"
@@ -242,7 +242,7 @@ async fetchCategories() {
   border-radius: 8px;
   width: 98%;
   height:100%;
-  max-height: 400px;
+  max-height: 440px;
   overflow: hidden;
 }
 
