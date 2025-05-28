@@ -2,7 +2,7 @@
   <div class="row q-px-md q-my-sm home">
     <!-- Left Column -->
 
-    <div class="col-12 col-md-8">
+    <div class="col-12 col-md-9">
        <div class="d-none d-sm-flex row w-100 web_view justify-content-between">
   <div
     class="margin-bottom top-cards"
@@ -56,7 +56,7 @@
     </div>
 
     <!-- Right Column -->
-    <div class="col mb-3 profile-column q-ml-md">
+    <div class="col mb-2 profile-column q-ml-md">
       <profile-card />
       <NotifCard class="q-mt-md" />
       <ClassCard class="q-mt-md" />
