@@ -3,8 +3,9 @@
     <img class="seminar-image" :src="seminarImage" alt="Seminar Image" />
     <div class="seminar-content">
       <h3 class="seminar-heading">Webinar</h3>
-      <p class="seminar-details">Time: {{ time }}</p>
+      <p class="seminar-details">Duration & Time: {{ time }}</p>
       <p class="seminar-details">Date: {{ date }}</p>
+      <p class="seminar-details">Slots: {{ slots }}</p>
     </div>
   </div>
 </template>
@@ -23,13 +24,17 @@ export default {
       type: String,
       default: 'https://via.placeholder.com/300x180?text=Seminar'
     },
-    time: {
+   time: {
       type: String,
-      default: '10:00 AM'
+      default: '60 Minutes, 10:00 AM'
     },
     date: {
       type: String,
       default: '2025-05-28'
+    },
+    slots: {
+      type: String,
+      default: '120/200'
     }
   }
 };
@@ -58,8 +63,13 @@ export default {
   text-align: left;
   padding-left: 1rem;
 }
+.seminar-card:hover {
+  transform: scale(1.05); /* Enlarges by 5% */
+  transition: transform 0.3s ease;
+  cursor: pointer; /* Changes cursor to pointer */
+}
 .seminar-heading {
-  margin: 0 0 0.5rem 0;
+  margin: 0 0 0.2rem 0;
   font-size: 1.3rem;
   font-weight: bold;
   color: #2528CB;
@@ -67,6 +77,6 @@ export default {
 .seminar-details {
   margin: 0.2rem 0;
   color: #555;
-  font-size: 1rem;
+  font-size: 0.8rem;
 }
 </style>

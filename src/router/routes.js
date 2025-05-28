@@ -238,7 +238,8 @@ const routes = [
   },
    {
     path: '/hackathonEvent',
-   component: () => import('layouts/home/HomePage.vue'),
+    meta: { title: 'Hackathon_Event', module: 'Hackathon_Event' },
+    component: () => import('layouts/DashboardLayout.vue'),
     children: [
       {
         path: '',
