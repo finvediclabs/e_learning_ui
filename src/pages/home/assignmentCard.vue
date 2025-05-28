@@ -1,15 +1,13 @@
 <template>
 
   <div class="attendance-box" @click="viewAll">
-    <div class="attendance-header row">
-      <div class="col-4">
+    <div class="attendance-header row items-center">
+      <div class="col-4 flex flex-center">
         <q-img :src="assignment_vector" class="attendance-vector" alt="Assignment Icon" />
       </div>
-      <div class="col-8 text-left">
+      <div class="col-8 text-left" style="margin-top: -4%;">
         <span class="attendance-title text-left text-h3">Assignment</span>
-      </div>
-    </div>
-    <div class="row attendance-content">
+        <div class="row attendance-content" style="margin-top: -10%;">
       <div class="col-10 attendance-bar">
         <div
           class="attendance-fill"
@@ -17,14 +15,17 @@
           :style="{ width: attendancePercentage + '%' }"
         ></div>
       </div>
-      <div class="col-2">
+      <div class="col-2" style="font-size: 12px;">
         <span>{{ attendancePercentage }}%</span>
       </div>
     </div>
+      </div>
+    </div>
+
   </div>
 </template>
 <script>
-import assignment_vector from 'src/assets/assignment_vector.png';
+import assignment_vector from 'src/assets/assignment.png';
 import { useSessionStore } from "src/stores/session";
 import { storeToRefs } from "pinia";
 import { useProfileStore } from "src/stores/profile";
@@ -101,24 +102,27 @@ export default {
 
 <style scoped>
 .attendance-box {
-  width: 95%;
+  width: 100%;
   margin: auto;
   /* padding: 10px; */
   border-radius: 20px;
-  cursor: pointer;
   background-color: #fff;
   text-align: center;
+  cursor: pointer;
+
 }
 
 .attendance-header {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 10px;
+  /* margin-bottom: 10px; */
+  /* border: 2px solid red; */
 }
 
 .attendance-vector {
-  width: 60%;
+  width: 80%;
+  border-radius: 2px;
   height: auto;
   margin-right: 8px;
 }
@@ -132,12 +136,12 @@ export default {
 .attendance-content {
   display: flex;
   align-items: center;
-  justify-content: center;
 }
 
+
 .attendance-bar {
-  width: 70%;
-  height: 16px;
+  width: 80%;
+  height: 8px;
   background-color: #D9D9D9;
   border-radius: 10px;
   overflow: hidden;
