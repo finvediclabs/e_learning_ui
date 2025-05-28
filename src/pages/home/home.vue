@@ -32,6 +32,22 @@
     </swiper-slide>
   </swiper>
 
+  <!-- New Cards -->
+   <div class="desktop-header2 q-mt-lg">
+  <span class="text-black" style="font-size: x-large; color: #141414; font-weight: 600;">Upcoming Events</span>
+</div>
+<div class="row q-col-gutter-md q-mb-md">
+  <div class="col-12 col-md-4">
+    <SeminarCard />
+  </div>
+  <div class="col-12 col-md-4">
+    <HackathonDetails />
+  </div>
+  <div class="col-12 col-md-4">
+    <WebinarDetails />
+  </div>
+</div>
+
       <!-- MostPopular & RecentlyViewed in One Row -->
       <div class="row w-100 Most-Recent">
         <MostPopular />
@@ -64,7 +80,9 @@ import AssesmentCard from "src/pages/home/assesmentCard.vue";
 import MostPopular from "src/pages/home/mostPopular.vue";
 import LabReport from "src/pages/home/labReport.vue";
 import AssignmentCard from "src/pages/home/assignmentCard.vue";
-
+import SeminarCard from "src/pages/home/SeminarCard.vue";
+import HackathonDetails from "src/pages/home/HackathonDetails.vue";
+import WebinarDetails from "src/pages/home/WebinarDetails.vue";
 import HackathonCard from "src/pages/home/hackathonCard.vue";
 import ProfileCard from "src/pages/home/profileCard.vue";
 import NotifCard from "src/pages/home/notifications.vue";
@@ -78,7 +96,10 @@ export default {
   components: {
     AttendanceCard,
     AssesmentCard,
+    HackathonDetails,
+    WebinarDetails,
       Swiper,
+      SeminarCard,
     SwiperSlide,
     AssignmentCard,
     HackathonCard,

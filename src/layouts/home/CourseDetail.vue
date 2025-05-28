@@ -15,7 +15,6 @@
       @click="$router.push('/')"
       style="cursor: pointer; color: blue; vertical-align: middle;"
     >
-      Home
     </span>
     &nbsp; > &nbsp; View Course
   </span>
