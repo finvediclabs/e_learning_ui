@@ -248,6 +248,30 @@ const routes = [
       }
     ]
   },
+   {
+  path: '/webinarEvent',
+  meta: { title: 'Webinar_Event', module: 'Webinar_Event' },
+  component: () => import('layouts/DashboardLayout.vue'),
+  children: [
+    {
+      path: '',
+      component: () => import('src/pages/hackathon/WebinarEvent.vue'),
+      meta: { item: '' }
+    }
+  ]
+},
+   {
+    path: '/seminarEvent',
+    meta: { title: 'Seminar_Event', module: 'Seminar_Event' },
+    component: () => import('layouts/DashboardLayout.vue'),
+    children: [
+      {
+        path: '',
+        component: () => import('src/pages/hackathon/SeminarEvent.vue'),
+        meta: { item: '' }
+      }
+    ]
+  },
   {
     path: '/allCourses',
     component: () => import('layouts/home/HomePage.vue'),

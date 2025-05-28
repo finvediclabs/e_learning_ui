@@ -2,30 +2,22 @@
   <div>
     <!-- Mobile View -->
     <div class="mobilepart" v-if="isMobile">
-      <div
-        class="mobile-content"
-        style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100vw; height: 50vh; padding: 20px; background-color: #f9f9f9; color: #333; text-align: center;"
-      >
-        <h1 style="font-size: 2em; font-weight: bold; color: #007bff; margin-bottom: 15px;">Hackathon</h1>
-        <p style="font-size: 1.2em; margin: 5px 0;">📅 Date: June 15, 2025</p>
-        <p style="font-size: 1.2em; margin: 5px 0;">🌐 Mode: Online</p>
-        <p style="font-size: 1.2em; margin: 5px 0;">📌 Topic: AI & ML in Fintech</p>
-        <p style="font-size: 1.2em; margin: 5px 0;">🏆 Prizes Worth: Up to 50,000</p>
-        <div style="margin-top: 20px; width: 100%;">
-          <router-link :to="'/register'" style="text-decoration: none; color: white;">
-          <span
-            class="btn rounded-pill text-white"
-            style="font-size: 1.3em; background-color: #007bff; padding: 12px 25px; text-decoration: none; border-radius: 30px; width: 100%; max-width: 250px;"
-          >
-            Click to Register
-        </span>
-        </router-link>
-        </div>
+      <div class="mobile-content">
+        <p class="text-2xl font-semibold text-gray-800" style="text-align: center; padding-top: 20%;">
+        🎥 Currently, there is no up-coming webinar
+      </p>
       </div>
     </div>
 
     <!-- Desktop View -->
     <div class="desk" v-else>
+     <!-- <div class="flex items-center justify-center h-[calc(100vh-64px)] bg-white">
+    <div class="text-center">
+      <p class="text-2xl font-semibold text-gray-800" style="padding-top: 40%; font-size: 40px;">
+        🎥 Currently, there is no up-coming webinar
+      </p>
+    </div>
+  </div> -->
     <div
    :style="{
   backgroundImage: `url(${Hackathonevent})`,
@@ -49,8 +41,7 @@
     text-align: center;
   "
 >
- <router-link :to="{ path: '/register', query: { product: 'H003' } }" style="text-decoration: none; color: white;">
-
+  <router-link :to="'/register'" style="text-decoration: none; color: white;">
           <span
             class="btn rounded-pill text-white"
             style="font-size: 1.3em; background-color: #007bff; padding: 12px 25px; text-decoration: none; border-radius: 30px; width: 100%; max-width: 250px;"
@@ -66,8 +57,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue'
 import Hackathonevent from 'src/assets/Hackathonevent.png'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 
 const isMobile = ref(window.innerWidth <= 768)
 
