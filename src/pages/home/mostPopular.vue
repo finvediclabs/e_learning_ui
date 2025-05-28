@@ -19,10 +19,6 @@
   <p class="loading-text">Loading Courses Offered...</p>
 </div>
 
-  <!-- <div v-if="isLoading" class="loading-container">
-      <q-spinner color="primary" size="40px" />
-      <p class="loading-text">Loading Courses Offered...</p>
-    </div> -->
 
   <div v-else class="container mt-4" style="width: 100%;padding-left: 1%;padding-right: 1%;" >
     <div class="row d-flex justify-content-center align-items-center w-100" style="width: 100%;">
@@ -34,7 +30,7 @@
   style="margin-left: auto; margin-right: auto;gap: 16px;"
 >
   <q-card class="course-card1 cursor-pointer" @click="handleCategoryClick(category, index)">
-    <div style="height: 270px;">
+    <div style="height: 38vh;">
       <img
         v-if="category.imagePath"
         :src="category.imagePath"
@@ -43,8 +39,8 @@
         fit="contain"
       />
     </div>
-    <q-card-section style="margin-bottom: 10px;">
-      <p class="text-bold text-left">{{ category.categoryName }}</p>
+    <q-card-section >
+      <p class="text-bold text-left two-line-clamp">{{ category.moduleName }}</p>
     </q-card-section>
   </q-card>
 </div>
@@ -73,7 +69,7 @@
         />
       </div>
       <q-card-section style="padding-bottom: 0%;">
-        <p class="text-bold text-left">{{ category.categoryName }}</p>
+        <p class="text-bold text-left">{{ category.moduleName }}</p>
       </q-card-section>
     </q-card>
   </swiper-slide>
@@ -95,6 +91,9 @@ import mostPopularBg from '../../assets/most_popularBG.png';
 import { useSessionStore } from "src/stores/session";
 import { storeToRefs } from "pinia";
 import { Swiper, SwiperSlide } from 'swiper/vue';
+import axios from "axios";
+
+
 import 'swiper/css';
 import { useProfileStore } from "src/stores/profile";
 import DemoUserPopUp from "src/layouts/DemoUserPopUp.vue";
@@ -165,11 +164,16 @@ async fetchCategories() {
   this.isLoading = true;
   try {
     const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
-    const getCourse = baseUrl + 'api/chapterCategoriess';
-    const response = await fetch(getCourse);
-    const data = await response.json();
+    const getCourse = baseUrl + 'api/modules';
 
-    const categoryNameMap = {
+    const response = await this.$api.get(getCourse);
+    console.log("Response from api/modules:", response);
+
+    // Extract and filter data where categoryId is 2
+    const data = response.data.filter(item => item.categoryId === 2);
+    console.log("Filtered data (categoryId = 2):", data);
+
+    const moduleNameMap = {
       "Specialization": "Equities & Electronic Trading",
       "Introduction to Banking": "Fintech & Financial Services"
     };
@@ -186,26 +190,21 @@ async fetchCategories() {
             const formData = new FormData();
             formData.append('filename', filename);
 
-            const downloadResponse = await fetch(downloadUrl, {
-              method: 'POST',
-              body: formData,
+            const downloadResponse = await this.$api.post(downloadUrl, formData, {
+              responseType: 'blob',
             });
 
-            if (!downloadResponse.ok) {
-              throw new Error(`HTTP error! status: ${downloadResponse.status}`);
-            }
-
-            const blob = await downloadResponse.blob();
+            const blob = downloadResponse.data;
             imageUrl = await this.preloadImage(window.URL.createObjectURL(blob));
           } catch (error) {
-            console.error(`Error fetching cover image for: ${category.categoryName}`, error);
+            console.error(`Error fetching cover image for: ${category.moduleName}`, error);
             imageUrl = require('@/assets/dummy_book.png');
           }
         }
 
         return {
           ...category,
-          categoryName: categoryNameMap[category.categoryName] || category.categoryName,
+          moduleName: moduleNameMap[category.moduleName] || category.moduleName,
           imagePath: imageUrl
         };
       })
@@ -243,7 +242,7 @@ async fetchCategories() {
   border-radius: 8px;
   width: 98%;
   height:100%;
-  max-height: 340px;
+  max-height: 400px;
   overflow: hidden;
 }
 
@@ -252,7 +251,9 @@ async fetchCategories() {
   margin-left: 3%;
   margin-right: 3%;
   margin-top: 3%;
-  padding: 0%;
+  padding-bottom: 0%;
+  padding-left: 0%;
+  padding-right: 0%;
   height: 100%;
   border-radius: 5px;
   object-fit: fill; /* ensures full image is visible */
@@ -364,7 +365,14 @@ async fetchCategories() {
   color: #4E5BF8;
   cursor: pointer;
 }
-
+.two-line-clamp{
+   display: -webkit-box;
+  -webkit-line-clamp: 2;  /* number of lines to show */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+}
 /* Mobile View Only */
 @media screen and (max-width: 600px) {
 

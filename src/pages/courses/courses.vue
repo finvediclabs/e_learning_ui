@@ -9,7 +9,7 @@
         <ul>
   <li class="category-item1">
     <div class="category-row1">
-      <span class="text-weight-bold" >{{ course.categoryName }}</span><br>
+      <span class="text-weight-bold" >{{ course.moduleName }}</span><br>
 
      <span class="text-weight-light" style="font-size: 14px;">{{ course.description }}</span>
     </div>
@@ -208,7 +208,7 @@ export default {
         id: null,
         title: '',
         description: '',
-        categoryName: [],
+        moduleName: [],
         catgoryId: [],
         abstractt: '',
         imagePath: '',
@@ -288,38 +288,38 @@ created() {
 async fetchCourseDetails() {
   this.categoryLoading = true;
   try {
-  const courseId = this.$route.params.id; // ✅ Extract the ID properly
-  console.log("Course ID:", courseId); // Debugging
+    const courseId = this.$route.params.id;
+    console.log("Course ID:", courseId);
 
-  const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
-  const apiUrl = `${baseUrl}api/categories/${courseId}`;
-
-  console.log('API URL:', apiUrl);
-
+    const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
+    const apiUrl = `${baseUrl}api/module/${courseId}`;
+    console.log('API URL:', apiUrl);
 
     const response = await this.$api.get(apiUrl);
+    console.log('Raw API Response:', response);
 
-    if (response.data) {
+    if (response && response.data) {
       const course = response.data;
-      console.log('Course Data:', course);
+      console.log('Response Data:', course);
 
-      // Ensure the API response contains expected data
       this.course = {
-        id: course.id, // ✅ Correct field
-        categoryName: course.categoryName, // ✅ Correct field
-        description: course.description, // ✅ Correct field
-        imagePath: course.imagePath || this.DummyBook, // ✅ Use fallback if imagePath is null
+        id: course.id,
+        moduleName: course.moduleName,             // changed from moduleName to moduleName
+        description: course.description,
+        imagePath: course.imagePath || this.DummyBook,
         bookChapters: course.bookChapters || [],
         videoChapters: course.videoChapters || [],
         presentationChapters: course.presentationChapters || [],
       };
 
+      console.log('Processed Course Object:', this.course);
     } else {
+      console.error('No data found in response:', response);
       throw new Error('Failed to fetch course details');
     }
   } catch (error) {
     this.error = 'Error loading course details. Please try again later.';
-    console.error(error);
+    console.error('Error fetching course details:', error);
   } finally {
     this.categoryLoading = false;
   }
@@ -332,7 +332,7 @@ async fetchCategoryDetails() {
   console.log("Course ID:", courseId); // Debugging
 
   const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
-  const apiUrl = `${baseUrl}api/categories/${courseId}`;
+  const apiUrl = `${baseUrl}api/module/${courseId}`;
 
   console.log('API URL:', apiUrl); // Debugging
 
@@ -346,7 +346,7 @@ async fetchCategoryDetails() {
       // Update category details
       this.category = {
         id: categoryData.id,
-        categoryName: categoryData.categoryName,
+        moduleName: categoryData.moduleName,
         description: categoryData.description,
         imagePath: categoryData.imagePath || this.DummyBook, // ✅ Fallback if imagePath is null
         bookChapters: categoryData.bookChapters || [],
