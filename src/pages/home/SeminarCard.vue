@@ -1,8 +1,8 @@
 <template>
   <router-link
-      :to="'/seminarEvent'"
-      style="text-decoration: none;"
-    >
+  :to="{ name: 'hackathonEvent', params: { id: 1 } }"
+  style="text-decoration: none;"
+>
   <div class="seminar-card">
     <img class="seminar-image" :src="seminarImage" alt="Seminar Image" />
     <div class="seminar-content">
@@ -12,7 +12,7 @@
       <p class="seminar-details">Slots: {{ slots }}</p>
     </div>
   </div>
-  </router-link>
+</router-link>
 </template>
 
 <script>

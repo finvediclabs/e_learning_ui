@@ -1,6 +1,9 @@
 <template>
-
-  <div class="seminar-card" @click="viewAll">
+ <router-link
+  :to="{ name: 'hackathonEvent', params: { id: 3 } }"
+  style="text-decoration: none;"
+>
+  <div class="seminar-card">
     <img class="seminar-image" :src="seminarImage" alt="Seminar Image" />
     <div class="seminar-content">
       <h3 class="seminar-heading">Hackathon</h3>
@@ -9,6 +12,7 @@
       <p class="seminar-details">Slots: {{ slots }}</p>
     </div>
   </div>
+  </router-link>
 </template>
 
 <script>

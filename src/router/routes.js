@@ -236,18 +236,19 @@ const routes = [
       }
     ]
   },
-   {
-    path: '/hackathonEvent',
-    meta: { title: 'Hackathon_Event' },
-    component: () => import('layouts/DashboardLayout.vue'),
-    children: [
-      {
-        path: '',
-        component: () => import('src/pages/hackathon/HackathonEvent.vue'),
-        meta: { item: '' }
-      }
-    ]
-  },
+  {
+  path: '/hackathonEvent',
+  meta: { title: 'Hackathon_Event' },
+  component: () => import('layouts/DashboardLayout.vue'),
+  children: [
+    {
+      path: ':id', // <-- add this
+      name: 'hackathonEvent',
+      component: () => import('src/pages/hackathon/HackathonEvent.vue'),
+      props: true // <-- optional but useful
+    }
+  ]
+},
    {
   path: '/webinarEvent',
   meta: { title: 'Webinar_Event' },

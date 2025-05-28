@@ -1,8 +1,8 @@
 <template>
    <router-link
-      :to="'/webinarEvent'"
-      style="text-decoration: none;"
-    >
+  :to="{ name: 'hackathonEvent', params: { id: 2 } }"
+  style="text-decoration: none;"
+>
   <div class="seminar-card">
     <img class="seminar-image" :src="seminarImage" alt="Seminar Image" />
     <div class="seminar-content">
