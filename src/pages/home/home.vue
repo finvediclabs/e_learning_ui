@@ -36,7 +36,7 @@
    <div class="desktop-header2 q-mt-lg">
   <span class="text-black" style="font-size: x-large; color: #141414; font-weight: 600;">Upcoming Events</span>
 </div>
-<div class="row q-col-gutter-md q-mb-md">
+<div class="row q-col-gutter-xl q-mb-md">
   <div class="col-12 col-md-4">
     <SeminarCard />
   </div>
