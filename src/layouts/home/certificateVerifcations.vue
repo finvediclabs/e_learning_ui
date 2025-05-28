@@ -13,7 +13,7 @@
     <div class="cert-input-container">
   <q-input
     v-model="uniqueId"
-    placeholder="Enter FinVedic Certificate ID for authentication"
+    placeholder="Enter ScaleGrad Certificate ID for authentication"
     outlined
     dense
     rounded
@@ -77,16 +77,18 @@ export default {
 
 <style scoped>
 .certificate-verification {
-  text-align: center;
+ text-align: center;
  width: 80%;
  border-radius: 20px;
- background-color: #898f9b;
+ background:linear-gradient(90deg, #14cec3,#2528cb);
+ background-blend-mode: #14cec3;
  /* background-color: #4E5BF8; */
- color: white;
+ color: #ecedef;
+ 
   margin: auto;
 }
 .color_btn{
-  background-color: #898f9b !important;
+  background-color: #141534 !important;
 }
 
 .check-btn {
@@ -102,9 +104,9 @@ export default {
 
 .arrow-btn {
   cursor: pointer;
-  color: #4E5BF8;
+  color: #14cec3;
   font-size:large !important;
-  margin-left: 0px !important;
+  margin-left: 10px !important;
 }
 
 /* Mobile-specific visibility handling */
