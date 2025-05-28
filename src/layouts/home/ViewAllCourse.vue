@@ -2,7 +2,7 @@
  <q-layout view="lHh Lpr lFf " style="min-height: unset">
 
   <div class="free-courses1 q-pb-lg q-mb-lg">
-    <div class="row w-100 text-left q-mt-md q-mx-lg">
+    <div class="row w-100 text-left q-mt-md q-mx-xl" >
       <span class="text-black header_freeCourses" style="width: 100%;">
         Start learning journey with our <span class="blue_color">Popular COURSES</span>
       </span>
@@ -11,7 +11,7 @@
       </span>
     </div>
 
-    <div class="container freeCourseCont mt-4 q-mx-lg ">
+    <div class="container freeCourseCont mt-4 " style="margin-right: 10%;margin-left: 10%;">
 <!-- Mobile view with scroll snapping -->
 <div
   v-if="$q.screen.lt.md"
@@ -51,15 +51,15 @@
     v-for="(category, index) in firstTwoCategories"
     :key="category.id"
     class="col-md-12 mb-4"
-    
+
   >
     <div class="row align-items-center q-mt-lg q-mx-lg" >
       <!-- IMAGE -->
       <div
-        class="col-2"
+        class="col-3"
         :class="index === 1 ? 'order-2' : 'order-1'"
         style="background-color: #fff; padding: 13px; border-radius: 15px; border: 1px solid #dcdcdc;"
-        
+
       >
         <img
           v-if="category.imagePath"
@@ -83,7 +83,7 @@
             <p class="text-h4 text-bold text-black q-mt-md">
               <span v-html="highlightCategoryName(category.categoryName)"></span>
             </p>
-            <p class="text-h5 text-grey q-mt-lg">{{ category.description }}</p>
+            <p class="text-h5 text-grey q-mt-lg two-line-clip">{{ category.description }}</p>
           </div>
 <div class="col-3">
           <q-btn
@@ -453,6 +453,14 @@ export default {
 .logo_in {
   min-height: 0px !important;
   cursor: pointer;
+}
+.two-line-clamp{
+    display: -webkit-box;
+  -webkit-line-clamp: 4;  /* number of lines to show */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
 }
 .bg-Customblue {
   background-color: #4E5BF8;

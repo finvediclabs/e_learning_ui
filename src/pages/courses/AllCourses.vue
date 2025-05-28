@@ -1,20 +1,17 @@
 <template>
  <q-layout view="lHh Lpr lFf " style="min-height: unset">
 
-
-
-
   <div class="free-courses1 q-pb-lg q-mb-lg">
-    <div class="row w-100 text-left q-mt-md q-mx-lg">
+    <div class="row w-100 text-left q-mt-md q-mx-xl" >
       <span class="text-black header_freeCourses" style="width: 100%;">
-        Start learning journey with our <span class="blue_color">Exclusive COURSES</span>
+        Start learning journey with our <span class="blue_color">Popular COURSES</span>
       </span>
       <span class="text-black desc_mostPopular" style="width: 100%;">
         "Unlock endless learning opportunities with our courses, designed to expand your knowledge"
       </span>
     </div>
 
-    <div class="container freeCourseCont mt-4 q-mx-lg ">
+    <div class="container freeCourseCont mt-4 " style="margin-right: 10%;margin-left: 10%;">
 <!-- Mobile view with scroll snapping -->
 <div
   v-if="$q.screen.lt.md"
@@ -36,7 +33,7 @@
       class="course-image4 q-pa-lg"
     />
 
-    <q-card-section>
+    <q-card-section >
       <p class="text-bold text-left blue_color">{{ category.categoryName }}</p>
       <span class="text-caption text-grey">{{ category.description }}</span>
     </q-card-section>
@@ -49,20 +46,20 @@
 
       <!-- Desktop view: grid -->
 <!-- First two categories with alternating layout -->
-<div class="row d-flex w-100 q-mb-xl align-items-center q-mt-md web_view">
-
+<div class="row d-flex w-100 q-mb-xl align-items-center q-mt-md web_view ">
   <div
     v-for="(category, index) in firstTwoCategories"
     :key="category.id"
-    class="col-md-6 mb-4 "
+    class="col-md-12 mb-4"
 
   >
-   <router-link :to="{ name: 'CoursesDetail', params: { id: category.id } }" style="text-decoration: none;">
-    <div class="row align-items-center course-card5 q-mt-lg">
+    <div class="row align-items-center q-mt-lg q-mx-lg" >
       <!-- IMAGE -->
       <div
-        class="col-4"
+        class="col-3"
         :class="index === 1 ? 'order-2' : 'order-1'"
+        style="background-color: #fff; padding: 13px; border-radius: 15px; border: 1px solid #dcdcdc;"
+
       >
         <img
           v-if="category.imagePath"
@@ -75,50 +72,83 @@
 
       <!-- TEXT -->
       <div
-        class="col-6"
-        :class="index === 1 ? 'order-1' : 'order-2'"
+        class="col course-TextCard"
+        :class="[
+          index === 1 ? 'order-1 q-mr-xl q-pa-md' : 'order-2 q-ml-xl q-pa-md'
+        ]"
+        style="background-color: #ffffff; "
       >
-        <div class="q-pa-sm">
-          <p class="text-h6 text-bold blue_color">{{ category.categoryName }}</p>
-          <p class="text-body1 text-grey">{{ category.description }}</p>
+        <div class="q-pa-sm column justify-between" style="min-height: 100%; ">
+          <div>
+            <p class="text-h4 text-bold text-black q-mt-md">
+              <span v-html="highlightCategoryName(category.categoryName)"></span>
+            </p>
+            <p class="text-h5 text-grey q-mt-lg two-line-clip">{{ category.description }}</p>
+          </div>
+<div class="col-3">
+          <q-btn
+            label="View Details"
+           no-caps
+            flat
+            class="q-mt-md q-px-lg"
+            style="background-color: #2528cb;color: #ffffff; border-radius: 10px;"
+            @click="goToCourseDetail(category.id)"
+          />
+          </div>
         </div>
       </div>
     </div>
-</router-link>
   </div>
 </div>
+
+
 
 
 
 
 <!-- Remaining categories in grid layout -->
- <span class="text-black header_freeCourses" style="width: 100%;"><span class="blue_color q-ml-lg q-mt-xl">Specializations</span>
+ <span class="text-black header_freeCourses" style="width: 100%;"><span class="blue_color q-ml-lg q-mt-xl" style="color: #000 !important;">Specializations</span>
       </span>
- <div class="row d-flex justify-content-center align-items-center w-100 web_view">
-
+ <div class="row d-flex justify-content-center align-items-center w-100 web_view q-mx-lg">
   <div
-    v-for="category in remainingCategories"
+    v-for="(category, index) in remainingCategories"
     :key="category.id"
-    class="col-md-3 mb-4 q-pt-sm snap-card q-mt-lg"
+    class="col-md-6 mb-4 q-pt-sm snap-card q-mt-lg"
+    :style="index % 2 === 0 ? 'padding-right: 15px;' : 'padding-left: 15px;'"
   >
-   <router-link :to="{ name: 'CoursesDetail', params: { id: category.id } }" style="text-decoration: none;">
-    <q-card class="course-card4 h-100">
-      <div>
-        <img
-          v-if="category.imagePath"
-          :src="category.imagePath"
-          alt="Category Image"
-          class="course-image4 q-pa-lg"
-        />
-      </div>
-      <q-card-section>
-        <p class="text-bold text-left blue_color">{{ category.categoryName }}</p>
-        <span class="text-caption text-grey two-line-clamp">{{ category.description }}</span>
-      </q-card-section>
-    </q-card>
+    <router-link
+      :to="{ name: 'Courses1Detail1', params: { id: category.id } }"
+      style="text-decoration: none;"
+    >
+      <q-card class="course-card4 h-100">
+        <div class="row no-wrap items-start">
+          <!-- IMAGE on the left -->
+          <div class="col-4">
+            <img
+              v-if="category.imagePath"
+              :src="category.imagePath"
+              alt="Category Image"
+              class="course-image4 q-pa-sm"
+              style="width: 100%; object-fit: cover; border-radius: 10px; "
+            />
+          </div>
+
+          <!-- TEXT on the right -->
+          <div class="col q-pa-sm q-pt-lg q-pl-md">
+            <q-card-section>
+              <p class="text-bold text-left text-black text-h5 "><span v-html="highlightCategoryName(category.categoryName)"></span></p>
+              <span class="text-grey text-body1  two-line-clamp">
+                {{ category.description }}
+              </span>
+            </q-card-section>
+          </div>
+        </div>
+      </q-card>
     </router-link>
   </div>
 </div>
+
+
 
 
 
@@ -175,7 +205,20 @@ export default {
       }
       return description.length > 100 ? description.slice(0, 100) + "..." : description;
     },
+  highlightCategoryName(name) {
+    const keywords = ['Financial Services', 'Technologies' , 'Electronic Trading', 'Analytics' , 'Management', 'Commercial Banking'];
+    let highlighted = name
 
+    keywords.forEach(keyword => {
+      const regex = new RegExp(`(${keyword})`, 'gi')
+      highlighted = highlighted.replace(regex, '<span style="color: #2528cb !important;">$1</span>')
+    })
+
+    return highlighted
+  },
+  goToCourseDetail(id) {
+    this.$router.push({ name: 'Courses1Detail1', params: { id } })
+  },
     /**
      * Toggles the description expansion for a specific category
      */
@@ -248,22 +291,31 @@ export default {
   padding: 20px;
   height: 100%; /* Set height to 80% of viewport */
   overflow-y: auto; /* Adds scroll if content overflows */
-   background-color: #FFFF;
-  background-image: url('src/assets/Labs_tools.png');
+   background-color: #f1f3ff;
+  /* background-image: url('src/assets/Labs_tools.png'); */
   background-size: 100% 100%;
   background-position: cover;
   background-repeat: no-repeat;
 }
+.margin-x {
+  margin-left: 20% !important;
+  margin-right: 20% !important;
+}
 
 .two-line-clamp {
   display: -webkit-box;
-  -webkit-line-clamp: 2;  /* number of lines to show */
+  -webkit-line-clamp: 5;  /* number of lines to show */
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: normal; /* allow wrapping */
 }
-
+.order-1 {
+  order: 1;
+}
+.order-2 {
+  order: 2;
+}
 .custom-col {
   flex: 0 0 12.5%; /* 100% / 8 = 12.5% width */
   max-width: 12.5%;
@@ -299,19 +351,22 @@ export default {
 .course-card4 {
   border: 1px solid #ddd;
   border-radius: 8px;
-  width: 90%;
-  margin-left: auto;
-  margin-right: auto;
+  width: 100%;
+
   height:100%;
   overflow: hidden;
 }
+.course-TextCard{
+  border: 1px solid #ddd;
+    border-radius: 15px;
 
+}
 .course-card5 {
   border: 1px solid #ddd;
   border-radius: 8px;
   width: 96%;
   margin-left: auto;
-  gap: 30px;
+  /* gap: 30px; */
   margin-right: auto;
   height:100%;
   /* overflow: hidden; */
@@ -319,9 +374,8 @@ export default {
 
 .course-image4 {
   width: 94%;
-  margin-left: 3%;
-  margin-right: 3%;
-  margin-top: 3%;
+  margin: 5%;
+  margin-bottom: 2%;
   padding: 0%;
   height: 60% !important;
   border-radius: 5px;
@@ -338,11 +392,11 @@ export default {
 .course-image5 {
   /* width: 90%; */
   margin: 0%;
-  padding: 2%;
+  padding: 0%;
   /* padding: 0%; */
   height: 100%;
 
-  border-radius: 15px;
+  border-radius: 5px;
   object-fit: fill; /* ensures full image is visible */
   object-position: center;
   /* aspect-ratio: 16 / 9; */
@@ -353,7 +407,8 @@ export default {
   cursor: pointer;
 }
 .blue_color{
-  color: #4e5bf8 !important;
+  /* color: #4e5bf8 !important; */
+  color: #2528cb !important;
   /* font-size: 18px; */
 }
 
@@ -398,6 +453,14 @@ export default {
 .logo_in {
   min-height: 0px !important;
   cursor: pointer;
+}
+.two-line-clamp{
+    display: -webkit-box;
+  -webkit-line-clamp: 4;  /* number of lines to show */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
 }
 .bg-Customblue {
   background-color: #4E5BF8;

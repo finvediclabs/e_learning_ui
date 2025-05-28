@@ -137,7 +137,7 @@ export default {
   },
   methods: {
     viewAll() {
-    this.$router.push("/courses");
+    this.$router.push("/courses1");
     console.log("View All Clicked from MostPopular");
   },
     async preloadImage(url) {
