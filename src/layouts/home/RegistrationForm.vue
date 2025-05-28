@@ -145,29 +145,23 @@ export default {
     };
   },
   methods: {
-    async handleSubmit() {
+handleSubmit() {
   const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
-  const apiUrl = baseUrl + 'api/web-enrolls';
+  const apiUrl = baseUrl + 'api/checkout';
 
-  try {
-    const response = await axios.post(apiUrl, this.form);
-    this.$q.notify({
-      type: 'positive',
-      message: 'Registration successful!',
-    });
-    this.resetForm();
+  // Get product code from route query or use default H001
+  const productCode = this.$route.query.product || 'H001';
 
-    // Wait for 3 seconds before redirecting
-    setTimeout(() => {
-      this.$router.push('/home');  // 👈 Redirect to home
-    }, 3000);  // 3000ms = 3 seconds
-  } catch (error) {
-    console.error('Error:', error);
-    this.$q.notify({
-      type: 'negative',
-      message: 'Registration failed. Try again.',
-    });
-  }
+  const params = new URLSearchParams({
+    PCode: productCode,
+    firstName: this.form.firstName,
+    lastName: this.form.lastName,
+    email: this.form.email,
+    phone: this.form.phoneNo
+  });
+
+  // Proceed with API request or redirection
+  window.location.href = `${apiUrl}?${params.toString()}`;
 },
     resetForm() {
       this.form = {
