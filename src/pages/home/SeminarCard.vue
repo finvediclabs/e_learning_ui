@@ -1,6 +1,6 @@
 <template>
   <router-link
-  :to="{ name: 'hackathonEvent', params: { id: 1 } }"
+  :to="'/seminarEvent'"
   style="text-decoration: none;"
 >
   <div class="seminar-card">

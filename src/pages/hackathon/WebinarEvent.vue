@@ -20,7 +20,7 @@
   </div> -->
     <div
    :style="{
-  backgroundImage: `url(${Hackathonevent})`,
+  backgroundImage: `url(${Webinar_Event})`,
   width: '80vw',              // reduce width
   height: '80vh',             // maintain height
   backgroundSize: 'contain',  // 👈 show full image
@@ -57,7 +57,7 @@
 </template>
 
 <script setup>
-import Hackathonevent from 'src/assets/Webinar_event.png'
+import Webinar_Event from 'src/assets/Webinar_event.png'
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 
 const isMobile = ref(window.innerWidth <= 768)

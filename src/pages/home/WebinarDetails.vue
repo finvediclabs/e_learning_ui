@@ -1,10 +1,10 @@
 <template>
    <router-link
-  :to="{ name: 'hackathonEvent', params: { id: 2 } }"
+  :to="'/groupDiscussion'"
   style="text-decoration: none;"
 >
   <div class="seminar-card">
-    <img class="seminar-image" :src="seminarImage" alt="Seminar Image" />
+    <img class="seminar-image" :src="webiNarImage" alt="Seminar Image" />
     <div class="seminar-content">
       <h3 class="seminar-heading">Webinar</h3>
       <p class="seminar-details">Duration & Time: {{ time }}</p>
@@ -16,19 +16,16 @@
 </template>
 
 <script>
-import seminarImage from 'src/assets/WebinarCard.png'; // Example image path
+import webiNarImage from 'src/assets/WebinarCard.png'; // Example image path
 export default {
   name: 'WebinarDetailsCard',
   data() {
     return {
-     seminarImage: seminarImage // Default image
+     webiNarImage: webiNarImage // Default image
     };
   },
   props: {
-    imageSrc: {
-      type: String,
-      default: 'https://via.placeholder.com/300x180?text=Seminar'
-    },
+
    time: {
       type: String,
       default: '60 Minutes, 10:00 AM'

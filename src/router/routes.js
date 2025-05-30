@@ -249,17 +249,18 @@ const routes = [
     }
   ]
 },
-   {
-  path: '/webinarEvent',
-  meta: { title: 'Webinar_Event' },
-  component: () => import('layouts/DashboardLayout.vue'),
-  children: [
-    {
-      path: '',
-      component: () => import('src/pages/hackathon/WebinarEvent.vue'),
-    }
-  ]
-},
+  {
+    path: '/groupDiscussion',
+    meta: { title: 'GroupDiscussion', module: 'GroupDiscussion' },
+    component: () => import('layouts/DashboardLayout.vue'),
+    children: [
+      {
+        path: '',
+        component: () => import('src/pages/GroupDiscussion/GroupDiscussion.vue'),
+      }
+    ]
+  },
+
    {
     path: '/seminarEvent',
     meta: { title: 'Seminar_Event', module: 'Seminar_Event' },
