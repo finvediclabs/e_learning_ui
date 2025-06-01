@@ -9,7 +9,12 @@
 
           <div class="carousel-view">
             <div class="carousel-row" :style="{ transform: `translateX(-${currentSlide * (100 / itemsPerSlide)}%)` }">
-              <div v-for="(lab, index) in loopLabs" :key="index" class="lab-card-container">
+              <div
+  v-for="(lab, index) in loopLabs"
+  :key="index"
+  class="lab-card-container"
+  :class="{'grayscale': isSaasUser && lab.title !== 'Tech Sandbox'}"
+>
                 <div class="card-title text-weight-medium text-h6">{{ lab.title }}</div>
                 <q-card
   class="sandbox-card"
@@ -30,7 +35,18 @@
   <q-img :src="lab.img" class="sandbox-img" />
 
   <q-card-section>
-    <div class="action-buttons">
+  <div class="action-buttons">
+    <!-- Show Agreement button ONLY for SaaS users before agreement and Tech Sandbox lab -->
+    <q-btn
+      v-if="isSaasUser && !isAgreementAccepted && lab.title === 'Tech Sandbox'"
+      label="Accept Agreement"
+      color="primary"
+      class="act-btn"
+      @click="showAgreementDialog = true"
+    />
+
+    <!-- Normal buttons if not SaaS user, agreement accepted, or not Tech Sandbox -->
+    <template v-else>
       <q-btn
         label="Restart"
         color=""
@@ -47,21 +63,27 @@
         @click="shutdown(labsData.find(vm => vm.userName === currentUserName))"
       />
       <q-btn
-        :label="['Fintech Sandbox', 'MAANG Sandbox'].includes(lab.title)
-          ? 'Download'
-          : (lab.title === 'Tech Sandbox' && labsData.some(vm => vm.userName === currentUserName && vm.provisioningState === 'Succeeded'))
-          ? 'Download VM'
-          : (isCreatingVm ? '' : 'Start')"
+        :label="
+          ['Fintech Sandbox', 'MAANG Sandbox'].includes(lab.title)
+            ? 'Download'
+            : (lab.title === 'Tech Sandbox' && labsData.some(vm => vm.userName === currentUserName && vm.provisioningState === 'Succeeded'))
+              ? 'Download VM'
+              : (isCreatingVm ? '' : 'Start')
+        "
         :loading="isCreatingVm"
         class="act-btn"
-        @click="['Fintech Sandbox', 'MAANG Sandbox'].includes(lab.title)
-          ? handleLabAction(lab)
-          : (lab.title === 'Tech Sandbox' && labsData.some(vm => vm.userName === currentUserName && vm.provisioningState === 'Succeeded'))
-          ? downloadVm(labsData.find(vm => vm.userName === currentUserName && vm.provisioningState === 'Succeeded'))
-          : handleLabAction(lab)"
+        @click="
+          ['Fintech Sandbox', 'MAANG Sandbox'].includes(lab.title)
+            ? handleLabAction(lab)
+            : (lab.title === 'Tech Sandbox' && labsData.some(vm => vm.userName === currentUserName && vm.provisioningState === 'Succeeded'))
+              ? downloadVm(labsData.find(vm => vm.userName === currentUserName && vm.provisioningState === 'Succeeded'))
+              : handleLabAction(lab)
+        "
       />
-    </div>
-  </q-card-section>
+    </template>
+  </div>
+</q-card-section>
+
 </q-card>
 
               </div>
@@ -75,39 +97,56 @@
               <div class="card-title text-weight-medium text-h6">{{ lab.title }}</div>
               <q-card class="sandbox-card">
                 <q-img :src="lab.img" class="sandbox-img" />
-                <q-card-section>
-                  <div class="action-buttons">
-                    <q-btn label="Restart" color="" outline class="q-mr-sm act-btn" v-if="lab.title !== 'Tech Sandbox'" />
-                    <q-btn
-  label="Shutdown"
-  color=""
-  outline
-  class="q-mr-sm act-btn"
-  v-if="lab.title === 'Tech Sandbox'"
-  @click="shutdown(labsData.find(vm => vm.userName === currentUserName))"
-/>
-                    <q-btn
-  :label="
-    ['Fintech Sandbox', 'MAANG Sandbox'].includes(lab.title)
-      ? 'Download'
-      : (lab.title === 'Tech Sandbox' && labsData.some(vm => vm.userName === currentUserName && vm.provisioningState === 'Succeeded'))
-        ? 'Download VM'
-        : (isCreatingVm ? '' : 'Start')
-  "
-  :loading="isCreatingVm"
-  class="act-btn"
-  @click="
-    ['Fintech Sandbox', 'MAANG Sandbox'].includes(lab.title)
-      ? handleLabAction(lab)
-      : (lab.title === 'Tech Sandbox' && labsData.some(vm => vm.userName === currentUserName && vm.provisioningState === 'Succeeded'))
-        ? downloadVm(labsData.find(vm => vm.userName === currentUserName && vm.provisioningState === 'Succeeded'))
-        : handleLabAction(lab)
-  "
-/>
+           <q-card-section>
+  <div class="action-buttons">
+    <!-- Show Agreement button ONLY for SaaS users before agreement and Tech Sandbox lab -->
+    <q-btn
+      v-if="isSaasUser && !isAgreementAccepted && lab.title === 'Tech Sandbox'"
+      label="Accept Agreement"
+      color="primary"
+      class="act-btn"
+      @click="showAgreementDialog = true"
+    />
 
+    <!-- Normal buttons if not SaaS user, agreement accepted, or not Tech Sandbox -->
+    <template v-else>
+      <q-btn
+        label="Restart"
+        color=""
+        outline
+        class="q-mr-sm act-btn"
+        v-if="lab.title !== 'Tech Sandbox'"
+      />
+      <q-btn
+        label="Shutdown"
+        color=""
+        outline
+        class="q-mr-sm act-btn"
+        v-if="lab.title === 'Tech Sandbox'"
+        @click="shutdown(labsData.find(vm => vm.userName === currentUserName))"
+      />
+      <q-btn
+        :label="
+          ['Fintech Sandbox', 'MAANG Sandbox'].includes(lab.title)
+            ? 'Download'
+            : (lab.title === 'Tech Sandbox' && labsData.some(vm => vm.userName === currentUserName && vm.provisioningState === 'Succeeded'))
+              ? 'Download VM'
+              : (isCreatingVm ? '' : 'Start')
+        "
+        :loading="isCreatingVm"
+        class="act-btn"
+        @click="
+          ['Fintech Sandbox', 'MAANG Sandbox'].includes(lab.title)
+            ? handleLabAction(lab)
+            : (lab.title === 'Tech Sandbox' && labsData.some(vm => vm.userName === currentUserName && vm.provisioningState === 'Succeeded'))
+              ? downloadVm(labsData.find(vm => vm.userName === currentUserName && vm.provisioningState === 'Succeeded'))
+              : handleLabAction(lab)
+        "
+      />
+    </template>
+  </div>
+</q-card-section>
 
-                  </div>
-                </q-card-section>
               </q-card>
             </div>
           </div>
@@ -132,6 +171,49 @@
 </div>
 </div>
     <DemoUserPopUp v-if="showPopup" @close="showPopup = false" />
+
+    <q-dialog v-model="showAgreementDialog">
+  <q-card class="q-pa-md">
+    <q-card-section>
+      <div class="text-h6">Pay-As-You-Go Agreement</div>
+    </q-card-section>
+
+    <q-card-section>
+      <p>
+        By clicking <strong>Proceed</strong>, you agree to the Pay-As-You-Go terms and conditions.
+        You acknowledge that each Virtual Machine (VM) you use will be charged at a rate of
+        <strong>₹100 per hour (inclusive of GST)</strong>. Billing is based strictly on the number
+        of hours your VM is active.
+      </p>
+      <p>
+        Payment must be completed every <strong>7 days</strong> based on your usage. Failure to
+        make timely payments may result in service restrictions.
+      </p>
+    </q-card-section>
+
+    <q-card-actions align="right">
+      <q-btn flat label="Cancel" color="negative" @click="showAgreementDialog = false" />
+      <q-btn flat label="Proceed" color="primary" @click="handleAgreementProceed" />
+    </q-card-actions>
+  </q-card>
+</q-dialog>
+
+<q-dialog v-model="showPaymentPopup" persistent>
+  <q-card>
+    <q-card-section class="text-h6">
+      Payment Required
+    </q-card-section>
+
+    <q-card-section>
+      You need to pay. You have used {{ usageHours }} hour<span v-if="usageHours !== 1">s</span> until now.
+    </q-card-section>
+
+    <q-card-actions align="right">
+      <q-btn label="Okay" color="primary" @click="showPaymentPopup = false" />
+      <!-- Add a "Pay Now" button later here -->
+    </q-card-actions>
+  </q-card>
+</q-dialog>
 </template>
 
 <script>
@@ -169,16 +251,21 @@ export default {
     return {
       userType,
       currentUserName,
+
     }
   },
   data() {
     return {
       isCreatingVm:false,
+      isSaasUser: false,
+isAgreementAccepted: false,
       showPopup: false,
       windows_lab: windows_lab,
       ubuntu_lab: ubuntu_lab,
       MySql_lab: MySql_lab,
       redis_lab: redis_lab,
+        showPaymentPopup: false,
+      usageHours: 0,
       extra_lab1: extra_lab1,
       circ_d1:circ_d1,
       extra_lab2: extra_lab2,
@@ -196,6 +283,10 @@ export default {
       region: "East US",
       version:"windows",
       labImg: windows,
+      isCreatingVm: false,
+        currentUserEmail: '',
+    showAgreementDialog: false,
+    agreementSelectedOS: null,
       labsData: [],
       labs: [
       { title: "Fintech Sandbox", img: extra_lab1 },
@@ -261,6 +352,84 @@ export default {
     openTool(link) {
         window.open(link, "_blank");
     },
+async handleAgreementProceed() {
+  this.showAgreementDialog = false;
+
+  const profileStore = useProfileStore();
+  const user = profileStore.user;
+
+  // Always use current date/time as createdAt
+  const createdAt = new Date();
+
+  // Add 1 day to createdAt to get paymentDueDate
+  const paymentDueDate = new Date(createdAt);
+  paymentDueDate.setDate(paymentDueDate.getDate() + 1);
+
+  const payload = {
+    userId: user.id,
+    accountId: user.accountId,
+    name: user.name,
+    username: user.username,
+    email: user.email,
+    createdAt: createdAt.toISOString(),
+    paymentDueDate: paymentDueDate.toISOString(),
+    status: 'Requested',
+    operatingSystem: this.agreementSelectedOS,
+    userRole: user.roles && user.roles.length > 0 ? user.roles[0].name : '',
+    totalVmHoursUsed: 0,  // Avoid null in backend
+  };
+
+  try {
+    const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
+    const url = baseUrl + 'api/lab-saas-users';
+
+    const response = await this.$api.post(url, payload);
+    console.log("Agreement accepted, server response:", response.data);
+   this.showMsg("Thank you for your subscription. You can now request for VMs.", "positive");
+
+   window.location.reload();
+
+  } catch (error) {
+    console.error("Failed to create SaaS user:", error);
+    const errMsg = error.response?.data?.message || "Failed to process agreement.";
+    this.showMsg(errMsg, "negative");
+  }
+},
+async checkSaasUserAgreement() {
+  const profileStore = useProfileStore();
+  const user = profileStore.user;
+  this.currentUserEmail = user.email;
+
+  // Step 1: Check if user has SaaS User role
+  if (user?.roles?.some(role => role.name === 'SaasUser')) {
+    this.isSaasUser = true;  // set to true if role found
+  } else {
+    this.isSaasUser = false; // explicitly false if role missing
+  }
+
+  if (!this.isSaasUser) {
+    this.isAgreementAccepted = false; // no agreement for non-SaaS users
+    return;
+  }
+
+  try {
+    const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
+    const url = baseUrl + 'api/lab-saas-users';
+
+    const response = await this.$api.get(url);
+    const labUsers = response.data?.data || [];
+
+    // Step 2: Check if current user has accepted the agreement
+    const existing = labUsers.find(u => u.email === this.currentUserEmail);
+    this.isAgreementAccepted = !!existing;
+
+    console.log("SaaS Role:", this.isSaasUser);
+    console.log("Agreement Accepted:", this.isAgreementAccepted);
+  } catch (err) {
+    console.error("Error checking SaaS agreement:", err);
+    this.isAgreementAccepted = false; // fail safe
+  }
+},
     fetchRequestVms() {
     this.$api.get('/api/request-vms')
       .then(response => {
@@ -549,12 +718,40 @@ this.isTechSandboxSucceeded = this.labsData.some(
       console.log(userNameAdmin, userRoleAdmin);
     },
 
-    async createVm(selectedOS) {
+async createVm(selectedOS) {
   if (!selectedOS) {
     this.showMsg('Please select an operating system.', 'negative');
     return;
   }
 
+  const profileStore = useProfileStore();
+  const user = profileStore.user;
+  const userRole = user.roles.length > 0 ? user.roles[0].name : "";
+
+  if (userRole === "SaasUser") {
+    try {
+      const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
+      const response = await this.$api.get(baseUrl + 'api/lab-saas-users');
+
+      const saasUsers = Array.isArray(response.data.data) ? response.data.data : [];
+
+      const agreementExists = saasUsers.some(saasUser => saasUser.email === user.email || saasUser.username === user.email);
+
+      if (agreementExists) {
+        await this.sendVmRequest(selectedOS);
+      } else {
+        this.agreementSelectedOS = selectedOS;
+        this.showAgreementDialog = true;
+      }
+    } catch (error) {
+      console.error("Failed to check SaaS user agreement:", error);
+      this.showMsg('Failed to verify agreement status. Please try again.', 'negative');
+    }
+  } else {
+    await this.sendVmRequest(selectedOS);
+  }
+},
+async sendVmRequest(selectedOS) {
   const profileStore = useProfileStore();
   const user = profileStore.user;
   const createdAt = user.createdAt ? user.createdAt : new Date().toISOString();
@@ -579,16 +776,16 @@ this.isTechSandboxSucceeded = this.labsData.some(
     const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
     const requestVMsUrl = baseUrl + 'api/request-vms';
 
-    this.isCreatingVm = true; // Show loading indicator
+    this.isCreatingVm = true;
     const response = await this.$api.post(requestVMsUrl, requestData);
-    this.isCreatingVm = false; // Hide loading after response
+    this.isCreatingVm = false;
 
     this.showMsg(response.data.message, 'positive');
     setTimeout(() => {
-  window.location.reload();
-}, 3000);
+      window.location.reload();
+    }, 3000);
   } catch (error) {
-    this.isCreatingVm = false; // Hide loading if there's an error
+    this.isCreatingVm = false;
     console.error('Error sending VM request:', error);
     const errorMessage = error.response?.data?.message || 'Something went wrong!';
     this.showMsg(errorMessage, 'negative');
@@ -622,6 +819,7 @@ this.isTechSandboxSucceeded = this.labsData.some(
   // Initial data load
   this.getAzureVmsData();
   this.loadLockedStates();
+   this.checkSaasUserAgreement();
   this.fetchRequestVms();
 
   // Periodically call getAzureVmsData every 2 minutes (120,000 ms) if route is '/labs'

@@ -1,59 +1,72 @@
 <template>
-  <doughnut id="my-chart-id" :options="chartOptions" :data="chartData" />
-</template>
+    <Doughnut id="my-chart-id" :options="chartOptions" :data="chartData" />
+  </template>
 
-<script>
-import { Doughnut } from 'vue-chartjs'
-import { Chart as ChartJS, Title, Tooltip, Legend, DoughnutController, CategoryScale, LinearScale } from 'chart.js'
+  <script>
+  import { Doughnut } from 'vue-chartjs';
+  import { Chart as ChartJS, Title, Tooltip, Legend, DoughnutController, ArcElement, CategoryScale, LinearScale } from 'chart.js';
 
-ChartJS.register(Title, Tooltip, Legend, DoughnutController, CategoryScale, LinearScale)
+  ChartJS.register(Title, Tooltip, Legend, DoughnutController, ArcElement, CategoryScale, LinearScale);
 
+  import ColorHash from 'color-hash';
+  var colorHash = new ColorHash();
 
-import ColorHash from 'color-hash'
-var colorHash = new ColorHash();
-
-export default {
-  name: 'DoughnutChart',
-  components: { Doughnut },
-  props: {
-    labels: {
-      type: Array,
-      default: () => { return []; }
+  export default {
+    name: 'DoughnutChart2',
+    components: { Doughnut },
+    props: {
+      data: {
+        type: Array,
+        default: () => { return []; }
+      }
     },
-    data: {
-      type: Array,
-      default: () => { return []; }
-    },
-  },
-  data() {
-    return {
+    computed: {
+      chartData() {
+        const totalMinutes = 200; // Total time is 5 hours in minutes (5 * 60 = 300 minutes)
 
-      chartOptions: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            position: "left",
+        // If a specific user is selected, use that user's data
+        const userActiveTime = this.data[0] ? this.data[0].totalActiveTime : 0;
+        const remainingTime = totalMinutes - userActiveTime;
+
+        const labels = this.data[0] ? [this.data[0].userName, 'Remaining Time'] : ['No User Selected', 'Remaining Time'];
+        const dataValues = [userActiveTime, remainingTime];
+
+        return {
+          labels,
+          datasets: [
+            {
+              label: 'Time Distribution',
+              data: dataValues,
+              backgroundColor: [colorHash.hex(labels[0]), '#FFFFFF'],
+              borderColor: [colorHash.hex(labels[0]), '#CCCCCC'],
+              borderWidth: 1
+            }
+          ]
+        };
+      },
+    },
+    data() {
+      return {
+        chartOptions: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: true,
+              position: 'top',
+            }
           }
         }
       }
-    }
-  },
-  computed: {
-    chartData() {
-      
-      var request = {
-        labels: this.labels,
-        datasets: this.data.map(item => (
-          {
-            ...item,
-            backgroundColor: this.labels.map(lab => { return colorHash.hex(lab) })
-          }
-        ))
-      }
-      return request;
-    }
+    },
+  }
+  </script>
+
+  <style scoped>
+  #my-chart-id {
+    max-width: 100%;
+    max-height: 100%;
+    /* margin-left: 25%; */
   }
 
-}
-</script>
+  </style>
