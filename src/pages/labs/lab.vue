@@ -172,7 +172,7 @@
 </div>
     <DemoUserPopUp v-if="showPopup" @close="showPopup = false" />
 
-    <q-dialog v-model="showAgreementDialog">
+   <q-dialog v-model="showAgreementDialog">
   <q-card class="q-pa-md">
     <q-card-section>
       <div class="text-h6">Pay-As-You-Go Agreement</div>
@@ -189,14 +189,27 @@
         Payment must be completed every <strong>7 days</strong> based on your usage. Failure to
         make timely payments may result in service restrictions.
       </p>
+      <q-checkbox
+  v-model="agreementAccepted"
+  label="I accept the terms and conditions of ScaleGrad"
+  color="primary"
+  class="q-mt-md"
+/>
     </q-card-section>
 
     <q-card-actions align="right">
       <q-btn flat label="Cancel" color="negative" @click="showAgreementDialog = false" />
-      <q-btn flat label="Proceed" color="primary" @click="handleAgreementProceed" />
+      <q-btn
+        flat
+        label="Proceed"
+        color="primary"
+        :disable="!agreementAccepted"
+        @click="handleAgreementProceed"
+      />
     </q-card-actions>
   </q-card>
 </q-dialog>
+
 
 <q-dialog v-model="showPaymentPopup" persistent>
   <q-card>
@@ -258,6 +271,8 @@ export default {
     return {
       isCreatingVm:false,
       isSaasUser: false,
+      showAgreementDialog: false,
+    agreementAccepted: false,
 isAgreementAccepted: false,
       showPopup: false,
       windows_lab: windows_lab,
