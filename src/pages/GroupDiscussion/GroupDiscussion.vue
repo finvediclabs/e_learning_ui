@@ -1,5 +1,11 @@
 <template>
   <div class="group-discussion q-mx-xl">
+    <div class="column  q-mb-lg">
+  <div class="text-h5 text-bold">Group Discussions</div>
+  <div class="text-subtitle1 q-mt-md">
+  <q-btn color="primary" label="Register" @click="registerUser" />
+  </div>
+</div>
     <div class="section">
       <div class="text-h5 q-mb-md text-bold">Upcoming & Ongoing Discussions</div>
       <div class="cards-container">
@@ -102,18 +108,14 @@ export default {
   },
   computed: {
     upcomingAndOngoing() {
-      const now = new Date();
-      return this.discussions
-        .filter(d => {
-          const endDateTime = new Date(`${d.date}T${d.end}:00`);
-          return endDateTime >= now; // event not ended yet
-        })
-        .sort((a, b) => {
-          const startA = new Date(`${a.date}T${a.start}:00`);
-          const startB = new Date(`${b.date}T${b.start}:00`);
-          return startA - startB; // nearest start first
-        });
-    },
+      return this.discussions.filter(d => {
+    const now = new Date();
+    const discussionDate = d.date && d.start ? new Date(`${d.date} ${d.start}`) : null;
+const endDate = d.date && d.end ? new Date(`${d.date} ${d.end}`) : null;
+if (!discussionDate || !endDate) return false;
+    return discussionDate > now || (discussionDate <= now && endDate >= now);
+  });
+},
 
     completed() {
       const now = new Date();
@@ -160,12 +162,17 @@ export default {
   },
   },
   methods: {
+    registerUser() {
+  const email = this.$store?.getters?.['profile/email'] || 'user@example.com'; 
+  console.log('Register clicked by:', email);
+},
     fetchDiscussions() {
        const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
               const fetchDiscussions = baseUrl + 'api/groupDiscussions';
       this.$api.get(fetchDiscussions)
         .then((response) => {
           if (response.data && Array.isArray(response.data.data)) {
+            console.log('Fetched discussions:', response.data.data); 
             this.discussions = response.data.data;
           } else {
             console.warn('Unexpected response structure:', response);
@@ -209,6 +216,15 @@ export default {
   mounted() {
     this.fetchDiscussions();
   },
+  watch: {
+  discussions: {
+    immediate: true,
+    handler(val) {
+      console.log('All Discussions:', val);
+      console.log('Upcoming & Ongoing:', this.upcomingAndOngoing);
+    }
+  }
+}
 };
 </script>
 
