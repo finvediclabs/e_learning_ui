@@ -1,12 +1,55 @@
 <template>
   <div class="group-discussion q-mx-xl">
+    <div style="margin-left: 8%;margin-right: 8%;">
+<div
+  class="gd-background-container"
+  :style="{ backgroundImage: 'url(' + gd_background + ')' }"
+  v-if="displayedDiscussion"
+>
+  <!-- Text Overlay -->
+  <div class="gd-text-overlay text-h4 text-black">
+    <span><strong style="color: #09ca13;">Time:</strong> {{ displayedDiscussion.start }} - {{ displayedDiscussion.end }}</span><br />
+    <span><strong style="color:#4b06a3">Date:</strong> {{ displayedDiscussion.date }}</span><br />
+    <span><strong>Duration:</strong> {{ calculateDuration(displayedDiscussion.start, displayedDiscussion.end) }}</span>
+  </div>
+
+  <!-- Register Button / Status -->
+  <div class="text-subtitle1 q-mt-sm q-pt-sm register-button2">
+    <template v-if="displayedDiscussion.registeredEmails && displayedDiscussion.registeredEmails.includes(userEmail)">
+      <div class="register-button-wrapper2">
+        <div class="registered-btn2 highlight">
+          <q-icon name="check_circle" class="arrow-icon" />
+          Registered
+        </div>
+      </div>
+    </template>
+    <template v-else>
+      <div class="register-button-wrapper2" @click.stop.prevent="handleRegistration(displayedDiscussion.id)">
+        <button
+          style="background-color: #2acce0; box-shadow: 0 20px 40px rgba(255, 255, 255, 1);"
+          class="register-btn2 animate-on-click"
+          :class="{ clicked: clickedButtonId === displayedDiscussion.id }"
+        >
+          <q-icon name="arrow_forward" class="arrow-icon moving-arrow" />
+          Click to Register
+        </button>
+      </div>
+    </template>
+  </div>
+</div>
+
+</div>
+
+
+
+
     <div class="column  q-mb-lg">
 
 
 </div>
     <div class="section">
       <div class="text-h5 q-mb-md text-bold">Upcoming & Ongoing Discussions</div>
-      <div class="cards-container">   
+      <div class="cards-container">
         <div
   v-for="discussion in upcomingAndOngoing"
   :key="discussion.id"
@@ -99,11 +142,12 @@
     <q-btn
       label="View Transcript"
       class="btn-transcript"
-      @click="onCompletedCardClick(discussion)"
+       @click="onCompletedCardClick2(discussion)"
     />
     <q-btn
       label="Observations"
       class="btn-observations"
+       @click="onCompletedCardClick(discussion)"
     />
   </div>
 
@@ -150,6 +194,31 @@
   </q-card>
 </q-dialog>
 
+
+<q-dialog v-model="transcriptDialogVisible" persistent>
+  <q-card style="min-width: 400px; max-width: 600px;">
+    <q-card-section>
+      <div class="text-h6">Transcript</div>
+    </q-card-section>
+
+    <q-separator />
+
+    <q-card-section v-if="selectedTranscript && selectedTranscript.sentences && selectedTranscript.sentences.length">
+      <div v-for="sentence in selectedTranscript.sentences" :key="sentence.id" style="margin-bottom: 1rem;">
+        <strong>{{ sentence.speaker }}:</strong> {{ sentence.transcript }}
+
+      </div>
+    </q-card-section>
+
+    <q-card-section v-else>
+      <div>No transcript available.</div>
+    </q-card-section>
+
+    <q-card-actions align="right">
+      <q-btn flat label="Close" color="primary" v-close-popup @click="transcriptDialogVisible = false" />
+    </q-card-actions>
+  </q-card>
+</q-dialog>
   </div>
 </template>
 
@@ -157,7 +226,7 @@
 <script>
 import Img1 from 'src/assets/GD_1.jpg';
 import Img2 from 'src/assets/GD_2.jpg';
-
+import gd_background from 'src/assets/gd_background.png';
 import { useProfileStore } from "src/stores/profile";
 import { storeToRefs } from "pinia";
 export default {
@@ -182,11 +251,15 @@ export default {
       discussions: [],
       selectedResult: null,
       clickedButtonId: null,
+      gd_background,
       resultDialogVisible: false,
+        transcriptDialogVisible: false,
+    selectedDiscussion: null,
+     selectedTranscript: null,
       cardImages: [
       '/src/assets/BG_New.png',
       '/src/assets/Drona_BG.png',
-  
+
     ],
     imagePalette: [
   Img1, Img2,
@@ -212,7 +285,25 @@ if (!discussionDate || !endDate) return false;
     return discussionDate > now || (discussionDate <= now && endDate >= now);
   });
 },
+ displayedDiscussion() {
+    if (!this.upcomingAndOngoing || this.upcomingAndOngoing.length === 0) return null;
 
+    const now = new Date();
+    const firstDiscussion = this.upcomingAndOngoing[0];
+    const secondDiscussion = this.upcomingAndOngoing[1];
+
+    // Parse the start time of the first discussion (assumes it's ISO or compatible string)
+    const firstStart = new Date(firstDiscussion.start);
+
+    // Calculate difference in minutes
+    const diffMinutes = (firstStart - now) / 1000 / 60;
+
+    // If less than 30 minutes from now, use second discussion if available
+    if (diffMinutes >= 0 && diffMinutes < 30 && secondDiscussion) {
+      return secondDiscussion;
+    }
+    return firstDiscussion;
+  },
 completed() {
   const now = new Date();
   return this.discussions
@@ -232,6 +323,14 @@ completed() {
       return endB - endA; // latest completed first
     });
 },
+  sortedTranscript() {
+    if (!this.selectedDiscussion || !this.selectedDiscussion.transcriptParsed) return [];
+
+    // Access sentences array
+    const sentences = this.selectedDiscussion.transcriptParsed.sentences || [];
+    // Sort by timestamp ascending if needed
+    return sentences.slice().sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+  },
      sortedResultFromAiParsed() {
     if (!this.selectedResult || !this.selectedResult.resultFromAiParsed) return [];
 
@@ -268,6 +367,10 @@ completed() {
   const index = seed % this.imagePalette.length;
   return this.imagePalette[index];
 },
+  onCompletedCardClick2(discussion) {
+      this.selectedDiscussion = discussion;
+      this.transcriptDialogVisible = true;
+    },
     getRandomCardImage(id) {
     const index = id % this.cardImages.length;
     return this.cardImages[index];
@@ -317,7 +420,29 @@ const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
           this.discussions = [];
         });
     },
-    onCompletedCardClick(discussion) {
+   onCompletedCardClick2(discussion) {
+  const groupId = discussion.id;
+  const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
+  const fetchTranscriptUrl = baseUrl + 'api/groupDiscussionResults/by-group-id/' + groupId;
+
+  this.$api.get(fetchTranscriptUrl)
+    .then((response) => {
+      // Assuming the transcriptParsed is inside the response data
+      this.selectedTranscript = response.data?.transcriptParsed || null;
+
+      if (!this.selectedTranscript) {
+        this.selectedTranscript = { message: 'No transcript found' };
+      }
+
+      this.transcriptDialogVisible = true;
+    })
+    .catch((error) => {
+      console.error('Error fetching transcript:', error);
+      this.selectedTranscript = { error: 'Failed to load transcript.' };
+      this.transcriptDialogVisible = true;
+    });
+},
+onCompletedCardClick(discussion) {
       const groupId = discussion.id;
        const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
        const fetchDiscussionsResults = baseUrl + 'api/groupDiscussionResults/by-group-id/' + groupId;
@@ -345,6 +470,31 @@ const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
         window.open(url, '_blank');
       }
     },
+    calculateDuration(start, end) {
+    // Assuming time format is 'HH:mm'
+    const [startHour, startMin] = start.split(':').map(Number);
+    const [endHour, endMin] = end.split(':').map(Number);
+
+    let startDate = new Date();
+    let endDate = new Date();
+
+    startDate.setHours(startHour, startMin, 0);
+    endDate.setHours(endHour, endMin, 0);
+
+    let diffMs = endDate - startDate;
+
+    // Handle overnight discussions (end is next day)
+    if (diffMs < 0) {
+      endDate.setDate(endDate.getDate() + 1);
+      diffMs = endDate - startDate;
+    }
+
+    const diffMinutes = Math.floor(diffMs / 60000);
+    const hours = Math.floor(diffMinutes / 60);
+    const minutes = diffMinutes % 60;
+
+    return `${hours}h ${minutes}m`;
+  }
   },
   mounted() {
     this.fetchDiscussions();
@@ -491,9 +641,9 @@ const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
   font-size: 1.1rem;
   margin: 1rem 0.9375rem 0 0.9375rem;
   margin-bottom: 0;
-  max-width: max-content;  
+  max-width: max-content;
   transition: font-size 0.3s ease, padding 0.3s ease;
-  word-break: break-word !important;  
+  word-break: break-word !important;
   overflow-wrap: anywhere;
 }
 
@@ -504,10 +654,10 @@ const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
     padding: 0.3em 0.8em;
     margin: 0.75rem 0.5rem 0 0.5rem;
 
-    white-space: normal;  
-    max-width: 100%;     
-    word-break: break-word;  
-    overflow-wrap: anywhere; 
+    white-space: normal;
+    max-width: 100%;
+    word-break: break-word;
+    overflow-wrap: anywhere;
   }
 }
 
@@ -516,7 +666,7 @@ const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
   display: flex;
   flex-direction: column;
   gap: 4px;
-  padding-bottom: 1.5rem; 
+  padding-bottom: 1.5rem;
   position: relative;
 }
 
@@ -525,7 +675,7 @@ const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
   bottom: 2rem;
   right: 1rem;
 } */
- 
+
 
 .register-btn {
   display: flex;
@@ -560,6 +710,13 @@ const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
   /* margin-top: -35px; */
 }
 
+.register-button-wrapper2 {
+  display: flex;
+  align-items: flex-end !important;
+  justify-content: flex-end;
+  /* margin-top: -35px; */
+}
+
 .register-btn,
 .registered-btn {
   display: flex;
@@ -577,6 +734,35 @@ const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
   position: relative;
   overflow: hidden;
 }
+
+.register-btn2,
+.registered-btn2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #000;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  font-size: 16px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.register-btn2:hover {
+  background-color: #1565c0;
+}
+
+.registered-btn2 {
+  background-color: #4caf50; /* Green */
+  cursor: default;
+  pointer-events: none;
+}
+
 
 .register-btn:hover {
   background-color: #1565c0;
@@ -604,6 +790,40 @@ const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
 
 .clicked .moving-arrow {
   animation: slide-right 0.8s forwards;
+}
+
+.gd-background-container {
+  position: relative;
+  width: 100%;
+  margin: auto;
+  background-size: cover;
+  background-position: center;
+  height: 60vh; /* adjust as needed */
+  border-radius: 10px;
+}
+
+.gd-text-overlay {
+  position: absolute;
+  bottom: 8vh;
+  right: 6vw;
+  text-align: left;
+  color: white;
+  font-weight: bold;
+  /* optional: background for contrast */
+  padding: 10px;
+  border-radius: 6px;
+}
+.register-button2{
+   position: absolute;
+  bottom: 40%;
+  right:-6%;
+  text-align: left;
+  color: white;
+  font-weight: bold;
+  /* optional: background for contrast */
+  padding: 10px;
+  border-radius: 6px;
+
 }
 
 @keyframes slide-right {
@@ -665,6 +885,8 @@ const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
   word-break: break-word;
   overflow-wrap: anywhere;
 }
+
+
 .card-actions {
   display: flex;
   justify-content: space-around;
