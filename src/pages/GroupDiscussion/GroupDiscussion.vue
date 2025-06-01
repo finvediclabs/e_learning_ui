@@ -1,6 +1,10 @@
 <template>
-  <div class="group-discussion q-mx-xl">
-    <div style="margin-left: 8%;margin-right: 8%;">
+  <div  class="group-discussion"
+    :style="{ backgroundImage: 'url(' + topBgGd + ')' }">
+   <div
+   class="q-mx-xl q-mt-xl "
+  >
+    <div class="q-mt-xl" style="margin-left: 8%;margin-right: 8%;">
 <div
   class="gd-background-container"
   :style="{ backgroundImage: 'url(' + gd_background + ')' }"
@@ -47,9 +51,9 @@
 
 
 </div>
-    <div class="section">
+    <div class="section q-mx-xl">
       <div class="text-h5 q-mb-md text-bold">Upcoming & Ongoing Discussions</div>
-      <div class="cards-container">
+      <div class="cards-container ">
         <div
   v-for="discussion in upcomingAndOngoing"
   :key="discussion.id"
@@ -109,7 +113,7 @@
     </div>
 
 <!-- Completed Discussions -->
-<div class="section">
+<div class="section q-mx-xl">
   <div class="text-h5 q-mb-md text-bold">Completed Discussions</div>
   <div class="cards-container completed-card">
     <div
@@ -157,7 +161,7 @@
 
   </div>
 </div>
-
+</div>
 
     <!-- Result Dialog -->
    <!-- Result Dialog -->
@@ -227,6 +231,7 @@
 import Img1 from 'src/assets/GD_1.jpg';
 import Img2 from 'src/assets/GD_2.jpg';
 import gd_background from 'src/assets/gd_background.png';
+import topBgGd from 'src/assets/top_bg_gd.png';
 import { useProfileStore } from "src/stores/profile";
 import { storeToRefs } from "pinia";
 export default {
@@ -252,6 +257,7 @@ export default {
       selectedResult: null,
       clickedButtonId: null,
       gd_background,
+      topBgGd,
       resultDialogVisible: false,
         transcriptDialogVisible: false,
     selectedDiscussion: null,
@@ -517,6 +523,9 @@ onCompletedCardClick(discussion) {
 <style scoped>
 .group-discussion {
   padding: 2rem 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 .section {
   margin-bottom: 3rem;
@@ -524,11 +533,12 @@ onCompletedCardClick(discussion) {
 .cards-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 1rem; /* gap between cards */
 }
+
 .card {
   position: relative;
-  flex: 0 1 calc(33.333% - 1rem);
+  flex: 1 1 calc((100% - 2rem) / 3); /* 3 cards per row, 2 gaps of 1rem each */
   padding: 1.25rem;
   border-radius: 16px;
   color: #2e2e2e;
@@ -537,6 +547,7 @@ onCompletedCardClick(discussion) {
   overflow: hidden;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
+
 .card:hover {
   transform: scale(1.03);
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.15);
