@@ -17,13 +17,7 @@
           <div class="text-body-1"><strong>Time:</strong> {{ discussion.start }} - {{ discussion.end }}</div>
           <div class="text-body-1"><strong>Created By:</strong> {{ discussion.createdBy || 'N/A' }}</div>
           <q-icon :name="getRandomIcon(discussion.id)" class="bg-icon" />
-          <q-btn
-  label="Register"
-  color="primary"
-  @click.stop.prevent="registerForDiscussion(discussion)"
-/>
         </div>
-
       </div>
     </div>
 
@@ -88,10 +82,8 @@
 
 
 <script>
-import { useProfileStore } from "src/stores/profile";
 export default {
   name: 'GroupDiscussion',
-
   data() {
     return {
       discussions: [],
@@ -110,33 +102,32 @@ export default {
   },
   computed: {
     upcomingAndOngoing() {
-  const now = new Date();
-  return this.discussions
-    .filter(d => {
-      const endDateTime = new Date(`${d.endDate}T${d.end}:00`);
-      return endDateTime >= now; // event not ended yet
-    })
-    .sort((a, b) => {
-      const startA = new Date(`${a.endDate}T${a.start}:00`);
-      const startB = new Date(`${b.endDate}T${b.start}:00`);
-      return startA - startB; // nearest start first
-    });
-},
+      const now = new Date();
+      return this.discussions
+        .filter(d => {
+          const endDateTime = new Date(`${d.date}T${d.end}:00`);
+          return endDateTime >= now; // event not ended yet
+        })
+        .sort((a, b) => {
+          const startA = new Date(`${a.date}T${a.start}:00`);
+          const startB = new Date(`${b.date}T${b.start}:00`);
+          return startA - startB; // nearest start first
+        });
+    },
 
-completed() {
-  const now = new Date();
-  return this.discussions
-    .filter(d => {
-      const endDateTime = new Date(`${d.endDate}T${d.end}:00`);
-      return endDateTime < now; // event ended
-    })
-    .sort((a, b) => {
-      const endA = new Date(`${a.endDate}T${a.end}:00`);
-      const endB = new Date(`${b.endDate}T${b.end}:00`);
-      return endB - endA; // most recent end first
-    });
-},
-
+    completed() {
+      const now = new Date();
+      return this.discussions
+        .filter(d => {
+          const endDateTime = new Date(`${d.date}T${d.end}:00`);
+          return endDateTime < now; // event ended
+        })
+        .sort((a, b) => {
+          const endA = new Date(`${a.date}T${a.end}:00`);
+          const endB = new Date(`${b.date}T${b.end}:00`);
+          return endB - endA; // most recent end first
+        });
+    },
      sortedResultFromAiParsed() {
     if (!this.selectedResult || !this.selectedResult.resultFromAiParsed) return [];
 
@@ -170,49 +161,20 @@ completed() {
   },
   methods: {
     fetchDiscussions() {
-  const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
-  const fetchDiscussions = baseUrl + 'api/groupDiscussions';
-  this.$api.get(fetchDiscussions)
-    .then((response) => {
-      if (response.data) {
-        if (Array.isArray(response.data.data)) {
-          this.discussions = response.data.data;
-        } else if (response.data.data) {
-          this.discussions = [response.data.data];
-        } else if (Array.isArray(response.data)) {
-          this.discussions = response.data;
-        } else {
-          this.discussions = [];
-        }
-      } else {
-        this.discussions = [];
-      }
-    })
-    .catch((error) => {
-      console.error('Error fetching discussions:', error);
-      this.discussions = [];
-    });
-},
-registerForDiscussion(discussion) {
-      const profileStore = useProfileStore();
-      const userEmail = profileStore.user?.email;
-
-      if (!userEmail) {
-        alert('No user email found. Please login first.');
-        return;
-      }
-
-      const discussionId = discussion.id;
-      const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
-      const url = `${baseUrl}api/groupDiscussions/register/${discussionId}?userEmail=${encodeURIComponent(userEmail)}`;
-
-      this.$api.post(url)
-        .then(response => {
-          alert(response.data?.message || 'Registered successfully!');
+       const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
+              const fetchDiscussions = baseUrl + 'api/groupDiscussions';
+      this.$api.get(fetchDiscussions)
+        .then((response) => {
+          if (response.data && Array.isArray(response.data.data)) {
+            this.discussions = response.data.data;
+          } else {
+            console.warn('Unexpected response structure:', response);
+            this.discussions = [];
+          }
         })
-        .catch(error => {
-          const errMsg = error.response?.data?.message || 'Registration failed.';
-          alert(errMsg);
+        .catch((error) => {
+          console.error('Error fetching discussions:', error);
+          this.discussions = [];
         });
     },
     onCompletedCardClick(discussion) {
