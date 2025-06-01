@@ -6,55 +6,114 @@
 </div>
     <div class="section">
       <div class="text-h5 q-mb-md text-bold">Upcoming & Ongoing Discussions</div>
-      <div class="cards-container">
+      <div class="cards-container">   
         <div
-          v-for="discussion in upcomingAndOngoing"
-          :key="discussion.id"
-          class="card"
-          :style="{ background: getGradient(discussion.id) }"
-          @click="goToLink(discussion.link)"
-        >
-          <div class="text-h5">{{ discussion.title || 'Untitled' }}</div>
-          <div class="text-body-1"><strong>Topic:</strong> {{ discussion.topic }}</div>
-          <div class="text-body-1"><strong>Course:</strong> {{ discussion.course }}</div>
-          <div class="text-body-1"><strong>Date:</strong> {{ discussion.date }}</div>
-          <div class="text-body-1"><strong>Time:</strong> {{ discussion.start }} - {{ discussion.end }}</div>
-          <div class="text-body-1"><strong>Created By:</strong> {{ discussion.createdBy || 'N/A' }}</div>
-           <div class="text-body-1"><strong>Slots: </strong>{{ discussion.registeredSlotsFilled }}/{{ discussion.maxSlots || 'N/A' }}</div>
-          <q-icon :name="getRandomIcon(discussion.id)" class="bg-icon" />
-        <div class="text-subtitle1 q-mt-md">
-    <!-- Check if userEmail is in registeredEmails -->
-    <template v-if="discussion.registeredEmails && discussion.registeredEmails.includes(userEmail)">
-      <span class="text-green">Already Registered</span>
-    </template>
-    <template v-else>
-      <q-btn color="primary" label="Register" @click.stop.prevent="registerUser(discussion.id)" />
-    </template>
+  v-for="discussion in upcomingAndOngoing"
+  :key="discussion.id"
+  class="card up-card"
+  @click="goToLink(discussion.link)"
+>
+<div
+  class="card-image"
+  :style="{ backgroundImage: 'url(' + getRandomImage(discussion.id) + ')' }"
+></div>
+
+  <!-- <q-icon :name="getRandomIcon(discussion.id)" class="bg-icon-top" /> -->
+
+
+
+  <!-- Title section -->
+  <div class="card-title">
+    {{ discussion.title || 'Untitled' }}
   </div>
-        </div>
+
+  <!-- Content section -->
+  <div class="card-content">
+    <div><strong>Topic:</strong> {{ discussion.topic }}</div>
+    <div><strong>Course:</strong> {{ discussion.course }}</div>
+    <div><strong>Date:</strong> {{ discussion.date }}</div>
+    <div><strong>Time:</strong> {{ discussion.start }} - {{ discussion.end }}</div>
+    <!-- <div><strong>Created By:</strong> {{ discussion.createdBy || 'N/A' }}</div> -->
+    <div><strong>Slots:</strong> {{ discussion.registeredSlotsFilled }}/{{ discussion.maxSlots || 'N/A' }}</div>
+
+<!-- Registration Button or Status -->
+<div class="text-subtitle1 q-mt-sm">
+  <template v-if="discussion.registeredEmails && discussion.registeredEmails.includes(userEmail)">
+    <div class="register-button-wrapper">
+      <div class="registered-btn highlight">
+        <q-icon name="check_circle" class="arrow-icon" />
+        Registered
+      </div>
+    </div>
+  </template>
+  <template v-else>
+    <div class="register-button-wrapper" @click.stop.prevent="handleRegistration(discussion.id)">
+      <button class="register-btn animate-on-click" :class="{ clicked: clickedButtonId === discussion.id }">
+        <q-icon name="arrow_forward" class="arrow-icon moving-arrow" />
+        Register Now
+      </button>
+    </div>
+  </template>
+</div>
+
+
+  </div>
+
+  <!-- <q-icon :name="getRandomIcon(discussion.id)" class="bg-icon" /> -->
+</div>
+
       </div>
     </div>
 
-    <div class="section">
-      <div class="text-h5 q-mb-md text-bold">Completed Discussions</div>
-      <div class="cards-container">
-        <div
-          v-for="discussion in completed"
-          :key="discussion.id"
-          class="card"
-          :style="{ background: getGradient(discussion.id) }"
-          @click="onCompletedCardClick(discussion)"
-        >
-          <div class="text-h5">{{ discussion.title || 'Untitled' }}</div>
-          <div class="text-body-1"><strong>Topic:</strong> {{ discussion.topic }}</div>
-          <div class="text-body-1"><strong>Course:</strong> {{ discussion.course }}</div>
-          <div class="text-body-1"><strong>Date:</strong> {{ discussion.date }}</div>
-          <div class="text-body-1"><strong>Time:</strong> {{ discussion.start }} - {{ discussion.end }}</div>
-          <div class="text-body-1"><strong>Created By:</strong> {{ discussion.createdBy || 'N/A' }}</div>
-          <q-icon :name="getRandomIcon(discussion.id)" class="bg-icon" />
-        </div>
-      </div>
-    </div>
+<!-- Completed Discussions -->
+<div class="section">
+  <div class="text-h5 q-mb-md text-bold">Completed Discussions</div>
+  <div class="cards-container completed-card">
+    <div
+  v-for="discussion in completed"
+  :key="discussion.id"
+  class="card"
+>
+  <!-- Image like Upcoming -->
+  <div
+    class="card-image"
+    :style="{ backgroundImage: 'url(' + getRandomImage(discussion.id) + ')' }"
+  ></div>
+
+  <!-- Title -->
+  <div class="card-title">
+    {{ discussion.title || 'Untitled' }}
+  </div>
+
+  <!-- Content -->
+  <div class="card-content">
+    <div><strong>Topic:</strong> {{ discussion.topic }}</div>
+    <div><strong>Course:</strong> {{ discussion.course }}</div>
+    <div><strong>Date:</strong> {{ discussion.date }}</div>
+    <div><strong>Time:</strong> {{ discussion.start }} - {{ discussion.end }}</div>
+    <div><strong>Created By:</strong> {{ discussion.createdBy || 'N/A' }}</div>
+  </div>
+
+  <!-- Buttons -->
+  <div class="card-actions">
+    <q-btn
+      label="View Transcript"
+      class="btn-transcript"
+      @click="onCompletedCardClick(discussion)"
+    />
+    <q-btn
+      label="Observations"
+      class="btn-observations"
+    />
+  </div>
+
+  <!-- <q-icon :name="getRandomIcon(discussion.id)" class="bg-icon" /> -->
+</div>
+
+
+  </div>
+</div>
+
 
     <!-- Result Dialog -->
    <!-- Result Dialog -->
@@ -96,6 +155,9 @@
 
 
 <script>
+import Img1 from 'src/assets/GD_1.jpg';
+import Img2 from 'src/assets/GD_2.jpg';
+
 import { useProfileStore } from "src/stores/profile";
 import { storeToRefs } from "pinia";
 export default {
@@ -119,7 +181,16 @@ export default {
     return {
       discussions: [],
       selectedResult: null,
+      clickedButtonId: null,
       resultDialogVisible: false,
+      cardImages: [
+      '/src/assets/BG_New.png',
+      '/src/assets/Drona_BG.png',
+  
+    ],
+    imagePalette: [
+  Img1, Img2,
+],
       gradientPalette: [
         'linear-gradient(135deg, #f6d365 0%, #fda085 100%)',
         'linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%)',
@@ -142,19 +213,25 @@ if (!discussionDate || !endDate) return false;
   });
 },
 
-    completed() {
-      const now = new Date();
-      return this.discussions
-        .filter(d => {
-          const endDateTime = new Date(`${d.date}T${d.end}:00`);
-          return endDateTime < now; // event ended
-        })
-        .sort((a, b) => {
-          const endA = new Date(`${a.date}T${a.end}:00`);
-          const endB = new Date(`${b.date}T${b.end}:00`);
-          return endB - endA; // most recent end first
-        });
-    },
+completed() {
+  const now = new Date();
+  return this.discussions
+    .filter(d => {
+      if (!d.date || !d.end) return false;
+
+      // Normalize the end time (ensure it includes ":")
+      const endTime = d.end.includes(':') ? d.end : `${d.end}:00`;
+
+      // Construct end datetime using space (not "T", which may fail if time format is odd)
+      const endDate = new Date(`${d.date} ${endTime}`);
+      return !isNaN(endDate) && endDate < now;
+    })
+    .sort((a, b) => {
+      const endA = new Date(`${a.date} ${a.end.includes(':') ? a.end : `${a.end}:00`}`);
+      const endB = new Date(`${b.date} ${b.end.includes(':') ? b.end : `${b.end}:00`}`);
+      return endB - endA; // latest completed first
+    });
+},
      sortedResultFromAiParsed() {
     if (!this.selectedResult || !this.selectedResult.resultFromAiParsed) return [];
 
@@ -187,6 +264,23 @@ if (!discussionDate || !endDate) return false;
   },
   },
   methods: {
+    getRandomImage(seed) {
+  const index = seed % this.imagePalette.length;
+  return this.imagePalette[index];
+},
+    getRandomCardImage(id) {
+    const index = id % this.cardImages.length;
+    return this.cardImages[index];
+  },
+    handleRegistration(id) {
+    this.clickedButtonId = id;
+    this.registerUser(id); // your existing registration logic
+
+    // Remove animation class after a while
+    setTimeout(() => {
+      this.clickedButtonId = null;
+    }, 1500);
+  },
      async registerUser(discussionId) {
       const profileStore = useProfileStore();
       const { user } = storeToRefs(profileStore);
@@ -261,6 +355,8 @@ const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
     handler(val) {
       console.log('All Discussions:', val);
       console.log('Upcoming & Ongoing:', this.upcomingAndOngoing);
+      console.log('Completed Discussions:', this.completed);
+
     }
   }
 }
@@ -303,6 +399,14 @@ const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
   color: rgba(255, 255, 255, 0.2);
   pointer-events: none;
 }
+.bg-icon-top {
+  position: absolute;
+  top: 35px;
+  right: 10px;
+  font-size: 120px;
+  color: rgba(255, 255, 255, 0.2);
+  pointer-events: none;
+}
 
 @media (max-width: 1024px) {
   .card {
@@ -316,4 +420,317 @@ const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
     flex: 0 1 100%;
   }
 }
+
+/* ================== */
+.card {
+  position: relative;
+  flex: 0 1 calc(33.333% - 1rem);
+  border-radius: 16px;
+  background-color: #ffffff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+
+.card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.15);
+}
+
+.card-image {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+.card-content {
+  padding: 1rem;
+  color: #666;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.card-content strong {
+  color: #444;
+}
+
+.bg-icon {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  font-size: 100px;
+  color: rgba(66, 72, 194, 0.1);
+  pointer-events: none;
+}
+
+@media (max-width: 1024px) {
+  .card {
+    flex: 0 1 calc(50% - 1rem);
+  }
+}
+
+@media (max-width: 640px) {
+  .card {
+    flex: 0 1 100%;
+  }
+}
+
+.card-title {
+  display: inline-block;
+  color: #4248c2;
+  background-color: #e5fef8;
+  border-radius: 10px;
+  padding: 0.4em 1em;
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin: 1rem 0.9375rem 0 0.9375rem;
+  margin-bottom: 0;
+  max-width: max-content;  
+  transition: font-size 0.3s ease, padding 0.3s ease;
+  word-break: break-word !important;  
+  overflow-wrap: anywhere;
+}
+
+/* For small screens, allow wrapping */
+@media (max-width: 600px) {
+  .card-title {
+    font-size: 0.9rem;
+    padding: 0.3em 0.8em;
+    margin: 0.75rem 0.5rem 0 0.5rem;
+
+    white-space: normal;  
+    max-width: 100%;     
+    word-break: break-word;  
+    overflow-wrap: anywhere; 
+  }
+}
+
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-bottom: 1.5rem; 
+  position: relative;
+}
+
+/* .register-button-wrapper {
+  position: absolute;
+  bottom: 2rem;
+  right: 1rem;
+} */
+ 
+
+.register-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: black;
+  color: white;
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-weight: bold;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.register-btn:active {
+  transform: scale(0.97);
+  opacity: 0.9;
+}
+
+.register-btn .arrow-icon {
+  background-color: white;
+  color: black;
+  border-radius: 50%;
+  padding: 4px;
+  font-size: 16px;
+}
+
+
+.register-button-wrapper {
+  display: flex;
+  align-items: flex-end !important;
+  justify-content: flex-end;
+  /* margin-top: -35px; */
+}
+
+.register-btn,
+.registered-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #000;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  font-size: 16px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.register-btn:hover {
+  background-color: #1565c0;
+}
+
+.registered-btn {
+  background-color: #4caf50; /* Green */
+  cursor: default;
+  pointer-events: none;
+}
+
+.arrow-icon {
+  background-color: white;
+  color: #1976d2;
+  border-radius: 50%;
+  padding: 4px;
+  font-size: 20px;
+  transition: transform 0.5s ease;
+}
+
+.registered-btn .arrow-icon {
+  background-color: white;
+  color: #4caf50;
+}
+
+.clicked .moving-arrow {
+  animation: slide-right 0.8s forwards;
+}
+
+@keyframes slide-right {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(8px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.highlight {
+  animation: pulse 1s ease-in-out;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0px rgba(76, 175, 80, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 12px rgba(76, 175, 80, 0.9);
+  }
+  100% {
+    box-shadow: 0 0 0px rgba(76, 175, 80, 0.6);
+  }
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 8px;
+  flex-grow: 1;
+  padding: 1rem;
+  color: #666;
+  position: relative;
+}
+
+.card-image {
+  height: 220px;
+  background-size: cover;
+  background-position: center;
+}
+
+
+.completed-card .card-title {
+  display: inline-block;
+  color: #994848 !important;
+  background-color: #f3e5f5;
+  border-radius: 10px;
+  padding: 0.4em 1em;
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin: 1rem 0.9375rem 0 0.9375rem;
+  max-width: max-content;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+.card-actions {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 1rem;
+  padding: 0 1rem 1rem;
+}
+
+.btn-transcript {
+  padding: 6px 26px;
+  border-radius: 999px;
+  background-image: linear-gradient(to right, #4cbbf6, #1253a6);
+  color: white;
+  font-weight: 600;
+  text-transform: none;
+  box-shadow: 0 2px 8px rgba(76, 187, 246, 0.5);
+}
+
+.btn-observations {
+  padding: 6px 26px;
+  border-radius: 999px;
+  background-color: #eef2f2;
+  color: black;
+  font-weight: 600;
+  text-transform: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.card-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap; /* allow wrapping on small screens */
+  margin-top: 12px;
+}
+
+.btn-transcript,
+.btn-observations {
+  padding: 6px 18px;
+  border-radius: 999px;
+  font-weight: 500;
+  text-transform: none;
+  white-space: nowrap;
+  max-width: 100%;
+  font-size: 0.9rem;
+}
+
+.btn-transcript {
+  background-image: linear-gradient(to right, #4cbbf6, #1253a6);
+  color: white;
+  box-shadow: 0 3px 10px rgba(18, 83, 166, 0.35);
+}
+
+.btn-observations {
+  background-color: #eef2f2;
+  color: #000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Responsive scaling for ultra-small devices */
+@media (max-width: 420px) {
+  .btn-transcript,
+  .btn-observations {
+    font-size: 0.75rem;
+    padding: 4px 12px;
+  }
+}
+
+
 </style>

@@ -6,7 +6,7 @@
   <div class="seminar-card">
     <img class="seminar-image" :src="webiNarImage" alt="Seminar Image" />
     <div class="seminar-content">
-      <h3 class="seminar-heading">Webinar</h3>
+      <h3 class="seminar-heading">Group Discussions</h3>
       <p class="seminar-details">Duration & Time: {{ time }}</p>
       <p class="seminar-details">Date: {{ date }}</p>
       <p class="seminar-details">Slots: {{ slots }}</p>
