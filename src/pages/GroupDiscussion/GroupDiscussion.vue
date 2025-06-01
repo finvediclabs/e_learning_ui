@@ -1,10 +1,8 @@
 <template>
   <div class="group-discussion q-mx-xl">
     <div class="column  q-mb-lg">
-  <div class="text-h5 text-bold">Group Discussions</div>
-  <div class="text-subtitle1 q-mt-md">
-  <q-btn color="primary" label="Register" @click="registerUser" />
-  </div>
+
+
 </div>
     <div class="section">
       <div class="text-h5 q-mb-md text-bold">Upcoming & Ongoing Discussions</div>
@@ -23,6 +21,9 @@
           <div class="text-body-1"><strong>Time:</strong> {{ discussion.start }} - {{ discussion.end }}</div>
           <div class="text-body-1"><strong>Created By:</strong> {{ discussion.createdBy || 'N/A' }}</div>
           <q-icon :name="getRandomIcon(discussion.id)" class="bg-icon" />
+          <div class="text-subtitle1 q-mt-md">
+  <q-btn color="primary" label="Register" @click="registerUser" />
+  </div>
         </div>
       </div>
     </div>
@@ -163,7 +164,7 @@ if (!discussionDate || !endDate) return false;
   },
   methods: {
     registerUser() {
-  const email = this.$store?.getters?.['profile/email'] || 'user@example.com'; 
+  const email = this.$store?.getters?.['profile/email'] || 'user@example.com';
   console.log('Register clicked by:', email);
 },
     fetchDiscussions() {
@@ -172,7 +173,7 @@ if (!discussionDate || !endDate) return false;
       this.$api.get(fetchDiscussions)
         .then((response) => {
           if (response.data && Array.isArray(response.data.data)) {
-            console.log('Fetched discussions:', response.data.data); 
+            console.log('Fetched discussions:', response.data.data);
             this.discussions = response.data.data;
           } else {
             console.warn('Unexpected response structure:', response);
