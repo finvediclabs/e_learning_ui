@@ -20,9 +20,16 @@
           <div class="text-body-1"><strong>Date:</strong> {{ discussion.date }}</div>
           <div class="text-body-1"><strong>Time:</strong> {{ discussion.start }} - {{ discussion.end }}</div>
           <div class="text-body-1"><strong>Created By:</strong> {{ discussion.createdBy || 'N/A' }}</div>
+           <div class="text-body-1"><strong>Slots: </strong>{{ discussion.registeredSlotsFilled }}/{{ discussion.maxSlots || 'N/A' }}</div>
           <q-icon :name="getRandomIcon(discussion.id)" class="bg-icon" />
-          <div class="text-subtitle1 q-mt-md">
-  <q-btn color="primary" label="Register" @click="registerUser" />
+        <div class="text-subtitle1 q-mt-md">
+    <!-- Check if userEmail is in registeredEmails -->
+    <template v-if="discussion.registeredEmails && discussion.registeredEmails.includes(userEmail)">
+      <span class="text-green">Already Registered</span>
+    </template>
+    <template v-else>
+      <q-btn color="primary" label="Register" @click.stop.prevent="registerUser(discussion.id)" />
+    </template>
   </div>
         </div>
       </div>
@@ -89,8 +96,25 @@
 
 
 <script>
+import { useProfileStore } from "src/stores/profile";
+import { storeToRefs } from "pinia";
 export default {
   name: 'GroupDiscussion',
+  setup() {
+    const profileStore = useProfileStore();
+    const { profile, user } = storeToRefs(profileStore);
+
+    console.log("User:", user.value);
+    console.log("Profile:", profile.value);
+    console.log("email:", user.value.email);
+     const userEmail = user.value?.email || '';
+
+    return {
+      user,
+      profile,
+      userEmail,
+    };
+  },
   data() {
     return {
       discussions: [],
@@ -163,10 +187,24 @@ if (!discussionDate || !endDate) return false;
   },
   },
   methods: {
-    registerUser() {
-  const email = this.$store?.getters?.['profile/email'] || 'user@example.com';
-  console.log('Register clicked by:', email);
-},
+     async registerUser(discussionId) {
+      const profileStore = useProfileStore();
+      const { user } = storeToRefs(profileStore);
+
+      const email = user.value?.email;
+const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
+      const url = baseUrl + `api/groupDiscussions/register/${discussionId}?userEmail=${encodeURIComponent(email)}`;
+
+      try {
+        const response = await this.$api.post(url);
+        console.log('Registration success:', response.data);
+        this.fetchDiscussions();
+        // Optionally, show a notification or update UI here
+      } catch (error) {
+        console.error('Registration failed:', error.response?.data || error.message);
+        // Optionally, show error notification here
+      }
+    },
     fetchDiscussions() {
        const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
               const fetchDiscussions = baseUrl + 'api/groupDiscussions';
