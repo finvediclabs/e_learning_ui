@@ -798,7 +798,7 @@ onCompletedCardClick(discussion) {
   margin: auto;
   background-size: cover;
   background-position: center;
-  height: 60vh; /* adjust as needed */
+  height: 56vh; /* adjust as needed */
   border-radius: 10px;
 }
 
