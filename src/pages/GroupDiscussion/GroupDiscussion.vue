@@ -134,7 +134,7 @@
     <div><strong>Course:</strong> {{ discussion.course }}</div>
     <div><strong>Date:</strong> {{ discussion.date }}</div>
     <div><strong>Time:</strong> {{ discussion.start }} - {{ discussion.end }}</div>
-    <div><strong>Created By:</strong> {{ discussion.createdBy || 'N/A' }}</div>
+
   </div>
 
   <!-- Buttons -->
