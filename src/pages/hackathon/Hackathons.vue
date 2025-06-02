@@ -61,7 +61,7 @@
 
 <div class="section q-mx-xl" style="width: 80%; margin-right:auto; margin-left:auto;">
   <!-- Ongoing or Upcoming -->
-  <div class="text-h5 q-mb-md text-bold">Ongoing & Upcoming Courses</div>
+  <div class="text-h5 q-mb-md text-bold">Ongoing & Upcoming Hackathons</div>
 
 <div v-if="ongoingOrUpcomingCourses.length === 0" class="text-center text-grey q-pa-md">
   No ongoing or upcoming courses.
@@ -109,7 +109,7 @@
 
 
   <!-- Completed -->
-  <div class="text-h5 q-mt-xl q-mb-md text-bold">Completed Courses</div>
+  <div class="text-h5 q-mt-xl q-mb-md text-bold">Completed Hackathons</div>
   <div v-if="completedCourses.length === 0" class="text-center text-grey q-pa-md">
     No completed courses.
   </div>
