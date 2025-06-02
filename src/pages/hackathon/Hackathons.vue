@@ -83,10 +83,28 @@
     <div class="card-title">{{ course.title }}</div>
 
     <div class="card-content">
-      <div><strong>Description:</strong> {{ course.description }}</div>
-      <div class="q-mt-sm"><strong>Start:</strong> {{ course.date }}</div>
-      <div><strong>End:</strong> {{ course.endDate }}</div>
-      <div><strong>Slots:</strong> {{ course.maxSlots }}</div>
+      <div>
+  <strong>Description: </strong>
+  <span v-if="course.description.length <= 50">
+    {{ course.description }}
+  </span>
+  <span v-else-if="!expandedDescriptions[course.id]" >
+    {{ course.description.slice(0, 50) }}...
+    <a @click.stop="showFullDescription(course.id)" class="more">more</a>
+  </span>
+  <span v-else >
+    {{ course.description }}
+    <a @click.stop="showFullDescription(course.id)" class="more">less</a>
+  </span>
+</div>
+
+<div class="q-mt-sm"><strong>Start:</strong> {{ formatDate(course.date) }}</div>
+<div><strong>End:</strong> {{ formatDate(course.endDate) }}</div>
+<div>
+  <strong>Slots:</strong>
+  {{ course.registeredEmails ? course.registeredEmails.length : 0 }} / {{ course.maxSlots }}
+</div>
+
 
       <!-- Register / Registered Button -->
       <div class="text-subtitle1 q-mt-sm">
@@ -127,8 +145,23 @@
       <div class="card-image" :style="{ backgroundImage: 'url(' + course.cover + ')' }"></div>
       <div class="card-title">{{ course.title }}</div>
       <div class="card-content">
-        <div><strong>Description:</strong> {{ course.description }}</div>
-        <div class="q-mt-sm"><strong>Ended on:</strong> {{ course.endDate }}</div>
+        <div>
+  <strong>Description: </strong>
+  <span v-if="course.description.length <= 50">
+    {{ course.description }}
+  </span>
+  <span v-else-if="!expandedDescriptions[course.id]" >
+    {{ course.description.slice(0, 50) }}...
+    <a @click.stop="showFullDescription(course.id)" class="more">more</a>
+  </span>
+  <span v-else >
+    {{ course.description }}
+    <a @click.stop="showFullDescription(course.id)" class="more">less</a>
+  </span>
+</div>
+
+
+        <div class="q-mt-sm"><strong>Ended on:</strong> {{ formatDate(course.endDate) }}</div>
       </div>
     </div>
   </div>
@@ -403,6 +436,7 @@ export default {
       topBgGd: topBgGd,
       userEmail: '',
       theme: 'light',
+      expandedDescriptions: {},
       config: {
         sidebar: {
           viewThumbnail: true,
@@ -507,11 +541,28 @@ export default {
         console.error("Error processing ZIP file:", error);
       }
     },
-    formatDate(date) {
-    if (!date) return '';
-    const d = new Date(date);
-    return d.toLocaleDateString(); // e.g. "6/2/2025"
-  },
+    showFullDescription(courseId) {
+  this.expandedDescriptions[courseId] = !this.expandedDescriptions[courseId];
+},
+  openDescriptionDialog(text) {
+  this.dialogFileContent = text;
+  this.dialogVisible = true;
+},
+formatDate(date) {
+  if (!date) return '';
+  const options = {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: true,
+    timeZone: 'Asia/Kolkata',
+    timeZoneName: 'short', 
+  };
+
+  return new Intl.DateTimeFormat('en-IN', options).format(new Date(date));
+},
   formatTime(date) {
     if (!date) return '';
     const d = new Date(date);
@@ -1457,6 +1508,9 @@ async fetchAllStudentAssignmentsForUser() {
   }
 }
 
+.more{
+  color: #1976d2;
+}
 
 
 </style>
