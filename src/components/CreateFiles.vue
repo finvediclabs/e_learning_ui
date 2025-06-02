@@ -47,6 +47,7 @@
                 <span v-if="!title">{{ errors.title }}</span>
               </div>
             </fin-portlet-item>
+            
 
             <fin-portlet-item class="full-width">
               <q-input v-model="description" borderless type="textarea" label="Description" rows="16"
@@ -62,11 +63,15 @@
                 class="fin-br-8 shadow-3 q-pa-sm bg-grey-2" />
             </fin-portlet-item>
 
+            
+
             <fin-portlet-item class="full-width" v-if="requiredCourses" style="margin-top: 2%;">
               <q-select v-model="selectedCourses" multiple borderless use-input  option-value="value" 
               option-label="label" map-options clearable label="Select Courses" :options="CoursesOptions"
                 class="fin-br-8 shadow-3 q-pa-sm bg-grey-2" />
             </fin-portlet-item>
+
+            
 
             <fin-portlet-item class="full-width" v-if="requiredDisplay" style="margin-top: 2%;">
               <q-select v-model="selectedDisplay" borderless label="Display" :options="DisplayOptions"

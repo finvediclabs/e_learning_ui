@@ -1,5 +1,52 @@
 <template>
-  <div class="elearning-page">
+  <div class="elearning-page"
+  :style="{ backgroundImage: 'url(' + topBgGd + ')' }"
+  >
+    <div class="q-mt-xl" style="margin-left: 8%;margin-right: 8%;">
+<div
+  class="gd-background-container1"
+  :style="{ backgroundImage: 'url(' + hACK_BG + ')' }"
+  v-if="firstUpcomingCourse"
+>
+  <!-- Text Overlay -->
+  <div class="gd-text-overlay1 text-h4 text-white">
+    <span>
+      <strong>Time:</strong>
+      {{ formatTime(firstUpcomingCourse.date) }}
+      <span v-if="firstUpcomingCourse.endDate"> - {{ formatTime(firstUpcomingCourse.endDate) }}</span>
+    </span><br />
+    <span><strong>Date:</strong> {{ formatDate(firstUpcomingCourse.date) }}</span><br />
+    <span>
+      <strong>Duration:</strong>
+      {{ calculateDuration(firstUpcomingCourse.date, firstUpcomingCourse.endDate) }}
+    </span>
+
+    <div class="text-subtitle1 q-mt-sm q-pt-sm">
+      <template v-if="firstUpcomingCourse.registeredEmails && firstUpcomingCourse.registeredEmails.includes(userEmail)">
+        <div class="register-button-wrapper2">
+          <div class="registered-btn2 highlight">
+            <q-icon name="check_circle" class="arrow-icon" />
+            Registered
+          </div>
+        </div>
+      </template>
+      <template v-else>
+        <div class="register-button-wrapper2" @click.stop.prevent="handleRegistration(firstUpcomingCourse.id)">
+          <button
+            style="background-color: #fff; color: #000; border: none; font-weight: bold;"
+            class="register-btn2 animate-on-click"
+            :class="{ clicked: clickedButtonId === firstUpcomingCourse.id }"
+          >
+            <q-icon name="arrow_forward" class="arrow-icon moving-arrow" />
+            Click to Register
+          </button>
+        </div>
+      </template>
+    </div>
+  </div>
+</div>
+
+</div>
 
     <!-- Featured Courses Section -->
     <div class="featured-section">
@@ -7,66 +54,82 @@
 
       <!-- Courses Section -->
 
-      <div class="featured-courses">
-
-<q-input
-  v-model="searchQuery"
-  outlined
-  debounce="300"
-  placeholder="Search courses..."
-  class="search-bar"
-  dense
-  clearable
-  prefix="🔍"
-/>
 
 
-  <table class="styled-course-table">
-    <thead>
-      <tr>
-        <th>Image</th>
-        <th>Title</th>
-        <th>Description</th>
-        <th>Status</th> <!-- ✅ New column -->
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-if="filteredFeaturedCourses.length === 0">
-      <td colspan="4" class="text-center text-grey q-pa-md">
-        No matching courses found.
-      </td>
-    </tr>
-      <tr
-        v-for="(course, index) in filteredFeaturedCourses"
-        :key="course.id"
-        class="course-row"
-        @click="openCourse(course.id, course.filePath, course.title)"
-      >
 
-        <td>
-          <q-btn
-            class="course-button"
-            :style="{
-              backgroundImage: `url(${course.cover})`,
-              backgroundSize: 'cover',             
-              height: '60px',
-              borderRadius: '8px',
-              
-            }"
-            flat
-          ></q-btn>
-        </td>
-        <td>{{ course.title }}</td>
-        <td>{{ course.description }}</td>
-        <td>
-          <span :class="isCourseDone(course.id) ? 'status-done' : 'status-pending'">
-            {{ isCourseDone(course.id) ? 'Done' : 'Pending' }}
-          </span>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+
+
+<div class="section q-mx-xl" style="width: 80%; margin-right:auto; margin-left:auto;">
+  <!-- Ongoing or Upcoming -->
+  <div class="text-h5 q-mb-md text-bold">Ongoing & Upcoming Courses</div>
+
+<div v-if="ongoingOrUpcomingCourses.length === 0" class="text-center text-grey q-pa-md">
+  No ongoing or upcoming courses.
 </div>
+
+<div class="cards-container">
+  <div
+    v-for="course in ongoingOrUpcomingCourses"
+    :key="course.id"
+    class="card up-card"
+    @click="openCourse(course.id, course.filePath, course.title, course.registeredEmails)"
+  >
+    <div class="card-image" :style="{ backgroundImage: 'url(' + course.cover + ')' }"></div>
+
+    <div class="card-title">{{ course.title }}</div>
+
+    <div class="card-content">
+      <div><strong>Description:</strong> {{ course.description }}</div>
+      <div class="q-mt-sm"><strong>Start:</strong> {{ course.date }}</div>
+      <div><strong>End:</strong> {{ course.endDate }}</div>
+      <div><strong>Slots:</strong> {{ course.maxSlots }}</div>
+
+      <!-- Register / Registered Button -->
+      <div class="text-subtitle1 q-mt-sm">
+        <template v-if="course.registeredEmails && course.registeredEmails.includes(userEmail)">
+          <div class="register-button-wrapper">
+            <div class="registered-btn highlight">
+              <q-icon name="check_circle" class="arrow-icon" />
+              Registered
+            </div>
+          </div>
+        </template>
+        <template v-else>
+          <div class="register-button-wrapper" @click.stop.prevent="handleRegistration(course.id)">
+            <button class="register-btn animate-on-click" :class="{ clicked: clickedButtonId === course.id }">
+              <q-icon name="arrow_forward" class="arrow-icon moving-arrow" />
+              Register Now
+            </button>
+          </div>
+        </template>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  <!-- Completed -->
+  <div class="text-h5 q-mt-xl q-mb-md text-bold">Completed Courses</div>
+  <div v-if="completedCourses.length === 0" class="text-center text-grey q-pa-md">
+    No completed courses.
+  </div>
+  <div class="cards-container">
+    <div
+      v-for="course in completedCourses"
+      :key="course.id"
+      class="card up-card"
+      @click="openCourse(course.id, course.filePath, course.title)"
+    >
+      <div class="card-image" :style="{ backgroundImage: 'url(' + course.cover + ')' }"></div>
+      <div class="card-title">{{ course.title }}</div>
+      <div class="card-content">
+        <div><strong>Description:</strong> {{ course.description }}</div>
+        <div class="q-mt-sm"><strong>Ended on:</strong> {{ course.endDate }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 
     </div>
   </div>
@@ -293,8 +356,13 @@ import FinPortletHeading from "src/components/Portlets/FinPortletHeading.vue";
 import FinPortletItem from "src/components/Portlets/FinPortletItem.vue";
 import { useSessionStore } from "src/stores/session";
 import { useProfileStore } from "src/stores/profile";
+import { storeToRefs } from 'pinia';
+import hACK_BG from 'src/assets/hACK_BG.png';
 import PDFViewer from 'pdf-viewer-vue';
 import "vue3-pdf-app/dist/icons/main.css";
+
+import topBgGd from 'src/assets/top_bg_gd.png';
+
 import JSZip from "jszip";
 import CryptoJS from 'crypto-js'
 import { title } from 'vue-carousel-3d';
@@ -305,8 +373,14 @@ export default {
     return {
       DummyBook: DummyBook,
       courses: [],
+      firstUpcomingCourse: null,
       chapterFilePath: '',
+      hACK_BG,
       numPages: 0,
+      ongoingOrUpcomingCourses: [],
+    completedCourses: [],
+      topBgGd: topBgGd,
+      userEmail: '',
       theme: 'light',
       config: {
         sidebar: {
@@ -373,7 +447,7 @@ export default {
     PDFViewer,
     // FinPortletItem
   },
-  
+
   computed: {
   filteredFeaturedCourses() {
     if (!this.searchQuery) return this.featuredCourses || [];
@@ -405,6 +479,31 @@ export default {
         console.error("Error processing ZIP file:", error);
       }
     },
+    formatDate(date) {
+    if (!date) return '';
+    const d = new Date(date);
+    return d.toLocaleDateString(); // e.g. "6/2/2025"
+  },
+  formatTime(date) {
+    if (!date) return '';
+    const d = new Date(date);
+    return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // e.g. "09:30 AM"
+  },
+  calculateDuration(start, end) {
+    if (!start || !end) return '';
+    const startTime = new Date(start);
+    const endTime = new Date(end);
+    const diffMs = endTime - startTime;
+    if (diffMs <= 0) return '0 min';
+
+    const diffMins = Math.floor(diffMs / 60000);
+    const hours = Math.floor(diffMins / 60);
+    const minutes = diffMins % 60;
+
+    return hours > 0
+      ? `${hours}h ${minutes}m`
+      : `${minutes} min`;
+  },
     async handleZipFile(file) {
       try {
         const jszip = new JSZip();
@@ -446,27 +545,56 @@ export default {
       }
     },
 
-    async openCourse(courseId, filePath, title) {
-      try {
-        this.selectedCourse = { id: courseId, filePath }; // Store the selected course details
-        console.log('Selected Course ID:', courseId);
-        this.dialogAssignmentId = courseId;
-        this.dialogAssignmentTitle = title;
-        console.log('Selected Course Heading:', title);
-        console.log('Selected Course File Path:', filePath);
+    async openCourse(courseId, filePath, title, registeredEmails) {
+  try {
+    console.log('[openCourse] Start opening course', { courseId, filePath, title, registeredEmails });
 
-        this.dialog = true; // Open dialog
-        this.sendPostRequest(filePath);
-      }
-      catch (error) {
-        console.error('Error opening course:', error);
-      }
-      // Fetch PDF or perform necessary operations
-      finally {
-        this.loading = false;
-        await this.fetchStudentAssignments();
-      }
-    },
+    const profileStore = useProfileStore();
+    const { user } = storeToRefs(profileStore);
+    const email = user.value?.email;
+
+    console.log('[openCourse] Current user email:', email);
+
+    if (!registeredEmails) {
+      console.warn('[openCourse] registeredEmails is undefined or null');
+    }
+
+    if (!registeredEmails || !registeredEmails.includes(email)) {
+      console.warn('[openCourse] User is NOT registered for this course.');
+      this.$q.notify({
+        type: 'warning',
+        message: 'You must register for this course before accessing it.'
+      });
+      return; // Stop here, don't open dialog
+    }
+
+    console.log('[openCourse] User is registered. Proceeding to open course dialog.');
+
+    this.selectedCourse = { id: courseId, filePath };
+    console.log('[openCourse] selectedCourse set:', this.selectedCourse);
+
+    this.dialogAssignmentId = courseId;
+    this.dialogAssignmentTitle = title;
+
+    console.log('[openCourse] dialogAssignmentId set to:', this.dialogAssignmentId);
+    console.log('[openCourse] dialogAssignmentTitle set to:', this.dialogAssignmentTitle);
+
+    this.dialog = true; // Open dialog
+    console.log('[openCourse] dialog opened.');
+
+    this.sendPostRequest(filePath);
+    console.log('[openCourse] sendPostRequest called with filePath:', filePath);
+  }
+  catch (error) {
+    console.error('[openCourse] Error opening course:', error);
+  }
+  finally {
+    this.loading = false;
+    console.log('[openCourse] loading set to false.');
+    await this.fetchStudentAssignments();
+    console.log('[openCourse] fetchStudentAssignments completed.');
+  }
+},
     // filterFeaturedCourses() {
     //   this.filteredFeaturedCourses = this.featuredCourses.filter((course) =>
     //     course.title.toLowerCase().includes(this.searchQuery.toLowerCase())
@@ -650,76 +778,96 @@ export default {
   });
 },
     async fetchCourses() {
-      console.log('fetchCourses: Start fetching courses.');
-      this.loading = true;
+  console.log('fetchCourses: Start fetching courses.');
+  this.loading = true;
 
-      try {
-        const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
-        let url = `${baseUrl}api/hackathon`;
-        const response = await this.$api.get(url);
-        this.loading = false;
-        console.log('fetchCourses: Response received.', response);
+  try {
+    const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
+    const url = `${baseUrl}api/hackathon`;
+    const response = await this.$api.get(url);
 
-        if (response.data && response.data.success) {
-          console.log('fetchCourses: Parsing course data.');
-          this.courses = response.data.data.map((course) => ({
-            id: course.id,
-            title: course.heading,
-            description: course.description,
-            abstractt: course.abstractt,
-            courseId: course.courseId,
-            filePath: course.filePath,
-            cover: course.imagePath ? course.imagePath : this.DummyBook, // Default cover image if none is provided
-          }));
+    if (response.data && response.data.success) {
+      console.log('fetchCourses: Response received.', response);
 
-          console.log('fetchCourses: Courses parsed successfully.', this.courses);
+      this.courses = response.data.data.map(course => ({
+        id: course.id,
+        title: course.heading,
+        description: course.description,
+        abstractt: course.abstractt,
+        courseId: course.courseId,
+        filePath: course.filePath,
+        date: course.date ? new Date(course.date) : null,
+        endDate: course.endDate ? new Date(course.endDate) : null,
+        registeredEmails: course.registeredEmails,
+        maxSlots: course.maxSlots,
+        registeredSlots: course.registeredSlots,
+        cover: course.imagePath || this.DummyBook,
+      }));
 
-          this.featuredCourses = this.courses; // Initialize featured courses
-          this.filteredFeaturedCourses = this.featuredCourses; // Initially show all featured courses
+      const now = new Date();
 
-          this.courses.forEach((course, index) => {
-            console.log(`fetchCourses: Processing course [${index}] with ID: ${course.id}.`);
-            const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
-            let imgurl = `${baseUrl}fs/download/`;
-            if (course.cover && course.cover.startsWith(imgurl)) {
-              console.log(`fetchCourses: Course [${index}] has a downloadable cover: ${course.cover}`);
-              const downloadUrl = `${baseUrl}fs/download`;
-              const removePrefix = `${baseUrl}fs/download/`;
-              const filename = course.cover.replace(removePrefix, '');
-              console.log('fileName', filename);
-              console.log(`fetchCourses: Filename extracted for course [${index}]: ${filename}`);
-              const formData = new FormData();
-              formData.append('filename', filename);
+      this.ongoingOrUpcomingCourses = this.courses.filter(course => {
+        if (!course.date) return false;
 
-              console.log(`fetchCourses: Sending POST request for cover of course [${index}].`);
-              this.$api
-                .post(downloadUrl, formData, { responseType: 'blob' })
-                .then((downloadResponse) => {
-                  console.log(`fetchCourses: Received cover blob for course [${index}].`);
-                  const blob = new Blob([downloadResponse.data]);
-                  const url = window.URL.createObjectURL(blob);
-                  course.cover = url; // Update cover with the received blob URL
-                  console.log(`fetchCourses: Updated cover for course [${index}]: ${url}`);
-                })
-                .catch((error) => {
-                  console.error(`fetchCourses: Error fetching cover for course [${index}]:`, error);
-                  course.cover = this.DummyBook; // Fallback to default image on error
-                });
-            } else {
-              console.log(`fetchCourses: Course [${index}] has a static or missing cover.`);
-            }
-          });
-          await this.fetchAllStudentAssignmentsForUser();
-        } else {
-          console.error('fetchCourses: Invalid data structure or failure in response:', response);
+        if (now < course.date) return true; // upcoming
+        if (course.endDate && now >= course.date && now <= course.endDate) return true; // ongoing
+
+        return false;
+      });
+
+      this.completedCourses = this.courses.filter(course => {
+        if (!course.endDate) return false;
+        return now > course.endDate;
+      });
+
+      this.ongoingOrUpcomingCourses.sort((a, b) => a.date - b.date);
+      this.completedCourses.sort((a, b) => b.endDate - a.endDate);
+
+      // Set first upcoming or ongoing course for top display
+      this.firstUpcomingCourse = this.ongoingOrUpcomingCourses.length > 0 ? this.ongoingOrUpcomingCourses[0] : null;
+
+      const imgurl = `${baseUrl}fs/download/`;
+      await Promise.all(this.courses.map(async (course, index) => {
+        if (course.cover && course.cover.startsWith(imgurl)) {
+          const downloadUrl = `${baseUrl}fs/download`;
+          const filename = course.cover.replace(imgurl, '');
+          const formData = new FormData();
+          formData.append('filename', filename);
+
+          try {
+            const downloadResponse = await this.$api.post(downloadUrl, formData, { responseType: 'blob' });
+            const blob = new Blob([downloadResponse.data]);
+            course.cover = window.URL.createObjectURL(blob);
+          } catch (error) {
+            console.error(`Error fetching cover for course [${index}]:`, error);
+            course.cover = this.DummyBook;
+          }
         }
-      } catch (error) {
-        this.loading = false;
-        console.error('fetchCourses: Error occurred during fetch:', error);
-      } finally {
-        console.log('fetchCourses: Finished fetching courses.');
-      }
-    },
+      }));
+
+      await this.fetchAllStudentAssignmentsForUser();
+
+    } else {
+      console.error('fetchCourses: Invalid data structure or failure in response:', response);
+    }
+  } catch (error) {
+    console.error('fetchCourses: Error occurred during fetch:', error);
+  } finally {
+    this.loading = false;
+    console.log('fetchCourses: Finished fetching courses.');
+  }
+},
+
+
+  handleRegistration(id) {
+    this.clickedButtonId = id;
+    this.registerUser(id);
+
+    // Remove animation class after 1.5 seconds
+    setTimeout(() => {
+      this.clickedButtonId = null;
+    }, 1500);
+  },
     async fetchStudentAssignments(userId, assignmentId) {
   this.loading = true; // Start loading state
   try {
@@ -1004,6 +1152,10 @@ async fetchAllStudentAssignmentsForUser() {
   mounted() {
     this.fetchCourses(); // Fetch courses on component mount
     this.fetchUserId();
+
+     const profileStore = useProfileStore();
+    const { user } = storeToRefs(profileStore);
+    this.userEmail = user.value?.email || '';
   }
 };
 </script>
@@ -1054,7 +1206,96 @@ async fetchAllStudentAssignmentsForUser() {
 .styled-course-table td {
   border: 1px solid #ddd;
 }
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 20px;
+}
 
+@media (min-width: 768px) {
+  .cards-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .cards-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.card.up-card {
+  border-radius: 12px;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+  cursor: pointer;
+}
+.card.up-card:hover {
+  transform: translateY(-4px);
+}
+
+.gd-background-container1 {
+  position: relative;
+  width: 100%;
+  margin: auto;
+  background-size: cover;
+  background-position: center;
+  height: 68vh; /* adjust as needed */
+  border-radius: 10px;
+}
+.gd-text-overlay1{
+  position: absolute;
+  bottom: 20vh;
+  right: 4vw;
+  text-align: left;
+  color: white;
+  font-weight: bold;
+  /* optional: background for contrast */
+  padding: 10px;
+  border-radius: 6px;
+}
+.register-button2{
+   position: absolute;
+  bottom: 40%;
+  right:30vw;
+  text-align: left;
+  color: white;
+  font-weight: bold;
+  /* optional: background for contrast */
+  padding: 10px;
+  border-radius: 6px;
+
+}
+
+
+.card-image {
+  height: 150px;
+  background-size: cover;
+  background-position: center;
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: bold;
+  padding: 8px 16px;
+}
+
+.card-content {
+  padding: 0 16px 16px 16px;
+  font-size: 14px;
+}
+
+.status-done {
+  color: green;
+  font-weight: bold;
+}
+
+.status-pending {
+  color: orange;
+  font-weight: bold;
+}
 
 
 @media screen and (max-width: 768px) {
@@ -1071,7 +1312,7 @@ async fetchAllStudentAssignmentsForUser() {
   .course-button {
     width: 60px !important;
     height: 40px !important;
-    background-size: contain !important; 
+    background-size: contain !important;
     background-position: center;
     background-repeat: no-repeat;
   }
@@ -1086,6 +1327,78 @@ async fetchAllStudentAssignmentsForUser() {
     word-break: break-word;
   }
 }
+
+.register-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: black;
+  color: white;
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-weight: bold;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.register-btn:active {
+  transform: scale(0.97);
+  opacity: 0.9;
+}
+
+.register-btn .arrow-icon {
+  background-color: white;
+  color: black;
+  border-radius: 50%;
+  padding: 4px;
+  font-size: 16px;
+}
+
+
+.register-button-wrapper {
+  display: flex;
+  align-items: flex-end !important;
+  justify-content: flex-end;
+}
+
+.register-btn,
+.registered-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #000;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  font-size: 16px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.registered-btn {
+  background-color: #4caf50; /* Green */
+  cursor: default;
+  pointer-events: none;
+}
+
+.arrow-icon {
+  background-color: white;
+  color: #1976d2;
+  border-radius: 50%;
+  padding: 4px;
+  font-size: 20px;
+  transition: transform 0.5s ease;
+}
+
+.registered-btn .arrow-icon {
+  background-color: white;
+  color: #4caf50;
+}
+
+  /* margi
 
 /* Default (for mobile screens and below) */
 .course-button {
