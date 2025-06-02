@@ -8,7 +8,7 @@
   <fin-portlet-item class="search-container">
     <div style="display: flex; justify-content: space-between; align-items: center; margin: 1% 2%;">
       <div v-if="studentAssignments.length > 0">
-  <span class="text-h6">Batch ID: {{ studentAssignments[0].cycleid_new }}</span>
+  <span class="text-h6">Assignments</span>
   </div>
 
   <q-select
@@ -560,7 +560,7 @@ async fetchBatches() {
     async fetchStudents(cycleid) {
   try {
     const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
-    const studentsUrl = `${baseUrl}api/enrollments/${cycleid}`;
+    const studentsUrl = `${baseUrl}api/enrollments/25001`;
     const response = await this.$api.get(studentsUrl);
     const data = response.data;
 
@@ -580,7 +580,7 @@ async fetchBatches() {
 async fetchAssignments(cycleid) {
   try {
     const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
-    const assignmentUrl = `${baseUrl}api/enrollmentsAssignments/with-assignments?cycleid=${cycleid}`;
+    const assignmentUrl = `${baseUrl}api/enrollmentsAssignments/with-assignments?cycleid=25001`;
 
     const response = await this.$api.get(assignmentUrl);
   //  console.log("Fetched student assignments:", response.data);
@@ -689,7 +689,7 @@ closeDialog() {
     async fetchStudentAssignments(batchId, studentId) {
   try {
     const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
-    const studentAssignmentUrl = `${baseUrl}api/student-assignments?batchId=${batchId}&studentId=${studentId}`;
+    const studentAssignmentUrl = `${baseUrl}api/student-assignments?batchId=25001&studentId=${studentId}`;
 
     const response = await this.$api.get(studentAssignmentUrl);
    // console.log("Fetched assignments:", response.data);
@@ -793,9 +793,9 @@ async handleSelectChange2(value1) {
     console.log("Selection cleared, URL using last selected cycleid:", url);
   } else if (this.batches.length > 0) {
     // Use firstCycleId from batches as the final fallback
-    const firstCycleId = this.batches[0].cycleid;
+    const firstCycleId = 25001;
     console.log("Using firstCycleId as fallback:", firstCycleId);
-    url += `cycleid=${firstCycleId}`;
+    url += `cycleid=25001`;
     console.log("Selection cleared, URL using firstCycleId:", url);
   } else {
     console.error("No cycleid selected to fallback on");
@@ -831,8 +831,8 @@ async handleSelectChange2(value1) {
         // Generate cycleid_new
         const cycleid = assignment.cycleid || '';
         const cycleid_new = cycleid.startsWith('0')
-          ? `24A${cycleid.slice(-3)}`
-          : `90A${cycleid}`;
+          ? `${cycleid.slice(-3)}`
+          : `${cycleid}`;
 
         // Generate studentId_new
         const studentId = assignment.studentId || '';
