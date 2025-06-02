@@ -53,7 +53,7 @@
 
 </div>
     <div class="section q-mx-xl">
-      <div class="text-h5 q-mb-md text-bold">Upcoming & Ongoing Discussions</div>
+      <div class="text-h5 q-mb-md text-bold">Upcoming & Ongoing Seminars</div>
       <div class="cards-container ">
         <div
   v-for="discussion in upcomingAndOngoing"
@@ -115,7 +115,7 @@
 
 <!-- Completed Discussions -->
 <div class="section q-mx-xl">
-  <div class="text-h5 q-mb-md text-bold">Completed Discussions</div>
+  <div class="text-h5 q-mb-md text-bold">Completed</div>
   <div class="cards-container completed-card">
     <div
   v-for="discussion in completed"
