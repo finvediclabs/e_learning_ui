@@ -185,7 +185,7 @@ export default {
     async fetchVMs() {
       try {
         const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
-    const labsURL = `${baseUrl}api/labVms/usernames-by-account?accountId=8`;
+    const labsURL = `${baseUrl}api/labVms/usernames-by-account?accountId=3`;
 
         // Set the token for the API request
 
