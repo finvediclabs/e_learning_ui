@@ -2,96 +2,245 @@
   <div>
     <!-- Mobile View -->
     <div class="mobilepart" v-if="isMobile">
-      <div
-        class="mobile-content"
-        style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100vw; height: 50vh; padding: 20px; background-color: #f9f9f9; color: #333; text-align: center;"
-      >
-        <h1 style="font-size: 2em; font-weight: bold; color: #007bff; margin-bottom: 15px;">Hackathon</h1>
-        <p style="font-size: 1.2em; margin: 5px 0;">📅 Date: June 15, 2025</p>
-        <p style="font-size: 1.2em; margin: 5px 0;">🌐 Mode: Online</p>
-        <p style="font-size: 1.2em; margin: 5px 0;">📌 Topic: AI & ML in Fintech</p>
-        <p style="font-size: 1.2em; margin: 5px 0;">🏆 Prizes Worth: Up to 50,000</p>
-        <div style="margin-top: 20px; width: 100%;">
-          <router-link :to="'/register'" style="text-decoration: none; color: white;">
-            <span
-              class="btn rounded-pill text-white"
-              style="font-size: 1.3em; background-color: #007bff; padding: 12px 25px; text-decoration: none; border-radius: 30px; width: 100%; max-width: 250px;"
-            >
-              Click to Register
-            </span>
-          </router-link>
-        </div>
-      </div>
+      <!-- Your existing mobile content -->
     </div>
 
-    <!-- Desktop View -->
-    <div class="desk q-mt-xl" v-else>
+   <!-- Desktop View -->
+<div class="desk q-mt-xl" v-else>
+  <div style="padding: 20px;">
+ <p style="
+  font-size: 28px;
+  font-weight: 600;
+  text-align: center;
+  color: #1a202c;
+  background-color: #f9fafb;
+  padding: 16px 24px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+">
+  Available Hackathon Courses
+</p>
+
+    <div v-if="filteredFeaturedCourses.length === 0" class="text-center text-grey q-pa-md">
+      No matching courses found.
+    </div>
+    
+    <div class="course-cards">
       <div
-        :style="{
-          backgroundImage: `url(${backgroundImage})`,
-          width: '80vw',
-          height: '80vh',
-          backgroundSize: 'contain',
-          backgroundRepeat: 'no-repeat',
-          backgroundPosition: 'center',
-          position: 'relative',
-          margin: '0 auto'
-        }"
+        v-for="course in filteredFeaturedCourses"
+        :key="course.id"
+        class="course-card"
       >
         <div
-          style="
-            position: absolute;
-            margin-bottom: 8%;
-            bottom: 40px;
-            left: 47%;
-            transform: translateX(-50%);
-            text-align: center;
-          "
-        >
-          <router-link :to="{ path: '/register', query: { product: 'H003' } }" style="text-decoration: none; color: white;">
-            <span
-              class="btn rounded-pill text-white"
-              style="font-size: 1.3em; background-color: #007bff; padding: 12px 25px; text-decoration: none; border-radius: 30px; width: 100%; max-width: 250px;"
-            >
-              Click to Register
-            </span>
-          </router-link>
-        </div>
+          class="course-image"
+          :style="{ backgroundImage: `url(${course.cover})` }"
+          @click="openCourse(course.id, course.filePath, course.title)"
+        ></div>
+      <div class="course-content">
+  <h3 class="course-title">{{ course.title }}</h3>
+  <p class="course-description">{{ course.description }}</p>
+  <p class="course-timestamp">
+    <strong>Created:</strong> {{ course.createdAt }}
+  </p>
+  <p class="course-timestamp">
+    <strong>Updated:</strong> {{ course.updatedAt }}
+  </p>
+  <q-btn
+    label="Register"
+    color="primary"
+    unelevated
+    @click="openCourse(course.id, course.filePath, course.title)"
+  />
+</div>
+
       </div>
     </div>
   </div>
+
+
+  
+</div>
+
+  </div>
 </template>
 
-<script setup>
-import { ref, onMounted, onBeforeUnmount, computed } from 'vue'
-import { useRoute } from 'vue-router'
+<script>
+import 'src/css/LibraryHackathon.css';
+import DummyBook from 'src/assets/dummyBook.jpg';
+import { useProfileStore } from "src/stores/profile";
 
-// Import images
-import Hackathonevent from 'src/assets/Hackathonevent.png'
-import SeminarEvent from 'src/assets/seminarEvent.png'
-import Webinar_Event from 'src/assets/Webinar_event.png'
+export default {
+  data() {
+    return {
+      courses: [],
+      featuredCourses: [],
+      filteredFeaturedCourses: [],
+      loading: false,
+      userId: null,
+      studentAssignments: [],
+      searchQuery: '',
+    };
+  },
 
-// Track screen size
-const isMobile = ref(window.innerWidth <= 768)
-const updateScreen = () => {
-  isMobile.value = window.innerWidth <= 768
-}
-onMounted(() => {
-  window.addEventListener('resize', updateScreen)
-})
-onBeforeUnmount(() => {
-  window.removeEventListener('resize', updateScreen)
-})
+  methods: {
+    fetchUserId() {
+      const profileStore = useProfileStore();
+      this.userId = profileStore.user.id;
+      this.fetchStudentAssignments(this.userId);
+    },
 
-// Get route param
-const route = useRoute()
+    async fetchCourses() {
+      this.loading = true;
+      try {
+        const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
+        const url = `${baseUrl}api/hackathon`;
+        const response = await this.$api.get(url);
 
-// Select image based on route param id
-const backgroundImage = computed(() => {
-  const id = route.params.id
-  if (id === '1') return SeminarEvent
-  if (id === '2') return Webinar_Event
-  if (id === '3') return Hackathonevent
-  return Hackathonevent
-})
+        if (response.data && response.data.success) {
+        this.courses = response.data.data.map(course => ({
+  id: course.id,
+  title: course.heading,
+  description: course.description,
+  filePath: course.filePath,
+  cover: course.imagePath ? course.imagePath : DummyBook,
+  createdAt: new Date(course.createdAt).toLocaleString(),   // 👈 format
+  updatedAt: new Date(course.updatedAt).toLocaleString(),   // 👈 format
+}));
+
+          this.featuredCourses = this.courses;
+          this.filteredFeaturedCourses = this.featuredCourses;
+
+          // Fetch blob URLs for covers if needed
+          const imgBaseUrl = `${baseUrl}fs/download/`;
+          this.courses.forEach(course => {
+            if (course.cover && course.cover.startsWith(imgBaseUrl)) {
+              const filename = course.cover.replace(imgBaseUrl, '');
+              const formData = new FormData();
+              formData.append('filename', filename);
+              this.$api.post(`${baseUrl}fs/download`, formData, { responseType: 'blob' })
+                .then(res => {
+                  const blobUrl = window.URL.createObjectURL(new Blob([res.data]));
+                  course.cover = blobUrl;
+                })
+                .catch(() => {
+                  course.cover = DummyBook;
+                });
+            }
+          });
+
+          await this.fetchStudentAssignments(this.userId);
+        }
+      } catch (error) {
+        console.error('Error fetching courses:', error);
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    async fetchStudentAssignments(userId) {
+      if (!userId) return;
+      this.loading = true;
+      try {
+        const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
+        const url = `${baseUrl}api/student-assignments?studentId=${userId}`;
+        const response = await this.$api.get(url);
+
+        if (response.data && response.data.success) {
+          // Filter only Hackathon assignments
+          this.studentAssignments = response.data.data.filter(a => a.type === 'Hackathon');
+        }
+      } catch (error) {
+        console.error('Error fetching student assignments:', error);
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    isCourseDone(courseId) {
+      return this.studentAssignments.some(a => a.assignmentId === courseId);
+    },
+
+    openCourse(courseId, filePath, title) {
+      // Your existing logic for opening course detail or PDF viewer
+      console.log('Open course:', courseId, title);
+    },
+  },
+
+  mounted() {
+    this.fetchUserId();
+    this.fetchCourses();
+  },
+};
 </script>
+
+
+
+<style scoped>
+.course-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: flex-start;
+}
+
+.course-card {
+  width: 280px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.1);
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  transition: box-shadow 0.3s ease;
+}
+
+.course-card:hover {
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.2);
+}
+
+.course-image {
+  height: 160px;
+  background-size: cover;
+  background-position: center;
+}
+
+.course-content {
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex-grow: 1;
+}
+
+.course-title {
+  font-weight: 600;
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.course-description {
+  flex-grow: 1;
+  font-size: 0.9rem;
+  color: #555;
+  margin: 0;
+}
+.course-timestamp {
+  font-size: 0.75rem;
+  color: #888;
+  margin: 0;
+}
+
+
+@media screen and (max-width: 768px) {
+  .styled-course-table {
+    font-size: 14px;
+  }
+
+  .styled-course-table th,
+  .styled-course-table td {
+    padding: 6px;
+  }
+}
+</style>
