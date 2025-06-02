@@ -1,5 +1,9 @@
 <template>
-    <div class="sandbox q-px-lg q-mx-md">
+   <div v-if="isSaasAdmin">
+      <!-- Show assignments or batch assignments based on selected state -->
+      <LabReport />
+    </div>
+    <div class="sandbox q-px-lg q-mx-md"  v-if="userType !== 'SaasAdmin'">
         <div class="row">
       <div class="col-12 q-pt-lg">
         <span class="text-h4 text-bold lab-sub">Labs</span>
@@ -247,12 +251,14 @@ import { useSessionStore } from "src/stores/session";
 import { storeToRefs } from "pinia";
 import windows from "../../assets/Windows.png";
 import { useProfileStore } from "src/stores/profile";
+import LabReport from "pages/reports/Index.vue"
 import DemoUserPopUp from "src/layouts/DemoUserPopUp.vue";
 import { version } from "jszip";
 export default {
   components: {
     FinPortletItem,
     DemoUserPopUp,
+    LabReport
   },
   setup() {
     const session = useSessionStore();
@@ -335,6 +341,12 @@ isAgreementAccepted: false,
           lab.provisioningState !== 'Failed';
 
       };
+    },
+     isSaasAdmin() {
+      const profileStore = useProfileStore();
+      const roles = profileStore.user.roles.map(role => role.name);
+      // Check if the user is admin or faculty
+      return roles.includes('SaasAdmin')
     },
     userHasVm() {
     return this.labsData.some(vm => vm.userName === this.currentUserName);
@@ -836,6 +848,7 @@ async sendVmRequest(selectedOS) {
   this.loadLockedStates();
    this.checkSaasUserAgreement();
   this.fetchRequestVms();
+
 
   // Periodically call getAzureVmsData every 2 minutes (120,000 ms) if route is '/labs'
   if (this.$route.path === '/labs') {

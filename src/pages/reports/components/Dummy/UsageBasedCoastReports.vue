@@ -98,6 +98,25 @@ import { useProfileStore } from "src/stores/profile";
 import { useSessionStore } from 'src/stores/session';
 
 export default {
+   setup() {
+    const session = useSessionStore();
+    const { token, userType } = storeToRefs(session);
+    console.log("Session Token:", token.value);
+    const { setUserType, setSessionToken } = session;
+    const profileStore = useProfileStore();
+    const { user } = storeToRefs(profileStore);
+
+
+    return {
+      token,
+      userType,
+      setUserType,
+      setSessionToken,
+      user,
+      accountId,
+      userAccountId: user.value?.accountId || null,
+    }
+  },
   components: {
     BarChart,
     DoughnutChart2
@@ -132,7 +151,7 @@ export default {
     filteredSecondTableVMs() {
     // Get the names of the VMs from the first table
     const firstTableVMNames = this.filteredVMs.flatMap(vm => vm.names);
-    
+
     // Filter the `vms` array to include only the VMs present in the first table
     return this.vms.filter(vm => firstTableVMNames.includes(vm.name));
   },
@@ -162,17 +181,20 @@ export default {
         this.setSelectedUser();
   },
   methods: {
-    
+
     async fetchVMs() {
       try {
         const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
-        const labsURL = baseUrl + 'api/labVms/deleted';
-        const response = await this.$api.get(labsURL);
+    const labsURL = `${baseUrl}api/labVms/usernames-by-account?accountId=8`;
+
+        // Set the token for the API request
+
+    const response = await this.$api.get(labsURL);
         this.vms = response.data.data; // Adjust according to the data structure
 
         if (this.isStudent) {
           this.vms = this.vms.filter(vm => vm.userId === this.userId);
-          
+
         }
 
         this.groupVMsByUser();
@@ -185,11 +207,11 @@ export default {
     setSelectedUser() {
         this.selectedUser = this.profileStore.user.email;
         this.filterVMsByUser(); // Ensure that data is filtered for the selected user
-      
+
     },
     groupVMsByUser() {
       const grouped = {};
-      
+
       this.vms.forEach(vm => {
         const userName = vm.userName || 'N/A';
         if (!grouped[userName]) {
@@ -251,7 +273,7 @@ export default {
     const minutes = totalMinutes % 60;           // Get the remaining minutes
     return `${hours} hours ${minutes} minutes`;
   },
-  
+
     formatChartData(result) {
       const data = [];
       const labels = [];

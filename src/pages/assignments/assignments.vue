@@ -3,7 +3,11 @@
       <!-- Show assignments or batch assignments based on selected state -->
       <SubmittedAssignment />
     </div>
-    <div v-if="userType !== 'Admin' && userType !== 'Faculty'">
+      <div v-if="isSaasAdmin">
+      <!-- Show assignments or batch assignments based on selected state -->
+      <SaasAdminAssignments />
+    </div>
+    <div v-if="userType !== 'Admin' && userType !== 'Faculty' && userType !== 'SaasAdmin'">
   <div class="assignments">
     <div class="row col-12 w-100">
       <div class="col-3 left">
@@ -321,6 +325,7 @@ import FinPortletHeading from "src/components/Portlets/FinPortletHeading.vue";
 import FinPortletItem from "src/components/Portlets/FinPortletItem.vue";
 import Prism from 'prismjs';
 import SubmittedAssignment from "./SubmitAssignments.vue";
+import SaasAdminAssignments from "./SaasAdminAssignments.vue";
 
 import VuePdfApp from "vue3-pdf-app";
 import PDFViewer from 'pdf-viewer-vue';
@@ -408,6 +413,7 @@ export default {
     FinPortletHeading,
     FinPortletItem,
     VuePdfApp,
+    SaasAdminAssignments,
     SubmittedAssignment,
   },
   computed: {
@@ -419,6 +425,13 @@ export default {
       const roles = profileStore.user.roles.map(role => role.name);
       // Check if the user is admin or faculty
       return roles.includes('Admin') || roles.includes('Faculty');
+    },
+
+     isSaasAdmin() {
+      const profileStore = useProfileStore();
+      const roles = profileStore.user.roles.map(role => role.name);
+      // Check if the user is admin or faculty
+      return roles.includes('SaasAdmin')
     },
   filteredAssignments() {
     console.log("Filtering assignments...");

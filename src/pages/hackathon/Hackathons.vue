@@ -1,5 +1,9 @@
 <template>
-  <div class="elearning-page"
+  <div v-if="isSaasAdmin">
+      <!-- Show assignments or batch assignments based on selected state -->
+      <SaasAdminHackathon />
+      </div>
+  <div class="elearning-page" v-if="userType !== 'Admin' && userType !== 'Faculty' && userType !== 'SaasAdmin'"
   :style="{ backgroundImage: 'url(' + topBgGd + ')' }"
   >
     <div class="q-mt-xl" style="margin-left: 8%;margin-right: 8%;">
@@ -53,6 +57,12 @@
       <div class="heading_class"> </div>
 
       <!-- Courses Section -->
+
+
+
+
+
+
 <div class="section q-mx-xl" style="width: 80%; margin-right:auto; margin-left:auto;">
   <!-- Ongoing or Upcoming -->
   <div class="text-h5 q-mb-md text-bold">Ongoing & Upcoming Hackathons</div>
@@ -73,28 +83,10 @@
     <div class="card-title">{{ course.title }}</div>
 
     <div class="card-content">
-      <div>
-  <strong>Description: </strong>
-  <span v-if="course.description.length <= 50">
-    {{ course.description }}
-  </span>
-  <span v-else-if="!expandedDescriptions[course.id]" >
-    {{ course.description.slice(0, 50) }}...
-    <a @click.stop="showFullDescription(course.id)" class="more">more</a>
-  </span>
-  <span v-else >
-    {{ course.description }}
-    <a @click.stop="showFullDescription(course.id)" class="more">less</a>
-  </span>
-</div>
-
-<div class="q-mt-sm"><strong>Start:</strong> {{ formatDate(course.date) }}</div>
-<div><strong>End:</strong> {{ formatDate(course.endDate) }}</div>
-<div>
-  <strong>Slots:</strong>
-  {{ course.registeredEmails ? course.registeredEmails.length : 0 }} / {{ course.maxSlots }}
-</div>
-
+      <div><strong>Description:</strong> {{ course.description }}</div>
+      <div class="q-mt-sm"><strong>Start:</strong> {{ course.date }}</div>
+      <div><strong>End:</strong> {{ course.endDate }}</div>
+      <div><strong>Slots:</strong> {{ course.maxSlots }}</div>
 
       <!-- Register / Registered Button -->
       <div class="text-subtitle1 q-mt-sm">
@@ -135,23 +127,8 @@
       <div class="card-image" :style="{ backgroundImage: 'url(' + course.cover + ')' }"></div>
       <div class="card-title">{{ course.title }}</div>
       <div class="card-content">
-        <div>
-  <strong>Description: </strong>
-  <span v-if="course.description.length <= 50">
-    {{ course.description }}
-  </span>
-  <span v-else-if="!expandedDescriptions[course.id]" >
-    {{ course.description.slice(0, 50) }}...
-    <a @click.stop="showFullDescription(course.id)" class="more">more</a>
-  </span>
-  <span v-else >
-    {{ course.description }}
-    <a @click.stop="showFullDescription(course.id)" class="more">less</a>
-  </span>
-</div>
-
-
-        <div class="q-mt-sm"><strong>Ended on:</strong> {{ formatDate(course.endDate) }}</div>
+        <div><strong>Description:</strong> {{ course.description }}</div>
+        <div class="q-mt-sm"><strong>Ended on:</strong> {{ course.endDate }}</div>
       </div>
     </div>
   </div>
@@ -365,7 +342,13 @@
     </q-card>
   </q-dialog>
 
+
+
+
 </template>
+
+
+
 
 <script>
 import 'src/css/LibraryHackathon.css';
@@ -380,14 +363,33 @@ import { useProfileStore } from "src/stores/profile";
 import { storeToRefs } from 'pinia';
 import hACK_BG from 'src/assets/hACK_BG.png';
 import PDFViewer from 'pdf-viewer-vue';
+import SaasAdminHackathon from './SaasAdminHackathon.vue';
 import "vue3-pdf-app/dist/icons/main.css";
+
 import topBgGd from 'src/assets/top_bg_gd.png';
+
 import JSZip from "jszip";
 import CryptoJS from 'crypto-js'
 import { title } from 'vue-carousel-3d';
 
 export default {
   name: 'ElearningCourses',
+   setup() {
+    const session = useSessionStore();
+    const { token, userType } = storeToRefs(session);
+    console.log("Session Token:", token.value);
+    const { setUserType, setSessionToken } = session;
+    const profileStore = useProfileStore();
+    const { user } = storeToRefs(profileStore);
+
+    return {
+      token,
+      userType,
+      setUserType,
+      setSessionToken,
+      user
+    }
+  },
   data() {
     return {
       DummyBook: DummyBook,
@@ -401,7 +403,6 @@ export default {
       topBgGd: topBgGd,
       userEmail: '',
       theme: 'light',
-      expandedDescriptions: {},
       config: {
         sidebar: {
           viewThumbnail: true,
@@ -463,6 +464,7 @@ export default {
     // SubmittedAssignment,
     // SubmittedAssignment2,
     FinPortletHeading,
+    SaasAdminHackathon,
     VuePdfApp,
     PDFViewer,
     // FinPortletItem
@@ -476,6 +478,12 @@ export default {
       course.title.toLowerCase().includes(this.searchQuery.toLowerCase())
     );
   },
+     isSaasAdmin() {
+      const profileStore = useProfileStore();
+      const roles = profileStore.user.roles.map(role => role.name);
+      // Check if the user is admin or faculty
+      return roles.includes('SaasAdmin')
+    },
 },
 
 
@@ -499,28 +507,11 @@ export default {
         console.error("Error processing ZIP file:", error);
       }
     },
-    showFullDescription(courseId) {
-  this.expandedDescriptions[courseId] = !this.expandedDescriptions[courseId];
-},
-  openDescriptionDialog(text) {
-  this.dialogFileContent = text;
-  this.dialogVisible = true;
-},
-formatDate(date) {
-  if (!date) return '';
-  const options = {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric',
-    hour12: true,
-    timeZone: 'Asia/Kolkata',
-    timeZoneName: 'short', 
-  };
-
-  return new Intl.DateTimeFormat('en-IN', options).format(new Date(date));
-},
+    formatDate(date) {
+    if (!date) return '';
+    const d = new Date(date);
+    return d.toLocaleDateString(); // e.g. "6/2/2025"
+  },
   formatTime(date) {
     if (!date) return '';
     const d = new Date(date);
@@ -1129,8 +1120,8 @@ async fetchAllStudentAssignmentsForUser() {
         const data = {
           assignmentId: this.dialogAssignmentId,
           assignmentTitle: this.dialogAssignmentTitle,
-          batchId: this.dialogBatchId,
-          batchTitle: this.dialogBatchTitle,
+          batchId: "1001",
+          batchTitle: "batch 002",
           studentId: this.userId,
           studentName: this.userEmail,
           submittedFile: fileUri, // Use the uploaded file URI
@@ -1464,10 +1455,6 @@ async fetchAllStudentAssignmentsForUser() {
   .course-button {
     background-position: bottom;
   }
-}
-
-.more{
-  color: #1976d2;
 }
 
 

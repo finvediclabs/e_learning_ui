@@ -413,7 +413,7 @@ export default {
       // allAccess: [ "profile", "help","program","assignment","class-room","elearning","admin","library","hackathon","read-pdf"],54
 
 
-      allAccess: [ "profile", "course","help","home","labs","library","homeProfile","reports","channel","class-room","calendar","hackathon","groupDiscussion","books","videos","presentations","chat","read-pdf","program","seminarEvent","seminar"],
+      allAccess: [ "profile", "course","hackathon","assignment","help","home","labs","library","homeProfile","reports","channel","class-room","calendar","hackathon","groupDiscussion","books","videos","presentations","chat","read-pdf","program","seminarEvent","seminar"],
       profiles: [], // Store fetched profiles here
       roles: [], // Store fetched roles here
       userRoles: [],
