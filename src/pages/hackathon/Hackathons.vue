@@ -858,6 +858,23 @@ export default {
   }
 },
 
+ async registerUser(hackathonId) {
+    const profileStore = useProfileStore();
+    const { user } = storeToRefs(profileStore);
+
+    const email = user.value?.email;
+    const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
+    const url = `${baseUrl}api/hackathon/register/${hackathonId}?userEmail=${encodeURIComponent(email)}`;
+
+    try {
+      const response = await this.$api.post(url);
+      console.log('Hackathon Registration success:', response.data);
+      this.fetchCourses(); // Refresh list or status
+    } catch (error) {
+      console.error('Hackathon Registration failed:', error.response?.data || error.message);
+    }
+  },
+
 
   handleRegistration(id) {
     this.clickedButtonId = id;
