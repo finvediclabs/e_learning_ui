@@ -1,6 +1,6 @@
 <template>
   <router-link
-  :to="'/seminarEvent'"
+  :to="'/seminar'"
   style="text-decoration: none;"
 >
   <div class="seminar-card">

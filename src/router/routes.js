@@ -261,6 +261,18 @@ const routes = [
     ]
   },
 
+  {
+    path: '/seminar',
+    meta: { title: 'Seminar', module: 'GroupDiscussion' },
+    component: () => import('layouts/DashboardLayout.vue'),
+    children: [
+      {
+        path: '',
+        component: () => import('src/pages/Seminar/SemnarDiscussion.vue'),
+      }
+    ]
+  },
+
    {
     path: '/seminarEvent',
     meta: { title: 'Seminar_Event', module: 'Seminar_Event' },
