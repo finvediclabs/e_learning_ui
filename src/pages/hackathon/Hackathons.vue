@@ -60,7 +60,7 @@
 
 
 
-<div class="section q-mx-xl" style="width: 80%; margin-right:auto; margin-left:auto;">
+<div class="section q-mx-xl" >
   <!-- Ongoing or Upcoming -->
   <div class="text-h5 q-mb-md text-bold">Ongoing & Upcoming Hackathons</div>
 
@@ -75,7 +75,7 @@
     class="card up-card"
     @click="openCourse(course.id, course.filePath, course.title, course.registeredEmails)"
   >
-    <div class="card-image" :style="{ backgroundImage: 'url(' + course.cover + ')' }"></div>
+    <div class="card-image" :style="{ backgroundImage: 'url(' + getRandomImage(course.cover, course.id) + ')' }"    ></div>
 
     <div class="card-title">{{ course.title }}</div>
 
@@ -139,7 +139,7 @@
       class="card up-card"
       @click="openCourse(course.id, course.filePath, course.title)"
     >
-      <div class="card-image" :style="{ backgroundImage: 'url(' + course.cover + ')' }"></div>
+      <div class="card-image" :style="{ backgroundImage: 'url(' + getRandomImage(course.cover, course.id) + ')' }"></div>
       <div class="card-title">{{ course.title }}</div>
       <div class="card-content">
         <div>
@@ -381,6 +381,17 @@
 
 
 <script>
+import Img1 from 'src/assets/GD_1.jpg';
+import Img2 from 'src/assets/GD_2.jpg';
+import Img3 from 'src/assets/GD_3.jpg';
+import Img4 from 'src/assets/GD_4.jpg';
+import Img5 from 'src/assets/GD_5.jpg';
+import Img6 from 'src/assets/GD_6.jpg';
+import Img7 from 'src/assets/GD_7.jpg';
+import Img8 from 'src/assets/GD_8.jpg';
+import Img9 from 'src/assets/GD_9.jpg';
+import Img10 from 'src/assets/GD_10.jpg';
+import Img11 from 'src/assets/GD_11.jpg';
 import 'src/css/LibraryHackathon.css';
 import DummyBook from 'src/assets/dummyBook.jpg';
 import VuePdfApp from "vue3-pdf-app";
@@ -391,7 +402,7 @@ import FinPortletItem from "src/components/Portlets/FinPortletItem.vue";
 import { useSessionStore } from "src/stores/session";
 import { useProfileStore } from "src/stores/profile";
 import { storeToRefs } from 'pinia';
-import hACK_BG from 'src/assets/hACK_BG.png';
+import hACK_BG from 'src/assets/hACK_BG.jpg';
 import PDFViewer from 'pdf-viewer-vue';
 import SaasAdminHackathon from './SaasAdminHackathon.vue';
 import "vue3-pdf-app/dist/icons/main.css";
@@ -424,6 +435,10 @@ export default {
     return {
       DummyBook: DummyBook,
       courses: [],
+      imagePalette: [
+  Img1, Img2, Img3,Img4,Img5,Img6,Img7,Img8,Img9,Img10,Img11,
+],
+imageCache: {},
       firstUpcomingCourse: null,
       chapterFilePath: '',
       hACK_BG,
@@ -519,6 +534,22 @@ export default {
 
 
   methods: {
+    getRandomImage(seed, courseId) {
+    // Check cache first
+    if (this.imageCache[courseId]) {
+      return this.imageCache[courseId];
+    }
+
+    const fallbackIndex = Math.floor(Math.random() * this.imagePalette.length);
+    const numericSeed = Number(seed);
+    const index = isNaN(numericSeed) ? fallbackIndex : numericSeed % this.imagePalette.length;
+    const selectedImage = this.imagePalette[index] || this.imagePalette[0];
+
+    // Cache the result
+    this.imageCache[courseId] = selectedImage;
+
+    return selectedImage;
+  },
     async fetchAndHandleZip() {
       try {
         // Fetch the ZIP file
@@ -1260,6 +1291,9 @@ async fetchAllStudentAssignmentsForUser() {
     flex-direction: column;
     align-items: flex-start;
   } */
+   .section{
+    width: 80%; margin-right:auto; margin-left:auto;
+   }
 
   .course-image-container {
     width: 100%;
@@ -1363,8 +1397,20 @@ async fetchAllStudentAssignmentsForUser() {
 }
 
 
-.card-image {
+/* .card-image {
   height: 150px;
+  background-size: cover;
+  background-position: center;
+} */
+.card-image {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+.card-image {
+  height: 220px;
   background-size: cover;
   background-position: center;
 }

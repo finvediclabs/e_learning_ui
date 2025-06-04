@@ -4,7 +4,7 @@
    <div
    class="q-mx-xl q-mt-xl "
   >
-    <div class="q-mt-xl" style="margin-left: 8%;margin-right: 8%;">
+    <div class="q-mt-xl banner" style="margin-left: 8%;margin-right: 8%;">
 <div
   class="gd-background-container1"
   :style="{ backgroundImage: 'url(' + sn_background + ')' }"
@@ -52,7 +52,7 @@
 
 
 </div>
-    <div class="section q-mx-xl">
+    <div class="section q-mx-xl" >
       <div class="text-h5 q-mb-md text-bold">Upcoming & Ongoing Seminars</div>
       <div class="cards-container ">
         <div
@@ -227,10 +227,18 @@
   </div>
 </template>
 
-
 <script>
 import Img1 from 'src/assets/GD_1.jpg';
 import Img2 from 'src/assets/GD_2.jpg';
+import Img3 from 'src/assets/GD_3.jpg';
+import Img4 from 'src/assets/GD_4.jpg';
+import Img5 from 'src/assets/GD_5.jpg';
+import Img6 from 'src/assets/GD_6.jpg';
+import Img7 from 'src/assets/GD_7.jpg';
+import Img8 from 'src/assets/GD_8.jpg';
+import Img9 from 'src/assets/GD_9.jpg';
+import Img10 from 'src/assets/GD_10.jpg';
+import Img11 from 'src/assets/GD_11.jpg';
 import sn_background from 'src/assets/seminar_image.png';
 import topBgGd from 'src/assets/top_bg_gd.png';
 import { useProfileStore } from "src/stores/profile";
@@ -270,7 +278,7 @@ export default {
 
     ],
     imagePalette: [
-  Img1, Img2,
+    Img1, Img2, Img3,Img4,Img5,Img6,Img7,Img8,Img9,Img10,Img11,
 ],
       gradientPalette: [
         'linear-gradient(135deg, #f6d365 0%, #fda085 100%)',
@@ -968,5 +976,29 @@ onCompletedCardClick(discussion) {
   }
 }
 
+.card-image {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+.card-image {
+  height: 220px;
+  background-size: cover;
+  background-position: center;
+}
+
+@media (max-width: 768px) {
+
+   .section{
+    width: 100% !important; 
+    margin-right:auto !important;
+     margin-left:auto !important;
+   }
+
+  }
+  /* =================== */
+  
 
 </style>
