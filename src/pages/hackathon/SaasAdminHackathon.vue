@@ -11,7 +11,7 @@
   <span class="text-h6">Hackathons</span>
   </div>
 
-  <q-select
+  <!-- <q-select
     v-model="studentSearch"
     :options="studentOptions"
     option-label="label1"
@@ -23,7 +23,7 @@
     clearable
     class="fin-input"
     @update:model-value="handleSelectChange2"
-  />
+  /> -->
 </div>
     </fin-portlet-item>
         <q-table
@@ -38,17 +38,58 @@
 
           <template v-slot:header="props">
             <q-tr :props="props" style="text-align:left">
-              <q-th v-for="col in props.cols" :key="col.name" :props="props"  :style="['submittedRatio', 'scoredMarks','totalMarks'].includes(col.name) ? 'text-align: center;' : 'text-align: left;'" class="theaded">
+              <q-th v-for="col in props.cols" :key="col.name" :props="props"  :style="['submittedRatio', 'score'].includes(col.name) ? 'text-align: center;' : 'text-align: left;'" class="theaded">
                 {{ col.label }}
               </q-th>
               <q-th auto-width class="theaded"/>
             </q-tr>
           </template>
 
+
+
           <template v-slot:body="props">
             <q-tr :props="props" style="text-align:left">
-              <q-td v-for="col in props.cols" :key="col.name" :props="props"  :style="['submittedRatio', 'scoredMarks','totalMarks'].includes(col.name) ? 'text-align: center;' : 'text-align: left;'">
-                {{ props.row[col.field] }}
+              <q-td v-for="col in props.cols" :key="col.name" :props="props"
+  :style="['submittedRatio', 'score'].includes(col.name) ? 'text-align: center;' : 'text-align: left;'"
+>
+  <!-- Custom progress bar column -->
+  <template v-if="col.name === 'completed'">
+  <div style="display: flex; align-items: center; gap: 6px; min-width: 80px;">
+    <q-linear-progress
+      :value="props.row.completedPercent / 100"
+      color="green"
+      track-color="grey-3"
+      size="12px"
+      rounded
+      style="width: 50px;"
+    />
+    <div style="font-size: 12px; white-space: nowrap;">
+      {{ props.row.completed }} / {{ props.row.total }}
+    </div>
+  </div>
+</template>
+
+<template v-else-if="col.name === 'pending'">
+  <div style="display: flex; align-items: center; gap: 6px; min-width: 80px;">
+    <q-linear-progress
+      :value="props.row.pendingPercent / 100"
+      color="red"
+      track-color="grey-3"
+      size="12px"
+      rounded
+      style="width: 50px;"
+    />
+    <div style="font-size: 12px; white-space: nowrap;">
+      {{ props.row.pending }} / {{ props.row.total }}
+    </div>
+  </div>
+</template>
+
+
+  <!-- Default rendering for other columns -->
+  <template v-else>
+    {{ props.row[col.field] }}
+  </template>
               </q-td>
               <q-td auto-width class="text-right">
                 <q-btn
@@ -88,6 +129,7 @@
                           <template v-if="assignment.blobUrl">
   <q-btn @click="openDialog(assignment.blobUrl, assignment.fileType, assignment)" icon="visibility" flat />
 </template>
+
               <template v-else>
                 <a :href="assignment.submittedFile" download>Download</a>
               </template>
@@ -309,11 +351,24 @@ setup() {
         { name: 'cycleDesc', label: 'Description', field: 'cycleDesc' },
       ],
       assignmentColumns: [       // Table column definitions for assignments
+        {
+    name: 'index',label: '#',field: 'index'},
         { name: 'studentId_new', label: 'Student ID', field: 'studentId_new' },
         { name: 'username', label: 'Username', field: 'username' },
         { name: 'submittedRatio', label: 'Submitted/Total Assignments', field: 'submittedRatio' },
-        { name: 'scoredMarks', label: 'Marks Obtained', field: 'scoredMarks' },
-        { name: 'totalMarks', label: 'Total Marks', field: 'totalMarks' },
+        {
+  name: 'completed',
+  label: 'Completed',
+  field: 'completedPercent',
+  sortable: false
+},
+{
+  name: 'pending',
+  label: 'Pending',
+  field: 'pendingPercent',
+  sortable: false
+},
+        { name: 'score', label: 'Score', field: 'score' },
       ],
       chapterFilePath: "",
       numPages: 0,
@@ -617,12 +672,16 @@ async fetchAssignments(cycleid) {
     // Check if the response is valid
     if (response.data && Array.isArray(response.data)) {
       // Process the data and add the submittedRatio, cycleid_new, and studentId_new fields
-     this.studentAssignments = response.data.map((assignment) => {
+     this.studentAssignments = response.data.map((assignment, index) => {
   const submitted = assignment.totalStudentAssignments || 0;
   const total = assignment.totalAssignments || 0;
   const submittedRatio = `${submitted}/${total}`;
   const numericSubmittedRatio = total > 0 ? submitted / total : 0;
+   const completed = submitted;
+          const pending = total - submitted;
 
+          const completedPercent = total > 0 ? (completed / total) * 100 : 0;
+          const pendingPercent = 100 - completedPercent;
   // Safely use assignment.cycleid to build cycleid_new
   const cycleid = assignment.cycleid || '';
   const cycleid_new = cycleid.startsWith('0')
@@ -632,13 +691,21 @@ async fetchAssignments(cycleid) {
     : `${cycleid}`;
 
   const studentId_new = `${cycleid_new}${assignment.studentId}`;
+    const score = `${assignment.scoredMarks || 0}/${assignment.totalMarks || 0}`;
 
   return {
     ...assignment,
     submittedRatio,
     numericSubmittedRatio,
     cycleid_new,
-    studentId_new
+      score,
+       completed,
+            pending,
+            total,
+            completedPercent,
+            pendingPercent,
+    studentId_new,
+       index: index + 1 // static index
   };
 });
       this.studentAssignments.sort((a, b) => b.numericSubmittedRatio - a.numericSubmittedRatio);
@@ -846,19 +913,24 @@ async handleSelectChange2(value1) {
       const sortedAssignments = response.data.sort((a, b) => {
         const submittedA = a.totalStudentAssignments || 0;
         const totalA = a.totalAssignments || 0;
-        const ratioA = submittedA / totalA;
+        const ratioA = totalA > 0 ? submittedA / totalA : 0;
 
         const submittedB = b.totalStudentAssignments || 0;
         const totalB = b.totalAssignments || 0;
-        const ratioB = submittedB / totalB;
+        const ratioB = totalB > 0 ? submittedB / totalB : 0;
 
         return ratioB - ratioA; // Sort in descending order
       });
 
       this.studentAssignments = sortedAssignments.map((assignment) => {
-        const submitted = assignment.totalStudentAssignments || 0;
+        const completed = assignment.totalStudentAssignments || 0;
         const total = assignment.totalAssignments || 0;
-        const submittedRatio = `${submitted}/${total}`;
+        const pending = total > completed ? total - completed : 0;
+
+        const completedPercent = total > 0 ? (completed / total) * 100 : 0;
+        const pendingPercent = total > 0 ? (pending / total) * 100 : 0;
+
+        const submittedRatio = `${completed}/${total}`;
 
         // Generate cycleid_new
         const cycleid = assignment.cycleid || '';
@@ -875,6 +947,11 @@ async handleSelectChange2(value1) {
           submittedRatio,
           cycleid_new,
           studentId_new,
+          completed,
+          pending,
+          total,
+          completedPercent,
+          pendingPercent,
         };
       });
     } else {
@@ -886,6 +963,8 @@ async handleSelectChange2(value1) {
     this.studentAssignments = [];
   }
 }
+
+
 ,
 
     handleRowClick(row) {
