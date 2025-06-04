@@ -39,7 +39,7 @@ export default {
     },
     slots: {
       type: String,
-      default: '120/200'
+      default: '17/20'
     }
   },
   methods: {
