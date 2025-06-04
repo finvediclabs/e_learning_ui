@@ -47,7 +47,7 @@ export default {
   },
   methods: {
     viewAll() {
-      this.$router.push("/hackathon");
+      this.$router.push("/hackathons");
     },
   },
 };

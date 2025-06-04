@@ -180,6 +180,19 @@ const routes = [
   },
 
   {
+    path: '/hackathons',
+    meta: { title: 'Hackathons', module: 'Hackathon' },
+    component: () => import('layouts/DashboardLayout.vue'),
+    children: [
+      {
+        path: '',
+        component: () => import('src/pages/hackathon/HackathonsResult.vue'),
+        meta: { item: '' }
+      }
+    ]
+  },
+
+  {
     path: '/',
     component: () => import('layouts/home/HomePage.vue'),
     children: [

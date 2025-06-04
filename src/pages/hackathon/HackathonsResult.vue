@@ -1,6 +1,9 @@
 <template>
-
-  <div class="elearning-page"
+  <div v-if="isSaasAdmin">
+      <!-- Show assignments or batch assignments based on selected state -->
+      <SaasAdminHackathon />
+      </div>
+  <div class="elearning-page" v-if="userType !== 'SaasAdmin'"
   :style="{ backgroundImage: 'url(' + topBgGd + ')' }"
   >
     <div class="q-mt-xl" style="margin-left: 8%;margin-right: 8%;">
