@@ -28,7 +28,6 @@
 import assignment_vector from 'src/assets/lab_vector.png';
 import { useSessionStore } from "src/stores/session";
 import { storeToRefs } from "pinia";
-
 import { useProfileStore } from "src/stores/profile";
 export default {
   setup() {
@@ -62,6 +61,9 @@ export default {
   },
   mounted() {
   this.fetchDeletedLabVms();
+   if (this.userType === 'SaasUser') {
+    this.attendancePercentage = 0;
+  }
 },
   methods: {
     viewAll() {

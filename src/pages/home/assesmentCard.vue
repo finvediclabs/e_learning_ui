@@ -34,8 +34,23 @@
 
 <script>
 import attendance_vector from 'src/assets/assessment.png';
+import { useSessionStore } from "src/stores/session";
+import { storeToRefs } from "pinia";
+import { useProfileStore } from "src/stores/profile";
 
 export default {
+   setup() {
+    const session = useSessionStore();
+    const { token, userType } = storeToRefs(session);
+    const profileStore = useProfileStore();
+    const currentUserId = profileStore.user.id || '';
+    console.log("Current User Id:", currentUserId);
+
+    return {
+      userType,
+      currentUserId,
+    };
+  },
   data() {
     return {
       attendancePercentage: 60, // Example percentage
@@ -53,6 +68,11 @@ export default {
       }
     },
   },
+   mounted() {
+  if (this.userType === 'SaasUser') {
+    this.attendancePercentage = 0;
+  }
+}
 };
 </script>
 

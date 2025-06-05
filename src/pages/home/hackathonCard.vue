@@ -25,9 +25,24 @@
 </template>
 
 <script>
-import hackathon_vector from 'src/assets/hackathon_vector.png';
 
+import hackathon_vector from 'src/assets/hackathon_vector.png';
+import { useSessionStore } from "src/stores/session";
+import { storeToRefs } from "pinia";
+import { useProfileStore } from "src/stores/profile";
 export default {
+  setup() {
+    const session = useSessionStore();
+    const { token, userType } = storeToRefs(session);
+    const profileStore = useProfileStore();
+    const currentUserId = profileStore.user.id || '';
+    console.log("Current User Id:", currentUserId);
+
+    return {
+      userType,
+      currentUserId,
+    };
+  },
   data() {
     return {
       attendancePercentage: 58, // Example percentage
@@ -50,6 +65,11 @@ export default {
       this.$router.push("/hackathons");
     },
   },
+   mounted() {
+  if (this.userType === 'SaasUser') {
+    this.attendancePercentage = 0;
+  }
+}
 };
 </script>
 

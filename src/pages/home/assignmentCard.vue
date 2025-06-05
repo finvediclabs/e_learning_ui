@@ -73,10 +73,10 @@ export default {
         console.log("Fetched report data:", response.data);
 
         // Check if user is not a Student, set attendance to 60%
-        if (this.userType !== 'Student') {
-          this.attendancePercentage = 60;
-          return; // Exit the method since we don't need to process the report data
-        }
+       if (this.userType !== 'Student' && this.userType !== 'SaasUser') {
+  this.attendancePercentage = 60;
+  return; // Exit the method since we don't need to process the report data
+}
 
         // Assuming the response is an array with at least one object
         const data = response.data[0];
