@@ -173,14 +173,12 @@
 
     <q-card-section>
       <p>
-        By clicking <strong>Proceed</strong>, you agree to the Pay-As-You-Go terms and conditions.
-        You acknowledge that each Virtual Machine (VM) you use will be charged at a rate of
-        <strong>₹100 per hour (inclusive of GST)</strong>. Billing is based strictly on the number
-        of hours your VM is active.
+        By clicking <strong>"Proceed"</strong>, you agree to the Pay-As-You-Go terms and conditions.
+      VMs are billed at
+        <strong>₹50/hour (inclusive of GST)</strong>. Usage is deducted from your preloaded credits
       </p>
       <p>
-        Payment must be completed every <strong>7 days</strong> based on your usage. Failure to
-        make timely payments may result in service restrictions.
+       You can top up credits  <strong>anytime</strong> based on your needs
       </p>
       <q-checkbox
   v-model="agreementAccepted"
