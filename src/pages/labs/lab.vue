@@ -50,35 +50,36 @@
     />
 
     <!-- Normal buttons if not SaaS user, agreement accepted, or not Tech Sandbox -->
-    <template v-else>
+   <template v-else>
+  <!-- Show Shutdown only if Tech Sandbox and VM is in Succeeded state (i.e., Download VM state) -->
+  <q-btn
+    label="Shutdown"
+    color=""
+    outline
+    class="q-mr-sm act-btn"
+    v-if="lab.title === 'Tech Sandbox' && labsData.some(vm => vm.userName === currentUserName && vm.provisioningState === 'Succeeded')"
+    @click="shutdown(labsData.find(vm => vm.userName === currentUserName))"
+  />
 
-      <q-btn
-        label="Shutdown"
-        color=""
-        outline
-        class="q-mr-sm act-btn"
-        v-if="lab.title === 'Tech Sandbox'"
-        @click="shutdown(labsData.find(vm => vm.userName === currentUserName))"
-      />
-      <q-btn
-        :label="
-          ['Fintech Sandbox', 'MAANG Sandbox'].includes(lab.title)
-            ? 'Download'
-            : (lab.title === 'Tech Sandbox' && labsData.some(vm => vm.userName === currentUserName && vm.provisioningState === 'Succeeded'))
-              ? 'Download VM'
-              : (isCreatingVm ? '' : 'Start')
-        "
-        :loading="isCreatingVm"
-        class="act-btn"
-        @click="
-          ['Fintech Sandbox', 'MAANG Sandbox'].includes(lab.title)
-            ? handleLabAction(lab)
-            : (lab.title === 'Tech Sandbox' && labsData.some(vm => vm.userName === currentUserName && vm.provisioningState === 'Succeeded'))
-              ? downloadVm(labsData.find(vm => vm.userName === currentUserName && vm.provisioningState === 'Succeeded'))
-              : handleLabAction(lab)
-        "
-      />
-    </template>
+  <q-btn
+    :label="
+      ['Fintech Sandbox', 'MAANG Sandbox'].includes(lab.title)
+        ? 'Download'
+        : (lab.title === 'Tech Sandbox' && labsData.some(vm => vm.userName === currentUserName && vm.provisioningState === 'Succeeded'))
+          ? 'Download VM'
+          : (isCreatingVm ? '' : 'Start')
+    "
+    :loading="isCreatingVm"
+    class="act-btn"
+    @click="
+      ['Fintech Sandbox', 'MAANG Sandbox'].includes(lab.title)
+        ? handleLabAction(lab)
+        : (lab.title === 'Tech Sandbox' && labsData.some(vm => vm.userName === currentUserName && vm.provisioningState === 'Succeeded'))
+          ? downloadVm(labsData.find(vm => vm.userName === currentUserName && vm.provisioningState === 'Succeeded'))
+          : handleLabAction(lab)
+    "
+  />
+</template>
   </div>
 </q-card-section>
 
@@ -219,6 +220,37 @@
     </q-card-actions>
   </q-card>
 </q-dialog>
+<q-dialog v-model="showVmDialog">
+      <q-card>
+        <q-card-section>
+          <div class="text-h6">Virtual Machine Request</div>
+          <div v-if="vmDialogMode === 'eligible'">
+            You have {{ remainingHours }} paid hours remaining.
+            <br>Would you like to proceed?
+          </div>
+          <div v-else>
+            You only have {{ remainingHours }} paid hours.
+            <br>You need at least 2 hours to request a VM.
+          </div>
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn flat label="Cancel" v-close-popup />
+          <q-btn
+            v-if="vmDialogMode === 'eligible'"
+            label="Request VM"
+            color="primary"
+            @click="proceedWithVmRequest(vmRequestData)"
+          />
+          <q-btn
+            v-else
+            label="Go to Payment"
+            color="orange"
+            @click="goToPayment"
+          />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
 </template>
 
 <script>
@@ -264,6 +296,11 @@ export default {
   data() {
     return {
       isCreatingVm:false,
+      showVmDialog: false,
+      vmDialogMode: '',      // 'eligible' or 'ineligible'
+      remainingHours: 0,
+      vmRequestData: {},
+
       isSaasUser: false,
       showAgreementDialog: false,
     agreementAccepted: false,
@@ -627,6 +664,8 @@ async shutdown(lab) {
     const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
     const getDeleteVMUrl = baseUrl + 'deletevm/';
     await this.$api.get(getDeleteVMUrl + lab.name);
+    console.log('Shutdown initiated for lab:', lab.name);
+
     lab.locked = true;
     this.saveLockedStates();
     this.showMsg('Shutdown initiated!', 'positive');
@@ -785,46 +824,124 @@ async createVm(selectedOS) {
     await this.sendVmRequest(selectedOS);
   }
 },
-async sendVmRequest(selectedOS) {
-  const profileStore = useProfileStore();
-  const user = profileStore.user;
-  const createdAt = user.createdAt ? user.createdAt : new Date().toISOString();
-  const userRole = user.roles.length > 0 ? user.roles[0].name : "";
+ async sendVmRequest(selectedOS) {
+    const profileStore = useProfileStore();
+    const user = profileStore.user;
 
-  const requestData = {
-    userId: user.id,
-    accountId: user.accountId,
-    name: user.name,
-    username: user.username,
-    email: user.email,
-    userRole: userRole,
-    createdAt: createdAt,
-    timestamp: new Date().toISOString(),
-    status: 'Requested',
-    operatingSystem: selectedOS
-  };
+    if (!user) {
+      this.showMsg('User not found', 'negative');
+      return;
+    }
 
-  console.log("Requesting VM with data:", requestData);
+    const userRole = user.roles.length > 0 ? user.roles[0].name : '';
+    const createdAt = user.createdAt || new Date().toISOString();
 
-  try {
+    const requestData = {
+      userId: user.id,
+      accountId: user.accountId,
+      name: user.name,
+      username: user.username,
+      email: user.email,
+      userRole: userRole,
+      createdAt: createdAt,
+      timestamp: new Date().toISOString(),
+      status: 'Requested',
+      operatingSystem: selectedOS
+    };
+
     const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
-    const requestVMsUrl = baseUrl + 'api/request-vms';
 
-    this.isCreatingVm = true;
-    const response = await this.$api.post(requestVMsUrl, requestData);
-    this.isCreatingVm = false;
+    if (userRole === 'SaasUser') {
+      try {
+        const response = await this.$api.get(`${baseUrl}api/lab-saas-users/by-user/${user.id}`);
 
-    this.showMsg(response.data.message, 'positive');
-    setTimeout(() => {
-      window.location.reload();
-    }, 3000);
-  } catch (error) {
-    this.isCreatingVm = false;
-    console.error('Error sending VM request:', error);
-    const errorMessage = error.response?.data?.message || 'Something went wrong!';
-    this.showMsg(errorMessage, 'negative');
-  }
-},
+        // Extract paidHours correctly from response.data.data
+        const saasUserData = response.data.data || {};
+        console.log('SaasUser Data:', saasUserData);
+
+        this.remainingHours = saasUserData.paidHours || 0;
+        this.vmRequestData = requestData;
+
+        if (this.remainingHours >= 2) {
+          this.vmDialogMode = 'eligible';
+        } else {
+          this.vmDialogMode = 'ineligible';
+        }
+
+        this.showVmDialog = true;
+      } catch (err) {
+        console.error('Error fetching SaasUser data:', err);
+        this.showMsg('Error checking VM eligibility. Please try again.', 'negative');
+      }
+      return;
+    }
+
+    // Not SaasUser — proceed immediately
+    this.proceedWithVmRequest(requestData);
+  },
+    async proceedWithVmRequest(data) {
+      try {
+        this.isCreatingVm = true;
+        const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
+        const response = await this.$api.post(`${baseUrl}api/request-vms`, data);
+        this.isCreatingVm = false;
+
+        this.showMsg(response.data.message, 'positive');
+        this.showVmDialog = false;
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 3000);
+      } catch (error) {
+        this.isCreatingVm = false;
+        console.error('Error sending VM request:', error);
+        const errorMessage = error.response?.data?.message || 'Something went wrong!';
+        this.showMsg(errorMessage, 'negative');
+      }
+    },
+
+   goToPayment() {
+    try {
+      this.showVmDialog = false;
+
+      const profileStore = useProfileStore();
+      const user = profileStore.user || {};
+
+      const paymentBaseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/api/onthego-payment';
+
+      const redirectUrl = new URL(paymentBaseUrl);
+
+      // You need to define amount, firstName, lastName properly before this call
+      const amount = this.calculateAmount(); // or some amount variable
+      const firstName = user.name ? user.name.split(' ')[0] : '';
+      const lastName = user.name ? user.name.split(' ').slice(1).join(' ') : '';
+
+      redirectUrl.searchParams.append('amount', amount);
+      redirectUrl.searchParams.append('firstName', firstName);
+      redirectUrl.searchParams.append('lastName', lastName);
+      redirectUrl.searchParams.append('email', user.email || '');
+      redirectUrl.searchParams.append('phone', user.phoneNumber || '');
+
+      window.open(redirectUrl.toString(), '_blank');
+
+      // Optional: reload current page after a short delay if needed
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+
+    } catch (error) {
+      console.error("Failed to create SaaS user or redirect to payment:", error);
+      const errMsg = error.response?.data?.message || "Failed to process payment.";
+      this.showMsg(errMsg, "negative");
+    }
+  },
+
+  calculateAmount() {
+    // Implement your logic here to calculate the payment amount.
+    // For example, fixed 100 or from some variable.
+    return 100;
+  },
+
 
     prevSlide() {
       this.currentSlide--;
