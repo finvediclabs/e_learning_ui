@@ -51,13 +51,7 @@
 
     <!-- Normal buttons if not SaaS user, agreement accepted, or not Tech Sandbox -->
     <template v-else>
-      <q-btn
-        label="Restart"
-        color=""
-        outline
-        class="q-mr-sm act-btn"
-        v-if="lab.title !== 'Tech Sandbox'"
-      />
+
       <q-btn
         label="Shutdown"
         color=""
@@ -114,13 +108,7 @@
 
     <!-- Normal buttons if not SaaS user, agreement accepted, or not Tech Sandbox -->
     <template v-else>
-      <q-btn
-        label="Restart"
-        color=""
-        outline
-        class="q-mr-sm act-btn"
-        v-if="lab.title !== 'Tech Sandbox'"
-      />
+
       <q-btn
         label="Shutdown"
         color=""
@@ -385,10 +373,16 @@ async handleAgreementProceed() {
   const profileStore = useProfileStore();
   const user = profileStore.user;
 
-  // Always use current date/time as createdAt
-  const createdAt = new Date();
+  // Split user.name into firstName and lastName (fallback to empty strings)
+  const nameParts = (user.name || '').trim().split(' ');
+  const firstName = nameParts.shift() || '';
+  const lastName = nameParts.join(' ') || '';
 
-  // Add 1 day to createdAt to get paymentDueDate
+  // Use the payment amount from your component data or set a default
+  const amount = this.amountPaid || 100.0; // replace `this.amountPaid` with actual amount variable if any
+
+  // Your other payload data
+  const createdAt = new Date();
   const paymentDueDate = new Date(createdAt);
   paymentDueDate.setDate(paymentDueDate.getDate() + 1);
 
@@ -403,7 +397,7 @@ async handleAgreementProceed() {
     status: 'Requested',
     operatingSystem: this.agreementSelectedOS,
     userRole: user.roles && user.roles.length > 0 ? user.roles[0].name : '',
-    totalVmHoursUsed: 0,  // Avoid null in backend
+    totalVmHoursUsed: 0,
   };
 
   try {
@@ -412,8 +406,20 @@ async handleAgreementProceed() {
 
     const response = await this.$api.post(url, payload);
     console.log("Agreement accepted, server response:", response.data);
-   this.showMsg("Thank you for your subscription. You can now request for VMs.", "positive");
+    this.showMsg("Thank you for your subscription. You can now request for VMs.", "positive");
 
+    // Build redirect URL with query params
+    const paymentUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/api/onthego-payment';
+    const redirectUrl = new URL(paymentUrl);
+    redirectUrl.searchParams.append('amount', amount);
+    redirectUrl.searchParams.append('firstName', firstName);
+    redirectUrl.searchParams.append('lastName', lastName);
+    redirectUrl.searchParams.append('email', user.email || '');
+    redirectUrl.searchParams.append('phone', user.phoneNumber || '');
+
+    // Redirect user to the onthego payment page
+   // Open in a new tab
+window.open(redirectUrl.toString(), '_blank');
    window.location.reload();
 
   } catch (error) {
@@ -422,6 +428,7 @@ async handleAgreementProceed() {
     this.showMsg(errMsg, "negative");
   }
 },
+
 async checkSaasUserAgreement() {
   const profileStore = useProfileStore();
   const user = profileStore.user;

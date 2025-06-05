@@ -84,7 +84,7 @@
           <th style="border-left: none; border-right: none">Course</th>
           <!-- <th>Description</th> -->
           <th style="border-left: none; border-right: none">Due Date</th>
-
+           <th style="border-left: none; border-right: none">Score</th>
           <!-- <th >File</th> -->
           <th style="border-left: none; border-right: none">Status</th>
           <th style="border-left: none; border-right: none">Submit</th>
@@ -98,6 +98,8 @@
           <td style="border-left: none; border-right: none">{{ assignment.course }}</td>
           <!-- <td>{{ assignment.assignmentDesc }}</td> -->
           <td style="border-left: none; border-right: none">{{ formatDate(assignment.dueDate) }}</td>
+           <td style="border-left: none; border-right: none">{{ assignment.marks }}</td>
+
           <!-- <td><a :href="assignment.file" target="_blank">Download</a></td> -->
           <td style="border-left: none; border-right: none" :class="{ 'done': assignment.status === 'Done', 'pending': assignment.status === 'Pending' }">
             {{ assignment.status }}
@@ -523,14 +525,23 @@ async fetchAssignments(cycleId) {
       console.log("Assignments Data:", assignmentsData); // Log the fetched assignments
       const studentId = this.user?.id;
 
-      // Fetch assignment status
+      // Fetch assignment status and marks
       const statusPromises = assignmentsData.map(async (assignment) => {
         try {
           const statusUrl = `api/student-assignments?studentId=${studentId}&assignmentId=${assignment.assignmentId}`;
           const statusResponse = await this.$api.get(statusUrl);
-          assignment.status = statusResponse.data.data.length > 0 ? "Done" : "Pending";
+          const studentAssignment = statusResponse.data.data[0];
+
+          if (studentAssignment) {
+            assignment.status = "Done";
+            assignment.marks = studentAssignment.marks ?? null;
+          } else {
+            assignment.status = "Pending";
+            assignment.marks = null;
+          }
         } catch (error) {
           assignment.status = "Pending";
+          assignment.marks = null;
         }
       });
 
