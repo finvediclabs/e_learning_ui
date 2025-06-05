@@ -12,29 +12,40 @@ export const useCategoryStore = defineStore('categories', {
     selectedSubCategory: {},
   }),
   actions: {
-    fetchCategories() {
+   fetchCategories() {
   if (window.location.hash === '#/home') {
-  console.warn('Profile fetch prevented on /home path.');
-  return;
-}
-      const sessionStore = useSessionStore(); // Get the session store
-      const token = sessionStore.token; // Retrieve the token
+    console.warn('Profile fetch prevented on /home path.');
+    return;
+  }
 
-      const headers = {
-        Authorization: `Bearer ${token}`, // Attach the token in the request headers
-      };
+  const sessionStore = useSessionStore(); // Get the session store
+  const token = sessionStore.token; // Retrieve the token
 
-      axios.get(baseUrl + 'api/chapterCategoriess').then(response => {
-        const categories = response.data.map(category => {
-          if (category.categoryCode === "INTR_TO_BANK") {
-            category.categoryName = "Fintech And Financial Services Landscape";
-          }
-          return category;
-        });
-        this.categories = categories;
-        this.fetchSubCategories();
+  const headers = {
+    Authorization: `Bearer ${token}`, // Attach the token in the request headers
+  };
+
+  axios.get(baseUrl + 'api/chapterCategoriess', { headers })
+    .then(response => {
+      // Filter categories with id 1, 2, or 3
+      let filteredCategories = response.data.filter(cat => [1, 2, 3].includes(cat.id));
+
+      // Optional: If categoryCode matches, rename
+      filteredCategories = filteredCategories.map(category => {
+        if (category.categoryCode === "INTR_TO_BANK") {
+          category.categoryName = "Fintech And Financial Services Landscape";
+        }
+        return category;
       });
-    },
+
+      this.categories = filteredCategories;
+      this.fetchSubCategories();
+    })
+    .catch(err => {
+      console.error("Error fetching categories:", err);
+      this.categories = [];
+    });
+},
     fetchSubCategories() {
         if (window.location.hash === '#/home') {
   console.warn('Profile fetch prevented on /home path.');

@@ -36,7 +36,7 @@ export default {
     },
     slots: {
       type: String,
-      default: '120/200'
+      default: '10/20'
     }
   },
 
