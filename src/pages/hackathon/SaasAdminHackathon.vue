@@ -57,11 +57,10 @@
   <div style="display: flex; align-items: center; gap: 6px; min-width: 80px;">
     <q-linear-progress
       :value="props.row.completedPercent / 100"
-      color="green"
       track-color="grey-3"
       size="12px"
       rounded
-      style="width: 50px;"
+      style="width: 50px; color: #4e5bf8;"
     />
     <div style="font-size: 12px; white-space: nowrap;">
       {{ props.row.completed }} / {{ props.row.total }}
@@ -73,11 +72,10 @@
   <div style="display: flex; align-items: center; gap: 6px; min-width: 80px;">
     <q-linear-progress
       :value="props.row.pendingPercent / 100"
-      color="red"
       track-color="grey-3"
       size="12px"
       rounded
-      style="width: 50px;"
+      style="width: 50px;   color:#41c0fd"
     />
     <div style="font-size: 12px; white-space: nowrap;">
       {{ props.row.pending }} / {{ props.row.total }}
@@ -962,10 +960,7 @@ async handleSelectChange2(value1) {
     console.error("Error fetching assignments:", error);
     this.studentAssignments = [];
   }
-}
-
-
-,
+},
 
     handleRowClick(row) {
      // console.log('Row clicked:', row);
