@@ -1,7 +1,10 @@
-<template>
+<template class="Helpy">
+    <!-- Page Heading -->
+    <div class="faq-heading">
+    <h2>Frequently Asked Questions</h2>
+  </div>
   <!-- Top Image -->
     <div class="top-image">   
-   
     </div>
   <div class="faq-page">
     <div class="faq-content">
@@ -56,7 +59,7 @@
           <div v-if="faq.id === 3">
             <q-card>
               <q-card-section>
-                <span class="bold">✅</span> If you are experiencing slow video streaming, check your internet connection first. If the issue persists, email us at "support@finvedic.com" for troubleshooting tips.
+                <span class="bold">✅</span> If you are experiencing slow video streaming, check your internet connection first. If the issue persists, email us at "support@finvedic.com" for troubleshooting tips or call +919966352440.
               </q-card-section>
             </q-card>
           </div>
@@ -267,7 +270,7 @@ export default {
           id: 3,
           title: "3. My video streaming is slow. How can I get help?",
           category: "Videos",
-          content: `If you are experiencing slow video streaming, check your internet connection first. If the issue persists, email us at "support@finvedic.com" for troubleshooting tips.` ,
+          content: `If you are experiencing slow video streaming, check your internet connection first. If the issue persists, email us at "support@finvedic.com" for troubleshooting tips or call +919966352440` ,
         },
         {
           id: 4,
@@ -300,7 +303,7 @@ export default {
             { id: 6.2, title: "b. How to access a Virtual Machine (VM)?", content: `✅ To access a VM, go to the "Labs" section of your course. If a lab download is not available, request the VM option. Select the required lab activity, and a VM will be allocated to you. Follow the on-screen instructions to start the VM.` },
             { id: 6.3, title: "c. How many lab hours are provided in this course?", content: `✅ The number of lab hours provided is 200 hours in total.` },
             { id: 6.4, title: "d. After exhausting the lab hours, can I get additional hours for practice?", content: `✅ No, additional hours for practice are not available after the initial 200 hours are exhausted.` },
-            { id: 6.5, title: "e. How to close the VM after I use it?", content: `✅ To close the VM, save your work, press the 'X' mark to return to the Gurukul portal, then click the "Shut Down" button.` },
+            { id: 6.5, title: "e. How to close the VM after I use it?", content: `✅ To close the VM, save your work, click the "Shut Down" button provided in your lab space` },
             { id: 6.6, title: "f. How will my work be saved in the labs?", content: `✅ To save your work, you need to create a Git repository where your work will be stored. Ensure you follow the saving procedures outlined in the lab manual.` },
             { id: 6.7, title: "g. How can I submit my work from labs for review?", content: `✅ You can submit your work by uploading it to the "Assignments" section of your course. Follow the instructions provided for submission.` },
             { id: 6.8, title: "h. How will I be able to retrieve my last session in labs?", content: `✅ Your previous session can be retrieved by accessing the Git repository you created before.` },
@@ -351,7 +354,7 @@ export default {
             { id: 12.2, title: "b. How to ask questions in the virtual classroom?", content:  `✅ During a virtual classroom session, you can ask questions using the chat feature or by using the "Raise Hand" option to speak directly.` },
             { id: 12.3, title: "c. How do I submit my assignments?", content: `✅ Assignments can be submitted by emailing them to support@finvedic.com. Follow the submission guidelines provided.` },
             { id: 12.4, title: "d. What is the duration of the classes?", content: `✅ Class duration varies by course. Check your course schedule for specific class times and durations.` },
-            { id: 12.5, title: "e. What if the link to my class is not working?", content: `✅ If the class link is not working, try refreshing the page or using a different browser. If the issue persists, email us at support@finvedic.com.` },
+            { id: 12.5, title: "e. What if the link to my class is not working?", content: `✅ If the class link is not working, try refreshing the page or using a different browser. If the issue persists, email us at support@finvedic.com or call +919966352440` },
             { id: 12.6, title: "f. How to track my upcoming classes?", content: `✅ You can track your upcoming classes through the "Schedule" section of your dashboard. This section provides a calendar view of all your classes and important dates.` },
           
           ]
@@ -691,6 +694,8 @@ export default {
   object-fit: cover; /* Cover the space, cropping if necessary */
 }
 
+
+
 @media (max-width: 768px) {
   .faq-page {
     display: flex;
@@ -707,6 +712,9 @@ export default {
     width: 100%;
     order: 1; 
   }
+  .top-image{
+    display: none;
+  }
 }
 
 @media (min-width: 376px) and (max-width: 768px){
@@ -718,6 +726,22 @@ export default {
 
 }
 
+.top-image{
+  background-image: url('/src/assets/BackImg.png');
+  background-repeat: no-repeat;
+  background-size: 100vw 47vh;
+  /* position: absolute; */
+  /* top: 120px; */
+  margin-top: 30px;
+  border-radius: 20px;
+}
+
+.faq-heading h2 {
+  color: #2c3e50;
+  font-size: 32px;
+  font-weight: bold;
+  margin-left: 3%;
+}
 
 
 
