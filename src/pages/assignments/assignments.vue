@@ -145,7 +145,8 @@
             <div style="padding: 10px;">
               <fin-portlet-header>
                 <fin-portlet-heading :loading="loading">
-                  <span class="User_heading">Instructions</span>
+                  <span class="User_heading"> Assignment 
+                    Instructions</span>
                 </fin-portlet-heading>
               </fin-portlet-header>
               <!-- Display the assignment description -->
@@ -274,7 +275,7 @@
             style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;position: relative;">
             <fin-portlet-header style="width: 50vw;">
               <fin-portlet-heading :loading="loading" class="text-center">
-                <span class="User_heading">Submit Your Assignment</span>
+                <span class="User_heading">Upload  Your Assignment</span>
               </fin-portlet-heading>
             </fin-portlet-header>
             <div v-if="!filePreviewUrl"
@@ -305,10 +306,17 @@
                 </div>
               </div>
             </div>
-          </div>
-
-          <!-- Submit Button -->
-          <q-btn v-if="filePreviewUrl" label="Submit" @click="onSubmit" style="margin-top: 20px;" />
+          </div>          <!-- Submit Button -->
+          <q-btn 
+            v-if="filePreviewUrl" 
+            label="Submit" 
+            color="primary" 
+            class="q-mt-lg" 
+            :loading="loading"
+            :disable="loading"
+            @click="onSubmit"
+            style="width: 200px; height: 40px;"
+          />
         </q-card-section>
       </q-card>
     </q-dialog>
