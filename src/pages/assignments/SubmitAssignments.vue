@@ -318,21 +318,9 @@
           class="q-mt-md"
         /> -->
     <q-card-actions class="q-dialog-actions">
-      <q-btn
-        label="Submit"
-        color="primary"
-        class="q-mr-sm"
-        @click="submitAssignmentData"
-        :loading="masterLoading"
-      />
+
       <q-btn label="Download File" color="secondary" @click="downloadFile" v-if="fileType" />
-      <q-btn
-        label="Submit Assignment Data"
-        color="primary"
-        @click="submitAssignmentData"
-        v-if="assignmentData && assignmentData.id"
-      />
-      <q-btn label="Close" color="secondary" @click="closeDialog" />
+
     </q-card-actions>
   </q-card>
 </q-dialog>

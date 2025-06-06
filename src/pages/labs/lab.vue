@@ -223,23 +223,28 @@
         <q-card-section>
           <div class="text-h6">Virtual Machine Request</div>
           <div v-if="vmDialogMode === 'eligible'">
-            You have {{ remainingHours }} paid hours remaining.
+            You have {{ remainingHoursFormatted }} paid hours remaining.
             <br>Would you like to proceed?
           </div>
           <div v-else>
-            You only have {{ remainingHours }} paid hours.
+            You only have {{ remainingHoursFormatted }} paid hours.
             <br>You need at least 2 hours to request a VM.
           </div>
         </q-card-section>
 
         <q-card-actions align="right">
           <q-btn flat label="Cancel" v-close-popup />
-          <q-btn
-            v-if="vmDialogMode === 'eligible'"
-            label="Request VM"
-            color="primary"
-            @click="proceedWithVmRequest(vmRequestData)"
-          />
+         <q-btn
+  v-if="vmDialogMode === 'eligible'"
+  :loading="isSpinningVm"
+  label="Spin VM"
+  color="primary"
+  @click="handleSpinVmClick"
+>
+  <template v-slot:loading>
+    <q-spinner color="white" size="20px" />
+  </template>
+</q-btn>
           <q-btn
             v-else
             label="Go to Payment"
@@ -298,7 +303,7 @@ export default {
       vmDialogMode: '',      // 'eligible' or 'ineligible'
       remainingHours: 0,
       vmRequestData: {},
-
+nos: 1,
       isSaasUser: false,
       showAgreementDialog: false,
     agreementAccepted: false,
@@ -320,6 +325,7 @@ isAgreementAccepted: false,
       isTechSandboxCreating: false,
       jupyter: jupyter,
       hasRequestedVm: false,
+      isSpinningVm: false,
       currentSlide: 0,
       itemsPerSlide: this.getItemsPerSlide(),
       isMobile: window.innerWidth <= 768,
@@ -822,7 +828,7 @@ async createVm(selectedOS) {
     await this.sendVmRequest(selectedOS);
   }
 },
- async sendVmRequest(selectedOS) {
+async sendVmRequest(selectedOS) {
     const profileStore = useProfileStore();
     const user = profileStore.user;
 
@@ -849,34 +855,118 @@ async createVm(selectedOS) {
 
     const baseUrl = (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/';
 
-    if (userRole === 'SaasUser') {
-      try {
-        const response = await this.$api.get(`${baseUrl}api/lab-saas-users/by-user/${user.id}`);
+   if (userRole === 'SaasUser') {
+  try {
+    const response = await this.$api.get(`${baseUrl}api/lab-saas-users/by-user/${user.id}`);
 
-        // Extract paidHours correctly from response.data.data
-        const saasUserData = response.data.data || {};
-        console.log('SaasUser Data:', saasUserData);
+    const saasUserData = response.data.data || {};
+    console.log('SaasUser Data:', saasUserData);
 
-        this.remainingHours = saasUserData.paidHours || 0;
-        this.vmRequestData = requestData;
+    const paidHours = saasUserData.paidHours || 0;
+    const usedFractionalHours = saasUserData.totalVmHoursUsed || 0;
+    const remaining = paidHours - usedFractionalHours;
 
-        if (this.remainingHours >= 2) {
-          this.vmDialogMode = 'eligible';
-        } else {
-          this.vmDialogMode = 'ineligible';
-        }
+    this.remainingHours = Math.max(remaining, 0);
 
-        this.showVmDialog = true;
-      } catch (err) {
-        console.error('Error fetching SaasUser data:', err);
-        this.showMsg('Error checking VM eligibility. Please try again.', 'negative');
-      }
-      return;
+    // Convert to hours and minutes for display
+    const fullHours = Math.floor(this.remainingHours);
+    const remainingMinutes = Math.round((this.remainingHours - fullHours) * 60);
+    this.remainingHoursFormatted = `${fullHours} hour${fullHours !== 1 ? 's' : ''} ${remainingMinutes} minute${remainingMinutes !== 1 ? 's' : ''}`;
+
+    this.vmRequestData = requestData;
+
+    if (this.remainingHours >= 2) {
+      this.vmDialogMode = 'eligible';
+    } else {
+      this.vmDialogMode = 'ineligible';
     }
+
+    this.showVmDialog = true;
+  } catch (err) {
+    console.error('Error fetching SaasUser data:', err);
+    this.showMsg('Error checking VM eligibility. Please try again.', 'negative');
+  }
+  return;
+
+}
 
     // Not SaasUser — proceed immediately
     this.proceedWithVmRequest(requestData);
   },
+async createLabVm(user, userRole) {
+  const urls = {
+    createVmsUrl: (process.env.VUE_APP_CORE_URL || '').replace(/\/$/g, '') + '/api/labVms/createLabVm'
+  };
+console.log('URLs:', urls);
+  console.log('Creating Lab VM for:', {
+    userId: user.id,
+    userName: user.username,
+    userEmail: user.email,
+    userRole: userRole,
+    version: this.version,
+    instance: this.instance,
+    region: this.region,
+    nos: this.nos
+  });
+
+  const userNameValue = user.username || user.email;
+  const userRoleValue = userRole;
+
+  const createSingleVm = () => {
+    const payload = {
+      nos: 1,
+      version: this.version,
+      type: this.version,
+      instance: this.instance,
+      region: this.region,
+      userName: userNameValue,
+      userRole: userRoleValue,
+    };
+    console.log('Sending VM creation request with payload:', payload);
+    return this.$api.post(urls.createVmsUrl, payload);
+  };
+this.isSpinningVm = true;
+  this.loader = true;
+  const createVmPromises = [];
+
+  for (let i = 0; i < this.nos; i++) {
+    console.log(`Creating VM #${i + 1}`);
+    createVmPromises.push(createSingleVm());
+  }
+
+
+  try {
+    const responses = await Promise.all(createVmPromises);
+    console.log('All VM creation responses:', responses);
+    this.showMsg('VM Created Successfully', 'positive');
+    this.showVmDialog = false;
+
+    setTimeout(() => {
+      window.location.reload();
+    }, 3000);
+  } catch (error) {
+    console.error('Error during VM creation:', error);
+    const errorMessage = error.response?.data?.message || error.message || 'VM creation failed';
+    this.showMsg(errorMessage, 'negative');
+  } finally {
+    this.isSpinningVm = false; // Set loading OFF
+  }
+},
+handleSpinVmClick() {
+  const profileStore = useProfileStore();
+  const user = profileStore.user;
+  const userRole = user?.roles?.[0]?.name || '';
+
+  console.log('[handleSpinVmClick] VM spin clicked for role:', userRole);
+
+  if (userRole === 'SaasUser') {
+    console.log('[handleSpinVmClick] Calling createLabVm...');
+    this.createLabVm(user, userRole);
+  } else {
+    console.log('[handleSpinVmClick] Calling proceedWithVmRequest...');
+    this.proceedWithVmRequest(this.vmRequestData);
+  }
+},
     async proceedWithVmRequest(data) {
       try {
         this.isCreatingVm = true;
