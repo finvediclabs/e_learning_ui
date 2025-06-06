@@ -670,7 +670,7 @@ formatDate(date) {
       console.warn('[openCourse] User is NOT registered for this course.');
       this.$q.notify({
         type: 'warning',
-        message: 'You must register for this course before accessing it.'
+        message: 'You must register to this Hackathon to access it.'
       });
       return; // Stop here, don't open dialog
     }

@@ -964,13 +964,13 @@ background-attachment: fixed;
   background-repeat: no-repeat;
   background-size: 100vw 40%;
 }
-.help_backgroundStyle{
+/* .help_backgroundStyle{
   background-image: url('/src/assets/BackImg.png');
   background-repeat: no-repeat;
   background-size: 100vw 55vh;
   position: absolute;
   top: 120px;
-}
+} */
 .StudentProfile_backgroundStyle{
   background-color: #B2CCFC;
   background-size: 100vw 100vh;
@@ -1153,9 +1153,9 @@ background-attachment: fixed;
     justify-content: center;
     display: flex;
   }
-  .help_backgroundStyle{
+  /* .help_backgroundStyle{
   top: 60px;
-  }
+  } */
 
   .Elearning_BackgroundStyle {
     /* background-image: url('/src/assets/ai_set_bg.jpg'); */

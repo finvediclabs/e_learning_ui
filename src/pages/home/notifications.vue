@@ -45,7 +45,7 @@
       return {
 
         notifications: [
-          { img: BackImg , key: "New Course", title: "Data Science Available" },
+          { img: BackImg , key: "New Course", title: "GenAI & Agentic AI" },
         //   { img: "src/assets/BG_New.png", key: "Update", title: "Python Course Updated" }
         ],
       };
